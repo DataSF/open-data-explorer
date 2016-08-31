@@ -4,6 +4,8 @@ import ChartCanvas from './ChartCanvas'
 import ChartSideBar from './ChartSideBar.jsx'
 import './_Chart.scss'
 
+var cool;
+
 class Charts extends Component {
 
   // shouldComponentUpdate (nextProps, nextState) {
