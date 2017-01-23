@@ -29,7 +29,7 @@ class ChartExperimentalLineStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, legendStyle, domainMax, xTickCnt, yTickCnt} = this.props
+    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, legendStyle, domainMax, minTickGap, yTickCnt} = this.props
     let lines = this.makeLines(groupKeys)
     return (
       <Choose>
@@ -37,8 +37,7 @@ class ChartExperimentalLineStuff extends Component {
           <LineChart width={w} height={h} data={chartData}>
             <XAxis
               dataKey='key'
-              tickCount={xTickCnt}
-              tick={<CustomKeyAxisTick />}
+              minTickGap={minTickGap}
               padding={xAxisPadding} />
             <YAxis
               type='number'
@@ -62,7 +61,8 @@ class ChartExperimentalLineStuff extends Component {
             height={h}
             data={chartData}
             margin={margin} >
-            <XAxis dataKey='label' />
+            <XAxis dataKey='label'
+              minTickGap={minTickGap} />
             <YAxis
               tickFormatter={valTickFormater}
               tickCount={yTickCnt}

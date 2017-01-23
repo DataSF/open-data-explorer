@@ -31,7 +31,7 @@ class ChartExperimentalAreaStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, grpColorScale, valTickFormater, domainMax} = this.props
+    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, grpColorScale, valTickFormater, domainMax, minTickGap} = this.props
     let areas = this.makeAreas(groupKeys, grpColorScale)
 
     return (
@@ -44,7 +44,7 @@ class ChartExperimentalAreaStuff extends Component {
             margin={margin}>
             <XAxis
               dataKey='key'
-              tick={<CustomKeyAxisTick />} />
+              minTickGap={minTickGap} />
             <YAxis
               tickFormatter={valTickFormater}
               tickCount={yTickCnt}
@@ -69,7 +69,7 @@ class ChartExperimentalAreaStuff extends Component {
             margin={margin}>
             <XAxis
               dataKey='label'
-              tick={<CustomKeyAxisTick />} />
+              minTickGap={minTickGap} />
             <YAxis
               tickFormatter={valTickFormater}
               tickCount={yTickCnt}

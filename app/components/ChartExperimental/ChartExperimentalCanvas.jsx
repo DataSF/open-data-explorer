@@ -75,37 +75,79 @@ class ChartExperimentalCanvas extends Component {
     return false
   }
 
-  convertChartData (chartData, selectedColumnDef, dateBy) {
+  convertChartData (chartData, selectedColumnDef, dateBy, isGroupBy) {
     let yrFormat = d3.time.format('%Y')
     let monthFormat = d3.time.format('%m-%Y')
-    if (chartData) {
-      if (chartData.length > 1) {
-        let newChartData = []
-        let i = chartData.length
-        let len = chartData.length
+    let newChartData = []
+    let isDtCol = false
+    if (selectedColumnDef) {
+      let reDate = /date/
+      if (reDate.test(selectedColumnDef.type)) {
+        isDtCol = true
+      }
+    }
+    if (chartData && chartData.length > 1) {
+      let i = chartData.length
+      let len = chartData.length
+      if (!isGroupBy) {
         for (i = 0; i < len; i++) {
           let newdict = {}
-          if (selectedColumnDef) {
-            let reDate = /date/
-            if (reDate.test(selectedColumnDef.type)) {
-              if (dateBy === 'month') {
-                newdict['key'] = monthFormat(new Date(chartData[i]['label']))
-              } else {
-                newdict['key'] = yrFormat(new Date(chartData[i]['label']))
-              }
-              newdict['value'] = Number(chartData[i]['value'])
+          if (isDtCol) {
+            if (dateBy === 'month') {
+              newdict['key'] = monthFormat(new Date(chartData[i]['label']))
             } else {
-              newdict['key'] = String(chartData[i]['label'])
-              newdict['value'] = Number(chartData[i]['value'])
+              newdict['key'] = yrFormat(new Date(chartData[i]['label']))
             }
+            newdict['value'] = Number(chartData[i]['value'])
+          } else {
+            newdict['key'] = String(chartData[i]['label'])
+            newdict['value'] = Number(chartData[i]['value'])
           }
           newChartData.push(newdict)
         }
         return newChartData
+      } else {
+        if (isDtCol && isGroupBy) {
+          for (i = 0; i < len; i++) {
+            let newdict = {}
+            if (dateBy === 'month') {
+              newdict['label'] = monthFormat(new Date(chartData[i]['label']))
+            } else {
+              newdict['label'] = yrFormat(new Date(chartData[i]['label']))
+            }
+            Object.keys(chartData[i]).map(function (key, index) {
+              if (key !== 'label') {
+                newdict[key] = Number(chartData[i][key])
+              }
+              if (key === 'undefined') {
+                newdict['blank'] = Number(chartData[i][key])
+              }
+            })
+
+            newChartData.push(newdict)
+          }
+          if (dateBy === 'month') {
+            newChartData.sort(function (a, b) {
+              return Number(a.label.substring(3, a.label.length)) - Number(b.label.substring(3, a.label.length))
+            })
+          } else {
+            newChartData.sort(function (a, b) {
+              return Number(a.label) - Number(b.label)
+            })
+          }
+          return newChartData
+        }
       }
     }
-
     return chartData
+  }
+
+  getMaxDate (dateBy, chartType, chartData) {
+    let maxDt = ''
+    if (chartType === 'line') {
+      maxDt = Math.max.apply(Math, chartData.map(function (o) { return o.key }))
+    }
+    return maxDt
   }
 
   isGroupByz (groupByKeys, barChartType) {
@@ -140,8 +182,6 @@ class ChartExperimentalCanvas extends Component {
   }
 
   render () {
-    console.log('**chart canvas**')
-    // console.log(this.props)
     let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, dateBy} = this.props
     chartType = this.setDefaultChartType(selectedColumnDef, chartType)
     let fillColor
@@ -168,15 +208,17 @@ class ChartExperimentalCanvas extends Component {
     let isDateSelectedCol
     let numericCol = this.isNumericCol(selectedColumnDef)
     let isGroupBy = this.isGroupByz(groupKeys)
-    if (!isGroupBy) {
-      chartData = this.convertChartData(chartData, selectedColumnDef, dateBy)
-    }
+    // if (!isGroupBy) {
+    chartData = this.convertChartData(chartData, selectedColumnDef, dateBy, isGroupBy)
+    // } else {
+    //  console.log(chartData)
+    // }
     if (selectedColumnDef) {
       fillColor = fillColorIndex[selectedColumnDef.type]
       grpColorScale = groupByColorIndex[selectedColumnDef.type]
       isDateSelectedCol = this.isSelectedColDate(selectedColumnDef)
     }
-    let xAxisPadding = { left: 20, right: 20 }
+    let xAxisPadding = { left: 50, right: 50 }
     let xTickCnt = 5
     let yTickCnt = 6
     // let dotColorOuter = '#7dc7f4'
@@ -195,6 +237,8 @@ class ChartExperimentalCanvas extends Component {
     // let yAxisPadding = { top: 10 }
     let maxValue = findMaxObjKeyValue(chartData, 'value')
     let domainMax = maxValue + (maxValue * 0.03)
+    let maxDt = this.getMaxDate(dateBy, chartType, chartData)
+    let minTickGap = 200
     return (
       <div className='chartCanvas'>
         <Choose>
@@ -233,7 +277,6 @@ class ChartExperimentalCanvas extends Component {
                   chartData={chartData}
                   yTickCnt={yTickCnt}
                   xTickCnt={xTickCnt}
-                  xAxisPadding={xAxisPadding}
                   valTickFormater={valTickFormater}
                   colType={selectedColumnDef.type}
                   legendMargin={legendMargin}
@@ -247,8 +290,9 @@ class ChartExperimentalCanvas extends Component {
                   isGroupBy={isGroupBy}
                   margin={margin}
                   domainMax={domainMax}
+                  xDomainMax={maxDt}
                   yTickCnt={yTickCnt}
-                  xTickCnt={xTickCnt}
+                  minTickGap={minTickGap}
                   rowLabel={rowLabel}
                   fillColor={fillColor}
                   groupKeys={groupKeys}
@@ -268,6 +312,7 @@ class ChartExperimentalCanvas extends Component {
                   rowLabel={rowLabel}
                   valTickFormater={valTickFormater}
                   fillColor={fillColor}
+                  minTickGap={minTickGap}
                   groupKeys={groupKeys}
                   chartData={chartData}
                   yTickCnt={yTickCnt}
