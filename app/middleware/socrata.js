@@ -54,7 +54,6 @@ function constructQuery (state) {
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
   let id = state.metadata.migrationId || state.metadata.id
-  id = id.substring(0, id.length - 1)
   let query = consumer.query().withDataset(id)
 
   let dateAggregation = dateBy === 'month' ? 'date_trunc_ym' : 'date_trunc_y'

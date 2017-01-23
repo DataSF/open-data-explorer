@@ -9,12 +9,9 @@ function callApi (endpoint, transform, state, params) {
     .then((response) => response.json().then((json) => ({json, response}))
   ).then(({ json, response }) => {
     if (!response.ok) {
-      console.log('Response')
-      console.log(response)
+      json.status = response.status
       return Promise.reject(json)
     }
-
-    console.log(response)
 
     const transformed = transform(json, state, params)
 
@@ -67,7 +64,8 @@ export default (store) => (next) => (action) => {
     (error) => next(actionWith({
       type: failureType,
       status: error.status,
-      error: 'The server responded with an error: ' + error.message || 'Something bad happened'
+      error: true,
+      message: 'The server responded with an error: ' + error.status + ' ' + error.message + '. Code: ' + error.code || 'Something bad happened'
     }))
   )
 }
