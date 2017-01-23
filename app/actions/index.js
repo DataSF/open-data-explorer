@@ -259,7 +259,7 @@ export const loadQueryStateFromString = (q) => (dispatch, getState) => {
     },
     error => {
       dispatch({
-        type: QS_ERROR,
+        type: QS_FAILURE,
         message: error.message || 'Something bad happened',
         error: true
       })
