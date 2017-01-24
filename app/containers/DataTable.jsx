@@ -3,9 +3,10 @@ import { loadTable, sortColumn, updatePage } from '../actions'
 import DataTable from '../components/Table/DataTable'
 
 const mapStateToProps = (state, ownProps) => {
-  const { metadata } = state
+  const { metadata, columnProps } = state
   return {
-    metadata
+    metadata,
+    columns: columnProps.columns
   }
 }
 
