@@ -206,7 +206,7 @@ export const UPDATE_FILTER = 'UPDATE_FILTER'
 export const APPLY_FILTER = 'APPLY_FILTER'
 export const APPLY_CHART_TYPE = 'APPLY_CHART_TYPE'
 export const UPDATE_FROM_QS = 'UPDATE_FROM_QS'
-export const QS_ERROR = 'QS_ERROR'
+export const QS_FAILURE = 'QS_FAILURE'
 
 export function addFilter (key) {
   return {
@@ -274,7 +274,7 @@ export const loadQueryStateFromString = (q) => (dispatch, getState) => {
     },
     error => {
       dispatch({
-        type: QS_ERROR,
+        type: QS_FAILURE,
         message: error.message || 'Something bad happened',
         error: true
       })

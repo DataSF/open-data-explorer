@@ -55,7 +55,7 @@ function constructQuery (state) {
 
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
-  let id = state.metadata.migrationId || state.metadata.id
+  let id = state.metadata.migrationId || state.metadata.dataId
   let query = consumer.query().withDataset(id)
 
   let dateAggregation = dateBy === 'month' ? 'date_trunc_ym' : 'date_trunc_y'
@@ -163,7 +163,7 @@ function endpointColumns (id) {
 function endpointTableQuery (state) {
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
-  let id = state.metadata.migrationId || state.metadata.id
+  let id = state.metadata.migrationId || state.metadata.dataId
   let table = state.metadata.table
   let page = table.tablePage || 0
 
@@ -192,8 +192,15 @@ function endpointColumnProperties (id, key) {
 // Transforms
 
 function transformMetadata (json) {
+  let dataId = json['id']
+
+  if (json.childViews) {
+    dataId = json.childViews[0]
+  }
+
   let metadata = {
     id: json['id'],
+    dataId,
     name: json['name'],
     description: json['description'],
     type: json['viewType'],
