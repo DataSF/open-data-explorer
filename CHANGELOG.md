@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/)
 
 ## Unreleased
 
-## [1.0.0-alpha.2](https://github.com/DataSF/open-data-explorer/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) - 2016-12-09
+## [v1.0.0-alpha.2](https://github.com/DataSF/open-data-explorer/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) - 2016-12-09
 
 ### Added
 
@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/)
 
 ### Fixed
 
-## [1.0.0-alpha.1](https://github.com/DataSF/open-data-explorer/compare/v1.0.0-alpha.0...v1.0.0-alpha.1) - 2016-10-25
+## [v1.0.0-alpha.1](https://github.com/DataSF/open-data-explorer/compare/v1.0.0-alpha.0...v1.0.0-alpha.1) - 2016-10-25
 
 ### Added
 
@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/)
 
 ### Fixed
 
-## [1.0.0-alpha.0](https://github.com/DataSF/open-data-explorer/compare/init...v1.0.0-alpha.0) - 2016-09-07
+## [v1.0.0-alpha.0](https://github.com/DataSF/open-data-explorer/compare/init...v1.0.0-alpha.0) - 2016-09-07
 
 This is our "hello world" release
 
