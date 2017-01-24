@@ -9,11 +9,11 @@ function callApi (endpoint, transform, state, params) {
     .then((response) => response.json().then((json) => ({json, response}))
   ).then(({ json, response }) => {
     if (!response.ok) {
+      json.status = response.status
       return Promise.reject(json)
     }
 
     const transformed = transform(json, state, params)
-    // const nextPageUrl = null // getNextPageUrl(response)
 
     return Object.assign({},
       transformed
@@ -63,7 +63,9 @@ export default (store) => (next) => (action) => {
     })),
     (error) => next(actionWith({
       type: failureType,
-      error: error.message || 'Something bad happened'
+      status: error.status,
+      error: true,
+      message: 'The server responded with an error: ' + error.status + ' ' + error.message + '. Code: ' + error.code || 'Something bad happened'
     }))
   )
 }
