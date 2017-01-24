@@ -10,6 +10,7 @@ const API_ROOT = 'https://data.sfgov.org/'
 // Export constants
 export const Endpoints = {
   METADATA: endpointMetadata,
+  COLUMNS: endpointColumns,
   QUERY: endpointQuery,
   TABLEQUERY: endpointTableQuery,
   COUNT: endpointCount,
@@ -19,6 +20,7 @@ export const Endpoints = {
 
 export const Transforms = {
   METADATA: transformMetadata,
+  COLUMNS: transformColumns,
   QUERY: transformQueryData,
   TABLEQUERY: transformTableQuery,
   COUNT: transformCount,
@@ -154,6 +156,10 @@ function endpointQuery (state) {
   return constructQuery(state)
 }
 
+function endpointColumns (id) {
+  return API_ROOT + `resource/cq5k-ka7d.json?$where=datasetid='${id}'`
+}
+
 function endpointTableQuery (state) {
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
@@ -240,6 +246,23 @@ function transformMetadata (json) {
   }
 
   return metadata
+}
+
+function transformColumns (json) {
+  let response = {}
+  let columns = {}
+  for (let column of json) {
+    columns[column['api_key']] = {
+      id: column['columnid'],
+      key: column['api_key'],
+      name: column['field_name'].replace(/[_-]/g, ' '),
+      alias: column['field_alias'] || '',
+      description: column['field_definition'] || ''
+    }
+  }
+  response.columns = columns
+
+  return response
 }
 
 function transformQueryDataLegacy (json, state) {

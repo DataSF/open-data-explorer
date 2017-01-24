@@ -17,6 +17,20 @@ function fetchMetadata (id) {
   }
 }
 
+export const COLUMNS_REQUEST = 'COLUMNS_REQUEST'
+export const COLUMNS_SUCCESS = 'COLUMNS_SUCCESS'
+export const COLUMNS_FAILURE = 'COLUMNS_FAILURE'
+
+function fetchColumns (id) {
+  return {
+    [CALL_API]: {
+      types: [COLUMNS_REQUEST, COLUMNS_SUCCESS, COLUMNS_FAILURE],
+      endpoint: Endpoints.COLUMNS(id),
+      transform: Transforms.COLUMNS
+    }
+  }
+}
+
 export const MIGRATION_REQUEST = 'MIGRATION_REQUEST'
 export const MIGRATION_FAILURE = 'MIGRATION_FAILURE'
 export const MIGRATION_SUCCESS = 'MIGRATION_SUCCESS'
@@ -67,6 +81,7 @@ export function loadMetadata (id) {
   return (dispatch, getState) => {
     return Promise.all([
       dispatch(fetchMetadata(id)),
+      dispatch(fetchColumns(id)),
       dispatch(fetchMigrationId(id)),
       dispatch(countRows(id)),
       dispatch(loadColumnProps())
