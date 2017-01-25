@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import d3 from 'd3'
 import { XAxis, LineChart, YAxis, CartesianGrid, Line, Legend, Tooltip } from 'recharts'
-import CustomKeyAxisTick from './CustomKeyAxisTick'
 import CustomYaxisLabel from './CustomYaxisLabel'
+import CustomXaxisLabel from './CustomXaxisLabel'
 class ChartExperimentalLineStuff extends Component {
 
   makeLines (groupKeys) {
@@ -29,16 +29,19 @@ class ChartExperimentalLineStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, legendStyle, domainMax, minTickGap, yTickCnt} = this.props
+    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, domainMax, minTickGap, yTickCnt, colName, legendStyle, xAxisHeight} = this.props
     let lines = this.makeLines(groupKeys)
+
     return (
       <Choose>
         <When condition={!isGroupBy}>
           <LineChart width={w} height={h} data={chartData}>
             <XAxis
               dataKey='key'
+              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} />}
               minTickGap={minTickGap}
-              padding={xAxisPadding} />
+              padding={xAxisPadding}
+              height={xAxisHeight} />
             <YAxis
               type='number'
               label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />}
@@ -52,8 +55,7 @@ class ChartExperimentalLineStuff extends Component {
               dataKey='value'
               stroke={fillColor} />
             <Tooltip />
-            <Legend wrapperStyle={legendStyle} />
-          </ LineChart>
+          </LineChart>
         </When>
         <When condition={isGroupBy}>
           <LineChart
@@ -61,8 +63,12 @@ class ChartExperimentalLineStuff extends Component {
             height={h}
             data={chartData}
             margin={margin} >
-            <XAxis dataKey='label'
-              minTickGap={minTickGap} />
+            <XAxis
+              dataKey='label'
+              height={xAxisHeight}
+              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={lines.length} />}
+              minTickGap={minTickGap}
+              padding={xAxisPadding} />
             <YAxis
               tickFormatter={valTickFormater}
               tickCount={yTickCnt}
@@ -71,6 +77,7 @@ class ChartExperimentalLineStuff extends Component {
             <CartesianGrid strokeDasharray='3 3' vertical={false} />
             <Tooltip />
             {lines}
+            <Legend wrapperStyle={legendStyle} />
           </LineChart>
         </When>
       </Choose>

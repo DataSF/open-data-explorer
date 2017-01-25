@@ -43,7 +43,7 @@ class ChartExperimentalHistogramStuff extends Component {
   }
 
   render () {
-    let {h, w, margin, rowLabel, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater} = this.props
+    let {h, w, margin, rowLabel, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater, xAxisHeight} = this.props
     let freqs = this.explodeFrequencies(chartData)
     let xScale = this.getXScale(freqs, w)
     let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(15))
@@ -91,9 +91,10 @@ class ChartExperimentalHistogramStuff extends Component {
             <XAxis
               dataKey='value'
               type='number'
+              height={xAxisHeight}
               domain={[0, domainMax]}
               tickCount={xTickCnt}
-              label={<CustomXaxisLabel val={'Values of ' + rowLabel} w={w} />} />
+              label={<CustomXaxisLabel val={'Values of ' + rowLabel} isGroupBy={false} numOfGroups={0} />} />
             <YAxis
               type='number'
               label={<CustomYaxisLabel val={'Frequency of Values'} h={h} />}

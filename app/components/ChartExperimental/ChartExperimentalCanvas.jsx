@@ -93,18 +93,27 @@ class ChartExperimentalCanvas extends Component {
         for (i = 0; i < len; i++) {
           let newdict = {}
           if (isDtCol) {
+            let dt = chartData[i]['label'].split('T')
+            dt = dt[0].split('-')
             if (dateBy === 'month') {
-              newdict['key'] = monthFormat(new Date(chartData[i]['label']))
+              newdict['key'] = monthFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
             } else {
-              newdict['key'] = yrFormat(new Date(chartData[i]['label']))
+              newdict['key'] = yrFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
             }
             newdict['value'] = Number(chartData[i]['value'])
           } else {
             newdict['key'] = String(chartData[i]['label'])
             newdict['value'] = Number(chartData[i]['value'])
           }
+          Object.keys(newdict).map(function (key, index) {
+            if (key === 'undefined') {
+              newdict['blank'] = Number(chartData[i][key])
+            }
+          })
+          delete newdict['undefined']
           newChartData.push(newdict)
         }
+
         return newChartData
       } else {
         if (isDtCol && isGroupBy) {
@@ -205,18 +214,16 @@ class ChartExperimentalCanvas extends Component {
       'double': {'start': '#c71585', 'end': '#ffc0cb'},
       'money': {'start': '#c71585', 'end': '#ffc0cb'}
     }
-    let isDateSelectedCol
+    let isDateSelectedCol = false
+    let colName = ''
     let numericCol = this.isNumericCol(selectedColumnDef)
     let isGroupBy = this.isGroupByz(groupKeys)
-    // if (!isGroupBy) {
     chartData = this.convertChartData(chartData, selectedColumnDef, dateBy, isGroupBy)
-    // } else {
-    //  console.log(chartData)
-    // }
     if (selectedColumnDef) {
       fillColor = fillColorIndex[selectedColumnDef.type]
       grpColorScale = groupByColorIndex[selectedColumnDef.type]
       isDateSelectedCol = this.isSelectedColDate(selectedColumnDef)
+      colName = selectedColumnDef.name
     }
     let xAxisPadding = { left: 50, right: 50 }
     let xTickCnt = 5
@@ -228,16 +235,18 @@ class ChartExperimentalCanvas extends Component {
     let w = this.state.width - (margin.left + margin.right)
     let h = this.state.height - (margin.top + margin.bottom)
     let formatValue = d3.format('.3s')
+    let xAxisHeight = 100
     // let formatValue = d3.format('d')
     let valTickFormater = function (d) { return formatValue(d) }
-    // let ytickCnt = 5
-    // let xtickCnt = 5
-    let legendMargin = { bottom: 50 }
+    let legendStyle = {
+      color: '#666',
+      paddingRight: 40,
+      paddingLeft: 60
+    }
     // let AxisPading = { left: 20, right: 20, bottom: 0 }
     // let yAxisPadding = { top: 10 }
     let maxValue = findMaxObjKeyValue(chartData, 'value')
     let domainMax = maxValue + (maxValue * 0.03)
-    let maxDt = this.getMaxDate(dateBy, chartType, chartData)
     let minTickGap = 200
     return (
       <div className='chartCanvas'>
@@ -250,6 +259,7 @@ class ChartExperimentalCanvas extends Component {
                     <ChartExperimentalHistogramStuff
                       w={w}
                       h={h}
+                      xAxisHeight={xAxisHeight}
                       domainMax={domainMax}
                       isGroupBy={isGroupBy}
                       margin={margin}
@@ -268,6 +278,7 @@ class ChartExperimentalCanvas extends Component {
                 <ChartExperimentalBarStuff
                   w={w}
                   h={h}
+                  minTickGap={minTickGap}
                   domainMax={domainMax}
                   isGroupBy={isGroupBy}
                   margin={margin}
@@ -279,9 +290,12 @@ class ChartExperimentalCanvas extends Component {
                   xTickCnt={xTickCnt}
                   valTickFormater={valTickFormater}
                   colType={selectedColumnDef.type}
-                  legendMargin={legendMargin}
+                  colName={colName}
                   grpColorScale={grpColorScale}
-                  isDateSelectedCol={isDateSelectedCol} />
+                  isDateSelectedCol={isDateSelectedCol}
+                  xAxisHeight={xAxisHeight}
+                  legendStyle={legendStyle}
+                  xAxisPadding={xAxisPadding} />
               </When>
               <When condition={chartType === 'line'}>
                 <ChartExperimentalLineStuff
@@ -290,16 +304,17 @@ class ChartExperimentalCanvas extends Component {
                   isGroupBy={isGroupBy}
                   margin={margin}
                   domainMax={domainMax}
-                  xDomainMax={maxDt}
                   yTickCnt={yTickCnt}
                   minTickGap={minTickGap}
                   rowLabel={rowLabel}
                   fillColor={fillColor}
                   groupKeys={groupKeys}
                   chartData={chartData}
+                  colName={colName}
+                  xAxisHeight={xAxisHeight}
+                  legendStyle={legendStyle}
                   valTickFormater={valTickFormater}
                   xAxisPadding={xAxisPadding}
-                  legendMargin={legendMargin}
                   grpColorScale={grpColorScale} />
               </When>
               <When condition={chartType === 'area'}>
@@ -318,7 +333,10 @@ class ChartExperimentalCanvas extends Component {
                   yTickCnt={yTickCnt}
                   xTickCnt={xTickCnt}
                   xAxisPadding={xAxisPadding}
-                  grpColorScale={grpColorScale} />
+                  grpColorScale={grpColorScale}
+                  colName={colName}
+                  xAxisHeight={xAxisHeight}
+                  legendStyle={legendStyle} />
               </When>
               <Otherwise>
                 <div>
