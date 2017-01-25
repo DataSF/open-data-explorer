@@ -35,7 +35,6 @@ class VizContainer extends Component {
 
   render () {
     let { props, actions } = this.props
-
     return (
       <Row>
         <Col md={9}>

@@ -46,7 +46,6 @@ class ChartExperimentalBarStuff extends Component {
   }
   render () {
     let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater, grpColorScale, colName, domainMax, isDateSelectedCol, minTickGap, legendStyle, xAxisHeight} = this.props
-    console.log(chartData)
     let bars = this.makeBars(groupKeys, grpColorScale)
     let chartProperties = this.getChartProperties(chartData)
     let xpadding = {bottom: 300}

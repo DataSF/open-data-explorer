@@ -14,7 +14,7 @@ class FilterCategory extends Component {
     let { filter, applyFilter } = this.props
     let options = Object.assign({}, filter.options)
     let selected = filter.options ? filter.options.selected : null
-
+    options.filterType = 'category'
     if (typeof value.multi !== 'undefined') {
       options.multi = value.multi
       if (Array.isArray(selected) && !value.multi) {
