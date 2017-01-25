@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-// import _ from 'lodash'
+import _ from 'lodash'
 import d3 from 'd3'
 import BlankChart from './BlankChart'
 import $ from 'jquery'
@@ -52,20 +52,20 @@ class ChartExperimentalCanvas extends Component {
     /*
     This component needs to be refactored to handle resizing on a container, for now, we'll update the component always
     We should also not rerender the char
+    */
     let thisChart = {
       chartData: this.props.chartData,
       chartType: this.props.chartType,
-      height: this.props.height,
-      width: this.props.width
+      height: this.state.height,
+      width: this.state.width
     }
     let nextChart = {
       chartData: nextProps.chartData,
       chartType: nextProps.chartType,
-      height: nextProps.height,
-      width: nextProps.width
+      height: nextState.height,
+      width: nextState.width
     }
-    return !_.isEqual(thisChart, nextChart) */
-    return true
+    return !_.isEqual(thisChart, nextChart)
   }
 
   isSelectedColDate (selectedColumnDef) {
