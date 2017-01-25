@@ -46,7 +46,8 @@ class FilterDateTime extends Component {
     if (picker.oldStartDate.format('YYYY-MM-DD') !== picker.startDate.format('YYYY-MM-DD') || picker.oldEndDate.format('YYYY-MM-DD') !== picker.endDate.format('YYYY-MM-DD')) {
       let options = {
         min: picker.startDate,
-        max: picker.endDate
+        max: picker.endDate,
+        filterType: 'dateRange'
       }
       this.props.applyFilter(this.props.fieldKey, options)
     }

@@ -58,6 +58,7 @@
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
     "soda-js": "^0.2.2",
+    "titleize": "^1.0.0",
     "underscore.string": "^3.3.4"
   },
   "devDependencies": {
