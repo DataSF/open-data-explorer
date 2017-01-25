@@ -82,12 +82,10 @@ function fetchColumnProps (id, key) {
 // 3. Last, we run some stats against certain columns to use in the interface
 export function loadMetadata (id) {
   return (dispatch, getState) => {
-    return Promise.all([
-      dispatch(fetchMetadata(id)),
-      dispatch(fetchColumns(id))
-    ]).then(() => {
+    return dispatch(fetchMetadata(id)).then(() => {
       let dataId = getState().metadata.dataId
       return Promise.all([
+        dispatch(fetchColumns(id)),
         dispatch(fetchMigrationId(id)),
         dispatch(countRows(dataId))
       ]).then(() => {
