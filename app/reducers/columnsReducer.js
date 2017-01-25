@@ -67,6 +67,10 @@ function initColumns (state, action) {
   })
 }
 
+function updateColumns (state, action) {
+  return merge({}, state, action.response)
+}
+
 function loadColumnProperties (state, action) {
   action.response.categoryColumns = union([], state.categoryColumns, action.response.categoryColumns)
   return merge({}, state, action.response)
@@ -74,6 +78,7 @@ function loadColumnProperties (state, action) {
 
 const columnsReducer = createReducer({}, {
   [ActionTypes.METADATA_SUCCESS]: initColumns,
+  [ActionTypes.COLUMNS_SUCCESS]: updateColumns,
   [ActionTypes.COLPROPS_SUCCESS]: loadColumnProperties
 })
 

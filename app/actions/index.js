@@ -17,6 +17,20 @@ function fetchMetadata (id) {
   }
 }
 
+export const COLUMNS_REQUEST = 'COLUMNS_REQUEST'
+export const COLUMNS_SUCCESS = 'COLUMNS_SUCCESS'
+export const COLUMNS_FAILURE = 'COLUMNS_FAILURE'
+
+function fetchColumns (id) {
+  return {
+    [CALL_API]: {
+      types: [COLUMNS_REQUEST, COLUMNS_SUCCESS, COLUMNS_FAILURE],
+      endpoint: Endpoints.COLUMNS(id),
+      transform: Transforms.COLUMNS
+    }
+  }
+}
+
 export const MIGRATION_REQUEST = 'MIGRATION_REQUEST'
 export const MIGRATION_FAILURE = 'MIGRATION_FAILURE'
 export const MIGRATION_SUCCESS = 'MIGRATION_SUCCESS'
@@ -62,24 +76,35 @@ function fetchColumnProps (id, key) {
   }
 }
 
-// Fetches the metadata for the dataset by unique identifier
+// Bootstraps the loading of metadata assets related to a dataset. We have to chain some of these because of the way Socrata handles various viewTypes.
+// 1. Load metadata and columns run asynchronously
+// 2. Then the migration ID is looked up so we know where to run queries against, and a query to count rows is issued
+// 3. Last, we run some stats against certain columns to use in the interface
 export function loadMetadata (id) {
   return (dispatch, getState) => {
     return Promise.all([
       dispatch(fetchMetadata(id)),
-      dispatch(fetchMigrationId(id)),
-      dispatch(countRows(id)),
-      dispatch(loadColumnProps())
-    ])
+      dispatch(fetchColumns(id))
+    ]).then(() => {
+      let dataId = getState().metadata.dataId
+      return Promise.all([
+        dispatch(fetchMigrationId(id)),
+        dispatch(countRows(dataId))
+      ]).then(() => {
+        return dispatch(loadColumnProps())
+      })
+    })
   }
 }
 
 export function loadColumnProps () {
   return (dispatch, getState) => {
-    let id = getState().metadata.migrationId ? getState().metadata.migrationId : getState().metadata.id
+    // let id = getState().metadata.migrationId ? getState().metadata.migrationId : getState().metadata.id
+    let id = getState().metadata.dataId
     let promises = []
-    for (var key in getState().metadata.columns) {
-      if (shouldRunColumnStats(getState().metadata.columns[key].type, key)) {
+    let columns = getState().columnProps.columns
+    for (var key in columns) {
+      if (shouldRunColumnStats(columns[key].type, key)) {
         promises.push(dispatch(fetchColumnProps(id, key)))
       }
     }
