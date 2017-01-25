@@ -13,6 +13,7 @@ class Dataset extends Component {
 
   render () {
     const { metadata, children, ...other } = this.props
+    console.log(metadata)
     return (
       <section id={'Dataset'}>
         <div className='container-fluid datasetContainer'>
