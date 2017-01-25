@@ -17,7 +17,7 @@ const humanType = {
 const ColumnCard = ({item, idx}) => {
   return (
     <Col md={12} key={idx}>
-      <Panel header={<h2>item.name</h2>} className={'descriptionPanel'}>
+      <Panel header={<h2>{item.name}</h2>} className={'descriptionPanel'}>
         <p> {item.description}</p>
         <Label bsStyle='info' style={labelStyle} className={'descriptionPanelField'}>Field type: {humanType[item.type]} </Label>
         <Label bsStyle='info' style={labelStyle} className={'descriptionPanelField'}>API name: {item.key}</Label>
