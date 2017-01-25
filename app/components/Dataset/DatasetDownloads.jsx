@@ -12,10 +12,10 @@ class DownloadLinks extends Component {
 
   render () {
     let options = Object.keys(downloadTypes)
-    let { apiDomain, id, migrationId } = this.props
+    let { apiDomain, id, dataId } = this.props
 
-    if (migrationId) {
-      id = migrationId
+    if (dataId) {
+      id = dataId
     }
     let menuItems = options.map(function (type, i) {
       let downloadLink = 'https://' + apiDomain + '/resource/' + id + '.' + type + '?$limit=99999999999'
@@ -27,7 +27,7 @@ class DownloadLinks extends Component {
     })
 
     return (
-      <DropdownButton title='Download' id='bg-nested-dropdown' bsStyle='primary' className={'datasetLinks'}>
+      <DropdownButton title='Download' id='bg-nested-dropdown' bsStyle='primary' bsSize='small' className={'datasetLinks'}>
         {menuItems}
       </DropdownButton>
     )
