@@ -260,7 +260,8 @@ function transformColumns (json) {
   let fieldTypeMap = {
     'numeric': 'number',
     'timestamp': 'date',
-    'boolean': 'checkbox'
+    'boolean': 'checkbox',
+    'geometry: point': 'location'
   }
 
   for (let column of json) {
