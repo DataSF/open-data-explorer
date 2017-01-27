@@ -14,17 +14,15 @@ const humanType = {
   'number': 'Number'
 }
 
-const ColumnCard = ({item}) => {
-  return (
-    <Col md={12}>
-      <Panel header={<h2>{item.name}</h2>} className={'descriptionPanel'}>
-        <p> {item.description}</p>
-        <Label bsStyle='info' style={labelStyle} className={'descriptionPanelField'}>Field type: {humanType[item.type]} </Label>
-        <Label bsStyle='info' style={labelStyle} className={'descriptionPanelField'}>API name: {item.key}</Label>
-      </Panel>
-    </Col>
-  )
-}
+const ColumnCard = ({item}) => (
+  <Col md={12}>
+    <Panel header={<h2>{item.name}</h2>} className={'descriptionPanel'}>
+      <p> {item.description}</p>
+      <Label bsStyle='info' style={labelStyle} className={'descriptionPanelField'}>Field type: {humanType[item.type]} </Label>
+      <Label bsStyle='info' style={labelStyle} className={'descriptionPanelField'}>API name: {item.key}</Label>
+    </Panel>
+  </Col>
+)
 
 const sortColumns = (keys, list, sort) => {
   keys.sort(function (a, b) {
