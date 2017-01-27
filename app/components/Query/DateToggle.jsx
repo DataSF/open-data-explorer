@@ -15,8 +15,6 @@ class DateToggle extends Component {
   render () {
     let {dateBy, changeDateBy, selectedColumnDef} = this.props
     let isRenderToggle = this.isDateCol(selectedColumnDef)
-    // console.log("*****dateby panel***")
-    // console.log(dateBy)
     // set the button year button active as default
     if (!(dateBy)) {
       dateBy = 'year'
