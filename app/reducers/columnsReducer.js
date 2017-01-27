@@ -94,11 +94,18 @@ function filterColumnList (state, action) {
   })
 }
 
+function sortColumnList (state, action) {
+  return updateObject(state, {
+    sort: action.payload
+  })
+}
+
 const columnsReducer = createReducer({}, {
   [ActionTypes.METADATA_SUCCESS]: initColumns,
   [ActionTypes.COLUMNS_SUCCESS]: updateColumns,
   [ActionTypes.COLPROPS_SUCCESS]: loadColumnProperties,
-  [ActionTypes.FILTER_COLUMN_LIST]: filterColumnList
+  [ActionTypes.FILTER_COLUMN_LIST]: filterColumnList,
+  [ActionTypes.SORT_COLUMN_LIST]: sortColumnList
 })
 
 export default columnsReducer

@@ -26,10 +26,10 @@ const ColumnCard = ({item}) => {
   )
 }
 
-/*
-  function compareTypes (a, b) {
-    let typeA = humanType[list[a].type].toUpperCase()
-    let typeB = humanType[list[b].type].toUpperCase()
+const sortColumns = (keys, list, sort) => {
+  keys.sort(function (a, b) {
+    let typeA = list[a][sort].toUpperCase()
+    let typeB = list[b][sort].toUpperCase()
 
     if (typeA < typeB) {
       return -1
@@ -40,13 +40,14 @@ const ColumnCard = ({item}) => {
     }
 
     return 0
-  }
- */
+  })
 
-const ColumnList = ({list, filter}) => {
-  let keys = Object.keys(list)
-  // for sorting by type, compare function will be based on above and passed based on sort set in state, which doesn't exist yet
-  keys.sort()
+  return keys
+}
+
+const ColumnList = ({list, filter, sort}) => {
+  sort = sort || 'name'
+  let keys = sortColumns(Object.keys(list), list, sort)
 
   filter = filter || ''
 
