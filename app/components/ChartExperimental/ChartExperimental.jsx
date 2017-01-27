@@ -24,7 +24,7 @@ class ChartExperimental extends Component {
   }
   render () {
     let groupKeys
-    let {chart, metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn} = this.props
+    let {chart, metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn, changeRollupBy} = this.props
     let {columns, query, ...other} = metadata
     groupKeys = query.groupKeys
     let chartData = this.props.chart.chartData
@@ -41,10 +41,12 @@ class ChartExperimental extends Component {
           chartData={chartData}
           groupKeys={groupKeys}
           changeDateBy={changeDateBy}
+          changeRollupBy={changeRollupBy}
           columns={columns}
           {...otherProps}
           query={query}
           dateBy={query.dateBy}
+          rollupBy={query.rollupBy}
           groupBy={query.groupBy}
           sumBy={query.sumBy}
           filters={query.filters}

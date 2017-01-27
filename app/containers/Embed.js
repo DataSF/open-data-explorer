@@ -105,6 +105,7 @@ const mapStateToProps = (state, ownProps) => {
     groupBy: query.groupBy,
     sumBy: query.sumBy,
     dateBy: query.dateBy,
+    rollupBy: query.rollupBy,
     filters: query.filters,
     rowLabel: metadata.rowLabel,
     isFetching: query.isFetching,
