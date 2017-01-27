@@ -7,7 +7,6 @@ import Catalog from './containers/Catalog'
 import Dataset from './containers/Dataset'
 import DatasetOverview from './containers/DatasetOverview'
 import ColumnDetails from './containers/ColumnDetails'
-import Charts from './containers/Charts'
 import DataTable from './containers/DataTable'
 import AboutPage from './components/AboutPage/AboutPage'
 import VizContainer from './containers/VizContainer'
@@ -29,10 +28,9 @@ export default (
       <IndexRoute component={DatasetOverview} />
       <Route path='overview' component={DatasetOverview} />
       <Route path='details' component={ColumnDetails} />
-      <Route path='charts' component={Charts} />
+      <Route path='charts' component={VizContainer} />
       <Route path='map' component={Dataset} />
       <Route path='table' component={DataTable} />
-      <Route path='chart_experimental' component={VizContainer} />
     </Route>
   </Route>
 )
