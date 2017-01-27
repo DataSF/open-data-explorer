@@ -32,11 +32,11 @@ class DatasetOverview extends Component {
       // assemble related documents
       let documents = []
       let tagList = null
-      if (notes || attachments || programLink) documents.push(<h2>Notes and Supporting Documentation</h2>)
+      if (notes || attachments || programLink) documents.push(<h2 key='title'>Notes and Supporting Documentation</h2>)
       if (notes) documents.push(<p key='notes'>{notes}</p>)
       if (programLink) documents.push(<p key='programLink'><a href={programLink} target={'_blank'}>Learn more about the program</a> related to this dataset</p>)
       if (attachments) {
-        documents.push(<h3 className={'text-muted'}>Documents</h3>)
+        documents.push(<h3 key={'doc-title'} className={'text-muted'}>Documents</h3>)
         documents.push(
           <ul key='attachments' className={'list-group'}>
             {this.renderAttachmentsList()}
