@@ -150,8 +150,17 @@ export const CHANGE_DATEBY = 'CHANGE_DATEBY'
 export const CHANGE_ROLLUPBY = 'CHANGE_ROLLUPBY'
 export const GROUP_BY = 'GROUP_BY'
 export const SUM_BY = 'SUM_BY'
-export const SORT_COLUMN = 'SORT_COLUMN'
+export const SORT_COLUMN = 'SORT_COLUMN' // for sorting the table
 export const UPDATE_PAGE = 'UPDATE_PAGE'
+export const FILTER_COLUMN_LIST = 'FILTER_COLUMN_LIST'
+export const SORT_COLUMN_LIST = 'SORT_COLUMN_LIST' // for sorting the list of columns on details or within column picker
+
+export function filterColumnList (type) {
+  return {
+    type: FILTER_COLUMN_LIST,
+    filterType: type
+  }
+}
 
 export function selectColumn (column) {
   return (dispatch, getState) => {
@@ -219,6 +228,13 @@ export function sumBy (key) {
       type: SUM_BY,
       payload: key})
     dispatch(fetchData(getState()))
+  }
+}
+
+export function sortColumnList (sort) {
+  return {
+    type: SORT_COLUMN_LIST,
+    payload: sort
   }
 }
 

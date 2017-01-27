@@ -20,6 +20,9 @@ const rootReducer = combineReducers({
 
 const getColumnDef = (state, column) => fromColumns.getColumnDef(state.columnProps, column)
 
+export const getUniqueColumnTypes = state =>
+  fromColumns.getUniqueColumnTypes(state.columnProps)
+
 export const getGroupableColumns = state =>
   fromColumns.getGroupableColumns(state.columnProps, state.query.selectedColumn)
 
