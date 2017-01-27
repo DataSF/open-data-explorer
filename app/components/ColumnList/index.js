@@ -43,12 +43,17 @@ const ColumnCard = ({item}) => {
   }
  */
 
-const ColumnList = ({list}) => {
+const ColumnList = ({list, filter}) => {
   let keys = Object.keys(list)
   // for sorting by type, compare function will be based on above and passed based on sort set in state, which doesn't exist yet
   keys.sort()
 
+  filter = filter || ''
+
   let listItems = keys.map((key, idx) => {
+    if (filter !== '' && list[key].type !== filter) {
+      return false
+    }
     return <ColumnCard item={list[key]} key={key} />
   })
 
@@ -60,7 +65,8 @@ const ColumnList = ({list}) => {
 }
 
 ColumnList.propTypes = {
-  list: PropTypes.object.isRequired
+  list: PropTypes.object.isRequired,
+  filter: PropTypes.string
 }
 
 export default ColumnList

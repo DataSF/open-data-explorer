@@ -151,6 +151,14 @@ export const GROUP_BY = 'GROUP_BY'
 export const SUM_BY = 'SUM_BY'
 export const SORT_COLUMN = 'SORT_COLUMN'
 export const UPDATE_PAGE = 'UPDATE_PAGE'
+export const FILTER_COLUMN_LIST = 'FILTER_COLUMN_LIST'
+
+export function filterColumnList (type) {
+  return {
+    type: FILTER_COLUMN_LIST,
+    filterType: type
+  }
+}
 
 export function selectColumn (column) {
   return (dispatch, getState) => {
