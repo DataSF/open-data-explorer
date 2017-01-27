@@ -1,6 +1,4 @@
 module.exports = function transformOthers (chartData, maxValue, isGroupBy) {
-  let others = []
-  let keysExclude = []
   if (!isGroupBy) {
     if (chartData.length > 13) {
       let chartDataTop15 = chartData.slice(0, 13)
