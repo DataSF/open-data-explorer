@@ -1,6 +1,6 @@
 import { CALL_API } from '../middleware'
 import { Endpoints, Transforms, shouldRunColumnStats } from '../middleware/socrata'
-
+import {isColTypeTest} from '../helpers'
 export const METADATA_REQUEST = 'METADATA_REQUEST'
 export const METADATA_SUCCESS = 'METADATA_SUCCESS'
 export const METADATA_FAILURE = 'METADATA_FAILURE'
@@ -147,6 +147,7 @@ export function loadTable () {
 // query parameter related actions - these might be able to be collapsed to a single action creator that updates the query params - groupby, dateby, column selection
 export const SELECT_COLUMN = 'SELECT_COLUMN'
 export const CHANGE_DATEBY = 'CHANGE_DATEBY'
+export const CHANGE_ROLLUPBY = 'CHANGE_ROLLUPBY'
 export const GROUP_BY = 'GROUP_BY'
 export const SUM_BY = 'SUM_BY'
 export const SORT_COLUMN = 'SORT_COLUMN' // for sorting the table
@@ -167,6 +168,30 @@ export function selectColumn (column) {
       type: SELECT_COLUMN,
       payload: column})
     dispatch(fetchData(getState()))
+    dispatch(setDefaultChartType(column))
+  }
+}
+
+export function setDefaultChartType (column) {
+  return (dispatch, getState) => {
+    function getDefaultChartType () {
+      let selectedColumnDef = getState().columnProps.columns[column]
+      let isDateCol = isColTypeTest(selectedColumnDef, 'date')
+      let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
+      let chartType
+      if (isDateCol) {
+        chartType = 'line'
+      } else if (isNumericCol) {
+        chartType = 'histogram'
+      } else {
+        chartType = 'bar'
+      }
+      return chartType
+    }
+    dispatch({
+      type: SET_DEFAULT_CHARTTYPE,
+      chartType: getDefaultChartType()
+    })
   }
 }
 
@@ -175,6 +200,15 @@ export function changeDateBy (dateBy) {
     dispatch({
       type: CHANGE_DATEBY,
       payload: dateBy})
+    dispatch(fetchData(getState()))
+  }
+}
+
+export function changeRollupBy (rollupBy) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: CHANGE_ROLLUPBY,
+      payload: rollupBy})
     dispatch(fetchData(getState()))
   }
 }
@@ -231,6 +265,7 @@ export const APPLY_FILTER = 'APPLY_FILTER'
 export const APPLY_CHART_TYPE = 'APPLY_CHART_TYPE'
 export const UPDATE_FROM_QS = 'UPDATE_FROM_QS'
 export const QS_FAILURE = 'QS_FAILURE'
+export const SET_DEFAULT_CHARTTYPE = 'SET_DEFAULT_CHARTTYPE'
 
 export function addFilter (key) {
   return {

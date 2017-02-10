@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import pluralize from 'pluralize'
-import { toTitleCase } from '../../helpers'
+// import { toTitleCase } from '../../helpers'
+import titleize from 'titleize'
 
 class ChartExperimentalTitle extends Component {
   // /Builds the the chart title component for the chart
@@ -19,7 +20,7 @@ class ChartExperimentalTitle extends Component {
     if (groupBy) {
       title += ' and ' + columns[groupBy].name
     }
-    title = toTitleCase(title)
+    title = titleize(title)
     return title
   }
 

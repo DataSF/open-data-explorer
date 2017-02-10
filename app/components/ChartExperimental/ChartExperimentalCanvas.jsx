@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-// import _ from 'lodash'
+import _ from 'lodash'
 import d3 from 'd3'
 import BlankChart from './BlankChart'
 import $ from 'jquery'
@@ -7,7 +7,7 @@ import ChartExperimentalBarStuff from './ChartExperimentalBarStuff'
 import ChartExperimentalLineStuff from './ChartExperimentalLineStuff'
 import ChartExperimentalAreaStuff from './ChartExperimentalAreaStuff'
 import ChartExperimentalHistogramStuff from './ChartExperimentalHistogramStuff'
-import { findMaxObjKeyValue, isColTypeTest } from '../../helpers'
+import { findMaxObjKeyValue, isColTypeTest, transformOthers } from '../../helpers'
 
 class ChartExperimentalCanvas extends Component {
 
@@ -52,20 +52,20 @@ class ChartExperimentalCanvas extends Component {
     /*
     This component needs to be refactored to handle resizing on a container, for now, we'll update the component always
     We should also not rerender the char
+    */
     let thisChart = {
       chartData: this.props.chartData,
       chartType: this.props.chartType,
-      height: this.props.height,
-      width: this.props.width
+      height: this.state.height,
+      width: this.state.width
     }
     let nextChart = {
       chartData: nextProps.chartData,
       chartType: nextProps.chartType,
-      height: nextProps.height,
-      width: nextProps.width
+      height: nextState.height,
+      width: nextState.width
     }
-    return !_.isEqual(thisChart, nextChart) */
-    return true
+    return !_.isEqual(thisChart, nextChart)
   }
 
   isSelectedColDate (selectedColumnDef) {
@@ -79,13 +79,7 @@ class ChartExperimentalCanvas extends Component {
     let yrFormat = d3.time.format('%Y')
     let monthFormat = d3.time.format('%m-%Y')
     let newChartData = []
-    let isDtCol = false
-    if (selectedColumnDef) {
-      let reDate = /date/
-      if (reDate.test(selectedColumnDef.type)) {
-        isDtCol = true
-      }
-    }
+    let isDtCol = isColTypeTest(selectedColumnDef, 'date')
     if (chartData && chartData.length > 1) {
       let i = chartData.length
       let len = chartData.length
@@ -113,7 +107,6 @@ class ChartExperimentalCanvas extends Component {
           delete newdict['undefined']
           newChartData.push(newdict)
         }
-
         return newChartData
       } else {
         if (isDtCol && isGroupBy) {
@@ -191,7 +184,7 @@ class ChartExperimentalCanvas extends Component {
   }
 
   render () {
-    let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, dateBy} = this.props
+    let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, dateBy, rollupBy} = this.props
     chartType = this.setDefaultChartType(selectedColumnDef, chartType)
     let fillColor
     let grpColorScale
@@ -228,9 +221,6 @@ class ChartExperimentalCanvas extends Component {
     let xAxisPadding = { left: 50, right: 50 }
     let xTickCnt = 5
     let yTickCnt = 6
-    // let dotColorOuter = '#7dc7f4'
-    // let dotColorInner = '#3f5175'
-    // let margin = {top: 20, right: 30, left: 20, bottom: 5}
     let margin = {top: 1, right: 5, bottom: 1, left: 5}
     let w = this.state.width - (margin.left + margin.right)
     let h = this.state.height - (margin.top + margin.bottom)
@@ -243,11 +233,20 @@ class ChartExperimentalCanvas extends Component {
       paddingRight: 40,
       paddingLeft: 60
     }
-    // let AxisPading = { left: 20, right: 20, bottom: 0 }
-    // let yAxisPadding = { top: 10 }
     let maxValue = findMaxObjKeyValue(chartData, 'value')
     let domainMax = maxValue + (maxValue * 0.03)
     let minTickGap = 200
+    if (!rollupBy) {
+      rollupBy = 'other'
+    }
+    let isDtCol = isColTypeTest(selectedColumnDef, 'date')
+    if (rollupBy === 'other' && !isDtCol) {
+      let chartDataTop15 = transformOthers(chartData, maxValue, isGroupBy)
+      if (chartDataTop15) {
+        chartData = chartDataTop15['chartData']
+      }
+    }
+    console.log(this.props)
     return (
       <div className='chartCanvas'>
         <Choose>
