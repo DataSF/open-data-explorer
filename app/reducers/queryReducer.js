@@ -1,5 +1,6 @@
 import * as ActionTypes from '../actions'
 import { updateObject, removeByKey, updateByKey } from './reducerUtilities'
+import merge from 'lodash/merge'
 
 const initialState = {}
 
@@ -49,7 +50,7 @@ function groupBy (state, action) {
 }
 
 function addFilter (state, action) {
-  return updateObject(state, {
+  return merge({}, state, {
     filters: {
       [action.payload.value]: {}
     }
