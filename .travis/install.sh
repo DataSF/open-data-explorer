@@ -12,3 +12,4 @@ openssl aes-256-cbc -K $encrypted_5c93ddfc62aa_key -iv $encrypted_5c93ddfc62aa_i
 rm travis_deploy.enc # Don't need it anymore
 chmod 600 travis_deploy
 mv travis_deploy ~/.ssh/id_rsa
+

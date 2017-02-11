@@ -1,5 +1,6 @@
 import * as ActionTypes from '../actions'
 import { updateObject, removeByKey, updateByKey } from './reducerUtilities'
+import merge from 'lodash/merge'
 
 const initialState = {}
 
@@ -7,6 +8,7 @@ const keyMap = {
   [ActionTypes.SUM_BY]: 'sumBy',
   [ActionTypes.GROUP_BY]: 'groupBy',
   [ActionTypes.CHANGE_DATEBY]: 'dateBy',
+  [ActionTypes.CHANGE_ROLLUPBY]: 'rollupBy',
   [ActionTypes.SELECT_COLUMN]: 'selectedColumn'
 }
 
@@ -49,7 +51,7 @@ function groupBy (state, action) {
 }
 
 function addFilter (state, action) {
-  return updateObject(state, {
+  return merge({}, state, {
     filters: {
       [action.payload.value]: {}
     }
@@ -87,6 +89,7 @@ export const queryReducer = (state = initialState, action) => {
     case ActionTypes.SUM_BY: return sumBy(state, action)
     case ActionTypes.GROUP_BY: return groupBy(state, action)
     case ActionTypes.CHANGE_DATEBY: return updateQueryKeys(state, action)
+    case ActionTypes.CHANGE_ROLLUPBY: return updateQueryKeys(state, action)
     case ActionTypes.ADD_FILTER: return addFilter(state, action)
     case ActionTypes.REMOVE_FILTER: return removeFilter(state, action)
     case ActionTypes.UPDATE_FILTER: return updateFilter(state, action)

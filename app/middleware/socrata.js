@@ -10,6 +10,7 @@ const API_ROOT = 'https://data.sfgov.org/'
 // Export constants
 export const Endpoints = {
   METADATA: endpointMetadata,
+  COLUMNS: endpointColumns,
   QUERY: endpointQuery,
   TABLEQUERY: endpointTableQuery,
   COUNT: endpointCount,
@@ -19,6 +20,7 @@ export const Endpoints = {
 
 export const Transforms = {
   METADATA: transformMetadata,
+  COLUMNS: transformColumns,
   QUERY: transformQueryData,
   TABLEQUERY: transformTableQuery,
   COUNT: transformCount,
@@ -53,7 +55,7 @@ function constructQuery (state) {
 
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
-  let id = state.metadata.migrationId || state.metadata.id
+  let id = state.metadata.dataId || state.metadata.id
   let query = consumer.query().withDataset(id)
 
   let dateAggregation = dateBy === 'month' ? 'date_trunc_ym' : 'date_trunc_y'
@@ -154,10 +156,14 @@ function endpointQuery (state) {
   return constructQuery(state)
 }
 
+function endpointColumns (id) {
+  return API_ROOT + `resource/cq5k-ka7d.json?$where=datasetid='${id}'`
+}
+
 function endpointTableQuery (state) {
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
-  let id = state.metadata.migrationId || state.metadata.id
+  let id = state.metadata.dataId || state.metadata.id
   let table = state.metadata.table
   let page = table.tablePage || 0
 
@@ -188,6 +194,7 @@ function endpointColumnProperties (id, key) {
 function transformMetadata (json) {
   let metadata = {
     id: json['id'],
+    dataId: json['id'],
     name: json['name'],
     description: json['description'],
     type: json['viewType'],
@@ -205,6 +212,10 @@ function transformMetadata (json) {
     tags: json.tags || null,
     category: json['category'] || 'dataset',
     columns: {}
+  }
+
+  if (json.viewType === 'geo') {
+    metadata.dataId = json.childViews[0]
   }
 
   if (json.metadata.attachments) {
@@ -240,6 +251,33 @@ function transformMetadata (json) {
   }
 
   return metadata
+}
+
+function transformColumns (json) {
+  let response = {}
+  let columns = {}
+  // for now, we'll have to refactor and bring consistency to this between our data dictionary work and the explorer
+  let fieldTypeMap = {
+    'numeric': 'number',
+    'timestamp': 'date',
+    'boolean': 'checkbox',
+    'geometry: point': 'location'
+  }
+
+  for (let column of json) {
+    let type = fieldTypeMap[column['field_type']] || column['field_type']
+    columns[column['api_key']] = {
+      id: column['columnid'],
+      key: column['api_key'],
+      name: column['field_name'].replace(/[_-]/g, ' '),
+      alias: column['field_alias'] || '',
+      description: column['field_definition'] || '',
+      type
+    }
+  }
+  response.columns = columns
+
+  return response
 }
 
 function transformQueryDataLegacy (json, state) {
@@ -409,7 +447,7 @@ function transformCount (json) {
 }
 
 function transformApiMigration (json) {
-  return {migrationId: json.nbeId}
+  return {dataId: json.nbeId}
 }
 
 function transformColumnProperties (json, state, params) {

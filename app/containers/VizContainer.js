@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns } from '../reducers'
-import { selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy, loadQueryStateFromString } from '../actions'
+import { selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy, loadQueryStateFromString, changeRollupBy } from '../actions'
 import BlankChart from '../components/ChartExperimental/BlankChart'
 import ConditionalOnSelect from '../components/ConditionalOnSelect'
 import ChartExperimentalCanvas from '../components/ChartExperimental/ChartExperimentalCanvas'
@@ -14,6 +14,7 @@ import FilterOptions from '../components/Query/FilterOptions'
 import SumOptions from '../components/Query/SumOptions'
 import { Row, Col, Accordion } from 'react-bootstrap'
 import DateToggle from '../components/Query/DateToggle'
+import OtherDataToggle from '../components/Query/OtherDataToggle'
 import ChartTypeDisplay from '../components/Query/ChartTypeDisplay'
 import Loading from '../components/Loading'
 import Messages from '../components/Messages'
@@ -35,7 +36,6 @@ class VizContainer extends Component {
 
   render () {
     let { props, actions } = this.props
-
     return (
       <Row>
         <Col md={9}>
@@ -50,23 +50,44 @@ class VizContainer extends Component {
                   sumBy={props.sumBy} />
                 <ChartExperimentalSubTitle
                   columns={props.columns}
-                  filters={props.filters} />
+                  filters={props.filters}
+                  chartData={props.chartData}
+                  rollupBy={props.rollupBy} />
               </div>
               <Loading isFetching={props.isFetching}>
                 <Row>
-                  <Col md={9} />
-                  <Col md={2}>
-                    <DateToggle
-                      dateBy={props.dateBy}
-                      changeDateBy={actions.changeDateBy}
-                      selectedColumnDef={props.selectedColumnDef} />
-                  </Col>
-                  <Col md={1} />
+                  <Choose>
+                    <When condition={props.selectedColumnDef}>
+                      <Col md={9} />
+                      <Choose>
+                        <When condition={props.selectedColumnDef.type === 'date'}>
+                          <Col md={2}>
+                            <DateToggle
+                              dateBy={props.dateBy}
+                              changeDateBy={actions.changeDateBy}
+                              selectedColumnDef={props.selectedColumnDef} />
+                          </Col>
+                          <Col md={1} />
+                        </When>
+                        <Otherwise>
+                          <Col md={3}>
+                            <OtherDataToggle
+                              chartData={props.chartData}
+                              rollupBy={props.rollupBy}
+                              chartType={props.chartType}
+                              changeRollupBy={actions.changeRollupBy}
+                              selectedColumnDef={props.selectedColumnDef} />
+                          </Col>
+                        </Otherwise>
+                      </Choose>
+                    </When>
+                  </Choose>
                 </Row>
                 <ChartExperimentalCanvas
                   chartData={props.chartData}
                   chartType={props.chartType}
                   dateBy={props.dateBy}
+                  rollupBy={props.rollupBy}
                   groupKeys={props.groupKeys}
                   filters={props.filters}
                   rowLabel={props.rowLabel}
@@ -116,6 +137,7 @@ VizContainer.propTypes = {
     groupBy: PropTypes.string,
     sumBy: PropTypes.string,
     dateBy: PropTypes.string,
+    rollupBy: PropTypes.string,
     filters: PropTypes.object,
     rowLabel: PropTypes.string,
     groupableColumns: PropTypes.array,
@@ -150,6 +172,7 @@ const mapStateToProps = (state, ownProps) => {
       groupBy: query.groupBy,
       sumBy: query.sumBy,
       dateBy: query.dateBy,
+      rollupBy: query.rollupBy,
       filters: query.filters,
       rowLabel: metadata.rowLabel,
       summableColumns: getSummableColumns(state),
@@ -189,6 +212,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       },
       changeDateBy: (dateBy) => {
         return dispatch(changeDateBy(dateBy))
+      },
+      changeRollupBy: (rollupBy) => {
+        return dispatch(changeRollupBy(rollupBy))
       },
       applyChartType: (chartType) => {
         return dispatch(applyChartType(chartType))

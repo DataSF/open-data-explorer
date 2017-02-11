@@ -1,15 +1,31 @@
 import React, { Component } from 'react'
+import titleize from 'titleize'
 
 class CustomXaxisLabel extends Component {
   render () {
     // review this, you can also pass in x, y, width
-    const {val} = this.props
-    // let xVal = (0 - ((width / 2) - 50))
+    let {val, viewBox, isGroupBy, numOfGrps} = this.props
+    val = titleize(val.toLowerCase())
+    let xVal = (viewBox.width / 2)
+    let yVal = 0
+    if (isGroupBy) {
+      if (numOfGrps < 13) {
+        yVal = viewBox.height - 80
+      } else if (numOfGrps > 13 && numOfGrps < 35) {
+        yVal = viewBox.height - 105
+      } else if (numOfGrps > 35 && numOfGrps < 44) {
+        yVal = viewBox.height - 165
+      } else {
+        yVal = viewBox.height - 150
+      }
+    } else {
+      yVal = viewBox.height - 65
+    }
     return (
-      <g>
+      <g className={'recharts-cartesian-axis-label'}>
         <text
-          x={435}
-          y={480}
+          x={xVal}
+          y={yVal}
           dy={16}
           textAnchor='middle'
           fill='#666'>

@@ -1,6 +1,6 @@
 import { CALL_API } from '../middleware'
 import { Endpoints, Transforms, shouldRunColumnStats } from '../middleware/socrata'
-
+import {isColTypeTest} from '../helpers'
 export const METADATA_REQUEST = 'METADATA_REQUEST'
 export const METADATA_SUCCESS = 'METADATA_SUCCESS'
 export const METADATA_FAILURE = 'METADATA_FAILURE'
@@ -13,6 +13,20 @@ function fetchMetadata (id) {
       types: [METADATA_REQUEST, METADATA_SUCCESS, METADATA_FAILURE],
       endpoint: Endpoints.METADATA(id),
       transform: Transforms.METADATA
+    }
+  }
+}
+
+export const COLUMNS_REQUEST = 'COLUMNS_REQUEST'
+export const COLUMNS_SUCCESS = 'COLUMNS_SUCCESS'
+export const COLUMNS_FAILURE = 'COLUMNS_FAILURE'
+
+function fetchColumns (id) {
+  return {
+    [CALL_API]: {
+      types: [COLUMNS_REQUEST, COLUMNS_SUCCESS, COLUMNS_FAILURE],
+      endpoint: Endpoints.COLUMNS(id),
+      transform: Transforms.COLUMNS
     }
   }
 }
@@ -62,24 +76,33 @@ function fetchColumnProps (id, key) {
   }
 }
 
-// Fetches the metadata for the dataset by unique identifier
+// Bootstraps the loading of metadata assets related to a dataset. We have to chain some of these because of the way Socrata handles various viewTypes.
+// 1. Load metadata and columns run asynchronously
+// 2. Then the migration ID is looked up so we know where to run queries against, and a query to count rows is issued
+// 3. Last, we run some stats against certain columns to use in the interface
 export function loadMetadata (id) {
   return (dispatch, getState) => {
-    return Promise.all([
-      dispatch(fetchMetadata(id)),
-      dispatch(fetchMigrationId(id)),
-      dispatch(countRows(id)),
-      dispatch(loadColumnProps())
-    ])
+    return dispatch(fetchMetadata(id)).then(() => {
+      let dataId = getState().metadata.dataId
+      return Promise.all([
+        dispatch(fetchColumns(id)),
+        dispatch(fetchMigrationId(id)),
+        dispatch(countRows(dataId))
+      ]).then(() => {
+        return dispatch(loadColumnProps())
+      })
+    })
   }
 }
 
 export function loadColumnProps () {
   return (dispatch, getState) => {
-    let id = getState().metadata.migrationId ? getState().metadata.migrationId : getState().metadata.id
+    // let id = getState().metadata.migrationId ? getState().metadata.migrationId : getState().metadata.id
+    let id = getState().metadata.dataId
     let promises = []
-    for (var key in getState().metadata.columns) {
-      if (shouldRunColumnStats(getState().metadata.columns[key].type, key)) {
+    let columns = getState().columnProps.columns
+    for (var key in columns) {
+      if (shouldRunColumnStats(columns[key].type, key)) {
         promises.push(dispatch(fetchColumnProps(id, key)))
       }
     }
@@ -124,10 +147,20 @@ export function loadTable () {
 // query parameter related actions - these might be able to be collapsed to a single action creator that updates the query params - groupby, dateby, column selection
 export const SELECT_COLUMN = 'SELECT_COLUMN'
 export const CHANGE_DATEBY = 'CHANGE_DATEBY'
+export const CHANGE_ROLLUPBY = 'CHANGE_ROLLUPBY'
 export const GROUP_BY = 'GROUP_BY'
 export const SUM_BY = 'SUM_BY'
-export const SORT_COLUMN = 'SORT_COLUMN'
+export const SORT_COLUMN = 'SORT_COLUMN' // for sorting the table
 export const UPDATE_PAGE = 'UPDATE_PAGE'
+export const FILTER_COLUMN_LIST = 'FILTER_COLUMN_LIST'
+export const SORT_COLUMN_LIST = 'SORT_COLUMN_LIST' // for sorting the list of columns on details or within column picker
+
+export function filterColumnList (type) {
+  return {
+    type: FILTER_COLUMN_LIST,
+    filterType: type
+  }
+}
 
 export function selectColumn (column) {
   return (dispatch, getState) => {
@@ -135,6 +168,30 @@ export function selectColumn (column) {
       type: SELECT_COLUMN,
       payload: column})
     dispatch(fetchData(getState()))
+    dispatch(setDefaultChartType(column))
+  }
+}
+
+export function setDefaultChartType (column) {
+  return (dispatch, getState) => {
+    function getDefaultChartType () {
+      let selectedColumnDef = getState().columnProps.columns[column]
+      let isDateCol = isColTypeTest(selectedColumnDef, 'date')
+      let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
+      let chartType
+      if (isDateCol) {
+        chartType = 'line'
+      } else if (isNumericCol) {
+        chartType = 'histogram'
+      } else {
+        chartType = 'bar'
+      }
+      return chartType
+    }
+    dispatch({
+      type: SET_DEFAULT_CHARTTYPE,
+      chartType: getDefaultChartType()
+    })
   }
 }
 
@@ -143,6 +200,15 @@ export function changeDateBy (dateBy) {
     dispatch({
       type: CHANGE_DATEBY,
       payload: dateBy})
+    dispatch(fetchData(getState()))
+  }
+}
+
+export function changeRollupBy (rollupBy) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: CHANGE_ROLLUPBY,
+      payload: rollupBy})
     dispatch(fetchData(getState()))
   }
 }
@@ -162,6 +228,13 @@ export function sumBy (key) {
       type: SUM_BY,
       payload: key})
     dispatch(fetchData(getState()))
+  }
+}
+
+export function sortColumnList (sort) {
+  return {
+    type: SORT_COLUMN_LIST,
+    payload: sort
   }
 }
 
@@ -191,7 +264,8 @@ export const UPDATE_FILTER = 'UPDATE_FILTER'
 export const APPLY_FILTER = 'APPLY_FILTER'
 export const APPLY_CHART_TYPE = 'APPLY_CHART_TYPE'
 export const UPDATE_FROM_QS = 'UPDATE_FROM_QS'
-export const QS_ERROR = 'QS_ERROR'
+export const QS_FAILURE = 'QS_FAILURE'
+export const SET_DEFAULT_CHARTTYPE = 'SET_DEFAULT_CHARTTYPE'
 
 export function addFilter (key) {
   return {
@@ -259,7 +333,7 @@ export const loadQueryStateFromString = (q) => (dispatch, getState) => {
     },
     error => {
       dispatch({
-        type: QS_ERROR,
+        type: QS_FAILURE,
         message: error.message || 'Something bad happened',
         error: true
       })

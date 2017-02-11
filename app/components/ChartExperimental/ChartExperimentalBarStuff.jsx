@@ -3,7 +3,6 @@ import d3 from 'd3'
 import { XAxis, BarChart, YAxis, CartesianGrid, Bar, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
 import CustomXaxisLabel from './CustomXaxisLabel'
-import CustomKeyAxisTick from './CustomKeyAxisTick'
 
 class ChartExperimentalBarStuff extends Component {
   makeBars (groupKeys, grpColorScale) {
@@ -46,97 +45,160 @@ class ChartExperimentalBarStuff extends Component {
     return chartProperties
   }
   render () {
-    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater, grpColorScale, domainMax, isDateSelectedCol} = this.props
-    console.log(this.props)
+    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater, grpColorScale, colName, domainMax, isDateSelectedCol, minTickGap, legendStyle, xAxisHeight} = this.props
     let bars = this.makeBars(groupKeys, grpColorScale)
     let chartProperties = this.getChartProperties(chartData)
     let xpadding = {bottom: 300}
     return (
       <Choose>
-        <When condition={!isGroupBy && chartProperties.manyBars}>
-          <BarChart
-            width={w}
-            height={h}
-            layout={chartProperties.layout}
-            data={chartData}
-            margin={margin}>
-            <XAxis
-              tickFormatter={valTickFormater}
-              type='number'
-              tickCount={xTickCnt}
-              padding={xpadding}
-              label={<CustomXaxisLabel val={'Number of ' + rowLabel + 's'} w={w} />} />
-            <YAxis dataKey='key' type='category' minTickGap={10} />
-            <CartesianGrid strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
-            <Tooltip />
-            <Bar dataKey='value' fill={fillColor} />
-          </BarChart>
+        <When condition={isDateSelectedCol}>
+          <Choose>
+            <When condition={!isGroupBy}>
+              <BarChart
+                width={w}
+                height={h}
+                data={chartData}
+                margin={margin}>
+                <XAxis
+                  dataKey='key'
+                  type='category'
+                  minTickGap={minTickGap}
+                  label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} />}
+                  height={xAxisHeight} />
+                <YAxis
+                  tickFormatter={valTickFormater}
+                  tickCount={yTickCnt}
+                  domain={[0, domainMax]}
+                  type='number'
+                  label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
+                <CartesianGrid strokeDasharray='3 3' vertical={false} />
+                <Tooltip />
+                <Bar dataKey='value' fill={fillColor} />
+              </BarChart>
+            </When>
+            <Otherwise>
+              <BarChart
+                width={w}
+                height={h}
+                data={chartData}
+                margin={margin}>
+                <XAxis
+                  dataKey='label'
+                  type='category'
+                  minTickGap={minTickGap}
+                  label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={bars.length} />}
+                  height={xAxisHeight} />
+                <YAxis
+                  tickFormatter={valTickFormater}
+                  tickCount={yTickCnt}
+                  domain={[0, domainMax]}
+                  type='number'
+                  label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
+                <CartesianGrid strokeDasharray='3 3' vertical={false} />
+                <Tooltip />
+                <Legend wrapperStyle={legendStyle} />
+                {bars}
+              </BarChart>
+            </Otherwise>
+          </Choose>
         </When>
-        <When condition={!isGroupBy && !chartProperties.manyBars}>
-          <BarChart
-            width={w}
-            height={h}
-            data={chartData}
-            margin={margin}>
-            <Choose>
-              <When condition={isDateSelectedCol}>
-                <XAxis dataKey='key' type='category' tick={<CustomKeyAxisTick />} />
-              </When>
-              <Otherwise>
-                <XAxis dataKey='key' type='category' />
-              </Otherwise>
-            </Choose>
-            <YAxis
-              tickFormatter={valTickFormater}
-              tickCount={yTickCnt}
-              domain={[0, domainMax]}
-              type='number'
-              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
-            <CartesianGrid strokeDasharray='3 3' vertical={false} />
-            <Tooltip />
-            <Bar dataKey='value' fill={fillColor} />
-            <Legend />
-          </BarChart>
-        </When>
-        <When condition={isGroupBy && chartProperties.manyBars}>
-          <BarChart
-            width={w}
-            height={h}
-            layout={chartProperties.layout}
-            data={chartData}
-            margin={margin}>
-            <XAxis
-              tickFormatter={valTickFormater}
-              tickCount={yTickCnt}
-              domain={[0, domainMax]}
-              type='number'
-              label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
-            <YAxis dataKey='label' type='category' />
-            <CartesianGrid strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
-            <Tooltip />
-            <Legend />
-            {bars}
-          </BarChart>
-        </When>
-        <When condition={isGroupBy && !chartProperties.manyBars}>
-          <BarChart
-            width={w}
-            height={h}
-            data={chartData}
-            margin={margin}>
-            <XAxis dataKey='label' type='category' />
-            <YAxis
-              tickFormatter={valTickFormater}
-              tickCount={yTickCnt}
-              domain={[0, domainMax]}
-              type='number'
-              label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
-            <CartesianGrid strokeDasharray='3 3' vertical={false} />
-            <Tooltip />
-            <Legend />
-            {bars}
-          </BarChart>
-        </When>
+        <Otherwise>
+          <Choose>
+            <When condition={!isGroupBy && chartProperties.manyBars}>
+              <BarChart
+                width={w}
+                height={h}
+                layout={chartProperties.layout}
+                data={chartData}
+                margin={margin}>
+                <XAxis
+                  tickFormatter={valTickFormater}
+                  type='number'
+                  tickCount={xTickCnt}
+                  padding={xpadding}
+                  domain={[0, domainMax]}
+                  label={<CustomXaxisLabel val={'Number of ' + rowLabel + 's'} isGroupBy={isGroupBy} numOfGrps={0} />}
+                  height={xAxisHeight} />
+                <YAxis
+                  dataKey='key'
+                  label={<CustomYaxisLabel val={colName} h={h} />}
+                  type='category' />
+                <CartesianGrid strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
+                <Tooltip />
+                <Bar dataKey='value' fill={fillColor} />
+              </BarChart>
+            </When>
+            <When condition={!isGroupBy && !chartProperties.manyBars}>
+              <BarChart
+                width={w}
+                height={h}
+                data={chartData}
+                margin={margin}>
+                <XAxis
+                  dataKey='key'
+                  type='category'
+                  label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} />}
+                  height={xAxisHeight} />
+                <YAxis
+                  tickFormatter={valTickFormater}
+                  tickCount={yTickCnt}
+                  domain={[0, domainMax]}
+                  type='number'
+                  label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
+                <CartesianGrid strokeDasharray='3 3' vertical={false} />
+                <Tooltip />
+                <Bar dataKey='value' fill={fillColor} />
+              </BarChart>
+            </When>
+            <When condition={isGroupBy && chartProperties.manyBars}>
+              <BarChart
+                width={w}
+                height={h}
+                layout={chartProperties.layout}
+                data={chartData}
+                margin={margin}>
+                <XAxis
+                  tickFormatter={valTickFormater}
+                  tickCount={yTickCnt}
+                  height={xAxisHeight}
+                  domain={[0, domainMax]}
+                  type='number'
+                  label={<CustomXaxisLabel val={'Number of ' + rowLabel + 's'} isGroupBy={isGroupBy} numOfGrps={bars.length} />} />
+                <YAxis
+                  dataKey='label'
+                  label={<CustomYaxisLabel val={colName} h={h} />}
+                  type='category' />
+                <CartesianGrid strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
+                <Tooltip />
+                <Legend wrapperStyle={legendStyle} />
+                {bars}
+              </BarChart>
+            </When>
+            <When condition={isGroupBy && !chartProperties.manyBars}>
+              <BarChart
+                width={w}
+                height={h}
+                data={chartData}
+                margin={margin}>
+                <XAxis
+                  dataKey='label'
+                  type='category'
+                  height={xAxisHeight}
+                  label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={bars.length} />} />
+                <YAxis
+                  tickFormatter={valTickFormater}
+                  tickCount={yTickCnt}
+                  domain={[0, domainMax]}
+                  type='number'
+                  label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
+                <CartesianGrid strokeDasharray='3 3' vertical={false} />
+                <Tooltip />
+                <Legend wrapperStyle={legendStyle} />
+                {bars}
+              </BarChart>
+            </When>
+          </Choose>
+        </Otherwise>
       </Choose>
     )
   }

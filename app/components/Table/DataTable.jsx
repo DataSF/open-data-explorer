@@ -94,8 +94,8 @@ class DataTable extends Component {
   }
 
   render () {
-    let { metadata } = this.props
-    let { columns, table, rowCount } = metadata
+    let { metadata, columns } = this.props
+    let { table, rowCount } = metadata
     let tableContainer = null
 
     if (table && table.data && table.data.length > 0) {

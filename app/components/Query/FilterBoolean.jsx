@@ -24,7 +24,8 @@ class FilterBoolean extends Component {
         return option.value
       }) : null
       options = {
-        selected: selected
+        selected: selected,
+        filterType: 'booleanCategory'
       }
     }
     applyFilter(this.props.fieldKey, options)

@@ -12,7 +12,8 @@ window.airbrake = new airbrakeJs({projectId: 129600, projectKey: 'b8fe4ddb8be713
 const initialState = {
   metadata: {
     query: {
-      dateBy: 'year'
+      dateBy: 'year',
+      rollupBy: 'other'
     },
     table: {
       tablePage: 0

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import d3 from 'd3'
 import { XAxis, AreaChart, YAxis, CartesianGrid, Area, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
-import CustomKeyAxisTick from './CustomKeyAxisTick'
+import CustomXaxisLabel from './CustomXaxisLabel'
 
 class ChartExperimentalAreaStuff extends Component {
 
@@ -31,7 +31,7 @@ class ChartExperimentalAreaStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, grpColorScale, valTickFormater, domainMax} = this.props
+    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, grpColorScale, valTickFormater, domainMax, minTickGap, xAxisHeight, legendStyle, colName} = this.props
     let areas = this.makeAreas(groupKeys, grpColorScale)
 
     return (
@@ -44,7 +44,9 @@ class ChartExperimentalAreaStuff extends Component {
             margin={margin}>
             <XAxis
               dataKey='key'
-              tick={<CustomKeyAxisTick />} />
+              minTickGap={minTickGap}
+              height={xAxisHeight}
+              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={0} />} />
             <YAxis
               tickFormatter={valTickFormater}
               tickCount={yTickCnt}
@@ -58,7 +60,6 @@ class ChartExperimentalAreaStuff extends Component {
               dataKey='value'
               stroke={fillColor}
               fill={fillColor} />
-            <Legend />
           </AreaChart>
         </When>
         <When condition={isGroupBy}>
@@ -69,7 +70,9 @@ class ChartExperimentalAreaStuff extends Component {
             margin={margin}>
             <XAxis
               dataKey='label'
-              tick={<CustomKeyAxisTick />} />
+              height={xAxisHeight}
+              minTickGap={minTickGap}
+              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={areas.length} />} />
             <YAxis
               tickFormatter={valTickFormater}
               tickCount={yTickCnt}
@@ -78,7 +81,7 @@ class ChartExperimentalAreaStuff extends Component {
               label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
             <CartesianGrid strokeDasharray='3 3' vertical={false} />
             <Tooltip />
-            <Legend />
+            <Legend wrapperStyle={legendStyle} />
             {areas}
           </AreaChart>
         </When>

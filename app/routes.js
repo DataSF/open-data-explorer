@@ -6,8 +6,7 @@ import HomePage from './components/HomePage/HomePage'
 import Catalog from './containers/Catalog'
 import Dataset from './containers/Dataset'
 import DatasetOverview from './containers/DatasetOverview'
-import DatasetDetails from './containers/DatasetDetails'
-import Charts from './containers/Charts'
+import ColumnDetails from './containers/ColumnDetails'
 import DataTable from './containers/DataTable'
 import AboutPage from './components/AboutPage/AboutPage'
 import VizContainer from './containers/VizContainer'
@@ -28,11 +27,10 @@ export default (
     <Route path='/:category/:title/:id' components={Dataset}>
       <IndexRoute component={DatasetOverview} />
       <Route path='overview' component={DatasetOverview} />
-      <Route path='details' component={DatasetDetails} />
-      <Route path='charts' component={Charts} />
+      <Route path='details' component={ColumnDetails} />
+      <Route path='charts' component={VizContainer} />
       <Route path='map' component={Dataset} />
       <Route path='table' component={DataTable} />
-      <Route path='chart_experimental' component={VizContainer} />
     </Route>
   </Route>
 )
