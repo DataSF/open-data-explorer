@@ -5,6 +5,9 @@ class CustomXaxisLabel extends Component {
   render () {
     // review this, you can also pass in x, y, width
     let {val, viewBox, isGroupBy, numOfGrps} = this.props
+    if (val.slice((val.length - 2), val.length) === 'ss') {
+      val = val.slice(0, (val.length - 1))
+    }
     val = titleize(val.toLowerCase())
     let xVal = (viewBox.width / 2)
     let yVal = 0
@@ -27,6 +30,7 @@ class CustomXaxisLabel extends Component {
           x={xVal}
           y={yVal}
           dy={16}
+          style={{fontSize: 15}}
           textAnchor='middle'
           fill='#666'>
           {val}

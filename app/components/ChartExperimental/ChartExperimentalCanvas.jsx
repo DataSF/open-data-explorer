@@ -81,10 +81,9 @@ class ChartExperimentalCanvas extends Component {
     let newChartData = []
     let isDtCol = isColTypeTest(selectedColumnDef, 'date')
     if (chartData && chartData.length > 1) {
-      let i = chartData.length
       let len = chartData.length
       if (!isGroupBy) {
-        for (i = 0; i < len; i++) {
+        for (let i = 0; i < len; i++) {
           let newdict = {}
           if (isDtCol) {
             let dt = chartData[i]['label'].split('T')
@@ -110,7 +109,7 @@ class ChartExperimentalCanvas extends Component {
         return newChartData
       } else {
         if (isDtCol && isGroupBy) {
-          for (i = 0; i < len; i++) {
+          for (let i = 0; i < len; i++) {
             let newdict = {}
             if (dateBy === 'month') {
               newdict['label'] = monthFormat(new Date(chartData[i]['label']))
@@ -138,7 +137,17 @@ class ChartExperimentalCanvas extends Component {
             })
           }
           return newChartData
-        }
+        } // /else{
+          // console.log("****grp by sort")
+          // let orderCD = {}
+          // for(let i=0; i<len; i++){
+          // console.log(chartData[i])
+          //   orderCD[i] = sumObj(chartData[i])
+          // console.log(orderCD[i])
+          // / }
+          // console.log(orderCD)
+          // console.log(chartData)
+        // }
       }
     }
     return chartData
@@ -231,16 +240,15 @@ class ChartExperimentalCanvas extends Component {
     let minTickGap = 200
     if (!rollupBy) {
       rollupBy = 'other'
-
     }
     let isDtCol = isColTypeTest(selectedColumnDef, 'date')
-    // if (rollupBy === 'other' && !isDtCol) {
-    if (rollupBy === 'other')  {
+    if (rollupBy === 'other' && !isDtCol) {
       let chartDataTop15 = transformOthers(chartData, maxValue, isGroupBy)
       if (chartDataTop15) {
         chartData = chartDataTop15['chartData']
       }
     }
+    let yAxisWidth = 70
     return (
       <div className='chartCanvas'>
         <Choose>
@@ -252,6 +260,7 @@ class ChartExperimentalCanvas extends Component {
                     <ChartExperimentalHistogramStuff
                       w={w}
                       h={h}
+                      yAxisWidth={yAxisWidth}
                       xAxisHeight={xAxisHeight}
                       domainMax={domainMax}
                       isGroupBy={isGroupBy}
@@ -272,6 +281,7 @@ class ChartExperimentalCanvas extends Component {
                 <ChartExperimentalBarStuff
                   w={w}
                   h={h}
+                  yAxisWidth={yAxisWidth}
                   minTickGap={minTickGap}
                   domainMax={domainMax}
                   isGroupBy={isGroupBy}
@@ -295,6 +305,7 @@ class ChartExperimentalCanvas extends Component {
                 <ChartExperimentalLineStuff
                   w={w}
                   h={h}
+                  yAxisWidth={yAxisWidth}
                   isGroupBy={isGroupBy}
                   margin={margin}
                   domainMax={domainMax}
@@ -315,6 +326,7 @@ class ChartExperimentalCanvas extends Component {
                 <ChartExperimentalAreaStuff
                   w={w}
                   h={h}
+                  yAxisWidth={yAxisWidth}
                   isGroupBy={isGroupBy}
                   domainMax={domainMax}
                   margin={margin}
