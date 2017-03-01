@@ -17,9 +17,9 @@ class ChartExperimentalSubTitle extends Component {
     if (subtitle.length > 0) {
       fitlerCategory = 'Only Showing ' + subtitle
       subtitle = 'Filtering by ' + titleize(columnFilterName)
-      subtitle = subtitle + ' => ' + fitlerCategory
+      subtitle = subtitle + ': ' + fitlerCategory
     }
-    return subtitle
+    return <span key='filterCatText'>{subtitle}</span>
   }
 
   filterDates (columnFilter, columnFilterName) {
@@ -29,8 +29,8 @@ class ChartExperimentalSubTitle extends Component {
     let maxDt = moment(columnFilter.options.max).format('MM/DD/YYYY')
     subtitle = 'Filtering by ' + titleize(columnFilterName)
     fitlerCategory = 'Only Showing Records Between ' + minDt + ' and ' + maxDt
-    subtitle = subtitle + ' => ' + fitlerCategory
-    return subtitle
+    subtitle = subtitle + ': ' + fitlerCategory
+    return <span key='filterDateText'>{subtitle}</span>
   }
 
   filterNumbers (columnFilter, columnFilterName) {
@@ -41,23 +41,24 @@ class ChartExperimentalSubTitle extends Component {
     let end = numList[1]
     subtitle = 'Filtering by ' + titleize(columnFilterName)
     fitlerCategory = 'Only Showing Records with Values Between ' + start + ' and ' + end
-    subtitle = subtitle + ' => ' + fitlerCategory
-    return subtitle
+    subtitle = subtitle + ': ' + fitlerCategory
+    return <span key='filterNumText'>{subtitle}</span>
   }
 
   buildSubTitle (filters, columns) {
-    let subtitle = ''
+    let subtitle = []
     if (!_.isEmpty(filters)) {
-      let fitlerKeys = Object.keys(filters)
-      for (let i = 0; i < fitlerKeys.length; i++) {
-        let filter = filters[fitlerKeys[i]]
+      let filterKeys = Object.keys(filters)
+      for (let i = 0; i < filterKeys.length; i++) {
+        let filter = filters[filterKeys[i]]
+        let column = columns[filterKeys[i]]
         if (!_.isEmpty(filter)) {
           if (filter.options.filterType === 'category' && filter.options.selected !== null) {
-            subtitle = this.filterCategories(filter, fitlerKeys[i])
+            subtitle = subtitle.concat([this.filterCategories(filter, column.name), <br key='filterCatBR' />])
           } else if (filter.options.filterType === 'dateRange') {
-            subtitle = this.filterDates(filter, fitlerKeys[i])
+            subtitle = subtitle.concat([this.filterDates(filter, column.name), <br key='filterDateBR' />])
           } else if (filter.options.filterType === 'numericRange') {
-            subtitle = this.filterNumbers(filters[fitlerKeys[i]], fitlerKeys[i])
+            subtitle = subtitle.concat([this.filterNumbers(filters[filterKeys[i]], column.name), <br key='filterNumBR' />])
           }
         }
       }
@@ -68,7 +69,7 @@ class ChartExperimentalSubTitle extends Component {
     let {filters, columns} = this.props
     let subtitleStuff = this.buildSubTitle(filters, columns)
     return (
-      <h3 className={'chartTitle'}>{subtitleStuff} </h3>
+      <div className={'ChartSubTitle'}>{subtitleStuff}</div>
     )
   }
 }
