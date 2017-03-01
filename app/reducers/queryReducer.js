@@ -1,5 +1,5 @@
 import * as ActionTypes from '../actions'
-import { updateObject, removeByKey, updateByKey } from './reducerUtilities'
+import { updateObject, removeByKey, updateFiltersByKey } from './reducerUtilities'
 import merge from 'lodash/merge'
 
 const initialState = {}
@@ -66,7 +66,7 @@ function removeFilter (state, action) {
 
 function updateFilter (state, action) {
   return updateObject(state, {
-    filters: updateByKey(state.filters, action.payload.key, action.payload)
+    filters: updateFiltersByKey(state.filters, action.payload.key, action.payload)
   })
 }
 
