@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import titleize from 'titleize'
+import moment from 'moment'
 
 class ChartExperimentalSubTitle extends Component {
   filterCategories (columnFilter, columnFilterName) {
@@ -21,23 +22,11 @@ class ChartExperimentalSubTitle extends Component {
     return subtitle
   }
 
-  getDtString (dt) {
-    let yr = String(dt.getFullYear())
-    let month = String(dt.getMonth())
-    if (month === '0') {
-      month = '01'
-    }
-    if (month.length === 1) {
-      month = '0' + month
-    }
-    let day = String(dt.getDate())
-    return month + '/' + day + '/' + yr
-  }
   filterDates (columnFilter, columnFilterName) {
     let subtitle = ''
     let fitlerCategory
-    let minDt = this.getDtString(columnFilter.options.min._d)
-    let maxDt = this.getDtString(columnFilter.options.max._d)
+    let minDt = moment(columnFilter.options.min).format('MM/DD/YYYY')
+    let maxDt = moment(columnFilter.options.max).format('MM/DD/YYYY')
     subtitle = 'Filtering by ' + titleize(columnFilterName)
     fitlerCategory = 'Only Showing Records Between ' + minDt + ' and ' + maxDt
     subtitle = subtitle + ' => ' + fitlerCategory
