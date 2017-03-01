@@ -53,7 +53,6 @@ class FilterDateTime extends Component {
     let end = moment(this.props.endDate).format('MM/DD/YYYY')
     let label = start + ' to ' + end
     let { dateBy } = this.props
-    console.log(dateBy)
     if (start === end) {
       label = start
     }

@@ -111,7 +111,8 @@ class VizContainer extends Component {
                 handleAddFilter={actions.handleAddFilter}
                 handleRemoveFilter={actions.handleRemoveFilter}
                 applyFilter={actions.applyFilter}
-                updateFilter={actions.updateFilter} />
+                updateFilter={actions.updateFilter}
+                dateBy={props.dateBy} />
               <ChartTypeDisplay
                 applyChartType={actions.applyChartType}
                 chartType={props.chartType}
@@ -171,7 +172,7 @@ const mapStateToProps = (state, ownProps) => {
       isFetching: query.isFetching,
       groupBy: query.groupBy,
       sumBy: query.sumBy,
-      dateBy: query.dateBy,
+      dateBy: query.dateBy || 'year',
       rollupBy: query.rollupBy,
       filters: query.filters,
       rowLabel: metadata.rowLabel,

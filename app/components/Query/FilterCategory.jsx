@@ -33,7 +33,6 @@ class FilterCategory extends Component {
     let {options, filter} = this.props
     let multi = filter.options ? filter.options.multi : false
     let selected = filter.options ? filter.options.selected : null
-    console.log(selected)
 
     return (
       <div className='category-filter'>
