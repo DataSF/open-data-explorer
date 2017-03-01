@@ -161,13 +161,6 @@ class ChartExperimentalCanvas extends Component {
     return false
   }
 
-  isNumericCol (selectedColumnDef) {
-    if (selectedColumnDef.type === 'number') {
-      return true
-    }
-    return false
-  }
-
   setDefaultChartType (selectedColumnDef, chartType) {
     let isDateCol = isColTypeTest(selectedColumnDef, 'date')
     let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
@@ -199,7 +192,7 @@ class ChartExperimentalCanvas extends Component {
       'other': '#E6FF2E'
     }
     const groupByColorIndex = {
-      'text': {'start': '#55FFFF', 'end': '#0000ff'},
+      'text': {'start': '#31c4ed', 'end': '#0000ff'},
       'date': {'start': '#204c39', 'end': '#83F52C'},
       'calendar_date': {'start': '#204c39', 'end': '#83F52C'},
       'checkbox': {'start': '#cc8458', 'end': '#F0DACE'},
@@ -209,7 +202,7 @@ class ChartExperimentalCanvas extends Component {
     }
     let isDateSelectedCol = false
     let colName = ''
-    let numericCol = this.isNumericCol(selectedColumnDef)
+    let numericCol = isColTypeTest(selectedColumnDef, 'number')
     let isGroupBy = this.isGroupByz(groupKeys)
     chartData = this.convertChartData(chartData, selectedColumnDef, dateBy, isGroupBy)
     if (selectedColumnDef) {
@@ -234,19 +227,20 @@ class ChartExperimentalCanvas extends Component {
       paddingLeft: 60
     }
     let maxValue = findMaxObjKeyValue(chartData, 'value')
-    let domainMax = maxValue + (maxValue * 0.03)
+    let domainMax = maxValue + (maxValue * 0.05)
     let minTickGap = 200
     if (!rollupBy) {
       rollupBy = 'other'
+
     }
     let isDtCol = isColTypeTest(selectedColumnDef, 'date')
-    if (rollupBy === 'other' && !isDtCol) {
+    // if (rollupBy === 'other' && !isDtCol) {
+    if (rollupBy === 'other')  {
       let chartDataTop15 = transformOthers(chartData, maxValue, isGroupBy)
       if (chartDataTop15) {
         chartData = chartDataTop15['chartData']
       }
     }
-    console.log(this.props)
     return (
       <div className='chartCanvas'>
         <Choose>
@@ -264,6 +258,7 @@ class ChartExperimentalCanvas extends Component {
                       margin={margin}
                       rowLabel={rowLabel}
                       fillColor={fillColor}
+                      colName={colName}
                       groupKeys={groupKeys}
                       chartData={chartData}
                       yTickCnt={yTickCnt}

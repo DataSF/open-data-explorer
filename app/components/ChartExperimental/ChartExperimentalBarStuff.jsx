@@ -3,6 +3,7 @@ import d3 from 'd3'
 import { XAxis, BarChart, YAxis, CartesianGrid, Bar, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
 import CustomXaxisLabel from './CustomXaxisLabel'
+import CustomKeyAxisTick from './CustomKeyAxisTick'
 
 class ChartExperimentalBarStuff extends Component {
   makeBars (groupKeys, grpColorScale) {
@@ -37,7 +38,8 @@ class ChartExperimentalBarStuff extends Component {
         manyBars: false,
         layout: 'horizontal'
       }
-      if (chartData.length > 20) {
+      console.log(chartData)
+      if (chartData.length > 5) {
         chartProperties.layout = 'vertical'
         chartProperties.manyBars = true
       }
@@ -62,7 +64,7 @@ class ChartExperimentalBarStuff extends Component {
                 <XAxis
                   dataKey='key'
                   type='category'
-                  minTickGap={minTickGap}
+                  // minTickGap={minTickGap}
                   label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} />}
                   height={xAxisHeight} />
                 <YAxis
@@ -85,7 +87,7 @@ class ChartExperimentalBarStuff extends Component {
                 <XAxis
                   dataKey='label'
                   type='category'
-                  minTickGap={minTickGap}
+                  //minTickGap={minTickGap}
                   label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={bars.length} />}
                   height={xAxisHeight} />
                 <YAxis
@@ -122,7 +124,8 @@ class ChartExperimentalBarStuff extends Component {
                 <YAxis
                   dataKey='key'
                   label={<CustomYaxisLabel val={colName} h={h} />}
-                  type='category' />
+                  type='category'
+                  tick={< CustomKeyAxisTick />} />
                 <CartesianGrid strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
                 <Tooltip />
                 <Bar dataKey='value' fill={fillColor} />

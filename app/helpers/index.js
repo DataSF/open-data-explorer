@@ -13,6 +13,9 @@ H.replacePropertyNameValue = require('./replacePropertyNameValue')
 H.fillArray = require('./fillArray.js')
 H.isColTypeTest = require('./isColTypeTest.js')
 H.transformOthers = require('./transformOthers.js')
+
+
+
 // Implement chaining
 H.prototype = {
   value: function value () {
