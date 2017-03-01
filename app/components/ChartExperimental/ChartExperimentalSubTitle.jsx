@@ -9,10 +9,9 @@ class ChartExperimentalSubTitle extends Component {
     if (typeof columnFilter.options['selected'] === 'string') {
       subtitle += titleize(columnFilter.options['selected'].toLowerCase())
     } else {
-      let filterList = columnFilter.options['selected'].map(function (item) {
+      subtitle = columnFilter.options['selected'].map(function (item) {
         return titleize(item.toLowerCase())
-      })
-      subtitle += filterList.join(', ')
+      }).join(', ')
     }
     if (subtitle.length > 0) {
       fitlerCategory = 'Only Showing ' + subtitle
@@ -64,7 +63,7 @@ class ChartExperimentalSubTitle extends Component {
       for (let i = 0; i < fitlerKeys.length; i++) {
         let filter = filters[fitlerKeys[i]]
         if (!_.isEmpty(filter)) {
-          if (filter.options.filterType === 'category') {
+          if (filter.options.filterType === 'category' && filter.options.selected !== null) {
             subtitle = this.filterCategories(filter, fitlerKeys[i])
           } else if (filter.options.filterType === 'dateRange') {
             subtitle = this.filterDates(filter, fitlerKeys[i])
