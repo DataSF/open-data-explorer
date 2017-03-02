@@ -4,6 +4,14 @@ import titleize from 'titleize'
 import moment from 'moment'
 
 class ChartExperimentalSubTitle extends Component {
+  constructor (props) {
+    super(props)
+
+    this.filterCategories = this.filterCategories.bind(this)
+    this.filterDates = this.filterDates.bind(this)
+    this.filterNumbers = this.filterNumbers.bind(this)
+  }
+
   filterCategories (columnFilter, columnFilterName) {
     let subtitle = ''
     let fitlerCategory
@@ -58,7 +66,7 @@ class ChartExperimentalSubTitle extends Component {
     let subtitle
     if (!_.isEmpty(filters)) {
       let filterKeys = Object.keys(filters)
-      subtitle = filterKeys.map(function (key) {
+      subtitle = filterKeys.map((key) => {
         let filter = filters[key]
         let column = columns[key] || null
         let columnName = column !== null ? column.name : 'Boolean Fields'

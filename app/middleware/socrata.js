@@ -99,7 +99,7 @@ function constructQuery (state) {
       let column = key !== 'checkboxes' ? columns[key] : {type: 'checkbox'}
       let filter = filters[key]
 
-      if (column.type === 'date') {
+      if (filter.options && column.type === 'date') {
         let start = filter.options.min.format('YYYY-MM-DD')
         let end = filter.options.max.format('YYYY-MM-DD')
         query.where(key + '>="' + start + '" and ' + key + '<="' + end + '"')
