@@ -7,6 +7,7 @@ function setMessage (state, action) {
   return updateObject(state, {
     message: action.message,
     type: 'error',
+    server: typeof action.status !== 'undefined',
     dismissable: false })
 }
 

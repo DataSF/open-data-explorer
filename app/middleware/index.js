@@ -8,8 +8,14 @@ function callApi (endpoint, transform, state, params) {
   return fetch(endpoint)
     .then((response) => response.json().then((json) => ({json, response}))
   ).then(({ json, response }) => {
-    if (!response.ok) {
-      json.status = response.status
+    let { ok, status } = response
+    if (!ok) {
+      json.status = status
+      if (status >= 500) {
+        json.message = 'Oops! Looks like the Socrata servers are unreachable, responded with: ' + json.message + '. Please check http://status.socrata.com and try again later.'
+      } else if (status < 500) {
+        json.message = 'Oops! The server responded with an error: ' + json.status + ' ' + json.message + '. Code: ' + json.code
+      }
       return Promise.reject(json)
     }
 
@@ -65,7 +71,7 @@ export default (store) => (next) => (action) => {
       type: failureType,
       status: error.status,
       error: true,
-      message: 'The server responded with an error: ' + error.status + ' ' + error.message + '. Code: ' + error.code || 'Something bad happened'
+      message: error.message || 'Something bad happened'
     }))
   )
 }

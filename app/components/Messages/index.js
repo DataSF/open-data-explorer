@@ -1,21 +1,21 @@
 import React, { PropTypes, Component } from 'react'
 import { Alert } from 'react-bootstrap'
 
-const Message = (props) => (
-  props.type
+const Message = ({title, type, message}) => (
+  type
   ? <Alert bsStyle='danger'>
-    <h4>Error</h4>
-    <p>{props.message}</p>
+    <h4>{title}</h4>
+    <p>{message}</p>
   </Alert> : false
 )
 
 class Messages extends Component {
   render () {
     let { messages } = this.props
-
+    let title = messages.server ? 'Server Error' : 'Application Error'
     return (
       <div className='Messages-wrapper'>
-        <Message type={messages.type} message={messages.message} />
+        <Message title={title} type={messages.type} message={messages.message} />
         {(messages.type !== 'error' && this.props.children)
           ? this.props.children : false }
       </div>
