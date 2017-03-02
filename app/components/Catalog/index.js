@@ -26,7 +26,7 @@ const Search = () => (
       </Col>
       <Col sm={8}>
         <div>
-          <SearchBox />
+          <SearchBox autoFocus />
           <ClearAll />
         </div>
         <div className={'Catalog__currentRefinements'}>

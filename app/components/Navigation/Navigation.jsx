@@ -37,7 +37,7 @@ export default class Navigation extends React.Component {
                   <span className={'icon-bar'} />
                 </button>
                 <a className={'navbar-brand navImg'} href='#' />
-                <a className={'navbar-brand navLogo'} href='#'>DataSF &#47;&#47; Staging Explorer </a>
+                <a className={'navbar-brand navLogo'} href='#'>DataSF &#47;&#47; Explorer </a>
               </div>
               <div className={'navbar-collapse collapse'}>
                 <ul className={'nav navbar-nav navbar-right navLi'}>
