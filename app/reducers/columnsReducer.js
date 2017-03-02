@@ -44,7 +44,7 @@ export const getGroupableColumns = (state, selectedColumn) => {
 export const getSelectableColumns = (state) => {
   let { columns } = state
   let colTypesAccepted = ['number', 'checkbox', 'date']
-  let regex = /((lat|lon)[a-z]*|^(x|y)$)/i
+  let regex = /(^(lat|lon)[a-z]*|^(x|y)$)/i
   if (!columns) return []
 
   return Object.keys(columns).filter((col) => {
