@@ -70,7 +70,7 @@ class ChartExperimentalSubTitle extends Component {
         let filter = filters[key]
         let column = columns[key] || null
         let columnName = column !== null ? column.name : 'Boolean Fields'
-        if (!_.isEmpty(filter)) {
+        if (!_.isEmpty(filter) && filter.options.selected !== null) {
           return builders[filter.options.filterType](filter, columnName)
         }
         return null
