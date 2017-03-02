@@ -16,7 +16,7 @@ class FilterOptions extends Component {
   }
 
   renderFilterList () {
-    let { filters, columns, handleRemoveFilter, applyFilter, updateFilter } = this.props
+    let { filters, columns, handleRemoveFilter, applyFilter, updateFilter, dateBy } = this.props
     let filterOptions = Object.keys(filters).map((key) => {
       let filterContent = null
       let filterType
@@ -44,7 +44,8 @@ class FilterOptions extends Component {
             fieldKey={filter.key}
             startDate={startDate}
             endDate={endDate}
-            applyFilter={applyFilter} />
+            applyFilter={applyFilter}
+            dateBy={dateBy} />
           break
         case 'category':
           let optionsForFilter = filter.categories.map(function (record) {

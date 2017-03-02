@@ -1,48 +1,38 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import titleize from 'titleize'
+import moment from 'moment'
 
 class ChartExperimentalSubTitle extends Component {
   filterCategories (columnFilter, columnFilterName) {
     let subtitle = ''
     let fitlerCategory
+    let { columns } = this.props
+
     if (typeof columnFilter.options['selected'] === 'string') {
       subtitle += titleize(columnFilter.options['selected'].toLowerCase())
     } else {
-      let filterList = columnFilter.options['selected'].map(function (item) {
-        return titleize(item.toLowerCase())
-      })
-      subtitle += filterList.join(', ')
+      subtitle = columnFilter.options['selected'].map(function (item) {
+        return columnFilter.options.filterType === 'category' ? titleize(item) : titleize(columns[item].name)
+      }).join(', ')
     }
     if (subtitle.length > 0) {
       fitlerCategory = 'Only Showing ' + subtitle
       subtitle = 'Filtering by ' + titleize(columnFilterName)
-      subtitle = subtitle + ' => ' + fitlerCategory
+      subtitle = subtitle + ': ' + fitlerCategory
     }
-    return subtitle
+    return <div key={columnFilterName}>{subtitle}</div>
   }
 
-  getDtString (dt) {
-    let yr = String(dt.getFullYear())
-    let month = String(dt.getMonth())
-    if (month === '0') {
-      month = '01'
-    }
-    if (month.length === 1) {
-      month = '0' + month
-    }
-    let day = String(dt.getDate())
-    return month + '/' + day + '/' + yr
-  }
   filterDates (columnFilter, columnFilterName) {
     let subtitle = ''
     let fitlerCategory
-    let minDt = this.getDtString(columnFilter.options.min._d)
-    let maxDt = this.getDtString(columnFilter.options.max._d)
+    let minDt = moment(columnFilter.options.min).format('MM/DD/YYYY')
+    let maxDt = moment(columnFilter.options.max).format('MM/DD/YYYY')
     subtitle = 'Filtering by ' + titleize(columnFilterName)
     fitlerCategory = 'Only Showing Records Between ' + minDt + ' and ' + maxDt
-    subtitle = subtitle + ' => ' + fitlerCategory
-    return subtitle
+    subtitle = subtitle + ': ' + fitlerCategory
+    return <div key={columnFilterName}>{subtitle}</div>
   }
 
   filterNumbers (columnFilter, columnFilterName) {
@@ -53,26 +43,30 @@ class ChartExperimentalSubTitle extends Component {
     let end = numList[1]
     subtitle = 'Filtering by ' + titleize(columnFilterName)
     fitlerCategory = 'Only Showing Records with Values Between ' + start + ' and ' + end
-    subtitle = subtitle + ' => ' + fitlerCategory
-    return subtitle
+    subtitle = subtitle + ': ' + fitlerCategory
+    return <div key={columnFilterName}>{subtitle}</div>
   }
 
   buildSubTitle (filters, columns) {
-    let subtitle = ''
+    const builders = {
+      'category': this.filterCategories,
+      'booleanCategory': this.filterCategories,
+      'numericRange': this.filterNumbers,
+      'dateRange': this.filterDates
+    }
+
+    let subtitle
     if (!_.isEmpty(filters)) {
-      let fitlerKeys = Object.keys(filters)
-      for (let i = 0; i < fitlerKeys.length; i++) {
-        let filter = filters[fitlerKeys[i]]
+      let filterKeys = Object.keys(filters)
+      subtitle = filterKeys.map(function (key) {
+        let filter = filters[key]
+        let column = columns[key] || null
+        let columnName = column !== null ? column.name : 'Boolean Fields'
         if (!_.isEmpty(filter)) {
-          if (filter.options.filterType === 'category') {
-            subtitle = this.filterCategories(filter, fitlerKeys[i])
-          } else if (filter.options.filterType === 'dateRange') {
-            subtitle = this.filterDates(filter, fitlerKeys[i])
-          } else if (filter.options.filterType === 'numericRange') {
-            subtitle = this.filterNumbers(filters[fitlerKeys[i]], fitlerKeys[i])
-          }
+          return builders[filter.options.filterType](filter, columnName)
         }
-      }
+        return null
+      })
     }
     return subtitle
   }
@@ -80,7 +74,7 @@ class ChartExperimentalSubTitle extends Component {
     let {filters, columns} = this.props
     let subtitleStuff = this.buildSubTitle(filters, columns)
     return (
-      <h3 className={'chartTitle'}>{subtitleStuff} </h3>
+      <div className={'ChartSubTitle'}>{subtitleStuff}</div>
     )
   }
 }

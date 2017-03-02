@@ -1,3 +1,5 @@
+import merge from 'lodash/merge'
+
 // utility functions
 export function updateObject (oldObject, newValues) {
   return Object.assign({}, oldObject, newValues)
@@ -12,11 +14,15 @@ export function removeByKey (myObj, deleteKey) {
     }, {})
 }
 
-export function updateByKey (myObj, updateKey, payload) {
+export function updateFiltersByKey (myObj, updateKey, payload) {
   return Object.keys(myObj)
     .reduce((result, current) => {
       if (current === updateKey) {
-        result[current] = payload
+        result[current] = merge({}, myObj[current], payload)
+        // first merge then replace selected
+        if (payload.options.selected) {
+          result[current].options.selected = payload.options.selected
+        }
       } else {
         result[current] = myObj[current]
       }

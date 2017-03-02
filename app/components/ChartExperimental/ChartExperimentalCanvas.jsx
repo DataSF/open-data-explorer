@@ -44,7 +44,6 @@ class ChartExperimentalCanvas extends Component {
     if (embed) {
       // this is a hack for now, we'll lift the state up to make handling layout simpler
       let offset = $('#Embed-chartHeader').outerHeight(true) + 21
-      console.log(offset)
       this.setState({height: window.innerHeight - offset})
     }
   }
@@ -248,6 +247,7 @@ class ChartExperimentalCanvas extends Component {
         chartData = chartDataTop15['chartData']
       }
     }
+
     let yAxisWidth = 70
     return (
       <div className='chartCanvas'>
