@@ -42,7 +42,7 @@ const Search = () => (
   </Grid>
 )
 
-const CatalogN = () => (
+const Catalog = () => (
   <InstantSearch
     appId='N6IVMSP2S4'
     apiKey='3bd0fc517f80911bf21045747262a1bd'
@@ -52,4 +52,4 @@ const CatalogN = () => (
   </InstantSearch>
 )
 
-export default CatalogN
+export default Search

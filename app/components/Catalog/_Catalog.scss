@@ -1,39 +1,25 @@
-@import 'toolkit';
-
-.facet h3 {
-	padding-bottom: 5px;
-	border-bottom: 2px solid #eee;
+.ais-SearchBox__root {
+  max-width: 700px;
+  margin: 0 5px 5px 0;
 }
 
-
-.catalogMain{
-   margin-right:1%;
-   margin-left:1%;
+.Catalog__refine h1 {
+  font-size: 20px;
 }
 
-h3.categories{
-  font-size:200%;
+.ais-Panel__root {
+  padding-bottom: 10px;
 }
 
-.catalogMainFacets{
-  margin-top:1%;
-  margin-left:1%;
-  margin-right:1%;
+.Catalog__currentRefinements {
+  padding-bottom: 10px;
 }
 
-.catalogMainSearchBox{
-  margin-top:3%;
+.Catalog {
+  padding-top: 20px;
 }
 
-.facetCategories{
-font-size:125%;
-}
-
-.panelItem{
-  font-size:115;
-}
-
-.CatalogShowingMsg {
-  margin-top: 1.5em;
-  font-weight: bold;
+.Catalog__pagination {
+  text-align: center;
+  width: 100%;
 }

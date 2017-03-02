@@ -3,7 +3,7 @@ import { Route, IndexRoute } from 'react-router'
 
 import App from './containers/App'
 import HomePage from './components/HomePage/HomePage'
-import CatalogN from './components/CatalogN'
+import Catalog from './containers/Catalog'
 import Dataset from './containers/Dataset'
 import DatasetOverview from './containers/DatasetOverview'
 import ColumnDetails from './containers/ColumnDetails'
@@ -16,9 +16,9 @@ export default (
   <Route component={App} path='/'>
     <Route path='/e/:id' component={Embed} />
     <IndexRoute component={HomePage} />
-    <Route path='/catalog' component={CatalogN}>
-      <IndexRoute component={CatalogN} />
-      <Route path=':page' component={CatalogN} />
+    <Route path='/catalog' component={Catalog}>
+      <IndexRoute component={Catalog} />
+      <Route path=':page' component={Catalog} />
     </Route>
     <Route path='/about' component={AboutPage}>
       <IndexRoute component={AboutPage} />
