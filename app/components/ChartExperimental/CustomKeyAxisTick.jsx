@@ -6,6 +6,8 @@ class CustomKeyAxisTick extends Component {
     payload = payload.value.replace('.', '')
     payload = payload.replace('-', '')
     payload = payload.replace(',', '')
+    payload = payload.replace('/', '')
+    payload = payload.trim()
     payload = payload.slice(0, 7)
     return payload
   }

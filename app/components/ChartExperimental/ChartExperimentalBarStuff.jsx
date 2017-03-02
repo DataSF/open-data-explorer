@@ -65,7 +65,6 @@ class ChartExperimentalBarStuff extends Component {
                   style={{fontSize: 13}}
                   label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} />}
                   height={xAxisHeight} />
-
                 <YAxis
                   tickFormatter={valTickFormater}
                   tickCount={yTickCnt}
