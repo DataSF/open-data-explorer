@@ -13,6 +13,9 @@
 
 .chartCanvas{
      min-height: 100%;
+     overflow:visible;
+     margin-right:-20px;
+     padding-right:20px;
 }
 
 .line {
@@ -74,6 +77,6 @@
     margin-bottom:100px;
 }
 
-.ChartSubTitle {
-
+.MonthFtSize{
+    font-size: 80%;
 }
