@@ -1,7 +1,7 @@
 import './_Catalog.scss'
 
 import React from 'react'
-import { InstantSearch, Hits, SearchBox, RefinementList, CurrentRefinements, ClearAll, Pagination, Panel, Stats } from 'react-instantsearch/dom'
+import { Hits, SearchBox, RefinementList, CurrentRefinements, ClearAll, Pagination, Panel, Stats } from 'react-instantsearch/dom'
 import { Grid, Row, Col, Panel as BSPanel } from 'react-bootstrap'
 import orderBy from 'lodash/orderBy'
 import { Link } from 'react-router'
@@ -40,16 +40,6 @@ const Search = () => (
       </Col>
     </Row>
   </Grid>
-)
-
-const Catalog = () => (
-  <InstantSearch
-    appId='N6IVMSP2S4'
-    apiKey='3bd0fc517f80911bf21045747262a1bd'
-    indexName='dev_dataset_search'
-  >
-    <Search />
-  </InstantSearch>
 )
 
 export default Search
