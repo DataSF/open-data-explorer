@@ -29,7 +29,7 @@ class ChartExperimentalLineStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, domainMax, minTickGap, yTickCnt, colName, legendStyle, xAxisHeight} = this.props
+    let {h, w, isGroupBy, yAxisWidth, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, domainMax, minTickGap, yTickCnt, colName, legendStyle, xAxisHeight} = this.props
     let lines = this.makeLines(groupKeys)
 
     return (
@@ -43,6 +43,7 @@ class ChartExperimentalLineStuff extends Component {
               padding={xAxisPadding}
               height={xAxisHeight} />
             <YAxis
+              width={yAxisWidth}
               type='number'
               label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />}
               tickCount={yTickCnt}

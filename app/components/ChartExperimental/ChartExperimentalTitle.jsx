@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import pluralize from 'pluralize'
 // import { toTitleCase } from '../../helpers'
 import titleize from 'titleize'
+import {isColTypeTest} from '../../helpers'
 
 class ChartExperimentalTitle extends Component {
   // /Builds the the chart title component for the chart
@@ -14,12 +15,18 @@ class ChartExperimentalTitle extends Component {
     return a
   }
 
-  buildTitle (a, b, columns, groupBy) {
-    let title = a + ' by ' + b
+  buildTitle (a, b, columns, groupBy, isNumericCol) {
+    let title
+    if (isNumericCol) {
+      title = 'Distribution of ' + b + ' over all ' + a
+    } else {
+      title = a + ' by ' + b
+    }
 
     if (groupBy) {
       title += ' and ' + columns[groupBy].name
     }
+
     title = titleize(title)
     return title
   }
@@ -28,7 +35,8 @@ class ChartExperimentalTitle extends Component {
     let {columns, sumBy, rowLabel, groupBy, selectedColumnDef} = this.props
     let a = this.buildA(columns, sumBy, rowLabel)
     let b = selectedColumnDef.name
-    let title = this.buildTitle(a, b, columns, groupBy)
+    let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
+    let title = this.buildTitle(a, b, columns, groupBy, isNumericCol)
     return (
       <h2 className={'chartTitle'}>{title}</h2>
     )
