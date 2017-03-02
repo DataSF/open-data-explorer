@@ -151,6 +151,9 @@ class ChartExperimentalCanvas extends Component {
     Object.keys(itemList).map(function (key, index) {
       if (key === 'label') {
         newdict[key] = String(itemList[key])
+        if (newdict[key] === 'undefined') {
+          newdict[key] = 'blank'
+        }
       } else if (key === 'undefined') {
         newdict['blank'] = Number(itemList[key])
       } else {
