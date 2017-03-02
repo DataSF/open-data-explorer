@@ -44,11 +44,12 @@ export const getGroupableColumns = (state, selectedColumn) => {
 export const getSelectableColumns = (state) => {
   let { columns } = state
   let colTypesAccepted = ['number', 'checkbox', 'date']
-
+  let regex = /((lat|lon)[a-z]*|^(x|y)$)/i
   if (!columns) return []
 
   return Object.keys(columns).filter((col) => {
-    return ((columns[col].categories && ['text', 'number'].indexOf(columns[col].type) > -1) || colTypesAccepted.indexOf(columns[col].type) > -1)
+    let geoFields = regex.test(columns[col].key)
+    return (!columns[col].unique && !geoFields && ((columns[col].categories && ['text', 'number'].indexOf(columns[col].type) > -1) || colTypesAccepted.indexOf(columns[col].type) > -1))
   }).map((col) => {
     return {
       label: columns[col].name,

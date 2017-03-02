@@ -34,7 +34,7 @@ export const shouldRunColumnStats = (type, key) => {
    * we don't want to run column stats against all numeric columns, so this allows us to control that, the regex below may need to be
    * tuned as is, it could create false positives. This is okay for now, something we can optimize later
   */
-  let regex = /(year|day|date|month|district|yr|code)/g
+  let regex = /(year|day|date|month|district|yr|code|id|x|y|lat|lon)/g
   let isCategorical = regex.test(key)
   if (type === 'text' || (isCategorical && type === 'number')) {
     return true
