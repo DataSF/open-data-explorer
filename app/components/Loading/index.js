@@ -32,8 +32,6 @@ class Loading extends Component {
     let { show } = this.state
     let style = this.props.style ? this.props.style : ''
     let classNames = `Loading-wrapper ${style}`
-
-    console.log(show)
     return (
       <div>
         {isFetching

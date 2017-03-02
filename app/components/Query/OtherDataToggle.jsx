@@ -33,7 +33,6 @@ class OtherDataToggle extends Component {
     }
     let allActive = rollupBy === 'none' ? 'active' : ''
     let otherActive = rollupBy === 'other' ? 'active' : ''
-    console.log(rollupBy)
     return (
       <div>
         <Choose>
