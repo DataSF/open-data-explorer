@@ -28,8 +28,6 @@
   "dependencies": {
     "airbrake-js": "^0.5.9",
     "alasql": "^0.3.3",
-    "algoliasearch": "^3.17.0",
-    "algoliasearch-helper": "^2.9.1",
     "c3": "^0.4.11-rc4",
     "copy-to-clipboard": "^3.0.5",
     "d3": "^3.5.17",
@@ -49,6 +47,7 @@
     "react-date-range": "^0.9.3",
     "react-dimensions": "^1.2.0",
     "react-dom": "^15.4.2",
+    "react-instantsearch": "^3.2.1",
     "react-radio-group": "^2.2.0",
     "react-redux": "^4.4.1",
     "react-router": "^2.0.1",
