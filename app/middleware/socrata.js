@@ -1,6 +1,4 @@
 import soda from 'soda-js'
-import pluralize from 'pluralize'
-import { capitalize } from 'underscore.string'
 import _ from 'lodash'
 import uniq from 'lodash/uniq'
 import { replacePropertyNameValue } from '../helpers'
@@ -34,7 +32,7 @@ export const shouldRunColumnStats = (type, key) => {
    * we don't want to run column stats against all numeric columns, so this allows us to control that, the regex below may need to be
    * tuned as is, it could create false positives. This is okay for now, something we can optimize later
   */
-  let regex = /(year|day|date|month|district|yr|code)/g
+  let regex = /(year|day|date|month|district|yr|code|id|x|y|lat|lon)/g
   let isCategorical = regex.test(key)
   if (type === 'text' || (isCategorical && type === 'number')) {
     return true
@@ -280,112 +278,6 @@ function transformColumns (json) {
   return response
 }
 
-function transformQueryDataLegacy (json, state) {
-  let { query, metadata, columnProps } = state
-  let { rowLabel } = metadata
-  let { selectedColumn, groupBy, sumBy } = query
-  let { columns } = columnProps
-  let labels = ['x']
-  let keys = []
-  let data = []
-  let nullText = 'Blank'
-  let isCheckbox = columns[selectedColumn].type === 'checkbox'
-  let keyIdx = groupBy || 'label'
-  if (keyIdx !== 'label' && columns[keyIdx].type === 'date') keyIdx = 'date_group_by'
-
-  rowLabel = !sumBy ? pluralize(rowLabel) : 'Sum of ' + columns[sumBy].name
-
-  labels = labels.concat(isCheckbox ? rowLabel : json.map((row) => {
-    return typeof row.label === 'undefined' ? nullText : (row.label === nullText ? 'False' : capitalize(row.label.toString()))
-  }).filter((elem, index, array) => {
-    return array.indexOf(elem) === index
-  }))
-
-  keys = keys.concat((!isCheckbox && !groupBy) ? rowLabel : json.map((row) => {
-    return typeof row[keyIdx] === 'undefined' ? nullText : (row[keyIdx] === nullText ? 'False' : capitalize(row[keyIdx].toString()))
-  }).filter((elem, index, array) => {
-    return array.indexOf(elem) === index
-  }))
-
-  keys.forEach((key, index, array) => data.push([key].concat(Array.apply(null, new Array(labels.length - 1)).map(Number.prototype.valueOf, 0))))
-
-  json.forEach((row) => {
-    let label = isCheckbox ? rowLabel : (typeof row.label === 'undefined' ? nullText : (row.label === nullText ? 'False' : capitalize(row.label.toString())))
-    let key = (!isCheckbox && !groupBy) ? rowLabel : (typeof row[keyIdx] === 'undefined' ? nullText : (row[keyIdx] === nullText ? 'False' : capitalize(row[keyIdx].toString())))
-    data[keys.indexOf(key)][labels.indexOf(label)] = row.value
-  })
-
-  if (columns[selectedColumn].type === 'number' && !columns[selectedColumn].categories) {
-    let counts = [].concat(data[0])
-    let numbers = [].concat(labels)
-    counts.shift()
-    numbers.shift()
-
-    let vector = numbers.map((number, idx, arr) => {
-      let expand = []
-      for (let i = 0; i < parseInt(counts[idx]); i++) {
-        expand.push(parseInt(number))
-      }
-      return expand
-    }).reduce((a, b) => {
-      return a.concat(b)
-    }, [])
-
-    vector.sort((a, b) => {
-      return a - b
-    })
-
-    let quantile = (p, vector) => {
-      let idx = 1 + (vector.length - 1) * p
-      let lo = Math.floor(idx)
-      let hi = Math.ceil(idx)
-      let h = idx - lo
-      return (1 - h) * vector[lo] + h * vector[hi]
-    }
-
-    let freedmanDiaconis = (vector) => {
-      let iqr = quantile(0.75, vector) - quantile(0.25, vector)
-      return 2 * iqr * Math.pow(vector.length, -1 / 3)
-    }
-
-    let pretty = (x) => {
-      let scale = Math.pow(10, Math.floor(Math.log(x / 10) / Math.LN10))
-      let err = 10 / x * scale
-      if (err <= 0.15) scale *= 10
-      else if (err <= 0.35) scale *= 5
-      else if (err <= 0.75) scale *= 2
-      return scale * 10
-    }
-
-    let binSize = freedmanDiaconis(vector)
-    if (binSize === 0) {
-      let vector2 = vector.slice(vector.lastIndexOf(0))
-      binSize = freedmanDiaconis(vector2)
-    }
-    binSize = pretty(binSize)
-    let binNumbers = (values, binWidth, array = [], index = 0) => {
-      if (index < values.length) {
-        let bin = Math.floor(values[index] / binWidth)
-        array[bin] = array[bin] ? array[bin] + 1 : 1
-        binNumbers(values, binWidth, array, index + 1)
-      }
-      return array
-    }
-
-    let maxBins = Math.floor(vector[vector.length - 1] / binSize)
-    let emptyBins = Array(maxBins).fill(0)
-    let binFreq = binNumbers(vector, binSize, emptyBins)
-
-    data[0] = ['Count of ' + rowLabel].concat(binFreq)
-    labels = ['x'].concat(binFreq.map((d, idx) => {
-      return binSize * idx + ' to ' + binSize * (idx + 1)
-    }))
-  }
-
-  data = [labels].concat(data)
-  return data
-}
-
 function reduceGroupedData (data, groupBy) {
   // collect unique labels
   let groupedData = uniq(data.map((obj) => {
@@ -408,12 +300,6 @@ function reduceGroupedData (data, groupBy) {
 }
 
 function transformQueryData (json, state) {
-  let data
-  if (!(json.length === 1)) {
-    data = transformQueryDataLegacy(json, state)
-  } else {
-    data = [ ['x', json[0]['label']], [ 'Count of Nothing', json[0]['value'] ] ]
-  }
   let { query } = state
   let groupKeys = []
   if (query.groupBy) {
@@ -426,7 +312,7 @@ function transformQueryData (json, state) {
   return {
     query: {
       isFetching: false,
-      data: data,
+      data: [],
       originalData: json,
       groupKeys: groupKeys
     }

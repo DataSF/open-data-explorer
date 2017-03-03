@@ -31,6 +31,7 @@ function resetState (state, action) {
   return {}
 }
 
+/*
 function clearData (state, action) {
   return updateObject(state, {
     chartData: [],
@@ -38,11 +39,11 @@ function clearData (state, action) {
     groupKeys: []
   })
 }
+*/
 
 // slice reducer - chart
 export const chartReducer = createReducer({}, {
   [ActionTypes.METADATA_REQUEST]: resetState,
-  [ActionTypes.DATA_REQUEST]: clearData,
   [ActionTypes.DATA_SUCCESS]: updateData,
   [ActionTypes.APPLY_CHART_TYPE]: changeChartType,
   [ActionTypes.SET_DEFAULT_CHARTTYPE]: setDefaultChartType
