@@ -9,7 +9,6 @@ function callApi (endpoint, transform, state, params) {
     .then((response) => response.json().then((json) => ({json, response}))
   ).then(({ json, response }) => {
     let { ok, status } = response
-    console.log(response)
     if (!ok) {
       json.status = status
       if (status >= 500) {
