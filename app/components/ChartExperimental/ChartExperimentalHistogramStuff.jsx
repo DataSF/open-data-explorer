@@ -43,7 +43,7 @@ class ChartExperimentalHistogramStuff extends Component {
   }
 
   render () {
-    let {h, w, margin, yAxisWidth, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater, xAxisHeight, colName} = this.props
+    let {h, w, yAxisWidth, fillColor, chartData, yTickCnt, valTickFormater, xAxisHeight, colName} = this.props
     let freqs = this.explodeFrequencies(chartData)
     let xScale = this.getXScale(freqs, w)
     let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(15))
@@ -53,8 +53,9 @@ class ChartExperimentalHistogramStuff extends Component {
       dx = histogramData[0]['dx']
     }
     let barData = this.makeBarData(histogramData)
-    let maxValue = findMaxObjKeyValue(barData, 'frequency')
-    let domainMax = maxValue + (maxValue * 0.03)
+    let maxValueX = findMaxObjKeyValue(barData, 'value') * 1.10
+    let domainMaxY = findMaxObjKeyValue(barData, 'frequency') * 1.03
+    // let domainMaxY = maxValue + (maxValueY * 0.03)
     const zerosDivStyle = {
       width: w,
       height: h
@@ -85,15 +86,14 @@ class ChartExperimentalHistogramStuff extends Component {
             width={w}
             height={h}
             data={barData}
-            margin={margin}
             barGap={0}
+            margin={{ right: 10, left: 5 }}
             barCategoryGap={0} >
             <XAxis
               dataKey='value'
               type='number'
+              domain={[0, maxValueX]}
               height={xAxisHeight}
-              domain={[0, domainMax]}
-              tickCount={xTickCnt}
               label={<CustomXaxisLabel val={'Value of ' + colName} isGroupBy={false} numOfGroups={0} />} />
             <YAxis
               type='number'
@@ -101,7 +101,7 @@ class ChartExperimentalHistogramStuff extends Component {
               label={<CustomYaxisLabel val={'Frequency of Values'} h={h} />}
               tickCount={yTickCnt}
               tickFormatter={valTickFormater}
-              domain={[0, domainMax]} />
+              domain={[0, domainMaxY]} />
             <CartesianGrid strokeDasharray='3 3' vertical={false} />
             <Tooltip content={<HistogramTooltip dx={dx} />} />
             <Bar dataKey='frequency' fill={fillColor} />
