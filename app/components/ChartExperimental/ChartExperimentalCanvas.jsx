@@ -7,7 +7,7 @@ import ChartExperimentalBarStuff from './ChartExperimentalBarStuff'
 import ChartExperimentalLineStuff from './ChartExperimentalLineStuff'
 import ChartExperimentalAreaStuff from './ChartExperimentalAreaStuff'
 import ChartExperimentalHistogramStuff from './ChartExperimentalHistogramStuff'
-import { findMaxObjKeyValue, isColTypeTest, transformOthers } from '../../helpers'
+import { findMaxObjKeyValue, isColTypeTest, sumObj, sortObj, transformOthers } from '../../helpers'
 
 class ChartExperimentalCanvas extends Component {
 
@@ -74,79 +74,153 @@ class ChartExperimentalCanvas extends Component {
     return false
   }
 
-  convertChartData (chartData, selectedColumnDef, dateBy, isGroupBy) {
+  formatChartDataDates (itemList, dateBy) {
     let yrFormat = d3.time.format('%Y')
     let monthFormat = d3.time.format('%m-%Y')
+    Object.keys(itemList).map(function (key, index) {
+      let dt = itemList[key]['label'].split('T')
+      dt = dt[0].split('-')
+      if (dateBy === 'month') {
+        itemList[key]['key'] = monthFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
+      } else {
+        itemList[key]['key'] = yrFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
+      }
+      itemList[key]['value'] = Number(itemList[key]['value'])
+    })
+    return itemList
+  }
+
+  formatChartDataDatesGrpBy (itemList, dateBy) {
+    let yrFormat = d3.time.format('%Y')
+    let monthFormat = d3.time.format('%m-%Y')
+    Object.keys(itemList).map(function (key, index) {
+      if (dateBy === 'month') {
+        itemList[key]['label'] = monthFormat(new Date(itemList[key]['label']))
+      } else {
+        itemList[key]['label'] = yrFormat(new Date(itemList[key]['label']))
+      }
+    })
+    return itemList
+  }
+
+  formatChartDataCol (itemList) {
+    Object.keys(itemList).map(function (key, index) {
+      itemList[key]['key'] = String(itemList[key]['label'])
+      itemList[key]['value'] = Number(itemList[key]['value'])
+    })
+    return itemList
+  }
+
+  formatBlankChartData (itemList) {
+    Object.keys(itemList).map(function (key, index) {
+      if (itemList[key]['key'] === 'undefined') {
+        itemList[key]['blank'] = Number(itemList[key]['value'])
+      }
+    })
+    delete itemList['undefined']
+    return itemList
+  }
+
+  formatWhiteSpaceChartData (itemList) {
+    Object.keys(itemList).map(function (key, index) {
+      itemList[key]['key'] = itemList[key]['key'].replace(/(\r\n|\n|\r|\t)/gm, 'whitespace')
+      itemList[key]['key'] = itemList[key]['key'].replace('  ', 'whitespace')
+      if (itemList[key]['key'] === ' ') {
+        itemList[key]['key'] = 'whitespace'
+      }
+    })
+    return itemList
+  }
+
+  castChartData (chartData, isDtCol, dateBy) {
+    let newChartData = []
+    if (isDtCol) {
+      newChartData = this.formatChartDataDates(chartData, dateBy)
+    } else {
+      newChartData = this.formatChartDataCol(chartData)
+    }
+    newChartData = this.formatBlankChartData(newChartData)
+    newChartData = this.formatWhiteSpaceChartData(newChartData)
+    return newChartData
+  }
+
+  formatChartDataGrpBy (itemList, dateBy, isDateCol) {
+    let newdict = {}
+    let yrFormat = d3.time.format('%Y')
+    let monthFormat = d3.time.format('%m-%Y')
+    Object.keys(itemList).map(function (key, index) {
+      if (key === 'label') {
+        newdict[key] = String(itemList[key])
+        if (newdict[key] === 'undefined') {
+          newdict[key] = 'blank'
+        }
+      } else if (key === 'undefined') {
+        newdict['blank'] = Number(itemList[key])
+      } else {
+        newdict[key] = Number(itemList[key])
+      }
+    })
+    if (isDateCol) {
+      let dt = newdict['label'].split('T')
+      dt = dt[0].split('-')
+      if (dateBy === 'month') {
+        newdict['label'] = monthFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
+      } else {
+        newdict['label'] = yrFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
+      }
+    }
+    return newdict
+  }
+
+  castChartDataGrpBy (chartData, isDtCol, dateBy) {
+    let newChartData = []
+    for (let i = 0; i < chartData.length; i++) {
+      let newdict = this.formatChartDataGrpBy(chartData[i], dateBy, isDtCol)
+      newChartData.push(newdict)
+    }
+    return newChartData
+  }
+  sortChartDataGrpByDate (newChartData, dateBy) {
+    if (dateBy === 'month') {
+      newChartData.sort(function (a, b) {
+        return Number(a.label.substring(3, a.label.length)) - Number(b.label.substring(3, a.label.length))
+      })
+    } else {
+      newChartData.sort(function (a, b) {
+        return Number(a.label) - Number(b.label)
+      })
+    }
+    return newChartData
+  }
+
+  sortChartDataGrpBy (newChartData) {
+    let sortedNewChartData = []
+    let grpSumDict = {}
+    Object.keys(newChartData).map(function (key, index) {
+      grpSumDict[key] = sumObj(newChartData[key], 'label')
+    })
+    let sorted = sortObj(grpSumDict)
+    for (let i = 0; i < sorted.length; i++) {
+      let idx = sorted[i][0]
+      sortedNewChartData.push(newChartData[idx])
+    }
+    return sortedNewChartData
+  }
+
+  convertChartData (chartData, selectedColumnDef, dateBy, isGroupBy) {
     let newChartData = []
     let isDtCol = isColTypeTest(selectedColumnDef, 'date')
     if (chartData && chartData.length > 1) {
-      let len = chartData.length
       if (!isGroupBy) {
-        for (let i = 0; i < len; i++) {
-          let newdict = {}
-          if (isDtCol) {
-            let dt = chartData[i]['label'].split('T')
-            dt = dt[0].split('-')
-            if (dateBy === 'month') {
-              newdict['key'] = monthFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
-            } else {
-              newdict['key'] = yrFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
-            }
-            newdict['value'] = Number(chartData[i]['value'])
-          } else {
-            newdict['key'] = String(chartData[i]['label'])
-            newdict['value'] = Number(chartData[i]['value'])
-          }
-          Object.keys(newdict).map(function (key, index) {
-            if (key === 'undefined') {
-              newdict['blank'] = Number(chartData[i][key])
-            }
-          })
-          delete newdict['undefined']
-          newChartData.push(newdict)
+        return this.castChartData(chartData, isDtCol, dateBy)
+      } else {
+        newChartData = this.castChartDataGrpBy(chartData, isDtCol, dateBy)
+        if (isDtCol) {
+          newChartData = this.sortChartDataGrpByDate(newChartData, dateBy)
+        } else {
+          newChartData = this.sortChartDataGrpBy(newChartData)
         }
         return newChartData
-      } else {
-        if (isDtCol && isGroupBy) {
-          for (let i = 0; i < len; i++) {
-            let newdict = {}
-            if (dateBy === 'month') {
-              newdict['label'] = monthFormat(new Date(chartData[i]['label']))
-            } else {
-              newdict['label'] = yrFormat(new Date(chartData[i]['label']))
-            }
-            Object.keys(chartData[i]).map(function (key, index) {
-              if (key !== 'label') {
-                newdict[key] = Number(chartData[i][key])
-              }
-              if (key === 'undefined') {
-                newdict['blank'] = Number(chartData[i][key])
-              }
-            })
-
-            newChartData.push(newdict)
-          }
-          if (dateBy === 'month') {
-            newChartData.sort(function (a, b) {
-              return Number(a.label.substring(3, a.label.length)) - Number(b.label.substring(3, a.label.length))
-            })
-          } else {
-            newChartData.sort(function (a, b) {
-              return Number(a.label) - Number(b.label)
-            })
-          }
-          return newChartData
-        } // /else{
-          // console.log("****grp by sort")
-          // let orderCD = {}
-          // for(let i=0; i<len; i++){
-          // console.log(chartData[i])
-          //   orderCD[i] = sumObj(chartData[i])
-          // console.log(orderCD[i])
-          // / }
-          // console.log(orderCD)
-          // console.log(chartData)
-        // }
       }
     }
     return chartData
@@ -228,13 +302,16 @@ class ChartExperimentalCanvas extends Component {
     let formatValue = d3.format('.3s')
     let xAxisHeight = 100
     // let formatValue = d3.format('d')
-    let valTickFormater = function (d) { return formatValue(d) }
     let legendStyle = {
       color: '#666',
       paddingRight: 40,
       paddingLeft: 60
     }
+    let valTickFormater
     let maxValue = findMaxObjKeyValue(chartData, 'value')
+    if (maxValue > 10) {
+      valTickFormater = function (d) { return formatValue(d) }
+    }
     let domainMax = maxValue + (maxValue * 0.05)
     let minTickGap = 200
     if (!rollupBy) {

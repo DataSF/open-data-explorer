@@ -14,6 +14,7 @@ H.fillArray = require('./fillArray.js')
 H.isColTypeTest = require('./isColTypeTest.js')
 H.transformOthers = require('./transformOthers.js')
 H.sumObj = require('./sumObj.js')
+H.sortObj = require('./sortObj.js')
 // Implement chaining
 H.prototype = {
   value: function value () {
