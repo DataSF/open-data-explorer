@@ -9,6 +9,7 @@ function callApi (endpoint, transform, state, params) {
     .then((response) => response.json().then((json) => ({json, response}))
   ).then(({ json, response }) => {
     let { ok, status } = response
+    console.log(response)
     if (!ok) {
       json.status = status
       if (status >= 500) {
@@ -67,11 +68,13 @@ export default (store) => (next) => (action) => {
       response,
       type: successType
     })),
-    (error) => next(actionWith({
-      type: failureType,
-      status: error.status,
-      error: true,
-      message: error.message || 'Something bad happened'
-    }))
+    (error) => {
+      next(actionWith({
+        type: failureType,
+        status: error.status,
+        error: true,
+        message: error.message || 'Something bad happened'
+      }))
+    }
   )
 }
