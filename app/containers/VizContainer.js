@@ -103,7 +103,11 @@ class VizContainer extends Component {
         <Col md={3}>
           <Accordion>
             <ConditionalOnSelect selectedColumn={props.selectedColumn}>
-              <GroupOptions columns={props.groupableColumns} selected={props.groupBy} onGroupBy={actions.handleGroupBy} />
+              <Choose>
+                <When condition={props.chartType !== 'histogram'}>
+                  <GroupOptions columns={props.groupableColumns} selected={props.groupBy} onGroupBy={actions.handleGroupBy} />
+                </When>
+              </Choose>
               <SumOptions columns={props.summableColumns} selected={props.sumBy} onSumBy={actions.handleSumBy} />
               <FilterOptions
                 filters={props.filters}
