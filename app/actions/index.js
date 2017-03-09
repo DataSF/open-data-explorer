@@ -81,6 +81,7 @@ function fetchColumnProps (id, key) {
 // 2. Then the migration ID is looked up so we know where to run queries against, and a query to count rows is issued
 // 3. Last, we run some stats against certain columns to use in the interface
 export function loadMetadata (id) {
+  console.log(id)
   return (dispatch, getState) => {
     return dispatch(fetchMetadata(id)).then(() => {
       let dataId = getState().metadata.dataId
@@ -338,4 +339,20 @@ export const loadQueryStateFromString = (q) => (dispatch, getState) => {
         error: true
       })
     })
+}
+
+export const UPDATE_SEARCH = 'UPDATE_SEARCH'
+export const CLEAR_SEARCH = 'CLEAR_SEARCH'
+
+export function updateSearch (searchState) {
+  return {
+    type: UPDATE_SEARCH,
+    payload: searchState
+  }
+}
+
+export function clearSearch () {
+  return {
+    type: CLEAR_SEARCH
+  }
 }

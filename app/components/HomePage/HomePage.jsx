@@ -2,6 +2,7 @@ import './_HomePage.scss'
 
 import React, { Component } from 'react'
 import { hashHistory } from 'react-router'
+import AutoSuggestSearch from '../../containers/AutoSuggestSearch'
 
 class HomePage extends Component {
 
@@ -33,17 +34,14 @@ class HomePage extends Component {
 
   render () {
     return (
-      <div id='main-container' className={'homePageMain container-fluid'}>
+      <div id='main-container'>
         <section id='jumbo-search' className={'jumbotron jumbotron-default homepage'}>
           <div className={'container'}>
             <h1>Find the data you need</h1>
             <p>Search hundreds of datasets from the City and County of San Francisco. Or browse on the <a href='#/catalog' className={'ext-sf-opendata'}>data catalog</a></p>
             <div className={'row'}>
-              <div className={'col-md-12'}>
-                <form action='#' role='form' className={'form-inline'} onSubmit={this.handleSearch} >
-                  <input id='homepageSearch' className={'search-input form-control input-mysize'} type='text' name='search' placeholder='Search for things like Crime, 311 cases, lobbyists, etc.' autoComplete={'off'} onChange={this.handleTextChange} />
-                  <button className={'btn btn-default btnSearch'} type='submit'><i className={'glyphicon glyphicon-search'} /></button>
-                </form>
+              <div className={'col-md-12 HomePage__search'}>
+                <AutoSuggestSearch />
               </div>
             </div>
           </div>

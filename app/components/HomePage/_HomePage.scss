@@ -41,3 +41,15 @@ search-catalog-input:-moz-placeholder {
     vertical-align: middle;
   }
 }
+
+.HomePage__search .react-autosuggest__container input {
+  width: 100%;
+  vertical-align: middle;
+  display: inline-block;
+  height: 50px;
+}
+
+.HomePage__search {
+  color: #000000;
+  text-align: left;
+}

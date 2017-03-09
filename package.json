@@ -23,7 +23,9 @@
     "test": "NODE_ENV=test node_modules/.bin/karma start",
     "test-travis": "NODE_ENV=test node_modules/.bin/karma start --single-run --browsers PhantomJS",
     "webpack": "webpack --colors --progress --config ./webpack/config",
-    "singletest": "NODE_ENV=test node_modules/.bin/karma start --single-run --no-auto-watch karma.conf.js"
+    "singletest": "NODE_ENV=test node_modules/.bin/karma start --single-run --no-auto-watch karma.conf.js",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "airbrake-js": "^0.5.9",
@@ -38,9 +40,11 @@
     "moment": "^2.13.0",
     "normalizr": "^2.0.1",
     "pluralize": "^2.0.0",
+    "qs": "^6.4.0",
     "rc-slider": "^3.5.1",
     "react": "^15.4.2",
     "react-addons-update": "^15.1.0",
+    "react-autosuggest": "^9.0.0",
     "react-bootstrap": "^0.30.5",
     "react-bootstrap-daterangepicker": "^3.2.2",
     "react-copy-to-clipboard": "^4.2.3",
@@ -126,7 +130,8 @@
     "template-html-loader": "0.0.3",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.11",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "@kadira/storybook": "^2.21.0"
   },
   "engines": {
     "node": ">=0.12.0"

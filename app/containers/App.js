@@ -1,21 +1,21 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import Navigation from '../components/Navigation/Navigation'
+import Navigation from '../components/Navigation'
 import Footer from '../components/Footer/Footer'
 
 const pages = [
   {
-    route: 'about',
-    title: 'About'
+    route: '/catalog',
+    title: 'Data Catalog'
   },
   {
-    route: 'catalog',
-    title: 'Data Catalog'
+    route: '/about',
+    title: 'About'
   }]
 
 const FullLayout = (props) => (
   <div className='FullLayout-wrapper'>
-    <Navigation pages={pages} />
+    <Navigation pages={pages} location={props.location} />
     <div className={'content-wrapper'}>
       {props.children}
     </div>
@@ -36,7 +36,7 @@ class App extends Component {
     return (
       <div className='App'>
         { isEmbed
-        ? <EmbedLayout children={children} /> : <FullLayout children={children} />
+        ? <EmbedLayout children={children} /> : <FullLayout children={children} location={this.props.location} />
         }
       </div>
     )

@@ -10,6 +10,8 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+  console.log('mapDispatch')
+  console.log(ownProps.params.id)
   return {
     onLoad: () => {
       return dispatch(loadMetadata(ownProps.params.id))

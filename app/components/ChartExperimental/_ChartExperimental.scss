@@ -1,4 +1,10 @@
-
+.chartCanvasBlankCanvas{
+  padding:20%;
+  border: 7px dashed;
+  border-color: #ecf0f1;
+  color: #ecf0f1;
+  font-size:275%;
+}
 
 .paddz{
     margin-top:10%;
@@ -71,10 +77,6 @@
     font-size:.8em;
     height: auto;
     text-align: center;
-}
-
-.chartHeader{
-    margin-bottom:100px;
 }
 
 .MonthFtSize{
