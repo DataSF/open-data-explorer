@@ -69,7 +69,6 @@ class AutoComplete extends Component {
       className={this.props.className}
       onSubmit={(event) => {
         event.preventDefault()
-        console.log(this.refs.autosuggest)
         if (!this.refs.autosuggest.justSelectedSuggestion) {
           hashHistory.push({
             pathname: '/catalog',

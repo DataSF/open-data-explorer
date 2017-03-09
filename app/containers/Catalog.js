@@ -12,6 +12,9 @@ class Catalog extends Component {
   constructor (props) {
     super(props)
 
+    // We set this and update it to deal with an issue where onSearchStateChange is called as the component is
+    // unmounting. This was causing the component to get trapped and remounted because the state would get updated
+    // before the location changed
     this.unmounting = false
   }
 
@@ -27,10 +30,6 @@ class Catalog extends Component {
 
   componentWillMount () {
     this.unmounting = false
-  }
-
-  componentDidMount () {
-    console.log('did mount')
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -71,7 +70,6 @@ const mapStateToProps = (state, ownProps) => {
   return {
     searchState: state.search.searchState,
     lastPush: state.search.lastPush,
-    page: ownProps.params.page || 1,
     router: ownProps.router,
     location: ownProps.location
   }

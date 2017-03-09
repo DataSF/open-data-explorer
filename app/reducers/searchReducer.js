@@ -1,9 +1,4 @@
 import * as ActionTypes from '../actions'
-import merge from 'lodash/merge'
-/*
-import union from 'lodash/union'
-import uniq from 'lodash/uniq'
-*/
 import { updateObject, createReducer } from './reducerUtilities'
 
 let initialState = {

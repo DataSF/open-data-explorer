@@ -12,9 +12,6 @@ class Dataset extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log('receiving props')
-    console.log(this.props.params.id)
-    console.log(nextProps.params.id)
     if (this.props.params.id !== nextProps.params.id) {
       nextProps.onLoad().then(() => {
         nextProps.loadColumnProps()
@@ -23,7 +20,6 @@ class Dataset extends Component {
   }
 
   render () {
-    console.log('render')
     const { metadata, children, ...other } = this.props
     return (
       <section id={'Dataset'}>
