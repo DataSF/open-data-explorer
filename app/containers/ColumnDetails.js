@@ -7,12 +7,12 @@ import ColumnSort from '../components/ColumnSort'
 import { getUniqueColumnTypes } from '../reducers'
 import { filterColumnList, sortColumnList } from '../actions'
 
-const ColumnDetails = ({list, filter, filterTypes, onFilter, sort, onSort}) => (
+const ColumnDetails = ({list, filters, items, onFilter, sort, onSort}) => (
   <Row>
     <Col md={8}>
-      <ColumnFilter filterTypes={filterTypes} onFilter={onFilter} filter={filter} />
+      <ColumnFilter items={items} onFilter={onFilter} filters={filters} />
       <ColumnSort sort={sort} onSort={onSort} />
-      <ColumnList list={list} filter={filter} sort={sort} />
+      <ColumnList list={list} filters={filters} sort={sort} />
     </Col>
   </Row>
 )
@@ -21,8 +21,8 @@ const mapStateToProps = (state, ownProps) => {
   const { columnProps } = state
   return {
     list: columnProps.columns || {},
-    filterTypes: getUniqueColumnTypes(state),
-    filter: columnProps.filter,
+    items: getUniqueColumnTypes(state),
+    filters: columnProps.typeFilters,
     sort: columnProps.sort
   }
 }

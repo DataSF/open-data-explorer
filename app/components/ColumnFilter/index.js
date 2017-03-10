@@ -11,17 +11,14 @@ const ICONS = {
   'checkbox': 'fa-check'
 }
 
-const FilterButton = ({type, icon, onFilter, filter}) => {
+const FilterButton = ({label, icon, onFilter, filters}) => {
   const handleOnFilter = () => {
-    if (filter === type) {
-      type = ''
-    }
-    onFilter(type)
+    onFilter(label)
   }
   return (
     <Button bsStyle='info' onClick={handleOnFilter}>
       <i className={icon} aria-hidden='true'>
-        <span className='sr-only'>{type}</span>
+        <span className='sr-only'>{label}</span>
       </i>
     </Button>
   )
@@ -33,14 +30,14 @@ FilterButton.propTypes = {
   onFilter: PropTypes.func.isRequired
 }
 
-const ColumnFilter = ({filterTypes, onFilter, filter}) => {
-  let filterButtons = filterTypes.map((type, idx) => {
-    let icon = 'fa ' + ICONS[type]
-    return <FilterButton key={idx} type={type} icon={icon} onFilter={onFilter} filter={filter} />
+const ColumnFilter = ({items, onFilter, filters}) => {
+  let filterButtons = items.map(({label}, idx) => {
+    let icon = 'fa ' + ICONS[label]
+    return <FilterButton key={idx} label={label} icon={icon} onFilter={onFilter} filters={filters} />
   })
   return (
     <div className={'ColumnFilter'}>
-      <div className={'ColumnFilter--title'}>
+      <div className={'ColumnFilter__title'}>
         <strong>Filter by type</strong>
       </div>
       <ButtonGroup>
@@ -51,9 +48,9 @@ const ColumnFilter = ({filterTypes, onFilter, filter}) => {
 }
 
 ColumnFilter.propTypes = {
-  filterTypes: PropTypes.array.isRequired,
+  items: PropTypes.array.isRequired,
   onFilter: PropTypes.func.isRequired,
-  filter: PropTypes.string
+  filters: PropTypes.array
 }
 
 export default ColumnFilter

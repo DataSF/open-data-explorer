@@ -20,6 +20,8 @@ import Loading from '../components/Loading'
 import Messages from '../components/Messages'
 import './_containers.scss'
 
+import TypeFilter from '../containers/TypeFilter'
+
 import { BASE_HREF } from '../constants/AppConstants'
 
 class VizContainer extends Component {
@@ -101,6 +103,7 @@ class VizContainer extends Component {
           </Messages>
         </Col>
         <Col md={3}>
+          <TypeFilter />
           <Accordion>
             <ConditionalOnSelect selectedColumn={props.selectedColumn}>
               <Choose>

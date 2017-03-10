@@ -1,8 +1,7 @@
 import * as ActionTypes from '../actions'
 import merge from 'lodash/merge'
 import union from 'lodash/union'
-import uniq from 'lodash/uniq'
-import { updateObject, createReducer } from './reducerUtilities'
+import { updateObject, createReducer, deleteFromArray } from './reducerUtilities'
 
 function sortColumns (a, b) {
   if (a.label < b.label) {
@@ -17,13 +16,25 @@ function sortColumns (a, b) {
 // selectors
 export const getColumnDef = (state, column) => state && state.columns ? state.columns[column] : null
 
-export const getUniqueColumnTypes = (state) => {
-  let { columns } = state
+export const getUniqueColumnTypes = ({columns, typeFilters}) => {
   if (!columns) return []
 
-  let uniqueColTypes = uniq(Object.keys(columns).map((col, idx, arr) => {
-    return columns[col].type
-  }))
+  typeFilters = typeFilters || []
+
+  let uniqueColTypes = Object.keys(columns).reduce((acc, val) => {
+    let index = acc.findIndex((el) => el.label === columns[val].type)
+
+    if (index > -1) {
+      acc[index].value += 1
+      return acc
+    }
+
+    return acc.concat({
+      label: columns[val].type,
+      value: 1,
+      isSelected: typeFilters.indexOf(columns[val].type) > -1
+    })
+  }, [])
 
   return uniqueColTypes
 }
@@ -90,8 +101,10 @@ function loadColumnProperties (state, action) {
 }
 
 function filterColumnList (state, action) {
+  let index = state.typeFilters.indexOf(action.payload)
+  let filtersArr = (index > -1) ? deleteFromArray(state.typeFilters, index) : state.typeFilters.concat(action.payload)
   return updateObject(state, {
-    filter: action.filterType
+    typeFilters: filtersArr
   })
 }
 
@@ -101,7 +114,7 @@ function sortColumnList (state, action) {
   })
 }
 
-const columnsReducer = createReducer({}, {
+const columnsReducer = createReducer({ typeFilters: [] }, {
   [ActionTypes.METADATA_SUCCESS]: initColumns,
   [ActionTypes.COLUMNS_SUCCESS]: updateColumns,
   [ActionTypes.COLPROPS_SUCCESS]: loadColumnProperties,

@@ -81,7 +81,6 @@ function fetchColumnProps (id, key) {
 // 2. Then the migration ID is looked up so we know where to run queries against, and a query to count rows is issued
 // 3. Last, we run some stats against certain columns to use in the interface
 export function loadMetadata (id) {
-  console.log(id)
   return (dispatch, getState) => {
     return dispatch(fetchMetadata(id)).then(() => {
       let dataId = getState().metadata.dataId
@@ -156,10 +155,10 @@ export const UPDATE_PAGE = 'UPDATE_PAGE'
 export const FILTER_COLUMN_LIST = 'FILTER_COLUMN_LIST'
 export const SORT_COLUMN_LIST = 'SORT_COLUMN_LIST' // for sorting the list of columns on details or within column picker
 
-export function filterColumnList (type) {
+export function filterColumnList (item) {
   return {
     type: FILTER_COLUMN_LIST,
-    filterType: type
+    payload: item
   }
 }
 

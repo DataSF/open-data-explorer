@@ -37,11 +37,9 @@ class Catalog extends Component {
   }
 
   onSearchStateChange (nextSearchState) {
-    console.log(this.props.router)
     const THRESHOLD = 700
     const newPush = Date.now()
     this.props.onSearchStateChange({lastPush: newPush})
-    // debugger
     if (this.props.lastPush && newPush - this.props.lastPush <= THRESHOLD) {
       this.props.router.replace(nextSearchState ? `${this.props.location.pathname}?${qs.stringify(nextSearchState)}` : '')
       this.props.onSearchStateChange({searchState: nextSearchState})
