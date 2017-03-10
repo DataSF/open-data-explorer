@@ -31,7 +31,8 @@ export const getUniqueColumnTypes = ({columns, typeFilters}) => {
 
     return acc.concat({
       label: columns[val].type,
-      value: 1,
+      value: columns[val].type,
+      count: 1,
       isSelected: typeFilters.indexOf(columns[val].type) > -1
     })
   }, [])
@@ -52,7 +53,7 @@ export const getGroupableColumns = (state, selectedColumn) => {
   }).sort(sortColumns)
 }
 
-export const getSelectableColumns = (state) => {
+export const getSelectableColumns = (state, selectedColumn) => {
   let { columns } = state
   let colTypesAccepted = ['number', 'checkbox', 'date']
   let regex = /(^(lat|lon)[a-z]*|^(x|y)$)/i
@@ -66,7 +67,8 @@ export const getSelectableColumns = (state) => {
       label: columns[col].name,
       value: columns[col].key,
       type: columns[col].type,
-      isCategory: (columns[col].categories)
+      isCategory: (typeof columns[col].categories !== 'undefined' && columns[col].categories.length > 0),
+      isSelected: (selectedColumn === columns[col].key)
     }
   }).sort(sortColumns)
 }
@@ -101,10 +103,19 @@ function loadColumnProperties (state, action) {
 }
 
 function filterColumnList (state, action) {
-  let index = state.typeFilters.indexOf(action.payload)
-  let filtersArr = (index > -1) ? deleteFromArray(state.typeFilters, index) : state.typeFilters.concat(action.payload)
+  let filterPayload
+
+  if (action.payload.key === 'typeFilters') {
+    let index = state.typeFilters.indexOf(action.payload.item)
+    filterPayload = (index > -1) ? deleteFromArray(state.typeFilters, index) : state.typeFilters.concat(action.payload.item)
+  } else if (action.payload.key === 'fieldNameFilter') {
+    filterPayload = action.payload.item
+  } else {
+    return state
+  }
+
   return updateObject(state, {
-    typeFilters: filtersArr
+    [action.payload.key]: filterPayload
   })
 }
 

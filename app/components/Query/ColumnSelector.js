@@ -15,6 +15,8 @@ class ColumnSelector extends Component {
     }
 
     let { columns, selected, onSelectColumn } = this.props
+
+    console.log(columns)
     const options = columns.map((option) => {
       let classNames = ['ColumnSelector-list-group-item']
       let type = (option.isCategory ? 'category' : option.type)
@@ -33,7 +35,6 @@ class ColumnSelector extends Component {
           {option.label}
         </ListGroupItem>)
     })
-
     return (
       <Panel collapsible defaultExpanded header='Select a dataset column'>
         Help text

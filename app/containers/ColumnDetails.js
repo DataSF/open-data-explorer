@@ -18,23 +18,19 @@ const ColumnDetails = ({list, filters, items, onFilter, sort, onSort}) => (
 )
 
 const mapStateToProps = (state, ownProps) => {
-  const { columnProps } = state
+  const { columnProps: { columns, typeFilters, sort } } = state
   return {
-    list: columnProps.columns || {},
+    list: columns || {},
     items: getUniqueColumnTypes(state),
-    filters: columnProps.typeFilters,
-    sort: columnProps.sort
+    filters: typeFilters,
+    sort: sort
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onFilter: (type) => {
-      return dispatch(filterColumnList(type))
-    },
-    onSort: (sort) => {
-      return dispatch(sortColumnList(sort))
-    }
+    onFilter: (item) => dispatch(filterColumnList('typeFilters', item)),
+    onSort: (sort) => dispatch(sortColumnList(sort))
   }
 }
 

@@ -155,10 +155,13 @@ export const UPDATE_PAGE = 'UPDATE_PAGE'
 export const FILTER_COLUMN_LIST = 'FILTER_COLUMN_LIST'
 export const SORT_COLUMN_LIST = 'SORT_COLUMN_LIST' // for sorting the list of columns on details or within column picker
 
-export function filterColumnList (item) {
+export function filterColumnList (key, item) {
   return {
     type: FILTER_COLUMN_LIST,
-    payload: item
+    payload: {
+      key,
+      item
+    }
   }
 }
 

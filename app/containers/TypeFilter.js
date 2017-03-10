@@ -17,7 +17,7 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onFilter: item => dispatch(filterColumnList(item))
+  onFilter: item => dispatch(filterColumnList('typeFilters', item))
 })
 
 export default connect(
