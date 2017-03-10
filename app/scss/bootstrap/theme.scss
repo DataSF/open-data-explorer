@@ -1,3 +1,21 @@
-.content-wrapper {
-	margin-top: 100px;
+.navbar-brand {
+  padding: 10px;
 }
+
+.navbar {
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+.jumbotron {
+  background-color: #2C3E50;
+  color: #FFFFFF;
+}
+
+@media (min-width: 768px) {
+  .navbar-nav > li > a {
+    padding-top: 21.5px;
+    padding-bottom: 19.5px;
+  }
+}
+

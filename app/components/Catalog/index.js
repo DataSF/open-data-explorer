@@ -7,13 +7,13 @@ import orderBy from 'lodash/orderBy'
 import { Link } from 'react-router'
 import slugify from 'underscore.string/slugify'
 
-const Record = ({hit}) => (
-  <BSPanel header={<Link to={`${'/' + slugify(hit.category) + '/' + slugify(hit.name) + '/' + hit.systemID}`}>{hit.name}</Link>} className='Catalog__record-header'>
+const Record = (clearSearch, {hit}) => (
+  <BSPanel header={<Link to={`${'/' + slugify(hit.category) + '/' + slugify(hit.name) + '/' + hit.systemID}`} onClick={clearSearch}>{hit.name}</Link>} className='Catalog__record-header'>
     <p>{hit.description}</p>
   </BSPanel>
 )
 
-const Search = () => (
+const Search = ({clearSearch}) => (
   <Grid fluid className={'Catalog'}>
     <Row className='Catalog__search'>
       <Col sm={3} className='Catalog__refine'>
@@ -33,7 +33,7 @@ const Search = () => (
           <CurrentRefinements />
           <Stats />
         </div>
-        <Hits hitComponent={Record} />
+        <Hits hitComponent={Record.bind(this, clearSearch)} />
         <div className={'Catalog__pagination'}>
           <Pagination />
         </div>

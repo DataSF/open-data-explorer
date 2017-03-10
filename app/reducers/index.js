@@ -7,6 +7,7 @@ import { queryReducer } from './queryReducer'
 import { chartReducer } from './chartReducer'
 import { tableReducer } from './tableReducer'
 import { messagesReducer } from './messagesReducer'
+import { searchReducer } from './searchReducer'
 
 const rootReducer = combineReducers({
   metadata: metadataReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   table: tableReducer,
   columnProps: columnsReducer,
   messages: messagesReducer,
+  search: searchReducer,
   routing
 })
 

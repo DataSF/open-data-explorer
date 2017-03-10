@@ -5,8 +5,6 @@ class URLReader extends Component {
   componentDidMount () {
     let { param, urlQuery, processUrl, id } = this.props
     if (typeof urlQuery[param] !== 'undefined') {
-      console.log(urlQuery[param])
-      console.log(id)
       processUrl(id, urlQuery[param])
     }
   }

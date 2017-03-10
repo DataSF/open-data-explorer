@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Row } from 'react-bootstrap'
 import Panel from './Panel'
-require('./_ChartExperimental.scss')
+import './_ChartExperimental.scss'
 import ChartExperimentalCanvas from './ChartExperimentalCanvas'
 
 class ChartExperimental extends Component {

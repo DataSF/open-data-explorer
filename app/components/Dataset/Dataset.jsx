@@ -11,11 +11,19 @@ class Dataset extends Component {
     })
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (this.props.params.id !== nextProps.params.id) {
+      nextProps.onLoad().then(() => {
+        nextProps.loadColumnProps()
+      })
+    }
+  }
+
   render () {
     const { metadata, children, ...other } = this.props
     return (
       <section id={'Dataset'}>
-        <div className='container-fluid datasetContainer'>
+        <div className='container-fluid'>
           <DatasetFrontMatter apiDomain={API_DOMAIN} {...metadata} />
           <DatasetNav {...other} />
           {children}
