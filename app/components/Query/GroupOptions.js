@@ -7,10 +7,10 @@ class GroupOptions extends Component {
     let { columns, selected, onGroupBy } = this.props
     return (
       columns.length !== 0
-      ? <Panel collapsible defaultExpanded header='Group by another column' bsStyle={'primary'}>
+      ? <Panel collapsible defaultExpanded header='Group by another field' bsStyle={'primary'}>
         <Select
           name='groupby'
-          placeholder='Select a column to group by'
+          placeholder='Select a field to group by'
           options={columns}
           value={selected}
           onChange={onGroupBy} />

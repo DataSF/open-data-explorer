@@ -15,7 +15,7 @@ import SumOptions from '../components/Query/SumOptions'
 import { Row, Col, Accordion, Panel } from 'react-bootstrap'
 import DateToggle from '../components/Query/DateToggle'
 import OtherDataToggle from '../components/Query/OtherDataToggle'
-import ChartTypeDisplay from '../components/Query/ChartTypeDisplay'
+import ChartTypePicker from '../components/ChartTypePicker'
 import Loading from '../components/Loading'
 import Messages from '../components/Messages'
 import FieldNameFilter from '../containers/FieldNameFilter'
@@ -39,7 +39,6 @@ class VizContainer extends Component {
 
   render () {
     let { props, actions } = this.props
-    console.log(props.supportedChartTypes)
     return (
       <Row>
         <Col md={9} className='VizContainer__stage'>
@@ -110,10 +109,10 @@ class VizContainer extends Component {
               </div>
             </Panel>
             <ConditionalOnSelect selectedColumn={props.selectedColumn}>
-              <ChartTypeDisplay
-                applyChartType={actions.applyChartType}
+              <ChartTypePicker
+                chartTypes={props.supportedChartTypes}
                 chartType={props.chartType}
-                selectedColumnDef={props.selectedColumnDef} />
+                onChange={actions.handleChartType} />
               <Choose>
                 <When condition={props.chartType !== 'histogram'}>
                   <GroupOptions columns={props.groupableColumns} selected={props.groupBy} onGroupBy={actions.handleGroupBy} />
@@ -228,7 +227,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       changeRollupBy: (rollupBy) => {
         return dispatch(changeRollupBy(rollupBy))
       },
-      applyChartType: (chartType) => {
+      handleChartType: (chartType) => {
         return dispatch(applyChartType(chartType))
       },
       loadQueryStateFromString: (q) => {
