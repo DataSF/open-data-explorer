@@ -4,11 +4,11 @@ import './_defaultListGroup.scss'
 
 class DefaultListGroup extends Component {
 
-  makeList (ComponentToRender, items) {
+  makeList (ComponentToRender, items, action, iconClick) {
     let content = (<div />)
     if (items) {
       content = items.map((item, index) => (
-        <ComponentToRender itemProps={item} key={`item-${index}`} />
+        <ComponentToRender itemProps={item} key={`item-${index}`} actions={{action}} iconClick={iconClick} />
     ))
     } else {
       content = (<ComponentToRender />)
@@ -16,10 +16,13 @@ class DefaultListGroup extends Component {
     return content
   }
   render () {
+    console.log('in the default list group')
     const ComponentToRender = this.props.itemComponent
     let items = this.props.items
+    let action = this.props.action
     let className = this.props.className
-    let content = this.makeList(ComponentToRender, items)
+    let iconClick = this.props.iconClick
+    let content = this.makeList(ComponentToRender, items, action, iconClick)
     return (
       <ListGroup fill className={className}>
         {content}

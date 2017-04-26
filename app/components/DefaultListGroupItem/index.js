@@ -4,21 +4,15 @@ import './_defaultListGroupItem.scss'
 
 class DefaultListGroupItem extends Component {
   render () {
-    const {itemProps} = this.props
-    let onClick
-    if (itemProps.hasOwnProperty('itemPropsFunction')) {
-      onClick = itemProps.actionFxn.bind(this, itemProps.actionFxnParams)
+    console.log(this.props)
+    let {itemProps, onClick} = this.props
+    if(onClick){
+      onClick = onClick.bind(this, itemProps.onClickParams)
     }
     return (
       <ListGroupItem className={itemProps.className}
         onClick={onClick}>
-        {itemProps.label}
-        <Choose>
-          <When condition={itemProps.hasOwnProperty('otherComponents')}>
-            {itemProps.otherComponents}
-          </When>
-        </Choose>
-
+        {this.props.children}
       </ListGroupItem>
     )
   }
