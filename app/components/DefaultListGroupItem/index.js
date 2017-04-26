@@ -4,14 +4,14 @@ import './_defaultListGroupItem.scss'
 
 class DefaultListGroupItem extends Component {
   render () {
-    const {itemProps} = this.props
-    let onClick
-    if (itemProps.hasOwnProperty('itemPropsFunction')) {
-      onClick = itemProps.actionFxn.bind(this, itemProps.actionFxnParams)
-    }
+    let {itemProps, onClick} = this.props
+    let handleOnClick = typeof onClick === 'function'
+      ? () => onClick(itemProps.fxnParams)
+      : false
+
     return (
       <ListGroupItem className={itemProps.className}
-        onClick={onClick}>
+        onClick={handleOnClick}>
         {itemProps.label}
         <Choose>
           <When condition={itemProps.hasOwnProperty('otherComponents')}>
@@ -24,7 +24,8 @@ class DefaultListGroupItem extends Component {
   }
 }
 DefaultListGroupItem.propTypes = {
-  itemProps: React.PropTypes.object.isRequired
+  itemProps: React.PropTypes.object.isRequired,
+  onClick: React.PropTypes.func
 }
 export default DefaultListGroupItem
 

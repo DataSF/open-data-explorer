@@ -8,7 +8,7 @@ const labelStyle = {
 const humanType = {
   'text': 'Text',
   'category': 'Category',
-  'checkbox': 'Boolean',
+  'boolean': 'Boolean',
   'date': 'Date/Time',
   'location': 'Latitude and Longitude',
   'number': 'Number'

@@ -82,7 +82,7 @@ class ChartExperimentalSubTitle extends Component {
     let {filters, columns} = this.props
     let subtitleStuff = this.buildSubTitle(filters, columns)
     return (
-      <div className={'ChartSubTitle'}>{subtitleStuff}</div>
+      <div className={'Chart__sub-title'}>{subtitleStuff}</div>
     )
   }
 }

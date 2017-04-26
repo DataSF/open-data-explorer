@@ -22,8 +22,8 @@ const rootReducer = combineReducers({
 
 const getColumnDef = (state, column) => fromColumns.getColumnDef(state.columnProps, column)
 
-export const getUniqueColumnTypes = state =>
-  fromColumns.getUniqueColumnTypes(state.columnProps)
+export const getUniqueColumnTypes = (state, selectable) =>
+  fromColumns.getUniqueColumnTypes(state.columnProps, selectable)
 
 export const getGroupableColumns = state =>
   fromColumns.getGroupableColumns(state.columnProps, state.query.selectedColumn)
@@ -36,5 +36,8 @@ export const getSummableColumns = state =>
 
 export const getSelectedColumnDef = state =>
   getColumnDef(state, state.query.selectedColumn)
+
+export const getSupportedChartTypes = state =>
+  fromColumns.getSupportedChartTypes(state.columnProps, state.query.selectedColumn)
 
 export default rootReducer

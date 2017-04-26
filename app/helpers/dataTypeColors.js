@@ -6,7 +6,7 @@ module.exports = function dataTypeColors (col) {
   let dateFields = ['date', 'calendar_date']
   let contactFields = ['email', 'phone', 'url']
   let locationFields = ['location']
-  let booleanFields = ['checkbox']
+  let booleanFields = ['boolean']
   let categoryFields = function (col) {
     if (col['categories']) {
       return true

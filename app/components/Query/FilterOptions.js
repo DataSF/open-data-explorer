@@ -22,14 +22,14 @@ class FilterOptions extends Component {
       let filterType
       let filter
       let checkboxOptions = {}
-      if (key !== 'checkboxes') {
+      if (key !== 'booleans') {
         filter = columns[key]
         filterType = (filter.type === 'text' || filter.type === 'number') && filter.categories ? 'category' : filter.type
       } else {
-        filter = {key: 'checkboxes', name: 'Checkboxes (true/false)'}
-        filterType = 'checkbox'
+        filter = {key: 'booleans', name: 'True/False fields'}
+        filterType = 'boolean'
         checkboxOptions = Object.keys(columns).filter((option) => {
-          return columns[option].type === 'checkbox'
+          return columns[option].type === 'boolean'
         }).map((option) => {
           return {value: columns[option].key, label: columns[option].name}
         })
@@ -61,7 +61,7 @@ class FilterOptions extends Component {
             applyFilter={applyFilter}
             filter={filters[key]} />
           break
-        case 'checkbox':
+        case 'boolean':
           filterContent = <FilterBoolean
             key={filter.key}
             fieldKey={filter.key}
@@ -103,14 +103,14 @@ class FilterOptions extends Component {
 
   render () {
     let { handleAddFilter, columns, filters } = this.props
-    let checkboxes = false
+    let booleans = false
     // todo: these are specific to Socrata, filterable columns should just be set in the state when columns are processed
-    const notFilters = ['checkbox', 'location', 'url']
+    const notFilters = ['boolean', 'location', 'url']
 
     let options = Object.keys(columns).filter((column) => {
       let option = columns[column]
       if (option.unique) return false
-      if (option.type === 'checkbox') checkboxes = true
+      if (option.type === 'boolean') booleans = true
       if (notFilters.indexOf(option.type) > -1) return false
       if (!option.categories && option.type === 'text') return false
       if (option.singleValue) return false
@@ -123,12 +123,12 @@ class FilterOptions extends Component {
       }
     })
 
-    if (checkboxes) {
-      options.push({value: 'checkboxes', label: 'Checkboxes (true/false)'})
+    if (booleans) {
+      options.push({value: 'booleans', label: 'True/False fields'})
     }
 
     return (
-      <Panel collapsible defaultExpanded header='Filter chart by other columns'>
+      <Panel collapsible defaultExpanded header='Filter chart by other columns' bsStyle={'primary'}>
         <Select
           name='filters'
           placeholder="Select fields you'd like to filter by"

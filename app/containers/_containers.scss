@@ -65,3 +65,61 @@
   padding: 10px 20px;
   font-size: 85%;
 }
+
+.VizContainer__config {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  top: 221px;
+  overflow: scroll;
+  padding-right: 35px;
+}
+
+.VizContainer__stage {
+  position: absolute;
+  width: 74%;
+  top: 221px;
+  bottom: 0;
+  overflow: scroll;
+}
+
+.reset-padding {
+  margin: -15px;
+}
+
+.VizContainer__config input {
+  border: none;
+  border-radius: 0;
+}
+
+.panel-group .panel + .panel {
+  margin-top: 0;
+}
+
+.VizContainer__config .panel-group .panel {
+  border-radius: 0;
+}
+
+.VizContainer__config .panel-heading {
+  border-radius: 0;
+}
+
+.VizContainer__config .panel-primary {
+  border-color: #d3d3d3;
+}
+
+.VizContainer__config .list-group {
+  margin-bottom: 0;
+}
+
+.VizContainer__config .list-group-item:first-child,
+.VizContainer__config .list-group-item:last-child
+ {
+    border-radius: 0;
+  }
+
+.VizContainer__config p.help-text {
+  padding: 5px 10px 5px 20px;
+  margin: 0;
+  border-bottom: thin solid black;
+}

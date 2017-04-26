@@ -267,7 +267,7 @@ class ChartExperimentalCanvas extends Component {
       'text': '#93c2de',
       'date': '#93deaf',
       'calendar_date': '#93deaf',
-      'checkbox': '#deaf93',
+      'boolean': '#deaf93',
       'number': '#de93c2',
       'double': '#de93c2',
       'money': '#de93c2',
@@ -277,7 +277,7 @@ class ChartExperimentalCanvas extends Component {
       'text': {'start': '#31c4ed', 'end': '#0000ff'},
       'date': {'start': '#204c39', 'end': '#83F52C'},
       'calendar_date': {'start': '#204c39', 'end': '#83F52C'},
-      'checkbox': {'start': '#cc8458', 'end': '#F0DACE'},
+      'boolean': {'start': '#cc8458', 'end': '#F0DACE'},
       'number': {'start': '#c71585', 'end': '#ffc0cb'},
       'double': {'start': '#c71585', 'end': '#ffc0cb'},
       'money': {'start': '#c71585', 'end': '#ffc0cb'}

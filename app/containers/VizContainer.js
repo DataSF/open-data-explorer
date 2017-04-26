@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
-import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns } from '../reducers'
+import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns, getSupportedChartTypes } from '../reducers'
 import { selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy, loadQueryStateFromString, changeRollupBy } from '../actions'
 import BlankChart from '../components/ChartExperimental/BlankChart'
 import ConditionalOnSelect from '../components/ConditionalOnSelect'
@@ -12,12 +12,13 @@ import ColumnSelector from '../components/Query/ColumnSelector'
 import GroupOptions from '../components/Query/GroupOptions'
 import FilterOptions from '../components/Query/FilterOptions'
 import SumOptions from '../components/Query/SumOptions'
-import { Row, Col, Accordion } from 'react-bootstrap'
+import { Row, Col, Accordion, Panel } from 'react-bootstrap'
 import DateToggle from '../components/Query/DateToggle'
 import OtherDataToggle from '../components/Query/OtherDataToggle'
 import ChartTypeDisplay from '../components/Query/ChartTypeDisplay'
 import Loading from '../components/Loading'
 import Messages from '../components/Messages'
+import FieldNameFilter from '../containers/FieldNameFilter'
 import './_containers.scss'
 
 import TypeFilter from '../containers/TypeFilter'
@@ -38,53 +39,48 @@ class VizContainer extends Component {
 
   render () {
     let { props, actions } = this.props
+    console.log(props.supportedChartTypes)
     return (
       <Row>
-        <Col md={9}>
+        <Col md={9} className='VizContainer__stage'>
           <Messages messages={props.messages}>
             <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
-              <div className='chartHeader'>
-                <ChartExperimentalTitle
-                  columns={props.columns}
-                  rowLabel={props.rowLabel}
-                  selectedColumnDef={props.selectedColumnDef}
-                  groupBy={props.groupBy}
-                  sumBy={props.sumBy} />
-                <ChartExperimentalSubTitle
-                  columns={props.columns}
-                  filters={props.filters}
-                  chartData={props.chartData}
-                  rollupBy={props.rollupBy} />
+              <div className='Chart__header'>
+                <Row>
+                  <Col md={9}>
+                    <ChartExperimentalTitle
+                      columns={props.columns}
+                      rowLabel={props.rowLabel}
+                      selectedColumnDef={props.selectedColumnDef}
+                      groupBy={props.groupBy}
+                      sumBy={props.sumBy} />
+                    <ChartExperimentalSubTitle
+                      columns={props.columns}
+                      filters={props.filters}
+                      chartData={props.chartData}
+                      rollupBy={props.rollupBy} />
+                  </Col>
+                  <Col md={3}>
+                    <Choose>
+                      <When condition={props.selectedColumnDef && props.selectedColumnDef.type === 'date'}>
+                        <DateToggle
+                          dateBy={props.dateBy}
+                          changeDateBy={actions.changeDateBy}
+                          selectedColumnDef={props.selectedColumnDef} />
+                      </When>
+                      <Otherwise>
+                        <OtherDataToggle
+                          chartData={props.chartData}
+                          rollupBy={props.rollupBy}
+                          chartType={props.chartType}
+                          changeRollupBy={actions.changeRollupBy}
+                          selectedColumnDef={props.selectedColumnDef} />
+                      </Otherwise>
+                    </Choose>
+                  </Col>
+                </Row>
               </div>
               <Loading isFetching={props.isFetching}>
-                <Row>
-                  <Choose>
-                    <When condition={props.selectedColumnDef}>
-                      <Col md={9} />
-                      <Choose>
-                        <When condition={props.selectedColumnDef.type === 'date'}>
-                          <Col md={2}>
-                            <DateToggle
-                              dateBy={props.dateBy}
-                              changeDateBy={actions.changeDateBy}
-                              selectedColumnDef={props.selectedColumnDef} />
-                          </Col>
-                          <Col md={1} />
-                        </When>
-                        <Otherwise>
-                          <Col md={3}>
-                            <OtherDataToggle
-                              chartData={props.chartData}
-                              rollupBy={props.rollupBy}
-                              chartType={props.chartType}
-                              changeRollupBy={actions.changeRollupBy}
-                              selectedColumnDef={props.selectedColumnDef} />
-                          </Col>
-                        </Otherwise>
-                      </Choose>
-                    </When>
-                  </Choose>
-                </Row>
                 <ChartExperimentalCanvas
                   chartData={props.chartData}
                   chartType={props.chartType}
@@ -102,10 +98,22 @@ class VizContainer extends Component {
             </ConditionalOnSelect>
           </Messages>
         </Col>
-        <Col md={3}>
-          <TypeFilter />
+        <Col md={3} className={'VizContainer__config'}>
           <Accordion>
+            <Panel header='Select a field' bsStyle={'primary'}>
+              <div className='reset-padding'>
+                <p className={'help-text'}>Filter field list below by type</p>
+                <TypeFilter />
+                <p className={'help-text'}>Select a field, filter list by name</p>
+                <FieldNameFilter />
+                <ColumnSelector columns={props.selectableColumns} selected={props.selectedColumn} onSelectColumn={actions.selectColumn} />
+              </div>
+            </Panel>
             <ConditionalOnSelect selectedColumn={props.selectedColumn}>
+              <ChartTypeDisplay
+                applyChartType={actions.applyChartType}
+                chartType={props.chartType}
+                selectedColumnDef={props.selectedColumnDef} />
               <Choose>
                 <When condition={props.chartType !== 'histogram'}>
                   <GroupOptions columns={props.groupableColumns} selected={props.groupBy} onGroupBy={actions.handleGroupBy} />
@@ -120,12 +128,7 @@ class VizContainer extends Component {
                 applyFilter={actions.applyFilter}
                 updateFilter={actions.updateFilter}
                 dateBy={props.dateBy} />
-              <ChartTypeDisplay
-                applyChartType={actions.applyChartType}
-                chartType={props.chartType}
-                selectedColumnDef={props.selectedColumnDef} />
             </ConditionalOnSelect>
-            <ColumnSelector columns={props.selectableColumns} selected={props.selectedColumn} onSelectColumn={actions.selectColumn} />
           </Accordion>
         </Col>
       </Row>
@@ -169,6 +172,7 @@ const mapStateToProps = (state, ownProps) => {
       embedCode,
       shareLink,
       messages,
+      supportedChartTypes: getSupportedChartTypes(state),
       queryString: ownProps.location.query.q,
       chartType: chart.chartType,
       chartData: chart.chartData,

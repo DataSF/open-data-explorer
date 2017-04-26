@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import DefaultListGroupItem from '../DefaultListGroupItem'
-import titleize from 'titleize'
+// import titleize from 'titleize'
 // import './_fieldButton.scss'
 import {setClassNamesListItem} from '../../helpers'
-
 
 class FieldButton extends Component {
 
@@ -18,8 +17,7 @@ class FieldButton extends Component {
     itemProps = this.setItemProps(itemProps)
     return (
       <DefaultListGroupItem
-        itemProps={itemProps}>
-      </DefaultListGroupItem>
+        itemProps={itemProps} />
     )
   }
 }

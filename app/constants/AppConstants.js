@@ -9,5 +9,5 @@ export const ICONS = {
   'date': 'fa-calendar',
   'number': 'fa-list-ol',
   'location': 'fa-globe',
-  'checkbox': 'fa-check'
+  'boolean': 'fa-check'
 }

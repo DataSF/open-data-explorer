@@ -5,18 +5,16 @@ import { getUniqueColumnTypes } from '../reducers'
 import DefaultListGroup from '../components/DefaultListGroup'
 import FieldTypeButton from '../components/FieldTypeButton'
 
-const TypeFilter = ({items}) => {
-  return (
-    <DefaultListGroup
-      itemComponent={FieldTypeButton}
-      className={'ColumnSelector-list-group'}
-      items={items}
-      onSelectListItem={onFilter}>
-    </DefaultListGroup>
-  )
+const TypeFilter = ({items, onFilter}) => (
+  <DefaultListGroup
+    itemComponent={FieldTypeButton}
+    className={'default-list-group'}
+    items={items}
+    onSelectListItem={onFilter} />
+)
 
 const mapStateToProps = (state, ownProps) => ({
-  items: getUniqueColumnTypes(state)
+  items: getUniqueColumnTypes(state, true)
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

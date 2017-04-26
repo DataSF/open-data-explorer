@@ -38,7 +38,7 @@ class ChartExperimentalTitle extends Component {
     let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
     let title = this.buildTitle(a, b, columns, groupBy, isNumericCol)
     return (
-      <h2 className={'chartTitle'}>{title}</h2>
+      <h2 className={'Chart__title'}>{title}</h2>
     )
   }
 }

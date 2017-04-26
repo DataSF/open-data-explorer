@@ -7,7 +7,7 @@ class SumOptions extends Component {
     let { columns, selected, onSumBy } = this.props
     return (
       columns.length !== 0
-        ? <Panel collapsible defaultExpanded header='Sum by a numeric column'>
+        ? <Panel collapsible defaultExpanded header='Sum by a numeric column' bsStyle={'primary'}>
           <Select
             name='sumby'
             placeholder='Select a column to sum by'

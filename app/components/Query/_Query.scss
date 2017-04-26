@@ -14,43 +14,33 @@
   height:40px;
 }
 
-.ColumnSelector-list-group {
-  height: 250px;
-  overflow: scroll;
-}
-
-.ColumnSelector-list-group-item {
-  color: #FFFFFF;
-}
-
 .ColumnSelector-list-group-item {
   .selected {
     color: green;
   }
 }
 
+
 .ColumnSelector-list-group {
-  button.list-group-item {
-    color: #FFFFFF;
-  }
   button.list-group-item.selected {
     opacity: 1;
     filter: alpha(opacity=100); /* For IE8 and earlier */
-    border: solid 3px;
-    border-color: #f2c407;
+    //border: solid 3px;
+    // border-color: #f2c407;
   }
   button.list-group-item.not-selected {
-    opacity: 0.5;
-    filter: alpha(opacity=50); /* For IE8 and earlier */
+    // opacity: 0.5;
+    //filter: alpha(opacity=50); /* For IE8 and earlier */
   }
 }
 
 .ChartCanvasToggleTime{
-  padding-bottom:20px;
+  float: right;
+  margin-right: 35px;
 }
 
 .ChartCanvasToggleOther{
-  margin-bottom:15px;
-  margin-top: -25px
+  float: right;
+  margin-right: 35px;
 }
 

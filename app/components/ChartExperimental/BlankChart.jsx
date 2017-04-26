@@ -6,7 +6,7 @@ class BlankChart extends Component {
   render () {
     return (
       <div className='chartCanvasBlankCanvas'>
-        Click on a dataset column to the right to start your charting adventure :-)
+        Click on a field name to the right to start your charting adventure :-)
       </div>
     )
   }

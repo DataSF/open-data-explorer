@@ -10,11 +10,6 @@ class ChartTypeDisplay extends Component {
     let {applyChartType, chartType, selectedColumnDef} = this.props
     let isDateCol = isColTypeTest(selectedColumnDef, 'date')
     let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
-    const panelTitle = (
-      <div>
-        Chart Type Options
-      </div>
-    )
     if (!(chartType)) {
       if (isDateCol) {
         chartType = 'line'
@@ -25,7 +20,7 @@ class ChartTypeDisplay extends Component {
       }
     }
     return (
-      <Panel collapsible defaultExpanded header={panelTitle}>
+      <Panel collapsible defaultExpanded header={'Choose chart type'} bsStyle={'primary'}>
         <Choose>
           <When condition={isDateCol}>
             <div className={'chartTypeRadio'}>

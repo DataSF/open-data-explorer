@@ -19,7 +19,6 @@ const FullLayout = (props) => (
     <div className={'content-wrapper'}>
       {props.children}
     </div>
-    <Footer />
   </div>
   )
 
