@@ -79,9 +79,9 @@ class VizContainer extends Component {
                   </Col>
                 </Row>
               </div>
-
+              <Loading isFetching={props.isFetching} style='centered'>
                 <ChartExperimentalCanvas
-                  chartData={props.chartData}
+                  chartData={props.chartData || []}
                   chartType={props.chartType}
                   dateBy={props.dateBy}
                   rollupBy={props.rollupBy}
@@ -91,9 +91,9 @@ class VizContainer extends Component {
                   selectedColumnDef={props.selectedColumnDef}
                   groupBy={props.groupBy}
                   sumBy={props.sumBy} />
-                <CopySnippet title='Embed this visual' help='Copy the code snippet below and embed in your website' snippet={props.embedCode} />
-                <CopySnippet title='Share this visual' help='Copy the link below to share this page with others' snippet={props.shareLink} />
-
+              </Loading>
+              <CopySnippet title='Embed this visual' help='Copy the code snippet below and embed in your website' snippet={props.embedCode} />
+              <CopySnippet title='Share this visual' help='Copy the link below to share this page with others' snippet={props.shareLink} />
             </ConditionalOnSelect>
           </Messages>
         </Col>

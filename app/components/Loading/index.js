@@ -8,37 +8,48 @@ class Loading extends Component {
     super(props)
 
     this.state = {
+      timer: null,
       show: false
     }
   }
 
-  componentWillMount () {
-    let { isFetching } = this.props
+  componentDidMount () {
+    let timer = null
+    let {isFetching} = this.props
     if (isFetching) {
-      setTimeout(() => { this.setState({ show: true }) }, 500)
+      timer = setTimeout(() => { this.setState({ show: true }) }, 750)
+      this.setState({timer})
     }
   }
 
+  componentWillUnmount () {
+    clearTimeout(this.state.timer)
+  }
+
   componentWillReceiveProps (nextProps) {
-    let { isFetching } = nextProps
-    this.setState({ show: false })
+    clearTimeout(this.state.timer)
+    let timer = null
+    let {isFetching} = nextProps
+    this.setState({ show: false, timer })
+
     if (isFetching) {
-      setTimeout(() => { this.setState({ show: true }) }, 500)
+      timer = setTimeout(() => { this.setState({ show: true }) }, 750)
+      this.setState({timer})
     }
   }
 
   render () {
-    let { isFetching } = this.props
+    // let { isFetching } = this.props
     let { show } = this.state
+    console.log(show)
     let style = this.props.style ? this.props.style : ''
     let classNames = `Loading-wrapper ${style}`
     return (
-      <div>
-        {isFetching
-        ? <div className={classNames}>
-          <IconLoading show={show} />
-        </div> : this.props.children
-      }
+      <div className={classNames}>
+        <IconLoading show={show} />
+        <div>
+          {this.props.children}
+        </div>
       </div>
     )
   }
@@ -50,3 +61,5 @@ Loading.propTypes = {
 }
 
 export default Loading
+
+// <IconLoading show={show} />

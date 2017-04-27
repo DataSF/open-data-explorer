@@ -260,6 +260,7 @@ class ChartExperimentalCanvas extends Component {
 
   render () {
     let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, dateBy, rollupBy} = this.props
+
     chartType = this.setDefaultChartType(selectedColumnDef, chartType)
     let fillColor
     let grpColorScale
@@ -318,7 +319,7 @@ class ChartExperimentalCanvas extends Component {
       rollupBy = 'other'
     }
     let isDtCol = isColTypeTest(selectedColumnDef, 'date')
-    if (rollupBy === 'other' && !isDtCol) {
+    if (rollupBy === 'other' && !isDtCol && chartData) {
       let chartDataTop15 = transformOthers(chartData, maxValue, isGroupBy)
       if (chartDataTop15) {
         chartData = chartDataTop15['chartData']
