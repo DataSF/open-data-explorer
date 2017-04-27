@@ -79,7 +79,7 @@ class VizContainer extends Component {
                   </Col>
                 </Row>
               </div>
-              <Loading isFetching={props.isFetching}>
+
                 <ChartExperimentalCanvas
                   chartData={props.chartData}
                   chartType={props.chartType}
@@ -93,7 +93,7 @@ class VizContainer extends Component {
                   sumBy={props.sumBy} />
                 <CopySnippet title='Embed this visual' help='Copy the code snippet below and embed in your website' snippet={props.embedCode} />
                 <CopySnippet title='Share this visual' help='Copy the link below to share this page with others' snippet={props.shareLink} />
-              </Loading>
+
             </ConditionalOnSelect>
           </Messages>
         </Col>
