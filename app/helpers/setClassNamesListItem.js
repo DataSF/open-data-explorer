@@ -1,4 +1,4 @@
-module.exports = function setClassNamesListItem (obj, propName) {
+module.exports = function setClassNamesListItem (obj, propName, optionalClassNames) {
   let classNames = ['ColumnSelector-list-group-item', 'column-type']
   if (obj.hasOwnProperty('isSelected')) {
     if (obj.isSelected) {
@@ -8,5 +8,8 @@ module.exports = function setClassNamesListItem (obj, propName) {
     }
   }
   classNames.push('column-type--' + obj[propName])
+  if (optionalClassNames) {
+    classNames = classNames.concat(optionalClassNames)
+  }
   return classNames.join(' ')
 }

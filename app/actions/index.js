@@ -172,6 +172,24 @@ export function selectColumn (column) {
       payload: column})
     dispatch(fetchData(getState()))
     dispatch(setDefaultChartType(column))
+    dispatch(setDefaultHideShow())
+  }
+}
+
+export function setHideShow (showCols) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SET_HIDE_SHOW,
+      payload: showCols})
+  }
+}
+
+export function setDefaultHideShow () {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SET_DEFAULT_HIDE_SHOW,
+      showCols: 'show'
+    })
   }
 }
 
@@ -261,6 +279,7 @@ export function updatePage (page) {
   }
 }
 
+export const SET_HIDE_SHOW = 'SET_HIDE_SHOW'
 export const ADD_FILTER = 'ADD_FILTER'
 export const REMOVE_FILTER = 'REMOVE_FILTER'
 export const UPDATE_FILTER = 'UPDATE_FILTER'
@@ -269,7 +288,7 @@ export const APPLY_CHART_TYPE = 'APPLY_CHART_TYPE'
 export const UPDATE_FROM_QS = 'UPDATE_FROM_QS'
 export const QS_FAILURE = 'QS_FAILURE'
 export const SET_DEFAULT_CHARTTYPE = 'SET_DEFAULT_CHARTTYPE'
-
+export const RESET_STATE = 'RESET_STATE'
 export function addFilter (key) {
   return {
     type: ADD_FILTER,
@@ -298,6 +317,12 @@ export function updateFilter (key, options) {
       key,
       options
     }
+  }
+}
+
+export function resetState () {
+  return {
+    type: RESET_STATE
   }
 }
 
@@ -345,6 +370,7 @@ export const loadQueryStateFromString = (q) => (dispatch, getState) => {
 
 export const UPDATE_SEARCH = 'UPDATE_SEARCH'
 export const CLEAR_SEARCH = 'CLEAR_SEARCH'
+export const SET_DEFAULT_HIDE_SHOW = 'SET_DEFAULT_HIDE_SHOW'
 
 export function updateSearch (searchState) {
   return {
@@ -358,3 +384,4 @@ export function clearSearch () {
     type: CLEAR_SEARCH
   }
 }
+

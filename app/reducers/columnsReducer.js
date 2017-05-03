@@ -72,11 +72,28 @@ export const getGroupableColumns = (state, selectedColumn) => {
   let { columns } = state
   selectedColumn = selectedColumn || ''
   if (!columns) return []
-
   return Object.keys(columns).filter((col) => {
     return (columns[col].key !== selectedColumn && columns[col].categories)
   }).map((col) => {
     return {label: columns[col].name, value: columns[col].key}
+  }).sort(sortColumns)
+}
+
+export const getSelectedField = (state, selectedColumn) => {
+  let { columns } = state
+  selectedColumn = selectedColumn || ''
+  if (!columns) return []
+  return Object.keys(columns).filter((col) => {
+    return (col === selectedColumn )
+  }).map((col) => {
+    return {
+      label: columns[col].name,
+      value: columns[col].key,
+      type: columns[col].type,
+      description: columns[col].description,
+      isCategory: (typeof columns[col].categories !== 'undefined' && columns[col].categories.length > 0),
+      isSelected: (selectedColumn === columns[col].key)
+    }
   }).sort(sortColumns)
 }
 
@@ -85,6 +102,10 @@ export const getSelectableColumns = (state, selectedColumn) => {
   if (!columns) return []
   return Object.keys(columns).filter((col) => {
     let selectable = isSelectable(columns, col)
+    if (state.showCols === 'hide' && col === selectedColumn) {
+        console.log('in here')
+        return false
+    }
     if (fieldNameFilter && columns[col].name.toLowerCase().indexOf(fieldNameFilter.toLowerCase()) === -1) {
       return false
     }
@@ -177,12 +198,30 @@ function sortColumnList (state, action) {
   })
 }
 
+function setHideShow (state, action) {
+  return updateObject(state, {
+    showCols: action.payload
+  })
+}
+
+function setDefaultHideShow (state, action) {
+  return updateObject(state, {
+    showCols: action.showCols
+  })
+}
+
+function resetState (state, action) {
+  return updateObject(state, {})
+}
+
 const columnsReducer = createReducer({ typeFilters: [] }, {
   [ActionTypes.METADATA_SUCCESS]: initColumns,
   [ActionTypes.COLUMNS_SUCCESS]: updateColumns,
   [ActionTypes.COLPROPS_SUCCESS]: loadColumnProperties,
   [ActionTypes.FILTER_COLUMN_LIST]: filterColumnList,
-  [ActionTypes.SORT_COLUMN_LIST]: sortColumnList
+  [ActionTypes.SORT_COLUMN_LIST]: sortColumnList,
+  [ActionTypes.SET_HIDE_SHOW]: setHideShow,
+  [ActionTypes.SET_DEFAULT_HIDE_SHOW]: setDefaultHideShow,
+  [ActionTypes.RESET_STATE]: resetState
 })
-
 export default columnsReducer

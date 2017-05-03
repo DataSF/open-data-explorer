@@ -18,7 +18,6 @@ import OtherDataToggle from '../components/Query/OtherDataToggle'
 import ChartTypePicker from '../components/ChartTypePicker'
 import Loading from '../components/Loading'
 import Messages from '../components/Messages'
-import FieldNameFilter from '../containers/FieldNameFilter'
 import './_containers.scss'
 
 import TypeFilter from '../containers/TypeFilter'
@@ -99,15 +98,7 @@ class VizContainer extends Component {
         </Col>
         <Col md={3} className={'VizContainer__config'}>
           <Accordion>
-            <Panel header='Select a field' bsStyle={'primary'}>
-              <div className='reset-padding'>
-                <p className={'help-text'}>Filter field list below by type</p>
-                <TypeFilter />
-                <p className={'help-text'}>Select a field, filter list by name</p>
-                <FieldNameFilter />
-                <ColumnSelector columns={props.selectableColumns} selected={props.selectedColumn} onSelectColumn={actions.selectColumn} />
-              </div>
-            </Panel>
+             <TypeFilter />
             <ConditionalOnSelect selectedColumn={props.selectedColumn}>
               <ChartTypePicker
                 chartTypes={props.supportedChartTypes}
