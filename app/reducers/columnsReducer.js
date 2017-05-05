@@ -84,7 +84,7 @@ export const getSelectedField = (state, selectedColumn) => {
   selectedColumn = selectedColumn || ''
   if (!columns) return []
   return Object.keys(columns).filter((col) => {
-    return (col === selectedColumn )
+    return (col === selectedColumn)
   }).map((col) => {
     return {
       label: columns[col].name,
@@ -103,8 +103,8 @@ export const getSelectableColumns = (state, selectedColumn) => {
   return Object.keys(columns).filter((col) => {
     let selectable = isSelectable(columns, col)
     if (state.showCols === 'hide' && col === selectedColumn) {
-        console.log('in here')
-        return false
+      console.log('in here')
+      return false
     }
     if (fieldNameFilter && columns[col].name.toLowerCase().indexOf(fieldNameFilter.toLowerCase()) === -1) {
       return false

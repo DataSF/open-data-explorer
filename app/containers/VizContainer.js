@@ -8,11 +8,10 @@ import ChartExperimentalCanvas from '../components/ChartExperimental/ChartExperi
 import ChartExperimentalTitle from '../components/ChartExperimental/ChartExperimentalTitle'
 import ChartExperimentalSubTitle from '../components/ChartExperimental/ChartExperimentalSubTitle'
 import CopySnippet from '../components/CopySnippet'
-import ColumnSelector from '../components/Query/ColumnSelector'
 import GroupOptions from '../components/Query/GroupOptions'
 import FilterOptions from '../components/Query/FilterOptions'
 import SumOptions from '../components/Query/SumOptions'
-import { Row, Col, Accordion, Panel } from 'react-bootstrap'
+import { Row, Col, Accordion } from 'react-bootstrap'
 import DateToggle from '../components/Query/DateToggle'
 import OtherDataToggle from '../components/Query/OtherDataToggle'
 import ChartTypePicker from '../components/ChartTypePicker'
@@ -98,7 +97,7 @@ class VizContainer extends Component {
         </Col>
         <Col md={3} className={'VizContainer__config'}>
           <Accordion>
-             <TypeFilter />
+            <TypeFilter />
             <ConditionalOnSelect selectedColumn={props.selectedColumn}>
               <ChartTypePicker
                 chartTypes={props.supportedChartTypes}

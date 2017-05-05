@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { filterColumnList, selectColumn, setHideShow, resetState } from '../actions'
+import { filterColumnList, selectColumn, setHideShow } from '../actions'
 import { getUniqueColumnTypes, getSelectableColumns, getSelectedColumnDef, getSelectedField } from '../reducers'
 import DefaultListGroup from '../components/DefaultListGroup'
 import FieldTypeButton from '../components/FieldTypeButton'
@@ -77,7 +77,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   onSelectColumn: (key) => dispatch(selectColumn(key)),
   setHideShow: showCols => dispatch(setHideShow(showCols)),
   resetState: resetState => dispatch(resetState())
-
 })
 
 export default connect(

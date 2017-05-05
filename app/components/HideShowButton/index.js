@@ -20,19 +20,19 @@ class HideShowButton extends Component {
 
   render () {
     let {itemProps, onClick, showCols} = this.props
-    if(showCols === 'hide'){
+    if (showCols === 'hide') {
       showCols = 'show'
       itemProps.isSelected = true
-    }else if(showCols === 'show'){
+    } else if (showCols === 'show') {
       showCols = 'hide'
       itemProps.isSelected = false
-    }else{
+    } else {
       showCols = 'show'
       itemProps.isSelected = false
     }
     itemProps = this.setItemProps(itemProps)
     return (
-      <DefaultListGroupItem itemProps={itemProps} onClick={onClick.bind(this, showCols)}  />
+      <DefaultListGroupItem itemProps={itemProps} onClick={onClick.bind(this, showCols)} />
     )
   }
 }
