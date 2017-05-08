@@ -1,5 +1,3 @@
-require('./_AboutPage.scss')
-
 import React from 'react'
 import { Grid } from 'react-bootstrap'
 

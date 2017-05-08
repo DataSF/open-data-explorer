@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import './_ChartExperimental.scss'
+import './@ChartExperimental.css'
 
 class BlankChart extends Component {
   // Blank chart that gets intialized when user first hits chart page.

@@ -1,4 +1,4 @@
-import './_HomePage.scss'
+import './@HomePage.css'
 
 import React, { Component } from 'react'
 import AutoSuggestSearch from '../../containers/AutoSuggestSearch'

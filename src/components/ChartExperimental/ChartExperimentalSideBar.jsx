@@ -3,7 +3,7 @@ import ChartOptions from '../Query/ChartOptions'
 import ChartType from './ChartType'
 import ChartColumns from './ChartColumns'
 import { Col, Accordion } from 'react-bootstrap'
-import './_Chart.scss'
+import './@Chart.css'
 
 class ChartExperimentalSideBar extends Component {
   render () {

@@ -1,4 +1,4 @@
-import './_ColumnFilter.scss'
+import './@ColumnFilter.css'
 import React, { PropTypes } from 'react'
 import { ButtonGroup, Button } from 'react-bootstrap'
 

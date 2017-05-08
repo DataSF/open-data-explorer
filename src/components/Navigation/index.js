@@ -1,4 +1,4 @@
-import './_Navigation.scss'
+import './@Navigation.css'
 
 import React from 'react'
 import { Link } from 'react-router'

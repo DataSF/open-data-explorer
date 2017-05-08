@@ -1,4 +1,4 @@
-import './_Catalog.scss'
+import './@Catalog.css'
 
 import React from 'react'
 import { Hits, SearchBox, RefinementList, CurrentRefinements, ClearAll, Pagination, Panel, Stats } from 'react-instantsearch/dom'

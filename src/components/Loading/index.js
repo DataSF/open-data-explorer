@@ -1,4 +1,4 @@
-import './_loading.scss'
+import './@Loading.css'
 
 import React, { Component, PropTypes } from 'react'
 import IconLoading from './IconLoading'

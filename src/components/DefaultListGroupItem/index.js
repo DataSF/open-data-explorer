@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { ListGroupItem, OverlayTrigger } from 'react-bootstrap'
-import './_defaultListGroupItem.scss'
+import './@DefaultListGroupItem.css'
 
 class DefaultListGroupItem extends Component {
   render () {

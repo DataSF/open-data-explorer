@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import DefaultListGroupItem from '../DefaultListGroupItem'
 // import titleize from 'titleize'
-import './_fieldButton.scss'
+import './@FieldButton.css'
 import {setClassNamesListItem} from '../../helpers'
 import { Popover } from 'react-bootstrap'
 

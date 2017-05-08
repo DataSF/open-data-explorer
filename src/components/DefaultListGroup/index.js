@@ -1,6 +1,6 @@
 import React from 'react'
 import { ListGroup } from 'react-bootstrap'
-import './_defaultListGroup.scss'
+import './@DefaultListGroup.css'
 
 const DefaultListGroup = ({itemComponent, className, items, onSelectListItem}) => {
   let content

@@ -1,4 +1,4 @@
-import './_Query.scss'
+import './@Query.css'
 
 import React, { Component, PropTypes } from 'react'
 import Select from 'react-select'

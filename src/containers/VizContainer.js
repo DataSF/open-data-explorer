@@ -17,7 +17,7 @@ import OtherDataToggle from '../components/Query/OtherDataToggle'
 import ChartTypePicker from '../components/ChartTypePicker'
 import Loading from '../components/Loading'
 import Messages from '../components/Messages'
-import './_containers.scss'
+import './@containers.css'
 
 import TypeFilter from '../containers/TypeFilter'
 

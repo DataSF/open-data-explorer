@@ -1,4 +1,4 @@
-import './_ColumnSort.scss'
+import './@ColumnSort.css'
 
 import React, { PropTypes } from 'react'
 import { ControlLabel, FormControl } from 'react-bootstrap'

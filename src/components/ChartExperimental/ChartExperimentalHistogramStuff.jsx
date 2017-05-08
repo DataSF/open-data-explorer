@@ -5,7 +5,7 @@ import { findMaxObjKeyValue, fillArray } from '../../helpers'
 import CustomXaxisLabel from './CustomXaxisLabel'
 import HistogramTooltip from './HistogramTooltip'
 import CustomYaxisLabel from './CustomYaxisLabel'
-require('./_Histogram.scss')
+import './@Histogram.css'
 
 class ChartExperimentalHistogramStuff extends Component {
   explodeFrequencies (chartData) {

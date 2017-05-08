@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-require('./_icon.scss')
+import './@Icon.css'
+
 class Icon extends Component {
 
   render () {

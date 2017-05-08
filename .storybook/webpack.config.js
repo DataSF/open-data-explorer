@@ -1,36 +1,18 @@
-const path = require('path');
+// you can use this file to add your custom webpack plugins, loaders and anything you like.
+// This is just the basic way to add addional webpack configurations.
+// For more information refer the docs: https://getstorybook.io/docs/configurations/custom-webpack-config
 
-const BASE_CSS_LOADER = 'css?sourceMap&-minimize';
+// IMPORTANT
+// When you add this file, we won't add the default configurations which is similar
+// to "React Create App". This only has babel loader to load JavaScript.
 
 module.exports = {
-    module: {
-        entry: {
-            app: ['bootstrap-loader']
-        },
-        loaders: [
-            {
-                test: /\.scss$/,
-                loaders: [
-                    'style',
-                    BASE_CSS_LOADER,
-                    'postcss',
-                    'sass?sourceMap'
-                ],
-                 include: path.resolve(__dirname, '../app/components')
-            },
-            {
-                test: /\.css?$/,
-                loaders: [
-                    'style',
-                    BASE_CSS_LOADER,
-                    'postcss'
-                ],
-                include: path.resolve(__dirname, '../')
-            },
-            {
-                test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
-                loader : 'file-loader'
-            }
-        ]
-    }
-}
+  plugins: [
+    // your custom plugins
+  ],
+  module: {
+    loaders: [
+      // add your custom loaders.
+    ],
+  },
+};

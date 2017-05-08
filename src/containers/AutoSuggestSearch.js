@@ -1,4 +1,4 @@
-import './_containers.scss'
+import './@containers.css'
 
 import React, {Component} from 'react'
 import { connect } from 'react-redux'

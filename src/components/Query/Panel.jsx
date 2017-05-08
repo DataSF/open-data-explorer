@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import '../ChartExperimental/_Chart.scss'
+import '../ChartExperimental/@Chart.css'
 import ColumnSelector from './ColumnSelector'
 import GroupOptions from './GroupOptions'
 import FilterOptions from './FilterOptions'
