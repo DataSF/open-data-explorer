@@ -23,6 +23,7 @@ class ChartExperimentalBarStuff extends Component {
                 key={i}
                 fill={colorScale(colorIndex)} />)
           }
+          return false
         })
         return bars
       }

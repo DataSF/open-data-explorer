@@ -23,6 +23,7 @@ class ChartExperimentalLineStuff extends Component {
                 key={i}
                 stroke={colorScale(colorIndex)} />)
           }
+          return false
         })
         return lines
       }

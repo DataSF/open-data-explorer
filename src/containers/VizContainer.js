@@ -77,7 +77,7 @@ class VizContainer extends Component {
                   </Col>
                 </Row>
               </div>
-              <Loading isFetching={props.isFetching} style='centered'>
+              <Loading isFetching={props.isFetching} type='centered'>
                 <ChartExperimentalCanvas
                   chartData={props.chartData || []}
                   chartType={props.chartType}

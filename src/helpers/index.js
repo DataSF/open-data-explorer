@@ -1,5 +1,3 @@
-'use strict'
-
 function H (value) {
   /* jshint validthis: true */
   if (!(this instanceof H)) return new H(value)

@@ -70,19 +70,21 @@ class FilterOptions extends Component {
             filter={filters[key]} />
           break
         case 'number':
-          let nextRange = filters[key].options ? filters[key].options.nextRange : [parseInt(filter.min), parseInt(filter.max)]
-          let currentRange = filters[key].options ? (filters[key].options.currentRange ? filters[key].options.currentRange : [parseInt(filter.min), parseInt(filter.max)]) : [parseInt(filter.min), parseInt(filter.max)]
+          let nextRange = filters[key].options ? filters[key].options.nextRange : [parseInt(filter.min, 10), parseInt(filter.max, 10)]
+          let currentRange = filters[key].options ? (filters[key].options.currentRange ? filters[key].options.currentRange : [parseInt(filter.min, 10), parseInt(filter.max, 10)]) : [parseInt(filter.min, 10), parseInt(filter.max, 10)]
           filterContent = <FilterNumeric
             key={filter.key}
             fieldKey={filter.key}
-            min={parseInt(filter.min)}
-            max={parseInt(filter.max)}
+            min={parseInt(filter.min, 10)}
+            max={parseInt(filter.max, 10)}
             currentRange={currentRange}
             nextRange={nextRange}
             filter={filters[key]}
             applyFilter={applyFilter}
             updateFilter={updateFilter} />
           break
+        default:
+          return null
       }
 
       let filterOption = (

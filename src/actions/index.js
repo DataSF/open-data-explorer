@@ -154,6 +154,9 @@ export const SORT_COLUMN = 'SORT_COLUMN' // for sorting the table
 export const UPDATE_PAGE = 'UPDATE_PAGE'
 export const FILTER_COLUMN_LIST = 'FILTER_COLUMN_LIST'
 export const SORT_COLUMN_LIST = 'SORT_COLUMN_LIST' // for sorting the list of columns on details or within column picker
+export const SET_HIDE_SHOW = 'SET_HIDE_SHOW'
+export const SET_DEFAULT_HIDE_SHOW = 'SET_DEFAULT_HIDE_SHOW'
+export const SET_DEFAULT_CHARTTYPE = 'SET_DEFAULT_CHARTTYPE'
 
 export function filterColumnList (key, item) {
   return {
@@ -279,7 +282,6 @@ export function updatePage (page) {
   }
 }
 
-export const SET_HIDE_SHOW = 'SET_HIDE_SHOW'
 export const ADD_FILTER = 'ADD_FILTER'
 export const REMOVE_FILTER = 'REMOVE_FILTER'
 export const UPDATE_FILTER = 'UPDATE_FILTER'
@@ -287,7 +289,6 @@ export const APPLY_FILTER = 'APPLY_FILTER'
 export const APPLY_CHART_TYPE = 'APPLY_CHART_TYPE'
 export const UPDATE_FROM_QS = 'UPDATE_FROM_QS'
 export const QS_FAILURE = 'QS_FAILURE'
-export const SET_DEFAULT_CHARTTYPE = 'SET_DEFAULT_CHARTTYPE'
 export const RESET_STATE = 'RESET_STATE'
 export function addFilter (key) {
   return {
@@ -370,7 +371,6 @@ export const loadQueryStateFromString = (q) => (dispatch, getState) => {
 
 export const UPDATE_SEARCH = 'UPDATE_SEARCH'
 export const CLEAR_SEARCH = 'CLEAR_SEARCH'
-export const SET_DEFAULT_HIDE_SHOW = 'SET_DEFAULT_HIDE_SHOW'
 
 export function updateSearch (searchState) {
   return {

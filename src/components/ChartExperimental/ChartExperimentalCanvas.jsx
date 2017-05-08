@@ -77,15 +77,16 @@ class ChartExperimentalCanvas extends Component {
   formatChartDataDates (itemList, dateBy) {
     let yrFormat = d3.time.format('%Y')
     let monthFormat = d3.time.format('%m-%Y')
-    Object.keys(itemList).map(function (key, index) {
-      let dt = itemList[key]['label'].split('T')
+    itemList = itemList.map(function (item, index) {
+      let dt = item['label'].split('T')
       dt = dt[0].split('-')
       if (dateBy === 'month') {
-        itemList[key]['key'] = monthFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
+        item['key'] = monthFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
       } else {
-        itemList[key]['key'] = yrFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
+        item['key'] = yrFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
       }
-      itemList[key]['value'] = Number(itemList[key]['value'])
+      item['value'] = Number(item['value'])
+      return item
     })
     return itemList
   }
@@ -93,41 +94,45 @@ class ChartExperimentalCanvas extends Component {
   formatChartDataDatesGrpBy (itemList, dateBy) {
     let yrFormat = d3.time.format('%Y')
     let monthFormat = d3.time.format('%m-%Y')
-    Object.keys(itemList).map(function (key, index) {
+    itemList = itemList.map(function (item, index) {
       if (dateBy === 'month') {
-        itemList[key]['label'] = monthFormat(new Date(itemList[key]['label']))
+        item['label'] = monthFormat(new Date(item['label']))
       } else {
-        itemList[key]['label'] = yrFormat(new Date(itemList[key]['label']))
+        item['label'] = yrFormat(new Date(item['label']))
       }
+      return item
     })
     return itemList
   }
 
   formatChartDataCol (itemList) {
-    Object.keys(itemList).map(function (key, index) {
-      itemList[key]['key'] = String(itemList[key]['label'])
-      itemList[key]['value'] = Number(itemList[key]['value'])
+    itemList = itemList.map(function (item, index) {
+      item['key'] = String(item['label'])
+      item['value'] = Number(item['value'])
+      return item
     })
     return itemList
   }
 
   formatBlankChartData (itemList) {
-    Object.keys(itemList).map(function (key, index) {
-      if (itemList[key]['key'] === 'undefined') {
-        itemList[key]['blank'] = Number(itemList[key]['value'])
+    itemList = itemList.map(function (item, index) {
+      if (item['key'] === 'undefined') {
+        item['blank'] = Number(item['value'])
       }
+      return item
     })
     delete itemList['undefined']
     return itemList
   }
 
   formatWhiteSpaceChartData (itemList) {
-    Object.keys(itemList).map(function (key, index) {
-      itemList[key]['key'] = itemList[key]['key'].replace(/(\r\n|\n|\r|\t)/gm, 'whitespace')
-      itemList[key]['key'] = itemList[key]['key'].replace('  ', 'whitespace')
-      if (itemList[key]['key'] === ' ') {
-        itemList[key]['key'] = 'whitespace'
+    itemList = itemList.map(function (item, index) {
+      item['key'] = item['key'].replace(/(\r\n|\n|\r|\t)/gm, 'whitespace')
+      item['key'] = item['key'].replace('  ', 'whitespace')
+      if (item['key'] === ' ') {
+        item['key'] = 'whitespace'
       }
+      return item
     })
     return itemList
   }
@@ -148,7 +153,7 @@ class ChartExperimentalCanvas extends Component {
     let newdict = {}
     let yrFormat = d3.time.format('%Y')
     let monthFormat = d3.time.format('%m-%Y')
-    Object.keys(itemList).map(function (key, index) {
+    Object.keys(itemList).forEach(function (key, index) {
       if (key === 'label') {
         newdict[key] = String(itemList[key])
         if (newdict[key] === 'undefined') {
@@ -160,6 +165,7 @@ class ChartExperimentalCanvas extends Component {
         newdict[key] = Number(itemList[key])
       }
     })
+
     if (isDateCol) {
       let dt = newdict['label'].split('T')
       dt = dt[0].split('-')
@@ -196,7 +202,8 @@ class ChartExperimentalCanvas extends Component {
   sortChartDataGrpBy (newChartData) {
     let sortedNewChartData = []
     let grpSumDict = {}
-    Object.keys(newChartData).map(function (key, index) {
+    console.log(newChartData)
+    Object.keys(newChartData).forEach(function (key, index) {
       grpSumDict[key] = sumObj(newChartData[key], 'label')
     })
     let sorted = sortObj(grpSumDict)

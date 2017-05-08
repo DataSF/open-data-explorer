@@ -25,6 +25,7 @@ class ChartExperimentalAreaStuff extends Component {
                 stroke={colorScale('colorIndex')}
                 fill={colorScale(colorIndex)} />)
           }
+          return false
         })
         return areas
       }

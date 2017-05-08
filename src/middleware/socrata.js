@@ -126,8 +126,8 @@ function constructQuery (state) {
         let joined = filter.options.selected.join(' ' + join + ' ')
         query.where(joined)
       } else if (column.type === 'number' && !column.categories && filter.options && filter.options.currentRange) {
-        let first = parseInt(filter.options.currentRange[0])
-        let last = parseInt(filter.options.currentRange[1])
+        let first = parseInt(filter.options.currentRange[0], 10)
+        let last = parseInt(filter.options.currentRange[1], 10)
         query.where(key + '>=' + first + ' and ' + key + '<=' + last)
       }
     }
@@ -279,7 +279,9 @@ function transformColumns (json) {
   return response
 }
 
+// refactor
 function reduceGroupedData (data, groupBy) {
+
   // collect unique labels
   let groupedData = uniq(data.map((obj) => {
     return obj['label']
@@ -287,14 +289,18 @@ function reduceGroupedData (data, groupBy) {
     return {label: label}
   })
 
+  let findInGroups = (i) => {
+    return groupedData.findIndex((element, idx, array) => {
+      return element['label'] === data[i]['label']
+    })
+  }
+
   // add columns to rows
   let i = 0
   let dataLength = data.length
   for (i; i < dataLength; i++) {
-    let groupIdx = groupedData.findIndex((element, idx, array) => {
-      return element['label'] === data[i]['label']
-    })
-    groupedData[groupIdx][data[i][groupBy]] = parseInt(data[i]['value'])
+    let groupIdx = findInGroups(i)
+    groupedData[groupIdx][data[i][groupBy]] = parseInt(data[i]['value'], 10)
   }
 
   return groupedData
@@ -338,7 +344,7 @@ function transformApiMigration (json) {
 }
 
 function transformColumnProperties (json, state, params) {
-  let maxRecord = parseInt(_.maxBy(json, function (o) { return parseInt(o.count) }).count)
+  let maxRecord = parseInt(_.maxBy(json, function (o) { return parseInt(o.count, 10) },).count, 10)
   let checkFirst = maxRecord / state.metadata.rowCount
   let checkNumCategories = json.length / state.metadata.rowCount
   let transformed = {

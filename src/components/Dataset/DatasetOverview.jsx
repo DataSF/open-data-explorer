@@ -70,7 +70,7 @@ class DatasetOverview extends Component {
             <h3 className={'text-muted'}>License</h3>
             <p><a href={licenseLink}>{licenseName}</a></p>
             <h3 className={'text-muted'}>Number of Rows</h3>
-            <p>{numberFormat(parseInt(rowCount))}</p>
+            <p>{numberFormat(parseInt(rowCount, 10))}</p>
             {tagList}
           </Col>
         </Row>

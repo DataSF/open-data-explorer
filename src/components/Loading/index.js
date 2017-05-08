@@ -42,8 +42,8 @@ class Loading extends Component {
     // let { isFetching } = this.props
     let { show } = this.state
     console.log(show)
-    let style = this.props.style ? this.props.style : ''
-    let classNames = `Loading-wrapper ${style}`
+    let type = this.props.type ? this.props.type : ''
+    let classNames = `Loading-wrapper ${type}`
     return (
       <div className={classNames}>
         <IconLoading show={show} />

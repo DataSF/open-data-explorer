@@ -18,7 +18,7 @@ class FilterNumeric extends Component {
   updateSliderRange (minOrMax, ev) {
     let nextRange = this.props
     let options = {}
-    let value = parseInt(ev.target.value)
+    let value = parseInt(ev.target.value, 10)
     nextRange = minOrMax === 'min' ? [value, nextRange[1]] : [nextRange[0], value]
     options.nextRange = nextRange
     options.filterType = 'numericRange'

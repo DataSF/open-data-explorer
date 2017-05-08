@@ -43,7 +43,7 @@ class Embed extends Component {
 
     return (
       <div className='Embed'>
-        <Loading isFetching={isFetching} style='centered'>
+        <Loading isFetching={isFetching} type='centered'>
           <Messages messages={messages}>
             <div id='Embed-chartHeader' className='chartHeader'>
               <ChartTitle

@@ -101,7 +101,7 @@ class DataTable extends Component {
     if (table && table.data && table.data.length > 0) {
       let perPage = 1000
       let tableRows = table.data.length
-      let items = Math.ceil(parseInt(rowCount) / perPage)
+      let items = Math.ceil(parseInt(rowCount, 10) / perPage)
 
       columns = Object.keys(columns).map((key, i) => {
         let column = columns[key]
