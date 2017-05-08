@@ -4,54 +4,26 @@
   "description": "React based application to explore open datasets interactively.",
   "repository": "https://github.com/DataSF/open-data-explorer",
   "license": "MIT",
-  "config": {
-    "buildDir": "./build",
-    "buildDirTests": "./build_tests",
-    "devHost": "localhost",
-    "devPort": 8000
-  },
-  "scripts": {
-    "stats": "NODE_ENV=production webpack --profile --json --config ./webpack/config > stats.json",
-    "build": "NODE_ENV=production npm run webpack",
-    "clean": "rimraf $npm_package_config_buildDir && mkdir $npm_package_config_buildDir",
-    "env": "env",
-    "lint": "standard --verbose | snazzy",
-    "storybook": "start-storybook -p 9001 -c .storybook",
-    "prebuild": "npm run clean",
-    "pretest": "npm install && npm run lint",
-    "pretest-travis": "npm install && npm run lint",
-    "start": "NODE_ENV=development node dev-server ./webpack/config",
-    "test": "NODE_ENV=test node_modules/.bin/karma start",
-    "test-travis": "NODE_ENV=test node_modules/.bin/karma start --single-run --browsers PhantomJS",
-    "webpack": "webpack --colors --progress --config ./webpack/config",
-    "singletest": "NODE_ENV=test node_modules/.bin/karma start --single-run --no-auto-watch karma.conf.js",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
-  },
   "dependencies": {
     "airbrake-js": "^0.5.9",
-    "alasql": "^0.3.3",
-    "c3": "^0.4.11-rc4",
-    "copy-to-clipboard": "^3.0.5",
+    "bootstrap-sass": "^3.3.7",
     "d3": "^3.5.17",
     "eslint-plugin-jsx-control-statements": "^2.1.1",
     "fixed-data-table": "^0.6.0",
-    "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.6.1",
     "moment": "^2.13.0",
-    "normalizr": "^2.0.1",
     "pluralize": "^2.0.0",
     "qs": "^6.4.0",
     "rc-slider": "^3.5.1",
-    "react": "^15.4.2",
+    "react": "^15.5.4",
     "react-addons-update": "^15.1.0",
     "react-autosuggest": "^9.0.0",
-    "react-bootstrap": "^0.30.5",
+    "react-bootstrap": "^0.31.0",
     "react-bootstrap-daterangepicker": "^3.2.2",
     "react-copy-to-clipboard": "^4.2.3",
     "react-date-range": "^0.9.3",
     "react-dimensions": "^1.2.0",
-    "react-dom": "^15.4.2",
+    "react-dom": "^15.5.4",
     "react-instantsearch": "^3.2.1",
     "react-radio-group": "^2.2.0",
     "react-redux": "^4.4.1",
@@ -67,135 +39,89 @@
     "underscore.string": "^3.3.4"
   },
   "devDependencies": {
-    "@kadira/storybook": "^2.35.3",
-    "autoprefixer": "^6.3.6",
-    "babel-core": "^6.7.4",
-    "babel-eslint": "^6.0.0",
-    "babel-istanbul-instrumenter-loader": "^1.0.1",
-    "babel-loader": "^6.2.4",
-    "babel-plugin-istanbul": "^2.0.0",
-    "babel-plugin-recharts": "^1.0.2",
-    "babel-plugin-rewire": "^1.0.0-rc-1",
-    "babel-plugin-transform-object-rest-spread": "^6.6.5",
-    "babel-polyfill": "^6.9.0",
-    "babel-preset-es2015": "^6.6.0",
-    "babel-preset-react": "^6.5.0",
-    "babel-runtime": "^6.6.1",
-    "bootstrap-loader": "1.0.10",
-    "bootstrap-sass": "3.3.6",
-    "chai": "^3.0.0",
-    "css-loader": "^0.23.1",
-    "enzyme": "^2.4.1",
-    "eslint": "^2.5.1",
-    "eslint-plugin-react": "^5.1.1",
-    "expect": "^1.20.1",
-    "extract-text-webpack-plugin": "^1.0.1",
-    "file-loader": "^0.8.4",
-    "glob": "^7.0.3",
-    "html-loader": "^0.4.3",
-    "isparta": "^4.0.0",
-    "isparta-instrumenter-loader": "^1.0.1",
-    "json-loader": "^0.5.2",
+    "autoprefixer": "6.7.2",
+    "babel-core": "6.22.1",
+    "babel-eslint": "7.1.1",
+    "babel-jest": "18.0.0",
+    "babel-loader": "6.2.10",
+    "babel-preset-react-app": "^2.2.0",
+    "babel-runtime": "^6.20.0",
+    "case-sensitive-paths-webpack-plugin": "1.1.4",
+    "chalk": "1.1.3",
+    "connect-history-api-fallback": "1.3.0",
+    "cross-spawn": "4.0.2",
+    "css-loader": "0.26.1",
+    "detect-port": "1.1.0",
+    "dotenv": "2.0.0",
+    "eslint": "3.16.1",
+    "eslint-config-react-app": "^0.6.2",
+    "eslint-loader": "1.6.0",
+    "eslint-plugin-flowtype": "2.21.0",
+    "eslint-plugin-import": "2.0.1",
+    "eslint-plugin-jsx-a11y": "4.0.0",
+    "eslint-plugin-react": "6.4.1",
+    "extract-text-webpack-plugin": "1.0.1",
+    "file-loader": "0.10.0",
+    "fs-extra": "0.30.0",
+    "html-webpack-plugin": "2.24.0",
+    "http-proxy-middleware": "0.17.3",
+    "jest": "18.1.0",
+    "json-loader": "0.5.4",
     "jsx-control-statements": "^3.1.5",
-    "karma": "^0.13.19",
-    "karma-babel-preprocessor": "^6.0.1",
-    "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^2.0.0",
-    "karma-coverage": "^1.1.1",
-    "karma-firefox-launcher": "^1.0.0",
-    "karma-mocha": "^0.2.1",
-    "karma-mocha-reporter": "^2.1.0",
-    "karma-phantomjs-launcher": "^0.2.3",
-    "karma-sinon": "^1.0.5",
-    "karma-source-map-support": "^1.2.0",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^1.8.0",
-    "mocha": "^2.3.4",
-    "mocha-loader": "^0.7.1",
-    "node-libs-browser": "^1.0.0",
-    "node-sass": "^3.4.2",
-    "opn": "^4.0.1",
-    "phantomjs": "^1.9.19",
-    "phantomjs-polyfill": "0.0.1",
-    "phantomjs-prebuilt": "^2.1.7",
-    "postcss-loader": "^0.9.1",
-    "react-addons-test-utils": "^15.1.0",
-    "react-hot-loader": "^1.2.8",
-    "resolve-url-loader": "^1.4.3",
-    "rimraf": "^2.4.1",
-    "sass-loader": "^3.2.0",
-    "sinon": "^1.17.2",
-    "snazzy": "^4.0.1",
-    "source-map-support": "^0.4.0",
-    "standard": "^8.0.0",
-    "style-loader": "^0.13.1",
-    "template-html-loader": "0.0.3",
-    "url-loader": "^0.5.7",
-    "webpack": "^1.12.11",
-    "webpack-dev-server": "^1.14.1",
-    "@kadira/storybook": "^2.21.0"
+    "node-sass": "^4.5.2",
+    "object-assign": "4.1.1",
+    "postcss-loader": "1.2.2",
+    "npm-run-all": "^4.0.2",
+    "promise": "7.1.1",
+    "react-dev-utils": "^0.5.2",
+    "style-loader": "0.13.1",
+    "url-loader": "0.5.7",
+    "webpack": "1.14.0",
+    "webpack-dev-server": "1.16.2",
+    "webpack-manifest-plugin": "1.1.0",
+    "whatwg-fetch": "2.0.2"
   },
-  "engines": {
-    "node": ">=0.12.0"
+  "scripts": {
+    "build-css": "node-sass src/ -o src/",
+    "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
+    "start-js": "node scripts/start.js",
+    "start": "npm-run-all -p watch-css start-js",
+    "build": "npm run build-css && node scripts/build.js",
+    "test": "node scripts/test.js --env=jsdom"
   },
-  "standard": {
-    "ignore": [
-      "*.spec.js",
-      "*.spec.jsx"
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
     ],
-    "globals": [
-      "Choose",
-      "When",
-      "Otherwise"
+    "setupFiles": [
+      "<rootDir>/config/polyfills.js"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web"
+    }
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ],
+    "plugins": [
+      "jsx-control-statements"
     ]
   },
   "eslintConfig": {
-    "env": {
-      "browser": true,
-      "node": true,
-      "es6": true
-    },
-    "ecmaFeatures": {
-      "modules": true,
-      "jsx": true
-    },
-    "globals": {
-      "describe": true,
-      "it": true,
-      "sinon": true
-    },
-    "parser": "babel-eslint",
-    "plugins": [
-      "react"
-    ],
-    "rules": {
-      "strict": [
-        2,
-        "global"
-      ],
-      "indent": [
-        2,
-        2
-      ],
-      "quotes": [
-        2,
-        "single"
-      ],
-      "no-underscore-dangle": 0,
-      "react/display-name": 0,
-      "react/jsx-quotes": 1,
-      "react/jsx-no-undef": 1,
-      "react/jsx-sort-props": 1,
-      "react/jsx-uses-react": 1,
-      "react/jsx-uses-vars": 1,
-      "react/no-did-mount-set-state": 1,
-      "react/no-did-update-set-state": 1,
-      "react/no-multi-comp": 1,
-      "react/no-unknown-property": 1,
-      "react/prop-types": 0,
-      "react/react-in-jsx-scope": 1,
-      "react/self-closing-comp": 1,
-      "react/wrap-multilines": 1
-    }
+    "extends": "react-app"
   }
 }
