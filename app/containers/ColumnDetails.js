@@ -7,34 +7,30 @@ import ColumnSort from '../components/ColumnSort'
 import { getUniqueColumnTypes } from '../reducers'
 import { filterColumnList, sortColumnList } from '../actions'
 
-const ColumnDetails = ({list, filter, filterTypes, onFilter, sort, onSort}) => (
+const ColumnDetails = ({list, filters, items, onFilter, sort, onSort}) => (
   <Row>
     <Col md={8}>
-      <ColumnFilter filterTypes={filterTypes} onFilter={onFilter} filter={filter} />
+      <ColumnFilter items={items} onFilter={onFilter} filters={filters} />
       <ColumnSort sort={sort} onSort={onSort} />
-      <ColumnList list={list} filter={filter} sort={sort} />
+      <ColumnList list={list} filters={filters} sort={sort} />
     </Col>
   </Row>
 )
 
 const mapStateToProps = (state, ownProps) => {
-  const { columnProps } = state
+  const { columnProps: { columns, typeFilters, sort } } = state
   return {
-    list: columnProps.columns || {},
-    filterTypes: getUniqueColumnTypes(state),
-    filter: columnProps.filter,
-    sort: columnProps.sort
+    list: columns || {},
+    items: getUniqueColumnTypes(state),
+    filters: typeFilters,
+    sort: sort
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onFilter: (type) => {
-      return dispatch(filterColumnList(type))
-    },
-    onSort: (sort) => {
-      return dispatch(sortColumnList(sort))
-    }
+    onFilter: (item) => dispatch(filterColumnList('typeFilters', item)),
+    onSort: (sort) => dispatch(sortColumnList(sort))
   }
 }
 

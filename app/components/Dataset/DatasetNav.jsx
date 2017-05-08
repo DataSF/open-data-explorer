@@ -32,7 +32,7 @@ class DatasetNav extends Component {
               Overview
             </NavItem>
             <NavItem eventKey={'details'} className={'tabSelected'}>
-              Column Details
+              Field Details
             </NavItem>
             <NavItem eventKey={'charts'} className={'tabSelected'}>
               Charts

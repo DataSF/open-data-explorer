@@ -94,7 +94,7 @@ function constructQuery (state) {
   if (columnType === 'date' || (columnType === 'number' && !isCategory)) query = query.where('label is not null')
   if (filters) {
     for (let key in filters) {
-      let column = key !== 'checkboxes' ? columns[key] : {type: 'checkbox'}
+      let column = key !== 'booleans' ? columns[key] : {type: 'boolean'}
       let filter = filters[key]
 
       if (filter.options && column.type === 'date') {
@@ -121,7 +121,7 @@ function constructQuery (state) {
           let whereString = queryNull !== '' ? queryNull : key + '=' + enclose + joined + enclose
           query.where(whereString)
         }
-      } else if (column.type === 'checkbox' && filter.options && filter.options.selected) {
+      } else if (column.type === 'boolean' && filter.options && filter.options.selected) {
         let join = filter.options.join || 'or'
         let joined = filter.options.selected.join(' ' + join + ' ')
         query.where(joined)
@@ -224,7 +224,8 @@ function transformMetadata (json) {
     let typeCast = {
       'calendar_date': 'date',
       'currency': 'number',
-      'money': 'number'
+      'money': 'number',
+      'checkbox': 'boolean'
     }
     let type = typeCast[column['dataTypeName']] || column['dataTypeName']
     let format = column['dataTypeName']
@@ -258,7 +259,7 @@ function transformColumns (json) {
   let fieldTypeMap = {
     'numeric': 'number',
     'timestamp': 'date',
-    'boolean': 'checkbox',
+    'checkbox': 'boolean',
     'geometry: point': 'location'
   }
 

@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Navigation from '../components/Navigation'
-import Footer from '../components/Footer/Footer'
 
 const pages = [
   {
@@ -19,7 +18,6 @@ const FullLayout = (props) => (
     <div className={'content-wrapper'}>
       {props.children}
     </div>
-    <Footer />
   </div>
   )
 

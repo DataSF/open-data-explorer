@@ -1,0 +1,37 @@
+.ColumnSelector-list-group {
+  background-color:yellow;
+}
+
+.ColumnSelector-list-group {
+  button.list-group-item {
+    color: #FFFFFF;
+  }
+  is-selected {
+    opacity: 1;
+    filter: alpha(opacity=100); /* For IE8 and earlier */
+    border: solid 3px;
+    border-color: #f2c407;
+  }
+  not-selected {
+    opacity: 0.5;
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+  }
+  column-type-text{
+    background-color: #93c2de
+  }
+  column-type-date{
+    background-color: #93deaf
+  }
+  column-type-boolean{
+    background-color: #deaf93
+  }
+  column-type-number{
+    background-color: #de93c2
+  }
+  column-type-other{
+    background-color:#E6FF2E
+  }
+
+}
+
+

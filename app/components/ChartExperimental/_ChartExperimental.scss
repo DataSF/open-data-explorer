@@ -1,6 +1,9 @@
 .chartCanvasBlankCanvas{
-  padding:20%;
-  border: 7px dashed;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  padding:17%;
+  border: 3px dashed;
   border-color: #ecf0f1;
   color: #ecf0f1;
   font-size:275%;
@@ -81,4 +84,14 @@
 
 .MonthFtSize{
     font-size: 80%;
+}
+
+.Chart__title {
+  margin-left: 72px;
+  margin-top: 0;
+}
+
+.Chart__sub-title {
+  margin-left: 72px;
+  color: #96989a;
 }

@@ -8,7 +8,7 @@ const labelStyle = {
 const humanType = {
   'text': 'Text',
   'category': 'Category',
-  'checkbox': 'Boolean',
+  'boolean': 'Boolean',
   'date': 'Date/Time',
   'location': 'Latitude and Longitude',
   'number': 'Number'
@@ -43,14 +43,14 @@ const sortColumns = (keys, list, sort) => {
   return keys
 }
 
-const ColumnList = ({list, filter, sort}) => {
+const ColumnList = ({list, filters, sort}) => {
+  console.log(filters)
+  filters = filters || []
   sort = sort || 'name'
   let keys = sortColumns(Object.keys(list), list, sort)
 
-  filter = filter || ''
-
   let listItems = keys.map((key, idx) => {
-    if (filter !== '' && list[key].type !== filter) {
+    if (filters.length > 0 && filters.indexOf(list[key].type) === -1) {
       return false
     }
     return <ColumnCard item={list[key]} key={key} />
@@ -65,7 +65,7 @@ const ColumnList = ({list, filter, sort}) => {
 
 ColumnList.propTypes = {
   list: PropTypes.object.isRequired,
-  filter: PropTypes.string
+  filter: PropTypes.array
 }
 
 export default ColumnList

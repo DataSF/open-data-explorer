@@ -16,6 +16,7 @@
     "clean": "rimraf $npm_package_config_buildDir && mkdir $npm_package_config_buildDir",
     "env": "env",
     "lint": "standard --verbose | snazzy",
+    "storybook": "start-storybook -p 9001 -c .storybook",
     "prebuild": "npm run clean",
     "pretest": "npm install && npm run lint",
     "pretest-travis": "npm install && npm run lint",
@@ -66,6 +67,7 @@
     "underscore.string": "^3.3.4"
   },
   "devDependencies": {
+    "@kadira/storybook": "^2.35.3",
     "autoprefixer": "^6.3.6",
     "babel-core": "^6.7.4",
     "babel-eslint": "^6.0.0",

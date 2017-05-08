@@ -17,7 +17,7 @@ const IconLoading = ({show}) => {
             keyTimes='0;0.2;0.7;1' keySplines='0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8' calcMode='spline' />
         </circle>
       </svg>
-    </div> : null
+    </div> : <div />
   )
 }
 

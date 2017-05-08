@@ -2,7 +2,7 @@ import React from 'react'
 
 const Logo = () => (
   <svg xmlns='http://www.w3.org/2000/svg' width='75' viewBox='0 0 148.87 78.7' aria-labelledby='title'>
-    <title id='title'>Data Explorer Logo</title>
+    <title id='title'>DataSF Explorer Logo</title>
     <circle cx='113.54' cy='44.45' r='24.49' fill='#fff' />
     <circle cx='38.25' cy='43.45' r='24.49' fill='#fff' />
     <path d='M15.71,31.32h-.26V24.54l-2,.77V25l2.25-.83h.05Z' fill='#bcbec0' />

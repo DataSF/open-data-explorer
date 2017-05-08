@@ -22,19 +22,25 @@ const rootReducer = combineReducers({
 
 const getColumnDef = (state, column) => fromColumns.getColumnDef(state.columnProps, column)
 
-export const getUniqueColumnTypes = state =>
-  fromColumns.getUniqueColumnTypes(state.columnProps)
+export const getUniqueColumnTypes = (state, selectable) =>
+  fromColumns.getUniqueColumnTypes(state.columnProps, selectable)
 
 export const getGroupableColumns = state =>
   fromColumns.getGroupableColumns(state.columnProps, state.query.selectedColumn)
 
 export const getSelectableColumns = state =>
-  fromColumns.getSelectableColumns(state.columnProps)
+  fromColumns.getSelectableColumns(state.columnProps, state.query.selectedColumn)
 
 export const getSummableColumns = state =>
   fromColumns.getSummableColumns(state.columnProps)
 
+export const getSelectedField = state =>
+  fromColumns.getSelectedField(state.columnProps, state.query.selectedColumn)
+
 export const getSelectedColumnDef = state =>
   getColumnDef(state, state.query.selectedColumn)
+
+export const getSupportedChartTypes = state =>
+  fromColumns.getSupportedChartTypes(state.columnProps, state.query.selectedColumn)
 
 export default rootReducer

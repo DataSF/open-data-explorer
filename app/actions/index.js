@@ -81,7 +81,6 @@ function fetchColumnProps (id, key) {
 // 2. Then the migration ID is looked up so we know where to run queries against, and a query to count rows is issued
 // 3. Last, we run some stats against certain columns to use in the interface
 export function loadMetadata (id) {
-  console.log(id)
   return (dispatch, getState) => {
     return dispatch(fetchMetadata(id)).then(() => {
       let dataId = getState().metadata.dataId
@@ -156,10 +155,13 @@ export const UPDATE_PAGE = 'UPDATE_PAGE'
 export const FILTER_COLUMN_LIST = 'FILTER_COLUMN_LIST'
 export const SORT_COLUMN_LIST = 'SORT_COLUMN_LIST' // for sorting the list of columns on details or within column picker
 
-export function filterColumnList (type) {
+export function filterColumnList (key, item) {
   return {
     type: FILTER_COLUMN_LIST,
-    filterType: type
+    payload: {
+      key,
+      item
+    }
   }
 }
 
@@ -170,6 +172,24 @@ export function selectColumn (column) {
       payload: column})
     dispatch(fetchData(getState()))
     dispatch(setDefaultChartType(column))
+    dispatch(setDefaultHideShow())
+  }
+}
+
+export function setHideShow (showCols) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SET_HIDE_SHOW,
+      payload: showCols})
+  }
+}
+
+export function setDefaultHideShow () {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SET_DEFAULT_HIDE_SHOW,
+      showCols: 'show'
+    })
   }
 }
 
@@ -259,6 +279,7 @@ export function updatePage (page) {
   }
 }
 
+export const SET_HIDE_SHOW = 'SET_HIDE_SHOW'
 export const ADD_FILTER = 'ADD_FILTER'
 export const REMOVE_FILTER = 'REMOVE_FILTER'
 export const UPDATE_FILTER = 'UPDATE_FILTER'
@@ -267,7 +288,7 @@ export const APPLY_CHART_TYPE = 'APPLY_CHART_TYPE'
 export const UPDATE_FROM_QS = 'UPDATE_FROM_QS'
 export const QS_FAILURE = 'QS_FAILURE'
 export const SET_DEFAULT_CHARTTYPE = 'SET_DEFAULT_CHARTTYPE'
-
+export const RESET_STATE = 'RESET_STATE'
 export function addFilter (key) {
   return {
     type: ADD_FILTER,
@@ -296,6 +317,12 @@ export function updateFilter (key, options) {
       key,
       options
     }
+  }
+}
+
+export function resetState () {
+  return {
+    type: RESET_STATE
   }
 }
 
@@ -343,6 +370,7 @@ export const loadQueryStateFromString = (q) => (dispatch, getState) => {
 
 export const UPDATE_SEARCH = 'UPDATE_SEARCH'
 export const CLEAR_SEARCH = 'CLEAR_SEARCH'
+export const SET_DEFAULT_HIDE_SHOW = 'SET_DEFAULT_HIDE_SHOW'
 
 export function updateSearch (searchState) {
   return {
@@ -356,3 +384,4 @@ export function clearSearch () {
     type: CLEAR_SEARCH
   }
 }
+
