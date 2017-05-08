@@ -8,7 +8,7 @@ import Dataset from './containers/Dataset'
 import DatasetOverview from './containers/DatasetOverview'
 import ColumnDetails from './containers/ColumnDetails'
 import DataTable from './containers/DataTable'
-import AboutPage from './components/AboutPage/AboutPage'
+import AboutPage from './components/AboutPage'
 import VizContainer from './containers/VizContainer'
 import Embed from './containers/Embed'
 

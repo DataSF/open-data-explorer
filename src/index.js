@@ -1,5 +1,5 @@
-import './favicon.ico'
-import './index.html'
+import './styles/bootstrap-explorer.css'
+
 import React from 'react'
 import { render } from 'react-dom'
 import { hashHistory } from 'react-router'
@@ -30,5 +30,5 @@ const store = configureStore(initialState)
 const history = syncHistoryWithStore(hashHistory, store)
 render(
   <Root store={store} history={history} />,
-  document.getElementById('app')
+  document.getElementById('root')
 )

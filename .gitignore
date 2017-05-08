@@ -4,3 +4,6 @@ node_modules
 .DS_Store
 *.orig
 /coverage
+
+# CSS is compiled by node-sass, don't commit
+*.css

@@ -125,6 +125,11 @@
     ]
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "globals": {
+      "Choose": true,
+      "When": true,
+      "Otherwise": true
+    }
   }
 }

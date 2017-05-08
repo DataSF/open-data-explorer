@@ -1,4 +1,4 @@
-import './_daterangepicker.scss'
+import './@daterangepicker.css'
 import React, { Component } from 'react'
 import {Button, Glyphicon} from 'react-bootstrap'
 import DateRangePicker from 'react-bootstrap-daterangepicker'

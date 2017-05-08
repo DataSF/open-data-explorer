@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { storiesOf, action } from '@kadira/storybook'
 import DefaultListGroupItem from '../components/DefaultListGroupItem'
