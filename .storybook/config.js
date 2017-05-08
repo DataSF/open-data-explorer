@@ -1,9 +1,7 @@
-import { configure } from '@kadira/storybook'
-import 'bootstrap-loader'
-
-function loadStories () {
-  require('../app/stories/index.js')
-  // You can require as many stories as you need.
+import { configure } from '@kadira/storybook';
+import '../src/styles/bootstrap-explorer.css'
+function loadStories() {
+  require('../src/stories');
 }
 
-configure(loadStories, module)
+configure(loadStories, module);

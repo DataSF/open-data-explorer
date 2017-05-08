@@ -3,11 +3,10 @@ open-data-explorer
 
 The very quick getting started guide
 
-1. Git clone
-2. cd into directory
-3. npm install
-4. npm start
-5. http://localhost:8000
+1. `git clone git@github.com:DataSF/open-data-explorer.git`
+2. `cd open-data-explorer`
+3. `yarn install`
+4. `yarn start`
 
 ## Libraries
 You can see all the libraries in use in package.json. Digging in, you should probably become familiar with the following:
