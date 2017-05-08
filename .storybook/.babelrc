@@ -1,0 +1,8 @@
+{
+  "presets": [
+    "react-app"
+  ],
+  "plugins": [
+    "jsx-control-statements"
+  ]
+}

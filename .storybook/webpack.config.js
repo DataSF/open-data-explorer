@@ -5,6 +5,7 @@
 // IMPORTANT
 // When you add this file, we won't add the default configurations which is similar
 // to "React Create App". This only has babel loader to load JavaScript.
+var autoprefixer = require('autoprefixer');
 
 module.exports = {
   plugins: [
@@ -12,7 +13,26 @@ module.exports = {
   ],
   module: {
     loaders: [
-      // add your custom loaders.
+      {
+        test: /\.css$/,
+        loader: 'style!css?importLoaders=1!postcss'
+      },
+      {
+        test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+        loader : 'file-loader'
+      }
     ],
+  },
+  postcss: function() {
+    return [
+      autoprefixer({
+        browsers: [
+          '>1%',
+          'last 4 versions',
+          'Firefox ESR',
+          'not ie < 9', // React doesn't support IE8 anyway
+        ]
+      }),
+    ];
   },
 };

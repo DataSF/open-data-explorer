@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import DefaultListGroupItem from '../DefaultListGroupItem'
-import './@FieldTypeButton.scss'
+import './@FieldTypeButton.css'
 import { setClassNamesListItem } from '../../helpers'
 
 class FieldTypeButton extends Component {
