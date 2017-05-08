@@ -1,5 +1,5 @@
 $bootstrap-sass-asset-helper: false !default;
-// Flatly 3.3.6
+// Flatly 3.3.7
 // Variables
 // --------------------------------------------------
 
@@ -20,7 +20,7 @@ $brand-success:         #18BC9C !default;
 $brand-info:            #3498DB !default;
 $brand-warning:         #F39C12 !default;
 $brand-danger:          #E74C3C !default;
-$list-group-border-active: #F89406 !default;
+
 
 //== Scaffolding
 //
@@ -53,10 +53,10 @@ $font-size-base:          15px !default;
 $font-size-large:         ceil(($font-size-base * 1.25)) !default; // ~18px
 $font-size-small:         ceil(($font-size-base * 0.85)) !default; // ~12px
 
-$font-size-h1:            floor(($font-size-base * 2.1)) !default; // ~36px
-$font-size-h2:            floor(($font-size-base * 1.7)) !default; // ~30px
-$font-size-h3:            ceil(($font-size-base * 1.3)) !default; // ~24px
-$font-size-h4:            ceil(($font-size-base * 1.1)) !default; // ~18px
+$font-size-h1:            floor(($font-size-base * 2.6)) !default; // ~36px
+$font-size-h2:            floor(($font-size-base * 2.15)) !default; // ~30px
+$font-size-h3:            ceil(($font-size-base * 1.7)) !default; // ~24px
+$font-size-h4:            ceil(($font-size-base * 1.25)) !default; // ~18px
 $font-size-h5:            $font-size-base !default;
 $font-size-h6:            ceil(($font-size-base * 0.85)) !default; // ~12px
 
@@ -89,7 +89,7 @@ $icon-font-svg-id:        "glyphicons_halflingsregular" !default;
 //## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
 
 $padding-base-vertical:     10px !default;
-$padding-base-horizontal:   20px !default;
+$padding-base-horizontal:   15px !default;
 
 $padding-large-vertical:    18px !default;
 $padding-large-horizontal:  27px !default;
@@ -112,7 +112,7 @@ $component-active-color:    #fff !default;
 //** Global background color for active items (e.g., navs or dropdowns).
 $component-active-bg:       $brand-primary !default;
 
-//** Width of the `border` for generating carets that indicator dropdowns.
+//** Width of the `border` for generating carets that indicate dropdowns.
 $caret-width-base:          4px !default;
 //** Carets increase slightly in size for larger components.
 $caret-width-large:         5px !default;
@@ -365,7 +365,7 @@ $navbar-padding-horizontal:        floor(($grid-gutter-width / 2)) !default;
 $navbar-padding-vertical:          (($navbar-height - $line-height-computed) / 2) !default;
 $navbar-collapse-max-height:       340px !default;
 
-$navbar-default-color:             #777 !default;
+$navbar-default-color:             #fff !default;
 $navbar-default-bg:                $brand-primary !default;
 $navbar-default-border:            transparent !default;
 

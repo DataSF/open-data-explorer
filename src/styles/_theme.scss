@@ -1,4 +1,4 @@
-// Flatly 3.3.5
+// Flatly 3.3.7
 // Bootswatch
 // -----------------------------------------------------
 
@@ -34,7 +34,7 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic"
 // Buttons ====================================================================
 
 .btn {
-  border-width: 1px;
+  border-width: 2px;
 }
 
 .btn:active {
@@ -292,7 +292,7 @@ a.list-group-item {
     &.active {
       background-color: $state-warning-bg;
     }
-
+    
     &.active:hover,
     &.active:focus {
       background-color: darken($state-warning-bg, 5%);
@@ -303,7 +303,7 @@ a.list-group-item {
     &.active {
       background-color: $state-danger-bg;
     }
-
+    
     &.active:hover,
     &.active:focus {
       background-color: darken($state-danger-bg, 5%);
@@ -328,10 +328,3 @@ a.list-group-item {
 .popover {
   color: $text-color;
 }
-
-.container-fluid {
-  padding-left: 2.5em !important;
-  padding-right: 2.5em !important;
-}
-
-
