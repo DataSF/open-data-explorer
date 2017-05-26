@@ -6,16 +6,12 @@ import { API_DOMAIN } from '../../constants/AppConstants'
 class Dataset extends Component {
 
   componentWillMount () {
-    this.props.onLoad().then(() => {
-      this.props.loadColumnProps()
-    })
+    this.props.onLoad()
   }
 
   componentWillReceiveProps (nextProps) {
     if (this.props.params.id !== nextProps.params.id) {
-      nextProps.onLoad().then(() => {
-        nextProps.loadColumnProps()
-      })
+      nextProps.onLoad()
     }
   }
 

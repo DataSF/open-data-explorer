@@ -3,31 +3,31 @@ import './@DatasetOverview.css'
 import React, { Component } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import { format } from 'd3'
-import {unix} from 'moment'
+import moment from 'moment'
 
 class DatasetOverview extends Component {
-  renderAttachmentsList () {
-    let { attachments, id } = this.props.metadata
-
-    let attachmentList = attachments.map((att, idx, array) => {
+  renderAttachmentsList (attachments, id) {
+    let attachmentList
+    if(attachments){
+      attachmentList = attachments.map((att, idx, array) => {
       return (
-        <li className={'list-group-item'}>
+        <li className={'list-group-item'} key={idx}>
           <a href={'https://data.sfgov.org/api/views/' + id + '/files/' + att.assetId + '?download=true&filename=' + att.filename}>
             {att.name}
           </a>
         </li>)
-    })
-
+      })
+    }
     return attachmentList
   }
 
   render () {
-    const { description, publishingDepartment, licenseLink, licenseName, rowCount, rowsUpdatedAt, publishingFrequency, notes, attachments, programLink, tags } = this.props.metadata
+    const { id, description, publishingDepartment, licenseLink, licenseName, rowCount, rowsUpdatedAt, publishingFrequency, notes, attachments, programLink, tags } = this.props.metadata
     let numberFormat = format(',')
-    let dayUpdated = unix(rowsUpdatedAt).format('MM/DD/YYYY')
-    let timeUpdated = unix(rowsUpdatedAt).format('hh:mm A')
+    let dayUpdated = moment(rowsUpdatedAt).format('MM/DD/YYYY')
+    let timeUpdated = moment(rowsUpdatedAt).format('hh:mm A')
     let overviewContent = null
-
+    let attachmentList = this.renderAttachmentsList( attachments, id)
     if (this.props.metadata) {
       // assemble related documents
       let documents = []
@@ -39,7 +39,7 @@ class DatasetOverview extends Component {
         documents.push(<h3 key={'doc-title'} className={'text-muted'}>Documents</h3>)
         documents.push(
           <ul key='attachments' className={'list-group'}>
-            {this.renderAttachmentsList()}
+            {attachmentList}
           </ul>
           )
       }
@@ -49,7 +49,7 @@ class DatasetOverview extends Component {
         tagList = (
           <div>
             <h3 className={'text-muted'}>Tags</h3>
-            <p>{tags.join(', ')}</p>
+            <p>{tags}</p>
           </div>
           )
       }

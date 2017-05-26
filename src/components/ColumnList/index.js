@@ -44,7 +44,6 @@ const sortColumns = (keys, list, sort) => {
 }
 
 const ColumnList = ({list, filters, sort}) => {
-  console.log(filters)
   filters = filters || []
   sort = sort || 'name'
   let keys = sortColumns(Object.keys(list), list, sort)
