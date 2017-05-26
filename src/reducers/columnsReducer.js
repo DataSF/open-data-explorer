@@ -32,7 +32,8 @@ function isSelectable (columns, col) {
   let colTypesAccepted = ['number', 'boolean', 'date']
   let regex = /(^(lat|lon)[a-z]*|^(x|y)$)/i
   let geoFields = regex.test(columns[col].key)
-  return (!columns[col].unique && !geoFields && ((columns[col].categories && ['text', 'number'].indexOf(columns[col].type) > -1) || colTypesAccepted.indexOf(columns[col].type) > -1))
+  let selectable = (!columns[col].unique && !geoFields && ((['text', 'number'].indexOf(columns[col].type) > -1) || colTypesAccepted.indexOf(columns[col].type) > -1))
+  return selectable
 }
 
 // selectors
@@ -103,13 +104,11 @@ export const getSelectableColumns = (state, selectedColumn) => {
   return Object.keys(columns).filter((col) => {
     let selectable = isSelectable(columns, col)
     if (state.showCols === 'hide' && col === selectedColumn) {
-      console.log('in here')
       return false
     }
     if (fieldNameFilter && columns[col].name.toLowerCase().indexOf(fieldNameFilter.toLowerCase()) === -1) {
       return false
     }
-
     if (selectable && typeFilters.length > 0 && typeFilters.indexOf(columns[col].type) > -1) {
       return true
     } else if (selectable && typeFilters.length === 0) {
@@ -162,13 +161,14 @@ export const getSupportedChartTypes = (state, selectedColumn) => {
 // case reducers
 function initColumns (state, action) {
   return updateObject(state, {
-    columns: action.response.columns
+    columns: action.response.columns,
+    categoryColumns: action.response.categoryColumns
   })
 }
 
-function updateColumns (state, action) {
-  return merge({}, state, action.response)
-}
+//function updateColumns (state, action) {
+//  return merge({}, state, action.response)
+//}
 
 function loadColumnProperties (state, action) {
   action.response.categoryColumns = union([], state.categoryColumns, action.response.categoryColumns)
@@ -215,8 +215,7 @@ function resetState (state, action) {
 }
 
 const columnsReducer = createReducer({ typeFilters: [] }, {
-  [ActionTypes.METADATA_SUCCESS]: initColumns,
-  [ActionTypes.COLUMNS_SUCCESS]: updateColumns,
+  [ActionTypes.COLUMNS_SUCCESS]: initColumns, 
   [ActionTypes.COLPROPS_SUCCESS]: loadColumnProperties,
   [ActionTypes.FILTER_COLUMN_LIST]: filterColumnList,
   [ActionTypes.SORT_COLUMN_LIST]: sortColumnList,

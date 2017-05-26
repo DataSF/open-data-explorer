@@ -1,5 +1,11 @@
 import { CALL_API } from '../middleware'
-import { Endpoints, Transforms, shouldRunColumnStats } from '../middleware/socrata'
+//import { Endpoints, Transforms, shouldRunColumnStats } from '../middleware/socrata'
+
+import { Endpoints, Transforms } from '../middleware/socrata'
+
+
+import { EndpointsSF, TransformsSF } from '../middleware/metadatasf'
+
 import {isColTypeTest} from '../helpers'
 export const METADATA_REQUEST = 'METADATA_REQUEST'
 export const METADATA_SUCCESS = 'METADATA_SUCCESS'
@@ -11,8 +17,8 @@ function fetchMetadata (id) {
   return {
     [CALL_API]: {
       types: [METADATA_REQUEST, METADATA_SUCCESS, METADATA_FAILURE],
-      endpoint: Endpoints.METADATA(id),
-      transform: Transforms.METADATA
+      endpoint: EndpointsSF.METADATA(id),
+      transform: TransformsSF.METADATA
     }
   }
 }
@@ -25,8 +31,8 @@ function fetchColumns (id) {
   return {
     [CALL_API]: {
       types: [COLUMNS_REQUEST, COLUMNS_SUCCESS, COLUMNS_FAILURE],
-      endpoint: Endpoints.COLUMNS(id),
-      transform: Transforms.COLUMNS
+      endpoint: EndpointsSF.COLUMNS(id),
+      transform: TransformsSF.COLUMNS
     }
   }
 }
@@ -35,29 +41,29 @@ export const MIGRATION_REQUEST = 'MIGRATION_REQUEST'
 export const MIGRATION_FAILURE = 'MIGRATION_FAILURE'
 export const MIGRATION_SUCCESS = 'MIGRATION_SUCCESS'
 
-function fetchMigrationId (id) {
-  return {
-    [CALL_API]: {
-      types: [MIGRATION_REQUEST, MIGRATION_SUCCESS, MIGRATION_FAILURE],
-      endpoint: Endpoints.MIGRATION(id),
-      transform: Transforms.MIGRATION
-    }
-  }
-}
+// function fetchMigrationId (id) {
+//  return {
+//   [CALL_API]: {
+//      types: [MIGRATION_REQUEST, MIGRATION_SUCCESS, MIGRATION_FAILURE],
+//      endpoint: Endpoints.MIGRATION(id),
+//      transform: Transforms.MIGRATION
+//    }
+//  }
+// }
 
 export const COUNT_REQUEST = 'COUNT_REQUEST'
 export const COUNT_SUCCESS = 'COUNT_SUCCESS'
 export const COUNT_FAILURE = 'COUNT_FAILURE'
 
-function countRows (id) {
-  return {
-    [CALL_API]: {
-      types: [COUNT_REQUEST, COUNT_SUCCESS, COUNT_FAILURE],
-      endpoint: Endpoints.COUNT(id),
-      transform: Transforms.COUNT
-    }
-  }
-}
+//function countRows (id) {
+//  return {
+//    [CALL_API]: {
+//      types: [COUNT_REQUEST, COUNT_SUCCESS, COUNT_FAILURE],
+//      endpoint: Endpoints.COUNT(id),
+//      transform: Transforms.COUNT
+//    }
+//  }
+//}
 
 export const COLPROPS_REQUEST = 'COLPROPS_REQUEST'
 export const COLPROPS_SUCCESS = 'COLPROPS_SUCCESS'
@@ -80,31 +86,42 @@ function fetchColumnProps (id, key) {
 // 1. Load metadata and columns run asynchronously
 // 2. Then the migration ID is looked up so we know where to run queries against, and a query to count rows is issued
 // 3. Last, we run some stats against certain columns to use in the interface
+
 export function loadMetadata (id) {
   return (dispatch, getState) => {
+    return Promise.all([
+      dispatch(fetchMetadata(id)),
+      dispatch(fetchColumns(id))
+      ]).then(() => {
+        return dispatch(loadColumnProps())
+      })
+    }
+  }
+
+/*export function loadMetadata (id) {
+  return (dispatch, getState) => {
     return dispatch(fetchMetadata(id)).then(() => {
-      let dataId = getState().metadata.dataId
+      //let dataId = getState().metadata.dataId
       return Promise.all([
         dispatch(fetchColumns(id)),
-        dispatch(fetchMigrationId(id)),
-        dispatch(countRows(dataId))
+        // dispatch(fetchMigrationId(id)),
+        //  dispatch(countRows(dataId))
       ]).then(() => {
         return dispatch(loadColumnProps())
       })
     })
   }
-}
+}*/
 
 export function loadColumnProps () {
   return (dispatch, getState) => {
     // let id = getState().metadata.migrationId ? getState().metadata.migrationId : getState().metadata.id
     let id = getState().metadata.dataId
     let promises = []
-    let columns = getState().columnProps.columns
-    for (var key in columns) {
-      if (shouldRunColumnStats(columns[key].type, key)) {
-        promises.push(dispatch(fetchColumnProps(id, key)))
-      }
+    //let columns = getState().columnProps.columns
+    let categoryColumns = getState().columnProps.categoryColumns
+    for (let i =0; i < categoryColumns.length; i++) {
+      promises.push(dispatch(fetchColumnProps(id, categoryColumns[i])))
     }
     return Promise.all(promises)
   }

@@ -184,6 +184,7 @@ function endpointColumnProperties (id, key) {
   if (key === 'category') {
     category = key
   }
+  console.log( API_ROOT + `resource/${id}.json?$select=${category},count(*)&$group=category&$order=category asc&$limit=50000`)
   return API_ROOT + `resource/${id}.json?$select=${category},count(*)&$group=category&$order=category asc&$limit=50000`
 }
 

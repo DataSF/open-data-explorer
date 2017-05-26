@@ -8,8 +8,8 @@ import moment from 'moment'
 class DatasetFrontMatter extends Component {
   render () {
     const { name, id, rowsUpdatedAt, apiDomain, dataId } = this.props
-    let dayUpdated = moment.unix(rowsUpdatedAt).format('MM/DD/YYYY')
-    let timeUpdated = moment.unix(rowsUpdatedAt).format('hh:mm A')
+    let dayUpdated = moment(rowsUpdatedAt).format('MM/DD/YYYY')
+    let timeUpdated = moment(rowsUpdatedAt).format('hh:mm A')
     return (
       <Row className={'dataSetTitle'} id='header'>
         <Col sm={8} md={9}>
