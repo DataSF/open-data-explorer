@@ -2,6 +2,7 @@ import soda from 'soda-js'
 import _ from 'lodash'
 import uniq from 'lodash/uniq'
 import { replacePropertyNameValue } from '../helpers'
+import moment from 'moment'
 
 const API_ROOT = 'https://data.sfgov.org/'
 
@@ -184,7 +185,6 @@ function endpointColumnProperties (id, key) {
   if (key === 'category') {
     category = key
   }
-  console.log( API_ROOT + `resource/${id}.json?$select=${category},count(*)&$group=category&$order=category asc&$limit=50000`)
   return API_ROOT + `resource/${id}.json?$select=${category},count(*)&$group=category&$order=category asc&$limit=50000`
 }
 
@@ -307,6 +307,70 @@ function reduceGroupedData (data, groupBy) {
   return groupedData
 }
 
+function isDateColSelected(state){
+  let selectedCol =  state.columnProps.columns[state.query.selectedColumn]
+  if(selectedCol.type === 'date'){
+    return true
+  }
+  return false
+}
+
+function getDateRange(json){
+  let dateListJson = json.map(function(obj){
+    return moment(obj.label, moment.ISO_8601).toISOString()
+  })
+  return dateListJson
+}
+
+function getDateGrp(state){
+  if(state.query.hasOwnProperty('dateBy')){
+    if(state.query.dateBy === 'month'){
+      return 'month'
+    }
+  }
+  return 'y'
+}
+
+function addMissingDates(json, state){
+  if(isDateColSelected(state)){
+    let startDate = moment(json[0]['label'], moment.ISO_8601);
+    let endDate = moment(json[json.length - 1]['label'], moment.ISO_8601);
+    let currentDate = startDate.clone()
+    let dateList = []
+    let dateBy = getDateGrp(state)
+    while (currentDate.isBefore(endDate)) {
+      let currDt = currentDate.toISOString()
+      dateList.push(currDt)
+      currentDate.add(1, dateBy)
+    }
+    dateList.push( endDate.toISOString())
+    let jsonDts = getDateRange(json)
+    let diff = _.difference(dateList, jsonDts)
+    let jsonEmptyDates =  diff.map(function(diffDt){
+      return makeEmptyDtChartData(diffDt, dateBy)
+    })
+    let fullDates =  json.concat(jsonEmptyDates)
+    // sort the dates at the end
+    return fullDates.sort(function(a, b){
+      let keyA = new Date(a.label),
+        keyB = new Date(b.label);
+      // Compare the 2 dates
+      if(keyA < keyB) return -1;
+      if(keyA > keyB) return 1;
+      return 0
+  })
+ }
+ return json
+}
+
+function makeEmptyDtChartData(diffDt, dateBy){
+  let sliceLen = 4
+  if(dateBy === 'month'){
+    sliceLen = 7
+  }
+  return {'label': diffDt, 'value':0, 'key': diffDt.slice(0,sliceLen) }
+}
+
 function transformQueryData (json, state) {
   let { query } = state
   let groupKeys = []
@@ -317,6 +381,7 @@ function transformQueryData (json, state) {
     json = reduceGroupedData(json, query.groupBy)
   }
   json = replacePropertyNameValue(json, 'label', 'undefined', 'blank')
+  json = addMissingDates(json, state)
   return {
     query: {
       isFetching: false,
