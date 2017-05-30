@@ -28,6 +28,8 @@ class ChartExperimental extends Component {
     let {columns, query, ...other} = metadata
     groupKeys = query.groupKeys
     let chartData = this.props.chart.chartData
+    console.log("***chart data***")
+    console.log(chartData)
     let otherProps = {...other}
     let displayChartOptions = null
     otherProps.selectedColumnDef = query.selectedColumn ? columns[query.selectedColumn] : null
@@ -36,24 +38,31 @@ class ChartExperimental extends Component {
     let chartType = chartDisplay.chartType
     return (
       <Row>
-        <ChartExperimentalCanvas
-          chart={chart}
-          chartData={chartData}
-          groupKeys={groupKeys}
-          changeDateBy={changeDateBy}
-          changeRollupBy={changeRollupBy}
-          columns={columns}
-          {...otherProps}
-          query={query}
-          dateBy={query.dateBy}
-          rollupBy={query.rollupBy}
-          groupBy={query.groupBy}
-          sumBy={query.sumBy}
-          filters={query.filters}
-          chartType={chartType}
-          applyChartType={applyChartType}
-          displayChartOptions={displayChartOptions}
-          />
+        <Choose>
+          <When condition={chartData.length > 0}>
+            <ChartExperimentalCanvas
+              chart={chart}
+              chartData={chartData}
+              groupKeys={groupKeys}
+              changeDateBy={changeDateBy}
+              changeRollupBy={changeRollupBy}
+              columns={columns}
+              {...otherProps}
+              query={query}
+              dateBy={query.dateBy}
+              rollupBy={query.rollupBy}
+              groupBy={query.groupBy}
+              sumBy={query.sumBy}
+              filters={query.filters}
+              chartType={chartType}
+              applyChartType={applyChartType}
+              displayChartOptions={displayChartOptions}
+            />
+          </When>
+          <When condition={chartData.length === 0}>
+            <h2> Based on your filters, your query retrieved no results </h2>
+          </When>
+        </Choose>
         <Panel
           {...query}
           columns={columns}

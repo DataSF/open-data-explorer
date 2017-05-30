@@ -37,6 +37,7 @@ class VizContainer extends Component {
 
   render () {
     let { props, actions } = this.props
+    console.log(props.chartData)
     return (
       <Row>
         <Col md={9} className='VizContainer__stage'>
@@ -78,17 +79,30 @@ class VizContainer extends Component {
                 </Row>
               </div>
               <Loading isFetching={props.isFetching} type='centered'>
-                <ChartExperimentalCanvas
-                  chartData={props.chartData || []}
-                  chartType={props.chartType}
-                  dateBy={props.dateBy}
-                  rollupBy={props.rollupBy}
-                  groupKeys={props.groupKeys}
-                  filters={props.filters}
-                  rowLabel={props.rowLabel}
-                  selectedColumnDef={props.selectedColumnDef}
-                  groupBy={props.groupBy}
-                  sumBy={props.sumBy} />
+                <Choose>
+                  <When condition={props.chartData}>
+                    <Choose>
+                      <When condition={props.chartData.length > 0}> 
+                        <ChartExperimentalCanvas
+                          chartData={props.chartData || []}
+                          chartType={props.chartType}
+                          dateBy={props.dateBy}
+                          rollupBy={props.rollupBy}
+                          groupKeys={props.groupKeys}
+                          filters={props.filters}
+                          rowLabel={props.rowLabel}
+                          selectedColumnDef={props.selectedColumnDef}
+                          groupBy={props.groupBy}
+                          sumBy={props.sumBy} />
+                      </When>
+                      <When condition={props.chartData.length === 0 && props.filters}>
+                        <div className={'filterNone'}> 
+                            Based on the filters you've applied, your query retrieved no results. Remove some of the filters and try again.
+                        </div>
+                      </When>
+                    </Choose>
+                  </When>
+                </Choose>
               </Loading>
               <CopySnippet title='Embed this visual' help='Copy the code snippet below and embed in your website' snippet={props.embedCode} />
               <CopySnippet title='Share this visual' help='Copy the link below to share this page with others' snippet={props.shareLink} />

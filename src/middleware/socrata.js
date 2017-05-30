@@ -374,14 +374,17 @@ function makeEmptyDtChartData(diffDt, dateBy){
 function transformQueryData (json, state) {
   let { query } = state
   let groupKeys = []
-  if (query.groupBy) {
+
+  if (query.groupBy && json.length > 0) {
     groupKeys = uniq(json.map((obj) => {
       return obj[query.groupBy]
     }))
     json = reduceGroupedData(json, query.groupBy)
   }
-  json = replacePropertyNameValue(json, 'label', 'undefined', 'blank')
-  json = addMissingDates(json, state)
+  if(json.length > 0){
+    json = replacePropertyNameValue(json, 'label', 'undefined', 'blank')
+    json = addMissingDates(json, state)
+  }
   return {
     query: {
       isFetching: false,
