@@ -1,5 +1,5 @@
 import soda from 'soda-js'
-import _ from 'lodash'
+import maxBy from 'lodash/maxBy'
 import uniq from 'lodash/uniq'
 import { replacePropertyNameValue } from '../helpers'
 
@@ -345,7 +345,7 @@ function transformApiMigration (json) {
 }
 
 function transformColumnProperties (json, state, params) {
-  let maxRecord = parseInt(_.maxBy(json, function (o) { return parseInt(o.count, 10) },).count, 10)
+  let maxRecord = parseInt(maxBy(json, function (o) { return parseInt(o.count, 10) },).count, 10)
   let checkFirst = maxRecord / state.metadata.rowCount
   let checkNumCategories = json.length / state.metadata.rowCount
   let transformed = {

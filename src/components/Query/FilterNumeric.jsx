@@ -1,9 +1,9 @@
-require('rc-slider/assets/index.css')
+import 'rc-slider/assets/index.css'
 import './@Query.css'
 import React, { Component } from 'react'
 import { Button } from 'react-bootstrap'
 import Slider from 'rc-slider'
-import _ from 'lodash'
+import isEqual from 'lodash/isEqual'
 
 class FilterNumeric extends Component {
   constructor (props) {
@@ -52,7 +52,7 @@ class FilterNumeric extends Component {
       marginBottom: 15
     }
     let applyOrCancel = null
-    if (!_.isEqual(this.props.currentRange, this.props.nextRange)) {
+    if (!isEqual(this.props.currentRange, this.props.nextRange)) {
       applyOrCancel = (<div style={{textAlign: 'right', marginTop: '8px'}}><Button bsStyle='warning' bsSize='xs' onClick={this.cancelUpdate}>Cancel</Button> <Button bsStyle='success' bsSize='xs' onClick={this.applyUpdate}>Apply</Button></div>)
     }
     return (

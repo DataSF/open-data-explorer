@@ -1,11 +1,10 @@
-require('fixed-data-table/dist/fixed-data-table.css')
-
+import 'fixed-data-table/dist/fixed-data-table.css'
 import React, { Component } from 'react'
 import {Pagination} from 'react-bootstrap'
 import {Table, Column, Cell} from 'fixed-data-table'
 import moment from 'moment'
 import Dimensions from 'react-dimensions'
-import d3 from 'd3'
+import { format } from 'd3'
 
 var SortTypes = {
   ASC: 'asc',
@@ -56,7 +55,7 @@ class DynamicCell extends Component {
     } else if (format === 'calendar_date' && data[rowIndex][field]) {
       content = moment(data[rowIndex][field]).format('MM/DD/YYYY')
     } else if (format === 'money' && data[rowIndex][field]) {
-      let dollars = d3.format('$,')
+      let dollars = format('$,')
       content = dollars(data[rowIndex][field])
     } else {
       content = data[rowIndex][field]

@@ -1,3 +1,5 @@
+/* global Choose, When, Otherwise */
+
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns, getSupportedChartTypes } from '../reducers'

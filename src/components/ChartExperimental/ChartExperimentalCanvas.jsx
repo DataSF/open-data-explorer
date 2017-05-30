@@ -1,5 +1,7 @@
+/* global Choose, When, Otherwise */
+
 import React, { Component } from 'react'
-import _ from 'lodash'
+import isEqual from 'lodash/isEqual'
 import d3 from 'd3'
 import BlankChart from './BlankChart'
 import $ from 'jquery'
@@ -64,7 +66,7 @@ class ChartExperimentalCanvas extends Component {
       height: nextState.height,
       width: nextState.width
     }
-    return !_.isEqual(thisChart, nextChart)
+    return !isEqual(thisChart, nextChart)
   }
 
   isSelectedColDate (selectedColumnDef) {
