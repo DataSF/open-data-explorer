@@ -3,6 +3,8 @@ import _ from 'lodash'
 import uniq from 'lodash/uniq'
 import { replacePropertyNameValue } from '../helpers'
 import moment from 'moment'
+import d3 from 'd3'
+import { sumObj, sortObj } from '../helpers'
 
 const API_ROOT = 'https://data.sfgov.org/'
 
@@ -331,6 +333,19 @@ function getDateGrp(state){
   return 'y'
 }
 
+function sortDateList(dateList){
+  dateList.sort(function(a, b){
+      let keyA = new Date(a.label),
+        keyB = new Date(b.label);
+      // Compare the 2 dates
+      if(keyA < keyB) return -1;
+      if(keyA > keyB) return 1;
+      return 0
+  })
+  return dateList
+}
+
+
 function addMissingDates(json, state){
   if(isDateColSelected(state)){
     let startDate = moment(json[0]['label'], moment.ISO_8601);
@@ -351,14 +366,7 @@ function addMissingDates(json, state){
     })
     let fullDates =  json.concat(jsonEmptyDates)
     // sort the dates at the end
-    return fullDates.sort(function(a, b){
-      let keyA = new Date(a.label),
-        keyB = new Date(b.label);
-      // Compare the 2 dates
-      if(keyA < keyB) return -1;
-      if(keyA > keyB) return 1;
-      return 0
-  })
+    return sortDateList(fullDates)
  }
  return json
 }
@@ -371,6 +379,104 @@ function makeEmptyDtChartData(diffDt, dateBy){
   return {'label': diffDt, 'value':0, 'key': diffDt.slice(0,sliceLen) }
 }
 
+
+function formatJsonGrpBy (itemList, dateBy, isDateCol) {
+    let newdict = {}
+    let yrFormat = d3.time.format('%Y')
+    let monthFormat = d3.time.format('%m-%Y')
+    Object.keys(itemList).forEach(function (key, index) {
+      if (key === 'label') {
+        newdict[key] = String(itemList[key])
+        if (newdict[key] === 'undefined') {
+          newdict[key] = 'blank'
+        }
+      } else if (key === 'undefined') {
+        newdict['blank'] = Number(itemList[key])
+      } else {
+        newdict[key] = Number(itemList[key])
+      }
+    })
+
+    if (isDateCol) {
+      let dt = newdict['label'].split('T')
+      dt = dt[0].split('-')
+      if (dateBy === 'month') {
+        newdict['label'] = monthFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
+      } else {
+        newdict['label'] = yrFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
+      }
+    }
+    return newdict
+}
+
+function castJsonGrpBy (json, state) {
+    let formattedJson = []
+    let dateBy = state.query.dateBy
+    let isDtCol = isDateColSelected(state)
+    for (let i = 0; i < json.length; i++) {
+      let newdict = formatJsonGrpBy(json[i], dateBy, isDtCol)
+      formattedJson.push(newdict)
+    }
+    return formattedJson
+  }
+
+function sortJsonGrpBy (json) {
+    let sortedJsonGrp = []
+    let grpSumDict = {}
+    Object.keys(json).forEach(function (key, index) {
+      grpSumDict[key] = sumObj(json[key], 'label')
+    })
+    let sorted = sortObj(grpSumDict)
+    for (let i = 0; i < sorted.length; i++) {
+      let idx = sorted[i][0]
+      sortedJsonGrp.push(json[idx])
+    }
+    return sortedJsonGrp
+  }
+
+
+function formatJsonCol (itemList) {
+    itemList = itemList.map(function (item, index) {
+      item['key'] = String(item['label'])
+      item['value'] = Number(item['value'])
+      return item
+    })
+    return itemList
+}
+
+function   formatJsonDateCol (itemList, dateBy) {
+    let yrFormat = d3.time.format('%Y')
+    let monthFormat = d3.time.format('%m-%Y')
+    itemList = itemList.map(function (item, index) {
+      if (dateBy === 'month') {
+        item['label'] = monthFormat(new Date(item['label']))
+        item['key'] = monthFormat(new Date(item['label']))
+      } else {
+        item['label'] = yrFormat(new Date(item['label']))
+        item['key'] = yrFormat(new Date(item['label']))
+      }
+      console.log(item)
+      return item
+    })
+    return itemList
+  }
+
+
+function  castJson (json, state) {
+    let formattedJson = []
+    if (isDateColSelected(state)) {
+      let dateBy = getDateGrp(state)
+      formattedJson = formatJsonDateCol(json,dateBy)
+    } else {
+      formattedJson = formatJsonCol(json)
+    }
+    //formattedJson = formatBlankJson(formattedJson)
+    //formattedJson = formatWhiteSpaceJson(formattedJson)
+    return formattedJson
+  }
+
+
+
 function transformQueryData (json, state) {
   let { query } = state
   let groupKeys = []
@@ -380,10 +486,19 @@ function transformQueryData (json, state) {
       return obj[query.groupBy]
     }))
     json = reduceGroupedData(json, query.groupBy)
+    json = castJsonGrpBy(json, state)
+    if(isDateColSelected(state)) {
+      json =  sortDateList(json)
+    }else{
+      json = sortJsonGrpBy (json)
+    }
   }
   if(json.length > 0){
     json = replacePropertyNameValue(json, 'label', 'undefined', 'blank')
     json = addMissingDates(json, state)
+  }
+  if(!query.groupBy){
+      json =  castJson (json, state)
   }
   return {
     query: {

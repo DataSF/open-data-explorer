@@ -187,10 +187,18 @@ class ChartExperimentalCanvas extends Component {
     return newChartData
   }
   sortChartDataGrpByDate (newChartData, dateBy) {
+    console.log("new chart data")
+    console.log(newChartData)
     if (dateBy === 'month') {
-      newChartData.sort(function (a, b) {
-        return Number(a.label.substring(3, a.label.length)) - Number(b.label.substring(3, a.label.length))
-      })
+      newChartData.sort(function(a, b){
+        let keyA = new Date(a.label),
+        keyB = new Date(b.label);
+      // Compare the 2 dates
+      if(keyA < keyB) return -1;
+      if(keyA > keyB) return 1;
+      return 0
+  })
+
     } else {
       newChartData.sort(function (a, b) {
         return Number(a.label) - Number(b.label)
@@ -198,11 +206,10 @@ class ChartExperimentalCanvas extends Component {
     }
     return newChartData
   }
-
+  
   sortChartDataGrpBy (newChartData) {
     let sortedNewChartData = []
     let grpSumDict = {}
-    console.log(newChartData)
     Object.keys(newChartData).forEach(function (key, index) {
       grpSumDict[key] = sumObj(newChartData[key], 'label')
     })
@@ -215,20 +222,12 @@ class ChartExperimentalCanvas extends Component {
   }
 
   convertChartData (chartData, selectedColumnDef, dateBy, isGroupBy) {
-    let newChartData = []
+    //let newChartData = []
     let isDtCol = isColTypeTest(selectedColumnDef, 'date')
     if (chartData && chartData.length > 1) {
       if (!isGroupBy) {
         return this.castChartData(chartData, isDtCol, dateBy)
-      } else {
-        newChartData = this.castChartDataGrpBy(chartData, isDtCol, dateBy)
-        if (isDtCol) {
-          newChartData = this.sortChartDataGrpByDate(newChartData, dateBy)
-        } else {
-          newChartData = this.sortChartDataGrpBy(newChartData)
-        }
-        return newChartData
-      }
+      } 
     }
     return chartData
   }
@@ -266,8 +265,7 @@ class ChartExperimentalCanvas extends Component {
   }
 
   render () {
-    let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, dateBy, rollupBy} = this.props
-
+    let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, rollupBy} = this.props
     chartType = this.setDefaultChartType(selectedColumnDef, chartType)
     let fillColor
     let grpColorScale
@@ -294,7 +292,7 @@ class ChartExperimentalCanvas extends Component {
     let colName = ''
     let numericCol = isColTypeTest(selectedColumnDef, 'number')
     let isGroupBy = this.isGroupByz(groupKeys)
-    chartData = this.convertChartData(chartData, selectedColumnDef, dateBy, isGroupBy)
+    //chartData = this.convertChartData(chartData, selectedColumnDef, dateBy, isGroupBy)
     if (selectedColumnDef) {
       fillColor = fillColorIndex[selectedColumnDef.type]
       grpColorScale = groupByColorIndex[selectedColumnDef.type]
