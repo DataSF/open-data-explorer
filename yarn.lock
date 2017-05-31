@@ -1324,6 +1324,12 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
+bootstrap-3-card@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/bootstrap-3-card/-/bootstrap-3-card-0.2.0.tgz#be08e9c6f23184706e0148107aa4185f6d614e04"
+  dependencies:
+    bootstrap-sass "3.x"
+
 bootstrap-daterangepicker@^2.1.24:
   version "2.1.25"
   resolved "https://registry.yarnpkg.com/bootstrap-daterangepicker/-/bootstrap-daterangepicker-2.1.25.tgz#fcd8ba0b755a054d330d7a3b7c4dd8bb855cffb7"
@@ -1331,7 +1337,7 @@ bootstrap-daterangepicker@^2.1.24:
     jquery ">=1.10"
     moment "^2.9.0"
 
-bootstrap-sass@^3.3.7:
+bootstrap-sass@3.x, bootstrap-sass@^3.3.7:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/bootstrap-sass/-/bootstrap-sass-3.3.7.tgz#6596c7ab40f6637393323ab0bc80d064fc630498"
 
@@ -5321,6 +5327,12 @@ react-autowhatever@^10.0.0:
     prop-types "^15.5.8"
     react-themeable "^1.1.0"
     section-iterator "^2.0.0"
+
+react-bootstrap-card@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-card/-/react-bootstrap-card-0.1.5.tgz#5a43af0be6de8a0f59f8eab226345fbbc2cba968"
+  dependencies:
+    classnames "^2.2.3"
 
 react-bootstrap-daterangepicker@^3.2.2:
   version "3.2.2"

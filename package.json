@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "airbrake-js": "^0.5.9",
+    "bootstrap-3-card": "^0.2.0",
     "bootstrap-sass": "^3.3.7",
     "d3": "^3.5.17",
     "eslint-plugin-jsx-control-statements": "^2.1.1",
@@ -19,6 +20,7 @@
     "react-addons-update": "^15.1.0",
     "react-autosuggest": "^9.0.0",
     "react-bootstrap": "^0.31.0",
+    "react-bootstrap-card": "^0.1.5",
     "react-bootstrap-daterangepicker": "^3.2.2",
     "react-copy-to-clipboard": "^4.2.3",
     "react-date-range": "^0.9.3",
@@ -39,6 +41,7 @@
     "underscore.string": "^3.3.4"
   },
   "devDependencies": {
+    "@kadira/storybook": "^2.21.0",
     "autoprefixer": "6.7.2",
     "babel-core": "6.22.1",
     "babel-eslint": "7.1.1",
@@ -69,9 +72,9 @@
     "json-loader": "0.5.4",
     "jsx-control-statements": "^3.1.5",
     "node-sass": "^4.5.2",
+    "npm-run-all": "^4.0.2",
     "object-assign": "4.1.1",
     "postcss-loader": "1.2.2",
-    "npm-run-all": "^4.0.2",
     "promise": "7.1.1",
     "react-dev-utils": "^0.5.2",
     "style-loader": "0.13.1",
@@ -79,8 +82,7 @@
     "webpack": "1.14.0",
     "webpack-dev-server": "1.16.2",
     "webpack-manifest-plugin": "1.1.0",
-    "whatwg-fetch": "2.0.2",
-    "@kadira/storybook": "^2.21.0"
+    "whatwg-fetch": "2.0.2"
   },
   "scripts": {
     "build-css": "node-sass src/ -o src/",
