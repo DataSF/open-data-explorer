@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import d3 from 'd3'
 import { XAxis, AreaChart, YAxis, CartesianGrid, Area, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
@@ -93,15 +94,15 @@ class ChartExperimentalAreaStuff extends Component {
 }
 
 ChartExperimentalAreaStuff.propTypes = {
-  chartData: React.PropTypes.array,
-  h: React.PropTypes.number,
-  w: React.PropTypes.number,
-  chartProperties: React.PropTypes.object,
-  isGroupBy: React.PropTypes.bool,
-  margin: React.PropTypes.object,
-  rowLabel: React.PropTypes.string,
-  groupKeys: React.PropTypes.array,
-  fillColor: React.PropTypes.string
+  chartData: PropTypes.array,
+  h: PropTypes.number,
+  w: PropTypes.number,
+  chartProperties: PropTypes.object,
+  isGroupBy: PropTypes.bool,
+  margin: PropTypes.object,
+  rowLabel: PropTypes.string,
+  groupKeys: PropTypes.array,
+  fillColor: PropTypes.string
 }
 
 export default ChartExperimentalAreaStuff

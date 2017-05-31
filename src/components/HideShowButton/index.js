@@ -1,5 +1,6 @@
 import './@HideShowButton.css'
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import DefaultListGroupItem from '../DefaultListGroupItem'
 // import {setClassNamesShowHide} from '../../helpers'
 class HideShowButton extends Component {
@@ -39,6 +40,6 @@ class HideShowButton extends Component {
 }
 
 HideShowButton.propTypes = {
-  itemProps: React.PropTypes.object.isRequired
+  itemProps: PropTypes.object.isRequired
 }
 export default HideShowButton

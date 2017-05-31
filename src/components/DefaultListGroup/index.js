@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { ListGroup } from 'react-bootstrap'
 import './@DefaultListGroup.css'
 
@@ -18,9 +19,9 @@ const DefaultListGroup = ({itemComponent, className, items, onSelectListItem}) =
 }
 
 DefaultListGroup.propTypes = {
-  items: React.PropTypes.array,
-  onSelectListItem: React.PropTypes.func,
-  className: React.PropTypes.string
+  items: PropTypes.array,
+  onSelectListItem: PropTypes.func,
+  className: PropTypes.string
 }
 
 export default DefaultListGroup

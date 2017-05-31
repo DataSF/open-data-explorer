@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Panel } from 'react-bootstrap'
 
 const ChartTypePicker = ({chartTypes, chartType, onChange}) => {
@@ -19,8 +20,8 @@ const ChartTypePicker = ({chartTypes, chartType, onChange}) => {
 }
 
 ChartTypePicker.propTypes = {
-  chartTypes: React.PropTypes.array,
-  onChange: React.PropTypes.func
+  chartTypes: PropTypes.array,
+  onChange: PropTypes.func
 }
 
 export default ChartTypePicker

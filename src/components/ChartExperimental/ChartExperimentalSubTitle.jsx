@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 import titleize from 'titleize'
-import format from 'date-fns/format'
+import moment from 'moment'
 
 class ChartExperimentalSubTitle extends Component {
   constructor (props) {
@@ -35,8 +36,8 @@ class ChartExperimentalSubTitle extends Component {
   filterDates (columnFilter, columnFilterName) {
     let subtitle = ''
     let fitlerCategory
-    let minDt = format(columnFilter.options.min, 'MM/DD/YYYY')
-    let maxDt = format(columnFilter.options.max, 'MM/DD/YYYY')
+    let minDt = moment(columnFilter.options.min).format('MM/DD/YYYY')
+    let maxDt = moment(columnFilter.options.max).format('MM/DD/YYYY')
     subtitle = 'Filtering by ' + titleize(columnFilterName)
     fitlerCategory = 'Only Showing Records Between ' + minDt + ' and ' + maxDt
     subtitle = subtitle + ': ' + fitlerCategory
@@ -88,8 +89,8 @@ class ChartExperimentalSubTitle extends Component {
 }
 
 ChartExperimentalSubTitle.propTypes = {
-  columns: React.PropTypes.object,
-  filters: React.PropTypes.object
+  columns: PropTypes.object,
+  filters: PropTypes.object
 }
 
 export default ChartExperimentalSubTitle

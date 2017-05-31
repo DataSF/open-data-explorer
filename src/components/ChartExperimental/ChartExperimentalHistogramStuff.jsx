@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import d3 from 'd3'
 import { XAxis, BarChart, YAxis, CartesianGrid, Bar, Tooltip } from 'recharts'
 import { findMaxObjKeyValue, fillArray } from '../../helpers'
@@ -113,9 +114,9 @@ class ChartExperimentalHistogramStuff extends Component {
 }
 
 ChartExperimentalHistogramStuff.propTypes = {
-  chartData: React.PropTypes.array,
-  h: React.PropTypes.number,
-  w: React.PropTypes.number
+  chartData: PropTypes.array,
+  h: PropTypes.number,
+  w: PropTypes.number
 }
 
 export default ChartExperimentalHistogramStuff
