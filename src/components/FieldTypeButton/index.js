@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import DefaultListGroupItem from '../DefaultListGroupItem'
 import './@FieldTypeButton.css'
 import { setClassNamesListItem } from '../../helpers'
@@ -27,7 +28,7 @@ class FieldTypeButton extends Component {
 }
 
 FieldTypeButton.propTypes = {
-  itemProps: React.PropTypes.object.isRequired,
-  onClick: React.PropTypes.func.isRequired
+  itemProps: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired
 }
 export default FieldTypeButton

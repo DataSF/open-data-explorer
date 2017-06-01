@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
-// import { toTitleCase } from '../../helpers'
-import titleize from 'titleize'
+import { toTitleCase } from '../../helpers'
+// import titleize from 'titleize'
 import {isColTypeTest} from '../../helpers'
 
 class ChartExperimentalTitle extends Component {
@@ -27,7 +28,7 @@ class ChartExperimentalTitle extends Component {
       title += ' and ' + columns[groupBy].name
     }
 
-    title = titleize(title)
+    title = toTitleCase(title)
     return title
   }
 
@@ -44,11 +45,11 @@ class ChartExperimentalTitle extends Component {
 }
 
 ChartExperimentalTitle.propTypes = {
-  columns: React.PropTypes.object,
-  rowLabel: React.PropTypes.string,
-  selectedColumnDef: React.PropTypes.object,
-  groupBy: React.PropTypes.string,
-  sumBy: React.PropTypes.string
+  columns: PropTypes.object,
+  rowLabel: PropTypes.string,
+  selectedColumnDef: PropTypes.object,
+  groupBy: PropTypes.string,
+  sumBy: PropTypes.string
 }
 
 export default ChartExperimentalTitle

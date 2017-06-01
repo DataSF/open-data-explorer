@@ -1,5 +1,8 @@
+/* global Choose, When, Otherwise */
+
 import React, { Component } from 'react'
-import _ from 'lodash'
+import PropTypes from 'prop-types'
+import isEqual from 'lodash/isEqual'
 import d3 from 'd3'
 import BlankChart from './BlankChart'
 import $ from 'jquery'
@@ -64,7 +67,7 @@ class ChartExperimentalCanvas extends Component {
       height: nextState.height,
       width: nextState.width
     }
-    return !_.isEqual(thisChart, nextChart)
+    return !isEqual(thisChart, nextChart)
   }
 
   isSelectedColDate (selectedColumnDef) {
@@ -444,15 +447,15 @@ class ChartExperimentalCanvas extends Component {
 }
 
 ChartExperimentalCanvas.propTypes = {
-  chartData: React.PropTypes.array,
-  chartType: React.PropTypes.string,
-  groupKeys: React.PropTypes.array,
-  columns: React.PropTypes.object,
-  filters: React.PropTypes.object,
-  rowLabel: React.PropTypes.string,
-  selectedColumnDef: React.PropTypes.object,
-  groupBy: React.PropTypes.string,
-  sumBy: React.PropTypes.string
+  chartData: PropTypes.array,
+  chartType: PropTypes.string,
+  groupKeys: PropTypes.array,
+  columns: PropTypes.object,
+  filters: PropTypes.object,
+  rowLabel: PropTypes.string,
+  selectedColumnDef: PropTypes.object,
+  groupBy: PropTypes.string,
+  sumBy: PropTypes.string
 }
 
 ChartExperimentalCanvas.defaultProps = {

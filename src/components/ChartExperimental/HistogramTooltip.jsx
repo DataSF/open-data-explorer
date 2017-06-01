@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class HistogramTooltip extends Component {
   buildHistogramLabel (label, dx) {
@@ -23,10 +24,10 @@ class HistogramTooltip extends Component {
   }
 }
 HistogramTooltip.propTypes = {
-  type: React.PropTypes.string,
-  payload: React.PropTypes.array,
-  label: React.PropTypes.number,
-  dx: React.PropTypes.number
+  type: PropTypes.string,
+  payload: PropTypes.array,
+  label: PropTypes.number,
+  dx: PropTypes.number
 }
 
 export default HistogramTooltip

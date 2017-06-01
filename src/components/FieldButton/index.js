@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import DefaultListGroupItem from '../DefaultListGroupItem'
 // import titleize from 'titleize'
 import './@FieldButton.css'
@@ -44,6 +45,6 @@ class FieldButton extends Component {
 }
 
 FieldButton.propTypes = {
-  itemProps: React.PropTypes.object.isRequired
+  itemProps: PropTypes.object.isRequired
 }
 export default FieldButton

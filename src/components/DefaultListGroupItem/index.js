@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { ListGroupItem, OverlayTrigger } from 'react-bootstrap'
 import './@DefaultListGroupItem.css'
 
@@ -40,8 +41,8 @@ class DefaultListGroupItem extends Component {
   }
 }
 DefaultListGroupItem.propTypes = {
-  itemProps: React.PropTypes.object.isRequired,
-  onClick: React.PropTypes.func
+  itemProps: PropTypes.object.isRequired,
+  onClick: PropTypes.func
 }
 export default DefaultListGroupItem
 

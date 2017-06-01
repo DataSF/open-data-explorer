@@ -1,5 +1,6 @@
 import './@ColumnFilter.css'
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { ButtonGroup, Button } from 'react-bootstrap'
 
 // To do: remove this in favor of passing icon components in below

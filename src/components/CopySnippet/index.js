@@ -1,6 +1,6 @@
 import './@CopySnippet.scss'
-
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Form, FormGroup, FormControl, Button } from 'react-bootstrap'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
