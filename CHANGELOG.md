@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/)
 
 ## Unreleased
 
-## [v1.0.0-alpha.4](https://github.com/DataSF/open-data-explorer/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) - 2017-02-10
+## [v1.0.0-alpha.4](https://github.com/DataSF/open-data-explorer/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) - 2017-06-01
 
 ### Added
 - [274](https://github.com/DataSF/open-data-explorer/pull/274) - Allow users to search datasets from navigation bar
