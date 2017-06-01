@@ -1,0 +1,66 @@
+button.list-group-item {
+    padding: 5px 10px;
+}
+
+.is-selected {
+    opacity: 1;
+    filter: alpha(opacity=100); /* For IE8 and earlier */
+    //border: solid 3px;
+    //border-color: #f2c407;
+}
+
+.not-selected {
+    //opacity: 0.5;
+    // filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
+.column-type {
+   border-left-width: 10px;
+}
+
+$text-color: #93c2de;
+$date-color: #93deaf;
+$boolean-color: #deaf93;
+$number-color: #de93c2;
+$other-color: #E6FF2E;
+
+.column-type--text{
+    border-left-color: $text-color;
+}
+
+.column-type--date{
+    border-left-color: $date-color;
+ }
+.column-type--boolean{
+    border-left-color: $boolean-color;
+}
+
+.column-type--number{
+    border-left-color: $number-color;
+}
+
+.column-type--other{
+    border-left-color:$other-color;
+}
+
+.column-type--text.selected{
+    background-color: $text-color;
+}
+
+.column-type--date.selected {
+    background-color: $date-color;
+ }
+.column-type--boolean.selected {
+    background-color: $boolean-color;
+}
+
+.column-type--number.selected {
+    background-color: $number-color;
+}
+
+.column-type--other.selected {
+    background-color:$other-color;
+}
+
+
+

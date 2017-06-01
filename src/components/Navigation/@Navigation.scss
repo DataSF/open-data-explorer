@@ -1,0 +1,87 @@
+.myNav .navbar-brand {
+  height: 50px;
+}
+
+.myNav.nav >li >a {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+.myNav .navbar-toggle {
+  padding: 10px;
+  margin: 25px 15px 25px 0;
+}
+
+.navLogo {
+  font-size:220%;
+  font-family: 'Lato', sans-serif;
+  margin-top:6.5%;
+  margin-bottom:2%;
+  margin-left:5%;
+}
+
+.navTotal {
+  width:100%;
+  padding-bottom:0.5%;
+  margin-top:-1%;
+  padding-left:2%;
+  padding-right:2%;
+}
+
+.navLi {
+  padding-top:2.5%;
+  font-size:120%;
+  font-family: 'Lato', sans-serif;
+}
+
+
+.ribbon {
+  z-index: 9999;
+  background-color: #a00;
+  overflow: hidden;
+  white-space: nowrap;
+  /* top left corner */
+  position: absolute;
+  left: -35px;
+  top: 15px;
+  /* 45 deg ccw rotation */
+  -webkit-transform: rotate(-45deg);
+     -moz-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+       -o-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  /* shadow */
+  -webkit-box-shadow: 0 0 10px #888;
+     -moz-box-shadow: 0 0 10px #888;
+          box-shadow: 0 0 10px #888;
+}
+
+.navImg{
+  min-height:60px;
+  min-width:80px;
+}
+
+.ribbon a {
+  border: 1px solid #faa;
+  color: #fff;
+  display: block;
+  font: bold 90.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 1px 0;
+  padding: 10px 50px;
+  text-align: center;
+  text-decoration: none;
+  /* shadow */
+  text-shadow: 0 0 5px #444;
+}
+
+.navbar-form {
+  padding: 10px;
+}
+
+.navbar-form .react-autosuggest__suggestions-container--open {
+  top: 30px
+}
+
+.navbar .ais-InstantSearch__root {
+  display: inline-block;
+  float: left;
+}

@@ -1,0 +1,183 @@
+#map {
+	width: 100%;
+	height: 800px;
+}
+
+#header .btn-group > .btn {
+	margin-bottom: 0;
+	margin-right: 0;
+}
+
+#data-table .pagination {
+	float: right;
+}
+
+#ChartsContainer .column-buttons .btn {
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+#ChartsContainer .toggle-time {
+	float: right;
+}
+.toggle-time{
+  margin-top:4%;
+  margin-right:7%;
+}
+#ChartsContainer {
+	margin-top: 20px;
+}
+
+#chartContainer {
+	float: right;
+}
+
+.datasetContainer{
+   margin-top:3%;
+}
+
+.c3 {
+	width: 100%;
+	height: 600px;
+}
+
+.c3 line, .c3 path {
+    stroke: #d9d9d9;
+}
+
+.c3 .tick text {
+    fill: #666666;
+}
+
+.c3 svg {
+     line-height: 1.4;
+    font-family: 'Lato', sans-serif;
+}
+
+.toggle-time {
+	float: right;
+}
+
+.glyphicon.glyphicon-search {
+    font-size: 28px;
+}
+
+input-mysize{
+  width: 550px;
+}
+
+
+.descriptionPanel{
+  minHeight: '200px';
+  font-size:105%;
+}
+
+.descriptionPanelField{
+  font-size:85%;
+}
+
+.datasetOverview{
+  margin-top: 2%;
+}
+.datasetName{
+}
+
+.datasetLinks{
+  background-color: #476481
+}
+
+.dataSetTitle{
+   font-family: 'Lato', sans-serif;
+}
+
+.chartButtons{
+  font-size:110%;
+  padding:0.50%;
+  border-radius: 0.10 !important;
+  border:0.001;
+  margin-left:0.01%;
+  margin-right:0.01%;
+  margin-bottom:0.01%;
+  font-family: 'Lato', sans-serif;
+}
+
+.chartButtonRow{
+  margin-right:2%;
+  margin-top:2%;
+}
+
+.c3chart{
+  margin-top:3%;
+}
+
+
+.chartFiltersStyle{
+  font-size:115%;
+  padding-right:5%;
+  margin-top:8%;
+}
+
+.filterF{
+  margin-top:2%;
+  margin-bottom:2%;
+  margin-right:3%;
+  font-size:115%;
+  min-width:320px;
+  height:40px;
+}
+
+.chartTypeRadio{
+  font-size:124%;
+  font-family: 'Lato', sans-serif;
+}
+
+.chartTypeRadioTitle{
+  font-size:140%;
+  padding-left:3%;
+  padding-bottom:1.5%;
+  font-family: 'Lato', sans-serif;
+}
+.chartTypeRadioGroup{
+  padding-left:3%;
+    background-color:#d3d3d3;
+  padding-top:3%;
+  font-family: 'Lato', sans-serif;
+  padding-bottom:3%;
+}
+.chartTypeRadioLabel{
+  padding-right:1%;
+  font-family: 'Lato', sans-serif;
+}
+
+
+
+
+/* Dataset Front Matter */
+
+#header p {
+  margin-bottom: 21px;
+}
+
+#header h1 {
+  margin-bottom: 2px;
+}
+
+/* Dataset Nav */
+
+.DatasetNav .nav-pills {
+  margin-bottom: 1em;
+}
+
+.DatasetNav .nav-pills > li > a {
+  border: thin solid #ecf0f1;
+
+}
+.DatasetNav .nav-pills > li.active > a {
+ background-color: #476481
+
+}
+
+
+
+
+

@@ -1,0 +1,46 @@
+
+.chartFiltersStyle{
+  font-size:115%;
+  padding-right:5%;
+  margin-top:8%;
+}
+
+.filterF{
+  margin-top:2%;
+  margin-bottom:2%;
+  margin-right:3%;
+  font-size:115%;
+  min-width:320px;
+  height:40px;
+}
+
+.ColumnSelector-list-group-item {
+  .selected {
+    color: green;
+  }
+}
+
+
+.ColumnSelector-list-group {
+  button.list-group-item.selected {
+    opacity: 1;
+    filter: alpha(opacity=100); /* For IE8 and earlier */
+    //border: solid 3px;
+    // border-color: #f2c407;
+  }
+  button.list-group-item.not-selected {
+    // opacity: 0.5;
+    //filter: alpha(opacity=50); /* For IE8 and earlier */
+  }
+}
+
+.ChartCanvasToggleTime{
+  float: right;
+  margin-right: 35px;
+}
+
+.ChartCanvasToggleOther{
+  float: right;
+  margin-right: 35px;
+}
+

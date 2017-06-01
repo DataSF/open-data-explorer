@@ -1,0 +1,11 @@
+{
+    "extends": "react-app",
+    "rules": {
+        "react/jsx-no-undef": ["error", { "allowGlobals": true }]
+    },
+    "globals": {
+      "Choose": true,
+      "When": true,
+      "Otherwise": true
+    }
+}
