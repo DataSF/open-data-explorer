@@ -76,7 +76,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   onFilter: item => dispatch(filterColumnList('typeFilters', item)),
   onSelectColumn: (key) => dispatch(selectColumn(key)),
   setHideShow: showCols => dispatch(setHideShow(showCols)),
-  resetState: resetState => dispatch(resetState(), )
+  resetState: resetState => dispatch(resetState())
 })
 
 export default connect(

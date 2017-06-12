@@ -1,6 +1,7 @@
 import './@ColumnSort.css'
 
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { ControlLabel, FormControl } from 'react-bootstrap'
 
 const ColumnSort = ({onSort, sort}) => {

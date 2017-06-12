@@ -1,5 +1,4 @@
 import './styles/bootstrap-explorer.css'
-
 import React from 'react'
 import { render } from 'react-dom'
 import { hashHistory } from 'react-router'

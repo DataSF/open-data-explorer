@@ -1,6 +1,7 @@
 import './@containers.css'
 
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {InstantSearch, Configure} from 'react-instantsearch/dom'
 import {createConnector} from 'react-instantsearch'
@@ -113,8 +114,8 @@ class AutoComplete extends Component {
 }
 
 AutoComplete.propTypes = {
-  refine: React.PropTypes.func.isRequired,
-  query: React.PropTypes.string.isRequired
+  refine: PropTypes.func.isRequired,
+  query: PropTypes.string.isRequired
 }
 
 const ConnectedAutoComplete = connectAutoComplete(AutoComplete)

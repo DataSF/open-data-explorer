@@ -1,6 +1,7 @@
 import soda from 'soda-js'
-import _ from 'lodash'
+import maxBy from 'lodash/maxBy'
 import uniq from 'lodash/uniq'
+import difference from 'lodash/difference'
 import { replacePropertyNameValue } from '../helpers'
 import moment from 'moment'
 import d3 from 'd3'
@@ -360,7 +361,7 @@ function addMissingDates(json, state){
     }
     dateList.push( endDate.toISOString())
     let jsonDts = getDateRange(json)
-    let diff = _.difference(dateList, jsonDts)
+    let diff = difference(dateList, jsonDts)
     let jsonEmptyDates =  diff.map(function(diffDt){
       return makeEmptyDtChartData(diffDt, dateBy)
     })
@@ -528,7 +529,7 @@ function transformApiMigration (json) {
 }
 
 function transformColumnProperties (json, state, params) {
-  let maxRecord = parseInt(_.maxBy(json, function (o) { return parseInt(o.count, 10) },).count, 10)
+  let maxRecord = parseInt(maxBy(json, function (o) { return parseInt(o.count, 10) },).count, 10)
   let checkFirst = maxRecord / state.metadata.rowCount
   let checkNumCategories = json.length / state.metadata.rowCount
   let transformed = {

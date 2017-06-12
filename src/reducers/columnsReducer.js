@@ -98,10 +98,13 @@ export const getSelectedField = (state, selectedColumn) => {
   }).sort(sortColumns)
 }
 
-export const getSelectableColumns = (state, selectedColumn) => {
+export const getSelectableColumns = (state, selectedColumn, all = false) => {
   let { columns, typeFilters, fieldNameFilter } = state
   if (!columns) return []
   return Object.keys(columns).filter((col) => {
+    // override to return all columns, not just selectable
+    if (all) return true
+
     let selectable = isSelectable(columns, col)
     if (state.showCols === 'hide' && col === selectedColumn) {
       return false
@@ -122,7 +125,9 @@ export const getSelectableColumns = (state, selectedColumn) => {
       type: columns[col].type,
       description: columns[col].description,
       isCategory: (typeof columns[col].categories !== 'undefined' && columns[col].categories.length > 0),
-      isSelected: (selectedColumn === columns[col].key)
+      isSelected: (selectedColumn === columns[col].key),
+      min: columns[col].min || null,
+      max: columns[col].max || null
     }
   }).sort(sortColumns)
 }

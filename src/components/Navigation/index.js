@@ -1,5 +1,4 @@
 import './@Navigation.css'
-
 import React from 'react'
 import { Link } from 'react-router'
 import Logo from '../Logo'
@@ -29,7 +28,7 @@ export default class Navigation extends React.Component {
         <div className={'ribbon'}>
           <Link to={'/about'} className={'ribbonTxt'}>alpha</Link>
         </div>
-        <nav id={'Navigation'} className={'navbar navbar-default'} role='navigation'>
+        <nav id={'Navigation'} className={'navbar navbar-default'}>
           <div className={'container'}>
             <div className={'navbar-header'}>
               <button type='button' className={'navbar-toggle'} data-toggle='collapse' data-target='.navbar-collapse'>
@@ -38,7 +37,7 @@ export default class Navigation extends React.Component {
                 <span className={'icon-bar'} />
                 <span className={'icon-bar'} />
               </button>
-              <a className={'navbar-brand'} href='#'>
+              <a className={'navbar-brand'} href='/'>
                 <Logo />
               </a>
             </div>

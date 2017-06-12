@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import _ from 'lodash'
+import PropTypes from 'prop-types'
+import isEmpty from 'lodash/isEmpty'
 import titleize from 'titleize'
 import moment from 'moment'
 
@@ -64,13 +65,13 @@ class ChartExperimentalSubTitle extends Component {
     }
 
     let subtitle
-    if (!_.isEmpty(filters)) {
+    if (!isEmpty(filters)) {
       let filterKeys = Object.keys(filters)
       subtitle = filterKeys.map((key) => {
         let filter = filters[key]
         let column = columns[key] || null
         let columnName = column !== null ? column.name : 'Boolean Fields'
-        if (!_.isEmpty(filter) && filter.options.selected !== null) {
+        if (!isEmpty(filter) && filter.options.selected !== null) {
           return builders[filter.options.filterType](filter, columnName)
         }
         return null
@@ -88,8 +89,8 @@ class ChartExperimentalSubTitle extends Component {
 }
 
 ChartExperimentalSubTitle.propTypes = {
-  columns: React.PropTypes.object,
-  filters: React.PropTypes.object
+  columns: PropTypes.object,
+  filters: PropTypes.object
 }
 
 export default ChartExperimentalSubTitle
