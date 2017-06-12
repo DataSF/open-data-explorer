@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import {
-  Card, CardSubtitle,
+  Card, 
   CardBlock,
-  CardFooter,
   CardTitle,
   CardText,
 } from 'react-bootstrap-card';

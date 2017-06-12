@@ -6,6 +6,8 @@ import ColumnFilter from '../components/ColumnFilter'
 import ColumnSort from '../components/ColumnSort'
 import { getUniqueColumnTypes } from '../reducers'
 import { filterColumnList, sortColumnList } from '../actions'
+import FieldColumns from '../components/FieldColumns'
+
 
 const ColumnDetails = ({list, filters, items, onFilter, sort, onSort}) => (
   <Row>
@@ -13,6 +15,8 @@ const ColumnDetails = ({list, filters, items, onFilter, sort, onSort}) => (
       <ColumnFilter items={items} onFilter={onFilter} filters={filters} />
       <ColumnSort sort={sort} onSort={onSort} />
       <ColumnList list={list} filters={filters} sort={sort} />
+      <FieldColumns
+        fieldList={list} sortBy={'alpha'}/>
     </Col>
   </Row>
 )

@@ -551,25 +551,4 @@ function transformColumnProperties (json, state, params) {
 }
 
 
-function formatBlankJson (itemList) {
-    itemList = itemList.map(function (item, index) {
-      if (item['key'] === 'undefined') {
-        item['blank'] = Number(item['value'])
-      }
-      return item
-    })
-    delete itemList['undefined']
-    return itemList
-  }
 
-function formatWhiteSpaceJson (itemList) {
-    itemList = itemList.map(function (item, index) {
-      item['key'] = item['key'].replace(/(\r\n|\n|\r|\t)/gm, 'whitespace')
-      item['key'] = item['key'].replace('  ', 'whitespace')
-      if (item['key'] === ' ') {
-        item['key'] = 'whitespace'
-      }
-      return item
-    })
-    return itemList
-  }

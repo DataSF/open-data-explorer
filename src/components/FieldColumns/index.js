@@ -1,14 +1,7 @@
 import React, { Component } from 'react'
 import {
-  Card, CardSubtitle,
-  CardBlock,
-  CardFooter,
-  CardTitle,
-  CardText,
   CardColumns,
-  CardImg
-} from 'react-bootstrap-card';
-import { Panel, Row, Col, Button } from 'react-bootstrap'
+} from 'react-bootstrap-card'
 import MetadataCard from '../MetadataCard'
 import './@FieldColumns.css'
 import _ from 'lodash'
@@ -30,6 +23,7 @@ class FieldColumns extends Component {
           )
         }
       }
+      return false
       })
     return fieldCards
   }
@@ -37,31 +31,42 @@ class FieldColumns extends Component {
   getHeaders(fieldList, sortBy ){
     let headersList
     if(sortBy === 'alpha'){
-      headersList = fieldList.map(function(field){
+      Object.keys(fieldList).forEach(function(field){
         if (field.name) {
-          return field.name.charAt(0)
+          headersList.push(field.name.charAt(0))
         }
       })
     }
     let headersListCnt = _.countBy(headersList, _.identity)
-    let arrHeads = Object.keys(headersListCnt).filter(function(n){ return n != "undefined" }); 
+    let arrHeads = Object.keys(headersListCnt).filter(function(n){ return n !== "undefined" }); 
     let headerItems = arrHeads.map(function(key){
       if(key){
           return {'name': key.toUpperCase() + " => ("+ String(headersListCnt[key]) + ")"  }
       }
+      return false
     })
     return headerItems
+  }
+  translateFieldObjToArry(columns){
+    let allCols = []
+    Object.keys(columns).forEach(function(col){
+      allCols.push(columns[col])
+    })
+    return allCols
   }
 
   render () {
     let {fieldList, sortBy } = this.props
-    fieldList =  fieldList[0].filter(function(n){ return n != "undefined" }); 
- 
-    let headersList = this.getHeaders(fieldList, sortBy )
-    let fieldCards = fieldList.concat(headersList)
-    
-    fieldCards =  fieldCards.filter(function(n){ return n != "undefined" }); 
-    fieldCards = fieldCards.map(function(item){
+    console.log('*** field List*****')
+    console.log(fieldList)
+    let fieldCards = []
+    if(Object.keys(fieldList).length > 0){
+      let headersList = this.getHeaders(fieldList, sortBy )
+      console.log(headersList)
+      let fieldListArr = this.translateFieldObjToArry(fieldList)
+      fieldCards = fieldListArr.concat(headersList)
+      fieldCards =  fieldCards.filter(function(n){ return n !== "undefined" })
+      fieldCards = fieldCards.map(function(item){
       if(item){
         if (typeof item.name !== 'undefined') {
           if(item.name !== null){
@@ -69,15 +74,18 @@ class FieldColumns extends Component {
         }
         }
       }
+      return false
     })
-    fieldCards =  fieldCards.filter(function(n){ return n != "undefined" }); 
+    fieldCards =  fieldCards.filter(function(n){ return n !== "undefined" })
 
     fieldCards = fieldCards.sort(function(a, b) {
       var textA = a.name.toUpperCase();
       var textB = b.name.toUpperCase();
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     })
-    fieldCards = this.makeMetadataCards(fieldCards)
+      fieldCards = this.makeMetadataCards(fieldCards)
+    }
+
     return (
     <CardColumns>
         {fieldCards}
