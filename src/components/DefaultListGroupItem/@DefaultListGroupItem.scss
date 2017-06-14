@@ -23,10 +23,43 @@ $date-color: #93deaf;
 $boolean-color: #deaf93;
 $number-color: #de93c2;
 $other-color: #E6FF2E;
+$geometryPoint: #AF93DE;
+$geometryMultiPoint: #8458CC;
+$geometryPolygon: #DED593;
+$geometryMultiPolygon: #756C24;
+$geometryLine: #939dde;
+$geometryMultiLine: #242F75;
+
 
 .column-type--text{
     border-left-color: $text-color;
 }
+
+.column-type--geometryMultiPolygon{
+    border-left-color: $geometryMultipolygon;
+}
+
+.column-type--geometryLine{
+    border-left-color: $geometryLine;
+}
+.column-type--geometryMultiLine{
+    border-left-color: $geometryMultiLine;
+}
+
+.column-type--geometryPoint{
+    border-left-color: $geometryPoint;
+}
+.column-type--geometryMultiPoint{
+    border-left-color: $geometryMultiPoint;
+}
+
+.column-type--geometryPolygon{
+    border-left-color: $geometryPolygon;
+}
+.column-type--geometryMultiPolygon{
+    border-left-color: $geometryMultiPolygon;
+}
+
 
 .column-type--date{
     border-left-color: $date-color;

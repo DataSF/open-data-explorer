@@ -8,15 +8,14 @@ const COLTYPES = {
   'text': 'Text',
   'number': 'Number',
   'location': 'Location',
-  'date': 'Date'
+  'date': 'Date', 
+  'geometryLine': 'Geometry: Line',
+  'geometryPoint': 'Geometry: Point',
+  'geometryPolygon': 'Geometry: Polygon',
+  'geometryMultiline': 'Geometry: Multiline',
+  'geometryMultipolygon': 'Geometry: Multipolygon',
+  'geometryMultipoint': 'Geometry: Multipoint',
 }
-
-// define chartTypes
-const LINE = {name: 'Line', key: 'line'}
-const BAR = {name: 'Bar', key: 'bar'}
-const COLUMN = {name: 'Column', key: 'bar'}
-const AREA = {name: 'Area', key: 'area'}
-const HISTOGRAM = {name: 'Histogram', key: 'histogram'}
 
 function sortColumns (a, b) {
   if (a.label < b.label) {
@@ -29,30 +28,28 @@ function sortColumns (a, b) {
 }
 
 function isSelectable (columns, col) {
-  let colTypesAccepted = ['number', 'boolean', 'date']
-  let regex = /(^(lat|lon)[a-z]*|^(x|y)$)/i
-  let geoFields = regex.test(columns[col].key)
-  let selectable = (!columns[col].unique && !geoFields && ((['text', 'number'].indexOf(columns[col].type) > -1) || colTypesAccepted.indexOf(columns[col].type) > -1))
+  let selectable = (!columns[col].unique)
   return selectable
 }
+
+
+
+
 
 // selectors
 export const getColumnDef = (state, column) => state && state.columns ? state.columns[column] : null
 
 export const getUniqueColumnTypes = ({columns, typeFilters}, onlySelectables = false) => {
   if (!columns) return []
-
   typeFilters = typeFilters || []
 
   let uniqueColTypes = Object.keys(columns).reduce((acc, val) => {
     let index = acc.findIndex((el) => el.value === columns[val].type)
     let selectable = onlySelectables ? isSelectable(columns, val) : true
-
     if (index > -1) {
       acc[index].count += selectable ? 1 : 0
       return acc
     }
-
     if ((onlySelectables && selectable) || !onlySelectables) {
       return acc.concat({
         label: COLTYPES[columns[val].type],
@@ -68,21 +65,7 @@ export const getUniqueColumnTypes = ({columns, typeFilters}, onlySelectables = f
   return uniqueColTypes
 }
 
-// refactor this to pass in a filter callback to a single column filtering function
-export const getGroupableColumns = (state, selectedColumn) => {
-  let { columns } = state
-  selectedColumn = selectedColumn || ''
-  if (!columns) return []
-  return Object.keys(columns).filter((col) => {
-    return (columns[col].key !== selectedColumn && columns[col].categories)
-  }).map((col) => {
-    return {label: columns[col].name, value: columns[col].key}
-  }).sort(sortColumns)
-}
-
-export const getSelectedField = (state, selectedColumn) => {
-  console.log("*****selected col reducer***")
-  console.log(selectedColumn)
+export const getSelectedFieldDetails = (state, selectedColumn) => {
   let { columns } = state
   selectedColumn = selectedColumn || ''
   if (!columns) return []
@@ -134,36 +117,6 @@ export const getSelectableColumns = (state, selectedColumn, all = false) => {
   }).sort(sortColumns)
 }
 
-export const getSummableColumns = (state) => {
-  let { columns } = state
-  let colTypesAccepted = ['number', 'money', 'double']
-
-  if (!columns) return []
-
-  return Object.keys(columns).filter((col) => {
-    return (!columns[col].categories && !columns[col].unique && colTypesAccepted.indexOf(columns[col].type) > -1)
-  }).map((col) => {
-    return {label: columns[col].name, value: columns[col].key}
-  }).sort(sortColumns)
-}
-
-export const getSupportedChartTypes = (state, selectedColumn) => {
-  if (!selectedColumn) return []
-
-  let { columns } = state
-  let hasDate = Object.keys(columns).filter(key => {
-    return columns[key].type === 'date'
-  }).length > 0
-
-  let column = columns[selectedColumn]
-  if (column.type === 'text') return [BAR]
-  if (column.type === 'date') return [LINE, COLUMN, AREA]
-  if (column.type === 'number' && hasDate) return [BAR, HISTOGRAM, LINE, AREA]
-  if (column.type === 'number') return [BAR, HISTOGRAM]
-  if (column.type === 'boolean') return [BAR]
-
-  return []
-}
 
 // case reducers
 function initColumns (state, action) {
@@ -173,9 +126,7 @@ function initColumns (state, action) {
   })
 }
 
-//function updateColumns (state, action) {
-//  return merge({}, state, action.response)
-//}
+
 
 function loadColumnProperties (state, action) {
   action.response.categoryColumns = union([], state.categoryColumns, action.response.categoryColumns)
@@ -184,10 +135,9 @@ function loadColumnProperties (state, action) {
 
 function filterColumnList (state, action) {
   let filterPayload
-  if (action.payload.target !== 'columnProps') {
+  if (action.payload.target !== 'fieldDetailsProps') {
     return state
   }
-
   if (action.payload.key === 'typeFilters') {
     let index = state.typeFilters.indexOf(action.payload.item)
     filterPayload = (index > -1) ? deleteFromArray(state.typeFilters, index) : state.typeFilters.concat(action.payload.item)
@@ -209,25 +159,37 @@ function sortColumnList (state, action) {
 }
 
 function setHideShow (state, action) {
-  if (action.payload.target !== 'columnProps') {
+  console.log("*** in here****")
+  console.log(action)
+  if (action.payload.target !== 'fieldDetailsProps') {
     return state
   }
   return updateObject(state, {
     showCols: action.payload.showCols
   })
+}
+
+function setSelectField(state, action) {
+  console.log("in here selected")
+  return updateObject(state, {
+    selectedField: action.payload
+  })
+
 }
 
 function setDefaultHideShow (state, action) {
-  if (action.payload.target !== 'columnProps') {
+  if (action.payload.target !== 'fieldDetailsProps') {
     return state
   }
-  return updateObject(state, {
-    showCols: action.payload.showCols
-  })
+  if (action.payload.target === 'fieldDetailsProps') {
+    return updateObject(state, {
+      showCols: action.payload.showCols
+    })
+  }
 }
 
 function resetState (state, action) {
-  if (action.payload.target !== 'columnProps') {
+  if (action.payload.target !== 'fieldDetailsProps') {
     return state
   }
   return updateObject(state, {})
@@ -235,16 +197,14 @@ function resetState (state, action) {
 
 
 
-
-
-
-const columnsReducer = createReducer({ typeFilters: [] }, {
+const fieldsReducer = createReducer({ typeFilters: [] }, {
   [ActionTypes.COLUMNS_SUCCESS]: initColumns, 
   [ActionTypes.COLPROPS_SUCCESS]: loadColumnProperties,
   [ActionTypes.FILTER_COLUMN_LIST]: filterColumnList,
   [ActionTypes.SORT_COLUMN_LIST]: sortColumnList,
   [ActionTypes.SET_HIDE_SHOW]: setHideShow,
   [ActionTypes.SET_DEFAULT_HIDE_SHOW]: setDefaultHideShow,
+  [ActionTypes.SELECT_FIELD]: setSelectField,
   [ActionTypes.RESET_STATE]: resetState
 })
-export default columnsReducer
+export default fieldsReducer

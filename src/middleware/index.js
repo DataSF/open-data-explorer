@@ -36,8 +36,11 @@ export default (store) => (next) => (action) => {
   if (typeof callAPI === 'undefined') {
     return next(action)
   }
-
+  
   let { endpoint } = callAPI
+  if (typeof endpoint === 'undefined') {
+    return next(action)
+  }
   const { types, transform, params } = callAPI
 
   if (typeof endpoint === 'function') {

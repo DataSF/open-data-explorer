@@ -175,12 +175,13 @@ export const SET_HIDE_SHOW = 'SET_HIDE_SHOW'
 export const SET_DEFAULT_HIDE_SHOW = 'SET_DEFAULT_HIDE_SHOW'
 export const SET_DEFAULT_CHARTTYPE = 'SET_DEFAULT_CHARTTYPE'
 
-export function filterColumnList (key, item) {
+export function filterColumnList (key, item, target) {
   return {
     type: FILTER_COLUMN_LIST,
     payload: {
       key,
-      item
+      item, 
+      target
     }
   }
 }
@@ -192,23 +193,34 @@ export function selectColumn (column) {
       payload: column})
     dispatch(fetchData(getState()))
     dispatch(setDefaultChartType(column))
-    dispatch(setDefaultHideShow())
+    dispatch(setDefaultHideShow('columnProps'))
   }
 }
 
-export function setHideShow (showCols) {
+export function selectField (column) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SELECT_FIELD,
+      payload: column})
+    dispatch(setDefaultHideShow('fieldDetailsProps'))
+  }
+}
+
+export function setHideShow (showCols, target) {
   return (dispatch, getState) => {
     dispatch({
       type: SET_HIDE_SHOW,
-      payload: showCols})
+      payload: {'showCols': showCols, 'target': target}
+    })
   }
 }
 
-export function setDefaultHideShow () {
+
+export function setDefaultHideShow (target) {
   return (dispatch, getState) => {
     dispatch({
       type: SET_DEFAULT_HIDE_SHOW,
-      showCols: 'show'
+      payload: {'showCols': 'show', 'target': target}
     })
   }
 }
@@ -338,9 +350,10 @@ export function updateFilter (key, options) {
   }
 }
 
-export function resetState () {
+export function resetState (target) {
   return {
-    type: RESET_STATE
+    type: RESET_STATE, 
+    payload: target
   }
 }
 
@@ -388,6 +401,10 @@ export const loadQueryStateFromString = (q) => (dispatch, getState) => {
 
 export const UPDATE_SEARCH = 'UPDATE_SEARCH'
 export const CLEAR_SEARCH = 'CLEAR_SEARCH'
+export const SELECT_FIELD = 'SELECT_FIELD'
+export const SET_SELECTED_FIELD_DETAILS = 'SET_SELECTED_FIELD_DETAILS'
+
+
 
 export function updateSearch (searchState) {
   return {

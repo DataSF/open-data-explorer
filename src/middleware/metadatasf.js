@@ -1,6 +1,15 @@
 
 
 const API_ROOT = 'http://metadatasf.tk/api/v1/'
+const geoTypeMappings = {
+  'geometry: line': 'geometryLine',
+  'geometry: point': 'geometryPoint',
+  'geometry: polygon': 'geometryPolygon',
+  'geometry: multiline': 'geometryMultiline',
+  'geometry: multipolygon': 'geometryMultipolygon',
+  'geometry: multipoint': 'geometryMultipoint',
+}
+
 
 export const EndpointsSF = {
   METADATA: endpointMetadata,
@@ -29,7 +38,14 @@ function transformMetadata (json) {
 
 function transformColumns (json) {
   let result = {}
+  let geoTypeMappingKeys = Object.keys(geoTypeMappings)
+  console.log(geoTypeMappingKeys)
   let columns = json.reduce(function(map, obj) {
+    
+    // console.log(obj)
+    if(geoTypeMappingKeys.includes(obj.type)){
+      obj.type = geoTypeMappings[obj.type]
+    }
     map[obj.key] = obj
     return map
   }, {})

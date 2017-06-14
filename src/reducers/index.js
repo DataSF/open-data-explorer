@@ -8,6 +8,8 @@ import { chartReducer } from './chartReducer'
 import { tableReducer } from './tableReducer'
 import { messagesReducer } from './messagesReducer'
 import { searchReducer } from './searchReducer'
+import fieldsReducer, * as fromFields from './fieldsReducer'
+
 
 const rootReducer = combineReducers({
   metadata: metadataReducer,
@@ -15,12 +17,28 @@ const rootReducer = combineReducers({
   chart: chartReducer,
   table: tableReducer,
   columnProps: columnsReducer,
+  fieldDetailsProps: fieldsReducer,
   messages: messagesReducer,
   search: searchReducer,
   routing
 })
 
 const getColumnDef = (state, column) => fromColumns.getColumnDef(state.columnProps, column)
+
+export const getUniqueColumnTypesDetails = (state, selectable) =>
+  fromFields.getUniqueColumnTypes(state.fieldDetailsProps, selectable)
+
+export const getSelectableColumnsDetails = (state, all = false) =>
+  fromFields.getSelectableColumns(state.fieldDetailsProps, state.query.selectedColumn, all)
+
+export const getSelectedFieldDetails = state =>
+  fromFields.getSelectedFieldDetails(state.fieldDetailsProps,state.fieldDetailsProps.selectedField)
+
+export const getSelectedFieldDef = state =>
+  getColumnDef(state, state.fieldDetailsProps.selectedField)
+
+
+
 
 export const getUniqueColumnTypes = (state, selectable) =>
   fromColumns.getUniqueColumnTypes(state.columnProps, selectable)
