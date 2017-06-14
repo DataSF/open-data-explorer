@@ -2,12 +2,12 @@
 
 const API_ROOT = 'http://metadatasf.tk/api/v1/'
 const geoTypeMappings = {
-  'geometry: line': 'geometryLine',
-  'geometry: point': 'geometryPoint',
-  'geometry: polygon': 'geometryPolygon',
-  'geometry: multiline': 'geometryMultiline',
-  'geometry: multipolygon': 'geometryMultipolygon',
-  'geometry: multipoint': 'geometryMultipoint',
+  'geometry: line': 'geometry-line',
+  'geometry: point': 'geometry-point',
+  'geometry: polygon': 'geometry-polygon',
+  'geometry: multiline': 'geometry-multi-line',
+  'geometry: multipolygon': 'geometry-multi-polygon',
+  'geometry: multipoint': 'geometry-multi-point',
 }
 
 

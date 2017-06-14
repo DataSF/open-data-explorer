@@ -7,29 +7,54 @@ import {
 } from 'react-bootstrap-card';
 import './@MetadataCard.css'
 class MetadataCard extends Component {
+ 
+  setClassNamesTypes (fieldType, isHeader) {
+    if(isHeader){
+      return 'cardBorder-header cardBorder-header-type--' + fieldType
+    }
+    return 'cardBorder-type--' + fieldType
+  }
 
   render () {
-    let {name, fieldFormat, description, fieldMin, fieldMax } = this.props
+    let {field } = this.props
+    let cardBorderClassType = this.setClassNamesTypes (field.type, field.isHeader)
     let minMaxInfo
-    if(fieldMin && fieldMax){
-      if(fieldFormat === 'date' ){
-        minMaxInfo= "Min Date: " + fieldMin + "; Max Date: " + fieldMax
-      }else if (fieldFormat === 'number' ){
-        minMaxInfo = "Min Value: " + fieldMin + "; Max Value: " + fieldMax
+    const COLTYPES = {
+      'boolean': 'True/False',
+      'text': 'Text',
+      'number': 'Number',
+      'location': 'Location',
+      'date': 'Date', 
+      'geometry-line': 'Geometry: Line',
+      'geometry-point': 'Geometry: Point',
+      'geometry-polygon': 'Geometry: Polygon',
+      'geometry-multi-line': 'Geometry: Multiline',
+      'geometry-multi-polygon': 'Geometry: Multipolygon',
+      'geometry-multi-point': 'Geometry: Multipoint',
+    }
+    field.fieldFormatDisplay = COLTYPES[field.type]
+    if( !field.description && !field.isHeader){
+      field.description = 'No definition available'
+    }
+    if(field.fieldMin && field.fieldMax){
+      if(field.fieldType === 'date' ){
+        minMaxInfo= "Min Date: " + field.min + "; Max Date: " + field.max
+      }else if (field.fieldType === 'number' ){
+        minMaxInfo = "Min Value: " + field.min + "; Max Value: " + field.max
       } 
     }
-    if(fieldFormat){
-      fieldFormat = fieldFormat.charAt(0).toUpperCase() + fieldFormat.slice(1)
+    if(field.isHeader){
+       field.fieldFormatDisplay = null
     }
-       return (
-        <Card className={'cardBorder'}>
+    return (
+        <Card className={'cardBorder ' + cardBorderClassType}>
           <CardBlock>
-            <CardTitle className={'cardFieldTitle'}>{name}</CardTitle>
-            <div className={'cardFieldType'}> {fieldFormat} </div>
+            <CardTitle className={'cardFieldTitle'}>{field.label}</CardTitle>
+            <div className={'cardFieldType'}> {field.fieldFormatDisplay} </div>
             <div className={'cardMinMax'}> {minMaxInfo} </div>
-            <CardText>{description}</CardText>
+            <CardText>{field.description}</CardText>
           </CardBlock>
-      </Card>
+        </Card>
      )
   }
 }

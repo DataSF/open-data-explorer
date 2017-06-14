@@ -5,9 +5,9 @@ import {
 import MetadataCard from '../MetadataCard'
 import './@FieldColumns.css'
 import _ from 'lodash'
-import titleize from 'titleize'
 
 class FieldColumns extends Component {
+  
   makeMetadataCards(fieldList){
     let fieldCards = fieldList.map(function(field){
       if(field){
@@ -16,11 +16,7 @@ class FieldColumns extends Component {
           return (
             <MetadataCard
             key={fieldIndex}
-            name={field.label}
-            fieldFormat={field.type}
-            description={field.description}
-            fieldMin={field.min}
-            fieldMax={field.max} />
+            field={field} />
           )
         }
       }
@@ -29,7 +25,7 @@ class FieldColumns extends Component {
     return fieldCards
   }
 
-  getHeaders(fieldList, sortBy ){
+  getHeaders(fieldList, sortBy, COLTYPES ){
     let headersList = []
     let headerItems = []
     let arrHeads = []
@@ -42,8 +38,9 @@ class FieldColumns extends Component {
       let headersListCnt = _.countBy(headersList, _.identity)
       arrHeads = Object.keys(headersListCnt).filter(function(n){ return n !== "undefined" }); 
       headerItems = arrHeads.map(function(key){
-        if(key){
-          return {'label': key.toUpperCase() + " => ("+ String(headersListCnt[key]) + ")"  }
+        if(key)
+        {
+          return {'label': key.toUpperCase() + " => "+ String(headersListCnt[key]) + "" , 'isHeader': true }
         }
         return false
       })
@@ -56,9 +53,10 @@ class FieldColumns extends Component {
       })
       let headersListCnt = _.countBy(headersList, _.identity)
       arrHeads = Object.keys(headersListCnt).filter(function(n){ return n !== "undefined" }); 
+      console.log(COLTYPES)
       headerItems = arrHeads.map(function(key){
         if(key){
-          return {'label': titleize(key.toLowerCase()) + " => ("+ String(headersListCnt[key]) + ")", 'type': key }
+          return {'label': COLTYPES[key] + ":", 'type': key, 'isHeader': true, 'field_count': String(headersListCnt[key]) }
         }
         return false
       })
@@ -99,20 +97,33 @@ class FieldColumns extends Component {
   render () {
     let {fieldList, sortBy } = this.props
     let fieldCards = []
+    const COLTYPES = {
+      'boolean': 'True/False',
+      'text': 'Text',
+      'number': 'Number',
+      'location': 'Location',
+      'date': 'Date', 
+      'geometry-line': 'Geometry: Line',
+      'geometry-point': 'Geometry: Point',
+      'geometry-polygon': 'Geometry: Polygon',
+      'geometry-multi-line': 'Geometry: Multiline',
+      'geometry-multi-polygon': 'Geometry: Multipolygon',
+      'geometry-multi-point': 'Geometry: Multipoint',
+    }
     if(Object.keys(fieldList).length > 0){
-      let headersObj = this.getHeaders(fieldList, sortBy )
+      let headersObj = this.getHeaders(fieldList, sortBy, COLTYPES )
       fieldCards = headersObj.headerItems.concat(fieldList)
       fieldCards =  fieldCards.filter(function(n){ return n !== "undefined" })
       fieldCards = fieldCards.map(function(item){
-      if(item){
-        if (typeof item.label !== 'undefined') {
-          if(item.label !== null){
-          return item
+        if(item){
+          if (typeof item.label !== 'undefined') {
+            if(item.label !== null){
+              return item
+            }
+          }
         }
-        }
-      }
-      return false
-    })
+        return false
+      })
 
     fieldCards =  fieldCards.filter(function(n){ return n !== "undefined" })
     fieldCards = this.cardSort(fieldCards, sortBy,  headersObj.headerTypes)

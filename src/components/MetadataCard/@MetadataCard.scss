@@ -1,0 +1,118 @@
+
+$text-color: #93c2de;
+$date-color: #93deaf;
+$boolean-color: #deaf93;
+$number-color: #de93c2;
+$other-color: #E6FF2E;
+$geometry-point-color: #AF93DE;
+$geometry-multi-point-color: #8458CC;
+$geometry-polygon-color: #DED593;
+$geometry-multi-polygon-color: #756C24;
+$geometry-line-color: #939DDE;
+$geometry-multi-line-color: #242F75;
+
+
+.cardFieldType {
+  font-size: 20px;
+  font-style: italic; }
+
+.cardFieldTitle {
+  font-size: 25px; }
+
+.cardBorder {
+  border-left-width: 5px; 
+  margin-bottom: 8%;
+  margin-left:2%;
+  margin-right:2%;
+}
+
+.cardMinMax {
+  font-size: 100%; }
+
+.cardBorder-type--text {
+  border-left-color: $text-color;
+}
+
+.cardBorder-type--date{
+    border-left-color: $date-color;
+ }
+.cardBorder--type--boolean{
+    border-left-color: $boolean-color;
+}
+
+.cardBorder-type--number{
+    border-left-color: $number-color;
+}
+
+.cardBorder-type--geometry-multi-polygon{
+    border-left-color: $geometry-multi-polygon-color;
+}
+
+.cardBorder-type--geometry-line{
+    border-left-color: $geometry-line-color;
+}
+.cardBorder-type--geometry-multi-line{
+    border-left-color: $geometry-multi-line-color;
+}
+
+.cardBorder-type--geometry-point{
+    border-left-color: $geometry-point-color;
+}
+.cardBorder-type--geometry-multi-point{
+    border-left-color: $geometry-multi-point-color;
+}
+
+.cardBorder-type--geometry-polygon{
+    border-left-color: $geometry-polygon-color;
+}
+.cardBorder-type--geometry-multi-polygon{
+    border-left-color: $geometry-multi-polygon-color;
+}
+
+.cardBorder-header{
+  border-right-left: 8px;
+  border-right-width: 8px; 
+  border-top-width: 2px; 
+  border-bottom-width: 2px;
+}
+
+/*****headers*****/
+.cardBorder-header-type--text{
+    border-color: $text-color;
+ }
+.cardBorder-header-type--date{
+    border-color: $date-color;
+ }
+
+.cardBorder-header-type--boolean{
+    border-color: $boolean-color;
+}
+
+.cardBorder-header-type--number{
+    border-color: $number-color;
+}
+
+.cardBorder-header-type--geometry-multi-polygon{
+    border-color: $geometry-multi-polygon-color;
+}
+
+.cardBorder-header-type--geometry-line{
+    border-color: $geometry-line-color;
+}
+.cardBorder-header-type--geometry-multi-line{
+    border-color: $geometry-multi-line-color;
+}
+
+.cardBorder-header-type--geometry-point{
+    border-color: $geometry-point-color;
+}
+.cardBorder-header-type--geometry-multi-point{
+    border-color: $geometry-multi-point-color;
+}
+
+.cardBorder-header-type--geometry-polygon{
+    border-color: $geometry-polygon-color;
+}
+.cardBorder-header-type--geometry-multi-polygon{
+    border-color: $geometry-multi-polygon-color;
+}

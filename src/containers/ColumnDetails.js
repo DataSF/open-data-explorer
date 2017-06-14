@@ -15,8 +15,8 @@ import { Panel } from 'react-bootstrap'
 const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols}) => (
   <Row>
     <Col sm={3}>
-      <div>
-    <Choose>
+    <div>
+      <Choose>
       <When condition={selectedColumnDef}>
         <Choose>
           <When condition={showCols !== 'hide'}>
@@ -75,9 +75,11 @@ const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectabl
           <h1> COL selected </h1>
         </When>
         <Otherwise>
-          <FieldColumns
-          fieldList={list} 
-          sortBy={'type'}/>
+          <div className={'columnDetailsContainer'}>
+            <FieldColumns
+            fieldList={list} 
+            sortBy={'type'}/>
+          </div>
         </Otherwise>
       </Choose>
     </Col>

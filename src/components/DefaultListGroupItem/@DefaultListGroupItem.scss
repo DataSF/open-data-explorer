@@ -23,43 +23,42 @@ $date-color: #93deaf;
 $boolean-color: #deaf93;
 $number-color: #de93c2;
 $other-color: #E6FF2E;
-$geometryPoint: #AF93DE;
-$geometryMultiPoint: #8458CC;
-$geometryPolygon: #DED593;
-$geometryMultiPolygon: #756C24;
-$geometryLine: #939dde;
-$geometryMultiLine: #242F75;
+$geometry-point-color: #AF93DE;
+$geometry-multi-point-color: #8458CC;
+$geometry-polygon-color: #DED593;
+$geometry-multi-polygon-color: #756C24;
+$geometry-line-color: #939DDE;
+$geometry-multi-line-color: #242F75;
 
 
 .column-type--text{
     border-left-color: $text-color;
 }
 
-.column-type--geometryMultiPolygon{
-    border-left-color: $geometryMultipolygon;
+.column-type--geometry-multi-polygon{
+    border-left-color: $geometry-multi-polygon-color;
 }
 
-.column-type--geometryLine{
-    border-left-color: $geometryLine;
+.column-type--geometry-line{
+    border-left-color: $geometry-line-color;
 }
-.column-type--geometryMultiLine{
-    border-left-color: $geometryMultiLine;
-}
-
-.column-type--geometryPoint{
-    border-left-color: $geometryPoint;
-}
-.column-type--geometryMultiPoint{
-    border-left-color: $geometryMultiPoint;
+.column-type--geometry-multi-line{
+    border-left-color: $geometry-multi-line-color;
 }
 
-.column-type--geometryPolygon{
-    border-left-color: $geometryPolygon;
+.column-type--geometry-point{
+    border-left-color: $geometry-point-color;
 }
-.column-type--geometryMultiPolygon{
-    border-left-color: $geometryMultiPolygon;
+.column-type--geometry-multi-point{
+    border-left-color: $geometry-multi-point-color;
 }
 
+.column-type--geometry-polygon{
+    border-left-color: $geometry-polygon-color;
+}
+.column-type--geometry-multi-polygon{
+    border-left-color: $geometry-multi-polygon-color;
+}
 
 .column-type--date{
     border-left-color: $date-color;

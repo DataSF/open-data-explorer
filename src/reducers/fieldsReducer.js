@@ -9,12 +9,12 @@ const COLTYPES = {
   'number': 'Number',
   'location': 'Location',
   'date': 'Date', 
-  'geometryLine': 'Geometry: Line',
-  'geometryPoint': 'Geometry: Point',
-  'geometryPolygon': 'Geometry: Polygon',
-  'geometryMultiline': 'Geometry: Multiline',
-  'geometryMultipolygon': 'Geometry: Multipolygon',
-  'geometryMultipoint': 'Geometry: Multipoint',
+  'geometry-line': 'Geometry: Line',
+  'geometry-point': 'Geometry: Point',
+  'geometry-polygon': 'Geometry: Polygon',
+  'geometry-multi-line': 'Geometry: Multiline',
+  'geometry-multi-polygon': 'Geometry: Multipolygon',
+  'geometry-multi-point': 'Geometry: Multipoint',
 }
 
 function sortColumns (a, b) {
