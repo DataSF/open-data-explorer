@@ -81,8 +81,6 @@ export const getGroupableColumns = (state, selectedColumn) => {
 }
 
 export const getSelectedField = (state, selectedColumn) => {
-  console.log("*****selected col reducer***")
-  console.log(selectedColumn)
   let { columns } = state
   selectedColumn = selectedColumn || ''
   if (!columns) return []

@@ -8,7 +8,7 @@ import _ from 'lodash'
 
 class FieldColumns extends Component {
   
-  makeMetadataCards(fieldList){
+  makeMetadataCards(fieldList, onClick){
     let fieldCards = fieldList.map(function(field){
       if(field){
        if (field.label) {
@@ -16,7 +16,8 @@ class FieldColumns extends Component {
           return (
             <MetadataCard
             key={fieldIndex}
-            field={field} />
+            field={field}
+            onClick={ onClick.bind(this, field.key)} />
           )
         }
       }
@@ -25,7 +26,7 @@ class FieldColumns extends Component {
     return fieldCards
   }
 
-  getHeaders(fieldList, sortBy, COLTYPES ){
+  getHeaders(fieldList, sortBy, COLTYPES){
     let headersList = []
     let headerItems = []
     let arrHeads = []
@@ -53,10 +54,9 @@ class FieldColumns extends Component {
       })
       let headersListCnt = _.countBy(headersList, _.identity)
       arrHeads = Object.keys(headersListCnt).filter(function(n){ return n !== "undefined" }); 
-      console.log(COLTYPES)
       headerItems = arrHeads.map(function(key){
         if(key){
-          return {'label': COLTYPES[key] + ":", 'type': key, 'isHeader': true, 'field_count': String(headersListCnt[key]) }
+          return {'label': COLTYPES[key] + " Fields (" + String(headersListCnt[key]) + ")", 'type': key, 'isHeader': true, 'field_count': String(headersListCnt[key]) }
         }
         return false
       })
@@ -95,7 +95,7 @@ class FieldColumns extends Component {
   }
 
   render () {
-    let {fieldList, sortBy } = this.props
+    let {fieldList, sortBy,onClick} = this.props
     let fieldCards = []
     const COLTYPES = {
       'boolean': 'True/False',
@@ -127,7 +127,7 @@ class FieldColumns extends Component {
 
     fieldCards =  fieldCards.filter(function(n){ return n !== "undefined" })
     fieldCards = this.cardSort(fieldCards, sortBy,  headersObj.headerTypes)
-    fieldCards = this.makeMetadataCards(fieldCards)
+    fieldCards = this.makeMetadataCards(fieldCards, onClick)
     }
 
     return (

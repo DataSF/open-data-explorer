@@ -34,7 +34,54 @@ function isSelectable (columns, col) {
 
 
 
+const profileLabels = {
+    'name': 'Name',
+    'type': 'Field Type',
+    'count': 'Total Count', 
+    'null': 'Null Count', 
+    'missing_count': 'Missing Count', 
+    'actual_count': 'Actual Count', 
+    'cardinality': 'Number of Distinct Values', 
+    'completeness': 'Completeness', 
+    'distinctness': 'Distinctness',
+    'uniqueness': 'Uniqueness', 
+    'is_primary_key_candidate': 'Primary Key Candidate',
+    'min_field_length': 'Min Field Length', 
+    'max_field_length': 'Min Field Length', 
+    'min': 'Min', 
+    'max': 'Max', 
+    'mean': 'Mean', 
+    'Median': 'Median', 
+    'mode': 'Mode',
+    'range': 'Range', 
+    'sum': 'Sum'
 
+}
+
+const profileDefinitions = {
+    'name': 'The name of the field',
+    'type': 'Type of field',
+    'count': 'The total count of records in the field',
+    'null'    : ' Count of the number of records with a NULL value',
+    'missing_count': 'Count of the number of records with a missing value (i.e. non-NULL absence of data e.g. character spaces)',
+    'actual_count': 'Count of the number of records with an actual value (i.e. non-NULL and non-missing)',
+    'cardinality': 'The number of distinct values',
+    'completeness': 'Percentage calculated as the actual number of records divided by the total number of records',
+    'distinctness': 'Percentage calculated as the number of distinct values divided by the total number of records',
+    'uniqueness': 'Percentage calculated as the number of distinct values divided by Actual',
+    'is_primary_key_candidate': 'Looks to see if a column is a 100% unique and 100% complete; if both are true, the column is a good candidate to become a primary key',
+    'min_field_length': 'The min number of characters/digits in a field',
+    'max_field_length': 'The max number of characters/digits in a field', 
+    'avg_field_length': 'The average number of characters/digits in a field', 
+    'min': 'The mininum value found in a field',
+    'max': 'The maximum value found in a field', 
+    'mean': 'The average value found in a field',
+    'median': 'The middle value found in a field', 
+    'mode': 'The most frequently occurring value in a field',
+    'range': 'The value between the min and the max', 
+    'sum': 'The sum of all the values in the field', 
+
+  }
 
 // selectors
 export const getColumnDef = (state, column) => state && state.columns ? state.columns[column] : null
@@ -104,16 +151,16 @@ export const getSelectableColumns = (state, selectedColumn, all = false) => {
     }
     return false
   }).map((col) => {
-    return {
-      label: columns[col].name,
-      value: columns[col].key,
-      type: columns[col].type,
-      description: columns[col].description,
-      isCategory: (typeof columns[col].categories !== 'undefined' && columns[col].categories.length > 0),
-      isSelected: (selectedColumn === columns[col].key),
-      min: columns[col].min || null,
-      max: columns[col].max || null
+    let colInstance = columns[col]
+    if(colInstance.type === 'date'){
+      colInstance.min = colInstance.min.split('T')[0]
+      colInstance.max = colInstance.max.split('T')[0]
     }
+    colInstance.fieldFormatDisplay = COLTYPES[colInstance.type]
+    colInstance.label =  columns[col].name
+    colInstance.value = columns[col].key 
+    colInstance.isSelected = (selectedColumn === columns[col].key)
+    return colInstance
   }).sort(sortColumns)
 }
 

@@ -29,7 +29,7 @@ export const getUniqueColumnTypesDetails = (state, selectable) =>
   fromFields.getUniqueColumnTypes(state.fieldDetailsProps, selectable)
 
 export const getSelectableColumnsDetails = (state, all = false) =>
-  fromFields.getSelectableColumns(state.fieldDetailsProps, state.query.selectedColumn, all)
+  fromFields.getSelectableColumns(state.fieldDetailsProps,state.fieldDetailsProps.selectedField, all)
 
 export const getSelectedFieldDetails = state =>
   fromFields.getSelectedFieldDetails(state.fieldDetailsProps,state.fieldDetailsProps.selectedField)

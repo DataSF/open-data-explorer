@@ -10,7 +10,7 @@ import FieldButton from '../components/FieldButton'
 import HideShowButton from '../components/HideShowButton/'
 import FieldNameFilterDetails from '../containers/FieldNameFilterDetails'
 import { Panel } from 'react-bootstrap'
-
+import FieldProfile from '../components/FieldProfile'
 
 const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols}) => (
   <Row>
@@ -72,13 +72,19 @@ const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectabl
     <Col sm={9}>
       <Choose>
         <When condition={selectedColumnDef}>
-          <h1> COL selected </h1>
+          <div className={'fieldProfileContainer'}>
+            <FieldProfile 
+              field={selectedColumnDef}
+              onClick={ onSelectColumn.bind(this, '')} />
+          </div>
         </When>
         <Otherwise>
           <div className={'columnDetailsContainer'}>
             <FieldColumns
             fieldList={list} 
-            sortBy={'type'}/>
+            sortBy={'type'}
+            onClick={onSelectColumn}
+            />
           </div>
         </Otherwise>
       </Choose>

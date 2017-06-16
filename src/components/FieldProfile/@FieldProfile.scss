@@ -1,0 +1,98 @@
+
+$text-color: #93c2de;
+$date-color: #93deaf;
+$boolean-color: #deaf93;
+$number-color: #de93c2;
+$other-color: #E6FF2E;
+$geometry-point-color: #AF93DE;
+$geometry-multi-point-color: #8458CC;
+$geometry-polygon-color: #DED593;
+$geometry-multi-polygon-color: #756C24;
+$geometry-line-color: #939DDE;
+$geometry-multi-line-color: #242F75;
+
+
+.fieldType {
+  font-size: 160%;
+  font-style: italic; 
+  margin-bottom:2%;
+}
+
+.fieldTitle {
+  font-size: 350%; 
+  padding-top:3%;
+  margin-bottom:3%;
+}
+
+.fieldBorder {
+  border-left-width: 5px; 
+  border-right-width: 2px; 
+  border-top-width: 2px; 
+  margin-bottom: 8%;
+  column-break-inside: avoid;
+  display: inline-block;
+  width:100%;
+}
+
+.fieldKey {
+  font-size: 120%; 
+  margin-bottom:4%;
+}
+
+.fieldBorder-type--text {
+  border-left-color: $text-color;
+  border-right-color: $text-color;
+}
+
+.fieldBorder-type--date{
+  border-left-color: $date-color;
+  border-right-color: $date-color;
+}
+.fieldBorder-type--boolean{
+  border-left-color: $boolean-color;
+  border-right-color: $boolean-color;
+}
+
+.fieldBorder-type--number{
+  border-left-color: $number-color;
+  border-right-color: $number-color;
+}
+
+.fieldBorder-type--geometry-multi-polygon{
+  border-left-color: $geometry-multi-polygon-color;
+  border-right-color: $geometry-multi-polygon-color;
+}
+
+.fieldBorder-type--geometry-line{
+  border-left-color: $geometry-line-color;
+  border-right-color: $geometry-line-color;
+}
+.fieldBorder-type--geometry-multi-line{
+  border-left-color: $geometry-multi-line-color;
+  border-right-color: $geometry-multi-line-color;
+}
+
+.fieldBorder-type--geometry-point{
+  border-left-color: $geometry-point-color;
+  border-right-color: $geometry-point-color;
+}
+.fieldBorder-type--geometry-multi-point{
+  border-left-color: $geometry-multi-point-color;
+  border-right-color: $geometry-multi-point-color;
+
+}
+
+.fieldBorder-type--geometry-polygon{
+  border-left-color: $geometry-polygon-color;
+  border-right-color: $geometry-polygon-color;
+}
+.fieldBorder-type--geometry-multi-polygon{
+  border-left-color: $geometry-multi-polygon-color;
+  border-right-color: $geometry-multi-polygon-color;
+}
+
+table.fieldProfile{
+}
+table.fieldProfile.td{
+  border-left: 1px solid;
+}

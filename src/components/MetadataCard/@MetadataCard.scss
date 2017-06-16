@@ -13,8 +13,11 @@ $geometry-multi-line-color: #242F75;
 
 
 .cardFieldType {
-  font-size: 20px;
-  font-style: italic; }
+  font-size: 22px;
+  font-style: italic; 
+  margin-top:-1%;
+  margin-bottom:4%;
+}
 
 .cardFieldTitle {
   font-size: 25px; }
@@ -24,56 +27,80 @@ $geometry-multi-line-color: #242F75;
   margin-bottom: 8%;
   margin-left:2%;
   margin-right:2%;
+  column-break-inside: avoid;
+  display: inline-block;
+  width:100%;
 }
 
 .cardMinMax {
-  font-size: 100%; }
+  font-size: 100%; 
+  margin-bottom:4%;
+}
 
 .cardBorder-type--text {
   border-left-color: $text-color;
+  border-right-color: $text-color;
 }
 
 .cardBorder-type--date{
-    border-left-color: $date-color;
- }
-.cardBorder--type--boolean{
-    border-left-color: $boolean-color;
+  border-left-color: $date-color;
+  border-right-color: $date-color;
+}
+.cardBorder-type--boolean{
+  border-left-color: $boolean-color;
+  border-right-color: $boolean-color;
 }
 
 .cardBorder-type--number{
-    border-left-color: $number-color;
+  border-left-color: $number-color;
+  border-right-color: $number-color;
 }
 
 .cardBorder-type--geometry-multi-polygon{
-    border-left-color: $geometry-multi-polygon-color;
+  border-left-color: $geometry-multi-polygon-color;
+  border-right-color: $geometry-multi-polygon-color;
 }
 
 .cardBorder-type--geometry-line{
-    border-left-color: $geometry-line-color;
+  border-left-color: $geometry-line-color;
+  border-right-color: $geometry-line-color;
 }
 .cardBorder-type--geometry-multi-line{
-    border-left-color: $geometry-multi-line-color;
+  border-left-color: $geometry-multi-line-color;
+  border-right-color: $geometry-multi-line-color;
 }
 
 .cardBorder-type--geometry-point{
-    border-left-color: $geometry-point-color;
+  border-left-color: $geometry-point-color;
+  border-right-color: $geometry-point-color;
 }
 .cardBorder-type--geometry-multi-point{
-    border-left-color: $geometry-multi-point-color;
+  border-left-color: $geometry-multi-point-color;
+  border-right-color: $geometry-multi-point-color;
+
 }
 
 .cardBorder-type--geometry-polygon{
-    border-left-color: $geometry-polygon-color;
+  border-left-color: $geometry-polygon-color;
+  border-right-color: $geometry-polygon-color;
 }
 .cardBorder-type--geometry-multi-polygon{
-    border-left-color: $geometry-multi-polygon-color;
+  border-left-color: $geometry-multi-polygon-color;
+  border-right-color: $geometry-multi-polygon-color;
 }
 
 .cardBorder-header{
-  border-right-left: 8px;
   border-right-width: 8px; 
+  border-left-width: 8px; 
   border-top-width: 2px; 
   border-bottom-width: 2px;
+  margin-bottom: 8%;
+  margin-left:2%;
+  margin-right:2%;
+  padding-top:2%;
+  column-break-inside: avoid;
+  display: inline-block;
+  width:100%;
 }
 
 /*****headers*****/
@@ -115,4 +142,8 @@ $geometry-multi-line-color: #242F75;
 }
 .cardBorder-header-type--geometry-multi-polygon{
     border-color: $geometry-multi-polygon-color;
+}
+
+.details-description{
+  margin-right:4%
 }

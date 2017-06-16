@@ -42,7 +42,6 @@ function transformColumns (json) {
   console.log(geoTypeMappingKeys)
   let columns = json.reduce(function(map, obj) {
     
-    // console.log(obj)
     if(geoTypeMappingKeys.includes(obj.type)){
       obj.type = geoTypeMappings[obj.type]
     }
