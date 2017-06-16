@@ -347,19 +347,24 @@ function sortDateList(dateList){
 }
 
 
+function getDtsForMissingDates(json, state, dateBy){
+  let dateList = []
+  let startDate = moment(json[0]['label'], moment.ISO_8601)
+  let endDate = moment(json[json.length - 1]['label'], moment.ISO_8601);
+  let currentDate = startDate.clone()
+  while (currentDate.isBefore(endDate)) {
+    let currDt = currentDate.toISOString()
+    dateList.push(currDt)
+    currentDate.add(1, dateBy)
+  }
+  dateList.push( endDate.toISOString())
+  return dateList
+}
+
 function addMissingDates(json, state){
   if(isDateColSelected(state)){
-    let startDate = moment(json[0]['label'], moment.ISO_8601);
-    let endDate = moment(json[json.length - 1]['label'], moment.ISO_8601);
-    let currentDate = startDate.clone()
-    let dateList = []
     let dateBy = getDateGrp(state)
-    while (currentDate.isBefore(endDate)) {
-      let currDt = currentDate.toISOString()
-      dateList.push(currDt)
-      currentDate.add(1, dateBy)
-    }
-    dateList.push( endDate.toISOString())
+    let dateList =  getDtsForMissingDates(json, state, dateBy)
     let jsonDts = getDateRange(json)
     let diff = difference(dateList, jsonDts)
     let jsonEmptyDates =  diff.map(function(diffDt){
@@ -370,6 +375,59 @@ function addMissingDates(json, state){
     return sortDateList(fullDates)
  }
  return json
+}
+
+function sortObjByKeys(obj){
+  return Object.keys(obj).sort(function(a,b){return obj[b]-obj[a]})
+}
+
+function getObjValsSorted(sortedKeys, obj){
+    return sortedKeys.map(function(key){
+      return obj[key]
+    })
+}
+
+function addMissingDatesGrpBy(json, state){
+  if(isDateColSelected(state)){
+    json =  sortDateList(json)
+    let grpVals = state.columnProps.columns[state.query.groupBy].categories
+    grpVals = grpVals.map(function(item){ 
+      return item['category']
+    })
+    let dateBy = getDateGrp(state)
+    let dateList =  getDtsForMissingDates(json, state, dateBy)
+    let jsonDts = getDateRange(json)
+    let diff = difference(dateList, jsonDts)
+    let blankJsonItems = []
+    if(diff.length > 0){
+      blankJsonItems = diff.map(function(item){
+        let blankObj = {'label': item }
+        grpVals.forEach(function(item){
+          blankObj[item] = 0
+        })
+        return blankObj
+      })
+    }
+    json = json.concat(blankJsonItems)
+    let jsonGrpFill = json.map(function(item){
+      let itemKeys = Object.keys(item)
+      let index = itemKeys.indexOf('label')
+      if (index > -1) {
+        itemKeys.splice(index, 1);
+      }
+      let grpDiff = grpVals.filter(x => itemKeys.indexOf(x) < 0 );
+      grpDiff.forEach(function(missing){
+        item[missing]= 0
+      })
+      let itemKeysSorted = sortObjByKeys(item)
+      let itemValsSorted = getObjValsSorted(itemKeysSorted, item)
+      let newItem =  Object.assign({}, ...itemKeysSorted.map((n, index) => ({[n]: itemValsSorted[index]})))
+      return newItem
+    })
+    jsonGrpFill =  sortDateList(jsonGrpFill)
+    return jsonGrpFill
+  }
+  return json
 }
 
 function makeEmptyDtChartData(diffDt, dateBy){
@@ -445,18 +503,19 @@ function formatJsonCol (itemList) {
     return itemList
 }
 
-function   formatJsonDateCol (itemList, dateBy) {
+function formatJsonDateCol (itemList, dateBy) {
     let yrFormat = d3.time.format('%Y')
     let monthFormat = d3.time.format('%m-%Y')
     itemList = itemList.map(function (item, index) {
       if (dateBy === 'month') {
-        item['label'] = monthFormat(new Date(item['label']))
-        item['key'] = monthFormat(new Date(item['label']))
+        let formattedDtMonth =  monthFormat(new Date(item['label']))
+        item['label'] = formattedDtMonth
+        item['key'] = formattedDtMonth
       } else {
-        item['label'] = yrFormat(new Date(item['label']))
-        item['key'] = yrFormat(new Date(item['label']))
+        let formattedDtYear  = yrFormat(new Date(item['label']))
+        item['label'] = formattedDtYear
+        item['key'] = formattedDtYear
       }
-      console.log(item)
       return item
     })
     return itemList
@@ -471,8 +530,6 @@ function  castJson (json, state) {
     } else {
       formattedJson = formatJsonCol(json)
     }
-    //formattedJson = formatBlankJson(formattedJson)
-    //formattedJson = formatWhiteSpaceJson(formattedJson)
     return formattedJson
   }
 
@@ -487,19 +544,16 @@ function transformQueryData (json, state) {
       return obj[query.groupBy]
     }))
     json = reduceGroupedData(json, query.groupBy)
+    json = addMissingDatesGrpBy(json, state)
     json = castJsonGrpBy(json, state)
-    if(isDateColSelected(state)) {
-      json =  sortDateList(json)
-    }else{
+    if(!isDateColSelected(state)) {
       json = sortJsonGrpBy (json)
     }
   }
-  if(json.length > 0){
+  if(json.length > 0 && !query.groupBy){
     json = replacePropertyNameValue(json, 'label', 'undefined', 'blank')
     json = addMissingDates(json, state)
-  }
-  if(!query.groupBy){
-      json =  castJson (json, state)
+    json =  castJson (json, state)
   }
   return {
     query: {

@@ -40,7 +40,6 @@ class VizContainer extends Component {
 
   render () {
     let { props, actions } = this.props
-    console.log(props.chartData)
     return (
       <Row>
         <Col md={9} className='VizContainer__stage'>
