@@ -85,3 +85,18 @@
   display: inline-block;
   float: left;
 }
+
+.navbar #feedbackButton {
+  padding-top: 10.5px;
+  padding-bottom: 10.5px;
+  margin-top: 11px;
+  background-color: #e0b566;
+  min-width: 159px;
+  text-align: center;
+  color: #222;
+}
+
+#feedbackButton + .dropdown-menu {
+  min-width: 159px;
+  border: none;
+}
