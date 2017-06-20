@@ -39,9 +39,7 @@ function transformMetadata (json) {
 function transformColumns (json) {
   let result = {}
   let geoTypeMappingKeys = Object.keys(geoTypeMappings)
-  console.log(geoTypeMappingKeys)
   let columns = json.reduce(function(map, obj) {
-    
     if(geoTypeMappingKeys.includes(obj.type)){
       obj.type = geoTypeMappings[obj.type]
     }
@@ -57,4 +55,4 @@ function transformColumns (json) {
     return key
   }).filter(n => n)
   return result
-} 
+}

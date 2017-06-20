@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import {
-  Card, 
+  Card,
   CardBlock,
   CardTitle,
   CardText,
 } from 'react-bootstrap-card';
 import './@MetadataCard.css'
 class MetadataCard extends Component {
- 
+
   setClassNamesTypes (fieldType, isHeader) {
 
     if(isHeader){
@@ -19,21 +19,27 @@ class MetadataCard extends Component {
   setFieldProps(field){
     if(field.min && field.max){
       if(field.type === 'date' ){
-        field.minInfo = "Min Date: " + field.min 
-        field.maxInfo = "Max Date: " + field.max
+        field.minMaxInfoHeader = "Date Range"
+        field.minMax = field.min + " to " + field.max
       }else if (field.type === 'number' ){
-        field.minInfo = "Min Value: " + field.min 
-        field.maxInfo = "Max Value: " + field.max
-      } 
+        field.minMaxInfoHeader = "Value Range"
+        field.minMax = field.min +  " to " + field.max
+      }
     }
     if(field.type === 'text' && !field.isHeader){
-      field.minInfo = 'Number of categories: ' + field.cardinality
+      field.minMaxInfoHeader = 'Number of Categories'
+      field.minMax = field.cardinality
     }
     if( !field.description && !field.isHeader && !field.globalDescription) {
       field.description = 'No definition available'
     }
     if(field.globalDescription){
       field.description = field.globalDescription
+    }
+    if(field.description){
+      if(field.description.split(" ").length > 60){
+        field.description = field.description.split(" ").slice(0, 59).join(" ")+ " ..."
+      }
     }
     if(field.isHeader){
        field.fieldFormatDisplay = null
@@ -49,27 +55,50 @@ class MetadataCard extends Component {
       ? () => onClick(field.key)
       : false
     return (
-        <Card className={ cardBorderClassType} onClick={handleOnClick}>
-           
-          <CardBlock>
-            <CardTitle className={'cardFieldTitle'}>{field.label}</CardTitle>
-            <Choose>
-              <When condition={!field.isHeader}>
-                <div className={'cardFieldType'}> {field.fieldFormatDisplay} </div>
-                <div className={'cardMinMax text-muted'}> {'API key: ' + field.key} </div>
+        <Choose>
+          <When condition={field.isHeader}>
+            <Card className={cardBorderClassType} onClick={handleOnClick}>
+              <CardBlock>
+                <CardTitle className={'cardFieldTitleHeader metadata-card-type--'+ field.type}>
+                  {field.label}
+                  <span className={'cardFieldTitleCount text-muted'}> {field.field_count }</span>
+                </CardTitle>
+              </CardBlock>
+            </Card>
+          </When>
+          <Otherwise>
+            <Card className={'metadata-cards cardHolder cardBorderTop-type--' + field.type} onClick={handleOnClick}>
+              <div className={cardBorderClassType}>
+                <CardBlock>
+                <div className={'metadataCardHeader'}>
+                  <CardTitle className={'cardFieldTitle'}>{field.label}</CardTitle>
+                  <div className={'cardFieldType metadata-card-type--' + field.type}> {field.fieldFormatDisplay} </div>
+                  </div>
+                </CardBlock>
+              </div>
+              <CardBlock>
+                <CardText className={'text-left details-description'}>{field.description}</CardText>
                 <Choose>
-                  <When condition={field.minInfo}>
-                    <div className={'cardMinMax text-muted'}>
-                      <div> {field.minInfo} </div>
-                      <div> {field.maxInfo} </div>
+                  <When condition={field.minMaxInfoHeader}>
+                    <div className={'metatadata-card-min-max text-muted'}>
+                      <div> {field.minMaxInfoHeader} </div>
+                      <div className={'metatadata-card-text-indent'}>
+                        &#183; {field.minMax}
+                      </div>
                     </div>
                   </When>
                 </Choose>
-                <CardText className={'text-left details-description'}>{field.description}</CardText>
-              </When>
-            </Choose>
-          </CardBlock>
-        </Card>
+                <div className={'metadata-card-api-key text-muted'}>
+                  <div>{'API Key'} </div>
+                  <div className={'metatadata-card-text-indent'}>
+                    &#183; {field.key}
+                  </div>
+                </div>
+              </CardBlock>
+            </Card>
+          </Otherwise>
+        </Choose>
+
      )
   }
 }

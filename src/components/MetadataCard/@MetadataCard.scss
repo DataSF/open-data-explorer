@@ -11,97 +11,198 @@ $geometry-multi-polygon-color: #756C24;
 $geometry-line-color: #939DDE;
 $geometry-multi-line-color: #242F75;
 
-
-.cardFieldType {
-  font-size: 22px;
-  font-style: italic; 
-  margin-top:-1%;
-  margin-bottom:4%;
-}
-
-.cardFieldTitle {
-  font-size: 25px; }
-
-.cardBorder {
-  border-left-width: 5px; 
+.metadata-cards{
   margin-bottom: 8%;
   margin-left:2%;
-  margin-right:2%;
+  margin-right:10%;
+  width:100%;
+  padding-top:2%;
+  border-top-width:2px
+}
+
+.cardHolder{
   column-break-inside: avoid;
   display: inline-block;
+
+}
+
+.cardBorder {
+  border-left-width: 8px;
+  border-right-width: 2px;
+  border-top-width:0px;
+  border-bottom: 1px solid #ecf0f1;
+  border-style:solid;
+  margin-top:-4px;
   width:100%;
 }
 
-.cardMinMax {
-  font-size: 100%; 
-  margin-bottom:4%;
+.metadataCardHeader{
+  background-color:none;
 }
+
+.cardFieldType {
+  font-size: 22px;
+  font-style: italic;
+  margin-top:-1%;
+}
+
+.cardFieldTitle {
+  font-size: 25px;
+ }
 
 .cardBorder-type--text {
   border-left-color: $text-color;
   border-right-color: $text-color;
+}
+.cardBorderTop-type--text {
+  border-top-color: $text-color;
 }
 
 .cardBorder-type--date{
   border-left-color: $date-color;
   border-right-color: $date-color;
 }
+.cardBorderTop-type--date{
+  border-top-color: $date-color;
+}
+
 .cardBorder-type--boolean{
   border-left-color: $boolean-color;
   border-right-color: $boolean-color;
+}
+
+.cardBorderTop-type--boolean{
+  border-top-color: $boolean-color;
 }
 
 .cardBorder-type--number{
   border-left-color: $number-color;
   border-right-color: $number-color;
 }
+.cardBorderTop-type--number{
+  border-top-color: $number-color;
+}
 
 .cardBorder-type--geometry-multi-polygon{
   border-left-color: $geometry-multi-polygon-color;
   border-right-color: $geometry-multi-polygon-color;
+}
+.cardBorderTop-type--geometry-multi-polygon{
+   border-top-color: $geometry-multi-polygon-color;
 }
 
 .cardBorder-type--geometry-line{
   border-left-color: $geometry-line-color;
   border-right-color: $geometry-line-color;
 }
+.cardBorderTop-type--geometry-line{
+  border-top-color: $geometry-line-color;
+}
 .cardBorder-type--geometry-multi-line{
   border-left-color: $geometry-multi-line-color;
   border-right-color: $geometry-multi-line-color;
+}
+
+.cardBorderTop-type--geometry-multi-line{
+  border-top-color: $geometry-multi-line-color;
 }
 
 .cardBorder-type--geometry-point{
   border-left-color: $geometry-point-color;
   border-right-color: $geometry-point-color;
 }
+
+.cardBorderTop-type--geometry-point{
+  border-top-color: $geometry-point-color;
+}
+
 .cardBorder-type--geometry-multi-point{
   border-left-color: $geometry-multi-point-color;
   border-right-color: $geometry-multi-point-color;
+}
 
+.cardBorderTop-type--geometry-multi-point{
+  border-top-color: $geometry-multi-point-color;
 }
 
 .cardBorder-type--geometry-polygon{
   border-left-color: $geometry-polygon-color;
   border-right-color: $geometry-polygon-color;
 }
+.cardBorderTop-type--geometry-polygon{
+   border-top-color: $geometry-polygon-color;
+}
+
 .cardBorder-type--geometry-multi-polygon{
   border-left-color: $geometry-multi-polygon-color;
   border-right-color: $geometry-multi-polygon-color;
 }
 
+.cardBorderTop-type--geometry-multi-polygon{
+   border-top-color: $geometry-multi-polygon-color;
+}
+
+/****font colors for type type*******/
+.metadata-card-type--text {
+  color: $text-color;
+}
+
+.metadata-card-type--date{
+  color: $date-color;
+}
+.metadata-card-type--boolean{
+  color: $boolean-color;
+}
+
+.metadata-card-type--number{
+  color: $number-color;
+}
+
+.metadata-card-type--geometry-multi-polygon{
+  color: $geometry-multi-polygon-color;
+}
+
+.metadata-card-type--geometry-line{
+  color: $geometry-line-color;
+}
+.metadata-card-type--geometry-multi-line{
+  color: $geometry-multi-line-color;
+}
+
+.metadata-card-type--geometry-point{
+  color: $geometry-point-color;
+}
+
+.metadata-card-type--geometry-multi-point{
+  color: $geometry-multi-point-color;
+}
+
+.metadata-card-type--geometry-polygon{
+  color: $geometry-polygon-color;
+}
+.metadata-card-type--geometry-multi-polygon{
+  color: $geometry-multi-polygon-color;
+}
+/*******border colors for headers *******/
+
+
 .cardBorder-header{
-  border-right-width: 8px; 
-  border-left-width: 8px; 
-  border-top-width: 2px; 
+  border-right-width: 2px;
+  border-left-width: 8px;
+  border-top-width: 2px;
   border-bottom-width: 2px;
   margin-bottom: 8%;
   margin-left:2%;
-  margin-right:2%;
+  margin-right:10%;
   padding-top:2%;
   column-break-inside: avoid;
   display: inline-block;
   width:100%;
 }
+
+.cardFieldTitleHeader {
+  font-size: 35px;
+ }
 
 /*****headers*****/
 .cardBorder-header-type--text{
@@ -145,5 +246,32 @@ $geometry-multi-line-color: #242F75;
 }
 
 .details-description{
-  margin-right:4%
+  margin-right:3%;
+  font-size:105%;
+}
+
+.cardFieldTitleCount{
+  font-size:25px;
+  padding-left:1%;
+}
+
+.metadata-card-api-key{
+  border-top: 1px solid #ecf0f1;
+  padding-bottom:2%;
+  padding-right:3%;
+  padding-top:5%;
+  font-size:100%;
+   word-wrap: break-word
+}
+
+.metatadata-card-text-indent{
+  margin-left:2%;
+  margin-right:3%;
+}
+
+.metatadata-card-min-max{
+  border-top: 1px solid #ecf0f1;
+  padding-top:5%;
+  padding-bottom:3%;
+  font-size:100%;
 }

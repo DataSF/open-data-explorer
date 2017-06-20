@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import FieldColumns from '../components/FieldColumns'
 import { filterColumnList, selectField, setHideShow, sortColumnList} from '../actions'
-import { getUniqueColumnTypesDetails, getSelectableColumnsDetails, getSelectedFieldDef, getSelectedFieldDetails} from '../reducers'
+import { getUniqueColumnTypesDetails, getSelectableColumnsDetails, getSelectedFieldDef, getSelectedFieldDetails, getFieldProfileInfo} from '../reducers'
 import DefaultListGroup from '../components/DefaultListGroup'
 import FieldTypeButton from '../components/FieldTypeButton'
 import FieldButton from '../components/FieldButton'
@@ -12,7 +12,7 @@ import FieldNameFilterDetails from '../containers/FieldNameFilterDetails'
 import { Panel } from 'react-bootstrap'
 import FieldProfile from '../components/FieldProfile'
 
-const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols}) => (
+const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols, selectedProfileInfo}) => (
   <Row>
     <Col sm={3}>
     <div>
@@ -73,15 +73,16 @@ const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectabl
       <Choose>
         <When condition={selectedColumnDef}>
           <div className={'fieldProfileContainer'}>
-            <FieldProfile 
+            <FieldProfile
               field={selectedColumnDef}
+              profileInfo={selectedProfileInfo}
               onClick={ onSelectColumn.bind(this, '')} />
           </div>
         </When>
         <Otherwise>
           <div className={'columnDetailsContainer'}>
             <FieldColumns
-            fieldList={list} 
+            fieldList={list}
             sortBy={'type'}
             onClick={onSelectColumn}
             />
@@ -100,6 +101,7 @@ const mapStateToProps = (state, ownProps) => {
     selectableColumns: getSelectableColumnsDetails(state),
     selectedColumn: state.fieldDetailsProps.selectedColumn,
     selectedColumnDef: getSelectedFieldDef(state),
+    selectedProfileInfo: getFieldProfileInfo(state),
     selectedField: getSelectedFieldDetails(state),
     hideshowVal: getSelectableColumnsDetails(state).length,
     showCols: state.fieldDetailsProps.showCols

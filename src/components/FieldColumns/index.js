@@ -7,7 +7,7 @@ import './@FieldColumns.css'
 import _ from 'lodash'
 
 class FieldColumns extends Component {
-  
+
   makeMetadataCards(fieldList, onClick){
     let fieldCards = fieldList.map(function(field){
       if(field){
@@ -37,7 +37,7 @@ class FieldColumns extends Component {
         }
       })
       let headersListCnt = _.countBy(headersList, _.identity)
-      arrHeads = Object.keys(headersListCnt).filter(function(n){ return n !== "undefined" }); 
+      arrHeads = Object.keys(headersListCnt).filter(function(n){ return n !== "undefined" });
       headerItems = arrHeads.map(function(key){
         if(key)
         {
@@ -53,10 +53,10 @@ class FieldColumns extends Component {
         }
       })
       let headersListCnt = _.countBy(headersList, _.identity)
-      arrHeads = Object.keys(headersListCnt).filter(function(n){ return n !== "undefined" }); 
+      arrHeads = Object.keys(headersListCnt).filter(function(n){ return n !== "undefined" });
       headerItems = arrHeads.map(function(key){
         if(key){
-          return {'label': COLTYPES[key] + " Fields (" + String(headersListCnt[key]) + ")", 'type': key, 'isHeader': true, 'field_count': String(headersListCnt[key]) }
+          return {'label': COLTYPES[key] + " Fields", 'type': key, 'isHeader': true, 'field_count': '(' + String(headersListCnt[key]) + ')' }
         }
         return false
       })
@@ -102,7 +102,7 @@ class FieldColumns extends Component {
       'text': 'Text',
       'number': 'Number',
       'location': 'Location',
-      'date': 'Date', 
+      'date': 'Date',
       'geometry-line': 'Geometry: Line',
       'geometry-point': 'Geometry: Point',
       'geometry-polygon': 'Geometry: Polygon',

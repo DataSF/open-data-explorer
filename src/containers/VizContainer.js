@@ -84,7 +84,7 @@ class VizContainer extends Component {
                 <Choose>
                   <When condition={props.chartData}>
                     <Choose>
-                      <When condition={props.chartData.length > 0}> 
+                      <When condition={props.chartData.length > 0}>
                         <ChartExperimentalCanvas
                           chartData={props.chartData || []}
                           chartType={props.chartType}
@@ -98,7 +98,7 @@ class VizContainer extends Component {
                           sumBy={props.sumBy} />
                       </When>
                       <When condition={props.chartData.length === 0 && props.filters}>
-                        <div className={'filterNone'}> 
+                        <div className={'filterNone'}>
                             Based on the filters you've applied, your query retrieved no results. Remove some of the filters and try again.
                         </div>
                       </When>

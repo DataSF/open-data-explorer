@@ -24,21 +24,24 @@ const rootReducer = combineReducers({
 })
 
 const getColumnDef = (state, column) => fromColumns.getColumnDef(state.columnProps, column)
+const getFieldDetailsDef = (state, column) => fromFields.getColumnDef(state.columnProps, column)
+const getFieldProfileDef = (state, column) => fromFields.getFieldProfileInfo(state.columnProps,  column)
+
 
 export const getUniqueColumnTypesDetails = (state, selectable) =>
   fromFields.getUniqueColumnTypes(state.fieldDetailsProps, selectable)
 
 export const getSelectableColumnsDetails = (state, all = false) =>
-  fromFields.getSelectableColumns(state.fieldDetailsProps,state.fieldDetailsProps.selectedField, all)
+  fromFields.getSelectableColumns(state.fieldDetailsProps, state.fieldDetailsProps.selectedField, all)
 
 export const getSelectedFieldDetails = state =>
-  fromFields.getSelectedFieldDetails(state.fieldDetailsProps,state.fieldDetailsProps.selectedField)
+  fromFields.getSelectedFieldDetails(state.fieldDetailsProps, state.fieldDetailsProps.selectedField)
 
 export const getSelectedFieldDef = state =>
-  getColumnDef(state, state.fieldDetailsProps.selectedField)
+  getFieldDetailsDef(state, state.fieldDetailsProps.selectedField)
 
-
-
+export const getFieldProfileInfo = state =>
+  getFieldProfileDef(state, state.fieldDetailsProps.selectedField)
 
 export const getUniqueColumnTypes = (state, selectable) =>
   fromColumns.getUniqueColumnTypes(state.columnProps, selectable)

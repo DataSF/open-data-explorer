@@ -180,7 +180,7 @@ export function filterColumnList (key, item, target) {
     type: FILTER_COLUMN_LIST,
     payload: {
       key,
-      item, 
+      item,
       target
     }
   }
@@ -352,7 +352,7 @@ export function updateFilter (key, options) {
 
 export function resetState (target) {
   return {
-    type: RESET_STATE, 
+    type: RESET_STATE,
     payload: target
   }
 }
@@ -403,7 +403,6 @@ export const UPDATE_SEARCH = 'UPDATE_SEARCH'
 export const CLEAR_SEARCH = 'CLEAR_SEARCH'
 export const SELECT_FIELD = 'SELECT_FIELD'
 export const SET_SELECTED_FIELD_DETAILS = 'SET_SELECTED_FIELD_DETAILS'
-
 
 
 export function updateSearch (searchState) {
