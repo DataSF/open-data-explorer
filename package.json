@@ -35,7 +35,6 @@
     "react-select": "1.0.0-rc.5",
     "recharts": "^0.18.0",
     "redux": "^3.3.1",
-    "redux-airbrake": "^0.0.1",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
     "soda-js": "^0.2.2",
