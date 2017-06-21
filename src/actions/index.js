@@ -191,9 +191,11 @@ export function selectColumn (column) {
     dispatch({
       type: SELECT_COLUMN,
       payload: column})
-    dispatch(fetchData(getState()))
-    dispatch(setDefaultChartType(column))
     dispatch(setDefaultHideShow('columnProps'))
+    if (column !== null) {
+      dispatch(fetchData(getState()))
+      dispatch(setDefaultChartType(column))
+    }
   }
 }
 

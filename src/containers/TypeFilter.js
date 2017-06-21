@@ -15,7 +15,7 @@ const TypeFilter = ({items, selectableColumns, onFilter, onSelectColumn, selecte
       <When condition={selectedColumnDef}>
         <Choose>
           <When condition={showCols !== 'hide'}>
-            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected Field'>
+            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected field'>
               <DefaultListGroup
                 itemComponent={FieldButton}
                 items={selectedField}
@@ -25,11 +25,12 @@ const TypeFilter = ({items, selectableColumns, onFilter, onSelectColumn, selecte
             </Panel>
           </When>
           <Otherwise>
-            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected Field'>
+            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected field'>
               <DefaultListGroup
                 itemComponent={FieldButton}
                 items={selectedField}
                 onSelectListItem={onSelectColumn} />
+              <h5>Filter field list by type</h5>
               <DefaultListGroup
                 itemComponent={FieldTypeButton}
                 className={'default-list-group'}
@@ -48,6 +49,7 @@ const TypeFilter = ({items, selectableColumns, onFilter, onSelectColumn, selecte
       </When>
       <Otherwise>
         <Panel collapsible defaultExpanded header='Select a field' bsStyle={'primary'}>
+          <h5>Filter field list by type</h5>
           <DefaultListGroup
             itemComponent={FieldTypeButton}
             className={'default-list-group'}
