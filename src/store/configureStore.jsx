@@ -14,7 +14,9 @@ export default function configureStore (initialState) {
       projectId: 129600,
       projectKey: 'b8fe4ddb8be71382afa569e93c9b0d87'
     }, {
-      context: { environment: server }
+      context: { 
+        environment: server
+       }
     }), ...middleware]
   }
 
