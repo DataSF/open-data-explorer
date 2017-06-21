@@ -133,23 +133,28 @@ $geometry-multi-line-color: #242F75;
 .profile-categories-container{
   margin-top:-3%;
   padding-left:1%;
-  padding-bottom:4%;
 }
 
 .profile-categories-tbl-header{
   padding-left:1.5%;
-  font-size:150%;
+  padding-top:3%;
+  font-size:175%;
   padding-bottom:2%;
 }
 
 .profile-categories-tbl{
    margin-left:3%;
    min-width:15%;
+   margin-bottom:3%;
 }
 
+.profile-category-cell-hdr{
+   font-size:120%;
+}
 .profile-category-cell{
   padding-top:2%;
    padding-bottom:2%;
+   font-size:120%;
   padding-right:10%;
   margin:2%;
   margin-right:5%;

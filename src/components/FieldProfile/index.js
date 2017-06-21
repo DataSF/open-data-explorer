@@ -106,7 +106,7 @@ class FieldProfile extends Component {
   render () {
     let {field, onClick, profileInfo} = this.props
     console.log("***selected field profile****")
-    console.log(field)
+    console.log(field.label)
     let cardBorderClassType = this.setClassNamesTypes (field.type)
     field = this.setFieldProps(field)
     let handleOnClick = typeof onClick === 'function'
@@ -141,26 +141,24 @@ class FieldProfile extends Component {
                 <tbody>{rows}</tbody>
               </table>
               </div>
-              </CardBlock>
-            </When>
-          </Choose>
-        <Choose>
-         <When condition={ categoryInfo.rows }>
-           <CardBlock className={'profile-categories-content'}>
+              <Choose>
+               <When condition={ categoryInfo.rows }>
               <div className='profile-categories-container'>
                 <div className={'profile-categories-tbl-header'}>
                 {categoryInfo.categoryHeader}
               </div>
               <table className={'profile-categories-tbl'}>
                 <tbody>
-                  <tr><th>{'Value'}</th><th>{'Count'}</th></tr>
+                  <tr><th className={'profile-category-cell-hdr'}>{'Value'}</th><th className={'profile-category-cell-hdr'}>{'Count'}</th></tr>
                   {categoryInfo.rows}
                 </tbody>
               </table>
               </div>
+                 </When>
+              </Choose>
               </CardBlock>
-         </When>
-        </Choose>
+            </When>
+          </Choose>
       </Card>
 
 

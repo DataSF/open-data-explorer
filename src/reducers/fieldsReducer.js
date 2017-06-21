@@ -55,7 +55,20 @@ const PROFILELABELS = {
   'median': 'Median',
   'mode': 'Mode',
   'range': 'Value Range',
-  'sum': 'Sum'
+  'sum': 'Sum',
+  'standard_deviation': 'Standard Deviation',
+  'variance': 'Variance',
+  'mean_absolute_deviation': 'Mean Absolute Deviation',
+  '_5':'5th Percentile',
+  '_25':'25th Percentile',
+  '_50':'50th Percentile',
+  '_75':'75th Percentile',
+  '_95':'95th Percentile',
+  'irq': 'IRQ',
+  'kurtosis': 'Kurtosis',
+  'skewness': 'Skewness',
+  'profile_last_updt_dt': 'Field Profile Last Updated At'
+
 }
 
 const PROFILEDISPLAY = {
@@ -81,7 +94,19 @@ const PROFILEDISPLAY = {
   'median': 'The middle value found in a field',
   'mode': 'The most frequently occurring value in a field',
   'range': 'The value between the min and the max',
-  'sum': 'The sum of all the values in the field'
+  'sum': 'The sum of all the values in the field',
+  'standard_deviation': 'A measure of how spread out numbers in the field are; a concrete measure of the exact distances from the mean',
+  'variance': 'A measure that gives a very general idea of the spread the values in a field. A value of zero means that there is no variation in values; All the numbers in the field set are the same',
+  'mean_absolute_deviation': 'Another measure that helps you get a sense of how spread out the values in a field are; Tells you how far, on average, all values in the field are from the middle ',
+  '_5': 'a measure that indicates the value below which 5% of values in the field fall',
+  '_25': 'a measure that indicates the value below which 25% of values in the field fall',
+  '_50': 'a measure that indicates the value below which 50% of values in the field fall',
+  '_75': 'a measure that indicates the value below which 75% of values in the field fall',
+  '_95': 'a measure that indicates the value below which 95% of values in the field fall',
+  'irq': 'The difference between the first quartile and third quartile of the values in a field. This another way to describe the spread of values within a field',
+  'kurtosis': 'A measure to describe the distribution, or skewness, of observed values of the field around the mean',
+  'skewness': 'A measure of the degree of asymmetry of the distribution of values in a field. If values in the lower tail of the field are more pronounced than the values in the larger tail of the field, the field will have negative skewness. If the reverse is true, the field will have positive skewness. If the two are equal, the field has zero skewness',
+  'profile_last_updt_dt':'The date that field was last profiled'
 }
 
 // selectors
@@ -108,7 +133,11 @@ export const getFieldProfileInfo = (state, column, categories) => {
           if(percentageFields.indexOf(key) > -1){
             keyObj['value'] = String(Math.round((parseFloat(selectedField[key])* 100)), 2) + "%"
           }else{
+            if(key === 'profile_last_updt_dt'){
+              keyObj['value'] = selectedField[key].split('T').slice(0,1)
+            }else{
             keyObj['value'] = selectedField[key]
+          }
           }
           profileItems.push(keyObj)
         }
@@ -273,7 +302,6 @@ function resetState (state, action) {
   }
   return updateObject(state, {})
 }
-
 
 
 const fieldsReducer = createReducer({ typeFilters: [] }, {
