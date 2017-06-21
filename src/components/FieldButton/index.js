@@ -8,7 +8,7 @@ import { Popover } from 'react-bootstrap'
 
 class FieldButton extends Component {
 
-  setItemProps (item) {
+  setItemProps (item,  hoverSide) {
     // const checked = (<span className='glyphicon glyphicon-removed type-checked' aria-hidden='true' />)
     const checked = (<span className='glyphicon glyphicon-remove type-x' aria-hidden='true' />)
     let itemProps = {...item}
@@ -18,12 +18,13 @@ class FieldButton extends Component {
     }
     itemProps.className = setClassNamesListItem(itemProps, 'type', optionalClassNames)
     itemProps.otherComponents = itemProps.isSelected ? checked : null
+    itemProps.hoverSide =  hoverSide
     return itemProps
   }
 
   render () {
-    let {itemProps, onClick} = this.props
-    itemProps = this.setItemProps(itemProps)
+    let {itemProps, onClick, hoverSide} = this.props
+    itemProps = this.setItemProps(itemProps, hoverSide)
     const FieldDefinition = <Popover id={'option-' + itemProps.value} title='Definition'>{itemProps.description || 'No definition available.'}</Popover>
     return (
       <Choose>
@@ -37,7 +38,7 @@ class FieldButton extends Component {
           <DefaultListGroupItem
             onClick={onClick.bind(this, itemProps.value)}
             itemProps={itemProps}
-            buttonOverlay={FieldDefinition} />
+            buttonOverlay={FieldDefinition}   />
         </Otherwise>
       </Choose>
     )

@@ -3,15 +3,15 @@ import { connect } from 'react-redux'
 import { filterColumnList } from '../actions'
 import FilterListInput from '../components/FilterListInput'
 
-const FieldNameFilter = ({onFilter}) => (
+const FieldNameFilterDetails = ({onFilter}) => (
   <FilterListInput onFilter={onFilter} />
 )
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onFilter: item => dispatch(filterColumnList('fieldNameFilter', item, 'columnProps'))
+  onFilter: item => dispatch(filterColumnList('fieldNameFilter', item, 'fieldDetailsProps'))
 })
 
 export default connect(
   null,
-  mapDispatchToProps)(FieldNameFilter)
+  mapDispatchToProps)(FieldNameFilterDetails)
 

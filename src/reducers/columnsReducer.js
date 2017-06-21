@@ -182,6 +182,9 @@ function loadColumnProperties (state, action) {
 
 function filterColumnList (state, action) {
   let filterPayload
+  if (action.payload.target !== 'columnProps') {
+    return state
+  }
 
   if (action.payload.key === 'typeFilters') {
     let index = state.typeFilters.indexOf(action.payload.item)
@@ -204,20 +207,34 @@ function sortColumnList (state, action) {
 }
 
 function setHideShow (state, action) {
+  if (action.payload.target !== 'columnProps') {
+    return state
+  }
   return updateObject(state, {
-    showCols: action.payload
+    showCols: action.payload.showCols
   })
 }
 
 function setDefaultHideShow (state, action) {
+  if (action.payload.target !== 'columnProps') {
+    return state
+  }
   return updateObject(state, {
-    showCols: action.showCols
+    showCols: action.payload.showCols
   })
 }
 
 function resetState (state, action) {
+  if (action.payload.target !== 'columnProps') {
+    return state
+  }
   return updateObject(state, {})
 }
+
+
+
+
+
 
 const columnsReducer = createReducer({ typeFilters: [] }, {
   [ActionTypes.COLUMNS_SUCCESS]: initColumns, 

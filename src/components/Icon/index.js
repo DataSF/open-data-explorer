@@ -23,10 +23,10 @@ class Icon extends Component {
   }
 }
 
-Icon.propTypes = {
-  otherComponents: React.PropTypes.array,
-  onClickFxn: React.PropTypes.func,
-  label: React.PropTypes.string,
-  className: React.PropTypes.string
-}
+// Icon.propTypes = {
+  // otherComponents: React.PropTypes.array,
+//  onClickFxn: React.PropTypes.func,
+//  label: React.PropTypes.string,
+//  className: React.PropTypes.string
+//}
 export default Icon
