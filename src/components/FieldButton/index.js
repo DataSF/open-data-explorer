@@ -31,7 +31,7 @@ class FieldButton extends Component {
           <DefaultListGroupItem
             itemProps={itemProps}
             buttonOverlay={FieldDefinition}
-            onClick={onClick.bind(this, '')} />
+            onClick={onClick.bind(this, null)} />
         </When>
         <Otherwise>
           <DefaultListGroupItem
