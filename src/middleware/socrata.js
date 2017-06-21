@@ -603,3 +603,6 @@ function transformColumnProperties (json, state, params) {
 
   return transformed
 }
+
+
+
