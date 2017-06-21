@@ -31,7 +31,6 @@ const EmbedLayout = (props) => (
 class App extends Component {
   render () {
     let { children } = this.props
-    console.log(this.props)
     let isEmbed = /\/e\//.test(this.props.location.pathname)
     return (
       <div className='App'>

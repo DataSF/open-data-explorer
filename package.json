@@ -5,7 +5,7 @@
   "repository": "https://github.com/DataSF/open-data-explorer",
   "license": "MIT",
   "dependencies": {
-    "airbrake-js": "^0.5.9",
+    "airbrake-js": "^0.9.1",
     "bootstrap-sass": "^3.3.7",
     "d3": "^3.5.17",
     "fixed-data-table": "^0.6.0",
@@ -32,6 +32,7 @@
     "react-select": "1.0.0-rc.5",
     "recharts": "^0.18.0",
     "redux": "^3.3.1",
+    "redux-airbrake": "^0.0.1",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
     "soda-js": "^0.2.2",
@@ -87,7 +88,9 @@
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
     "start-js": "node scripts/start.js",
     "start": "npm-run-all -p watch-css start-js",
-    "build": "npm run build-css && node scripts/build.js",
+    "build": "REACT_APP_CONTEXT=${REACT_APP_CONTEXT} npm run build-css && node scripts/build.js",
+    "build:staging": "REACT_APP_CONTEXT=staging npm run build",
+    "build:production": "REACT_APP_CONTEXT=production npm run build",
     "test": "node scripts/test.js --env=jsdom",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
