@@ -105,8 +105,6 @@ class FieldProfile extends Component {
 
   render () {
     let {field, onClick, profileInfo} = this.props
-    console.log("***selected field profile****")
-    console.log(field.label)
     let cardBorderClassType = this.setClassNamesTypes (field.type)
     field = this.setFieldProps(field)
     let handleOnClick = typeof onClick === 'function'

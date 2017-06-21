@@ -17,7 +17,12 @@ $geometry-multi-line-color: #242F75;
   margin-right:10%;
   width:100%;
   padding-top:2%;
-  border-top-width:2px
+  border-top-width:2px;
+  border-right: 1px solid #d3d3d3;
+  border-left: 1px solid #d3d3d3;
+  border-bottom:1px solid #d3d3d3;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
 }
 
 .cardHolder{
@@ -261,7 +266,7 @@ $geometry-multi-line-color: #242F75;
   padding-right:3%;
   padding-top:5%;
   font-size:100%;
-   word-wrap: break-word
+   word-wrap: break-word;
 }
 
 .metatadata-card-text-indent{

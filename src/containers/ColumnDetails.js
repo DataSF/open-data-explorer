@@ -13,14 +13,14 @@ import { Panel } from 'react-bootstrap'
 import FieldProfile from '../components/FieldProfile'
 
 const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols, selectedProfileInfo}) => (
-  <Row>
-    <Col sm={3}>
+  <Row className={'column-details-all-container'}>
+    <Col sm={3} className={'field-details-panel-picker-container'}>
     <div>
       <Choose>
-      <When condition={selectedColumnDef}>
-        <Choose>
+        <When condition={selectedColumnDef}>
+          <Choose>
           <When condition={showCols !== 'hide'}>
-            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected Field'>
+            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected Field' className={'column-details-picker-panel'}>
               <DefaultListGroup
                 itemComponent={FieldButton}
                 items={selectedField}
@@ -30,7 +30,7 @@ const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectabl
             </Panel>
           </When>
           <Otherwise>
-            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected Field'>
+            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected Field' className={'column-details-picker-panel'}>
               <DefaultListGroup
                 itemComponent={FieldButton}
                 items={selectedField}
@@ -52,7 +52,7 @@ const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectabl
         </Choose>
       </When>
       <Otherwise>
-        <Panel collapsible defaultExpanded header='Select a field' bsStyle={'primary'}>
+        <Panel collapsible defaultExpanded header='Select a field' bsStyle={'primary'} className={'column-details-picker-panel'}>
           <DefaultListGroup
             itemComponent={FieldTypeButton}
             className={'default-list-group'}
@@ -69,7 +69,7 @@ const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectabl
     </Choose>
   </div>
     </Col>
-    <Col sm={9}>
+    <Col sm={9} className={'column-details-container-wrapper'}>
       <Choose>
         <When condition={selectedColumnDef}>
           <div className={'fieldProfileContainer'}>
