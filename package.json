@@ -24,6 +24,7 @@
     "react-date-range": "^0.9.4",
     "react-dimensions": "^1.2.0",
     "react-dom": "^15.5.4",
+    "react-ga": "^2.2.0",
     "react-instantsearch": "^3.2.1",
     "react-radio-group": "^2.2.0",
     "react-redux": "^4.4.1",
