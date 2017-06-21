@@ -6328,10 +6328,6 @@ reduce@^1.0.1:
   dependencies:
     object-keys "~1.0.0"
 
-redux-airbrake@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/redux-airbrake/-/redux-airbrake-0.0.1.tgz#7700c6d2cc054b8dfe441f0e0cea082c6217a259"
-
 redux-logger@^2.6.1:
   version "2.10.2"
   resolved "https://registry.yarnpkg.com/redux-logger/-/redux-logger-2.10.2.tgz#3c5a5f0a6f32577c1deadf6655f257f82c6c3937"
