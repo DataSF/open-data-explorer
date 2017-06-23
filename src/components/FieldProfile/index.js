@@ -58,9 +58,6 @@ class FieldProfile extends Component {
   }
 
   makeCategoryRow(category, key){
-    if(!category.category){
-      category.category = 'Blank'
-    }
     return (
       <tr  key={Math.random()}>
         <td className={'profile-category-cell'}>{category.category}</td>
@@ -77,41 +74,54 @@ class FieldProfile extends Component {
     return rows
   }
 
-  makeCategoryRows(field){
+  makeCategoryRows(categories, field){
     let categoryInfo = {}
     let categoryRows = []
     let categoryHeader, categoryLen
+    let categoryHeadItem = 'Categories'
+    if(field.type === 'text'){
+      categoryHeadItem  = 'Text Values'
+    }
+    categoryLen = categories.length
+    if(categoryLen > 10){
+      categoryLen = 10
+      categoryHeader =  'Top 10 ' + categoryHeadItem + ' in '+ field.name
+    }else{
+       categoryHeader = String(categoryLen) + ' ' +  categoryHeadItem +  ' in ' + field.name
+    }
+    categoryInfo['categoryLen'] = categoryLen
+    categoryInfo['categoryHeader'] = categoryHeader
+    categories = categories.sort(function(a, b){
+        return String(parseInt(b.count, 10)- parseInt(a.count, 10))
+    })
+    for (let i=0; i < categoryLen; i++) {
+        categoryRows.push(this.makeCategoryRow(categories[i], i))
+    }
+    categoryInfo['rows'] = categoryRows
+    return categoryInfo
+  }
 
-    if(field.categories){
-      categoryLen = field.categories.length
-      if(categoryLen > 10){
-       categoryLen = 10
-       categoryHeader =  'Top 10 Categories in '+ field.name
-      }else{
-       categoryHeader = String(categoryLen) + ' Categories in ' + field.name
-      }
-      categoryInfo['categoryLen'] = categoryLen
-      categoryInfo['categoryHeader'] = categoryHeader
-      field.categories = field.categories.sort(function(a, b){
-          return String(parseInt(b.count, 10)- parseInt(a.count, 10))
-      })
-      for (let i=0; i < categoryLen; i++) {
-        categoryRows.push(this.makeCategoryRow(field.categories[i], i))
-      }
-      categoryInfo['rows'] = categoryRows
+  makeCategoryRowsType(field, selectedCategories){
+    let categoryInfo = {}
+    if( field.categories){
+      categoryInfo = this.makeCategoryRows(field.categories, field)
+    } else if (field.type === 'text' && selectedCategories) {
+      categoryInfo = this.makeCategoryRows(selectedCategories, field)
     }
     return categoryInfo
   }
 
   render () {
-    let {field, onClick, profileInfo} = this.props
+    let {field, onClick, profileInfo, selectedCategories} = this.props
+    console.log("********")
+    console.log(selectedCategories)
     let cardBorderClassType = this.setClassNamesTypes (field.type)
     field = this.setFieldProps(field)
     let handleOnClick = typeof onClick === 'function'
       ? () => onClick('')
       : false
     let rows = this.makeProfileStatTableRows(profileInfo)
-    let categoryInfo = this.makeCategoryRows(field)
+    let categoryInfo = this.makeCategoryRowsType(field, selectedCategories)
     return (
       <Card className={ 'profile-card field-border-top-type--' + field.type} onClick={handleOnClick}>
         <div className={cardBorderClassType}>

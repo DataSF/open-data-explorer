@@ -54,7 +54,7 @@ const PROFILELABELS = {
   'mean': 'Mean',
   'median': 'Median',
   'mode': 'Mode',
-  'range': 'Value Range',
+  'range': 'Range',
   'sum': 'Sum',
   'standard_deviation': 'Standard Deviation',
   'variance': 'Variance',
@@ -93,7 +93,7 @@ const PROFILEDISPLAY = {
   'mean': 'The average value found in a field',
   'median': 'The middle value found in a field',
   'mode': 'The most frequently occurring value in a field',
-  'range': 'The value between the min and the max',
+  'range': 'The value between the min and the max; for date fields, it indicates the number of days between the min and max',
   'sum': 'The sum of all the values in the field',
   'standard_deviation': 'A measure of how spread out numbers in the field are; a concrete measure of the exact distances from the mean',
   'variance': 'A measure that gives a very general idea of the spread the values in a field. A value of zero means that there is no variation in values; All the numbers in the field set are the same',
@@ -112,15 +112,27 @@ const PROFILEDISPLAY = {
 // selectors
 export const getColumnDef = (state, column) => {
   let selectedField = state && state.columns ? state.columns[column] : null
+  if(selectedField){
+    if(selectedField.categories && selectedField.type === 'date'){
+      selectedField.categories = selectedField.categories.map(function(item){
+        if(item.category){
+          item.category = item.category.split('T')[0]
+        }else{
+          item.category = "Blank"
+        }
+        return item
+      })
+    }
+  }
   return selectedField
 }
 
-export const getFieldProfileInfo = (state, column, categories) => {
+
+export const getFieldProfileInfo = (state, column) => {
   let selectedField = state && state.columns ? state.columns[column] : null
   let keysToExclude = ['name', 'type', 'description', 'globalDescription', 'id', 'fieldFormatDisplay', 'global_field', 'field_type_flag', 'isSelected', 'isCategory', 'field_documented', 'format', 'value', 'label', 'key']
   let percentageFields = ['uniqueness', 'completeness', 'distinctness']
   if(selectedField){
-    //console.log("***selected field redcur***")
     let profileItems = []
     let keys = Object.keys(PROFILEDISPLAY)
     keys.forEach(function(key){
@@ -132,12 +144,11 @@ export const getFieldProfileInfo = (state, column, categories) => {
           keyObj['labelDisplay'] = PROFILEDISPLAY[key]
           if(percentageFields.indexOf(key) > -1){
             keyObj['value'] = String(Math.round((parseFloat(selectedField[key])* 100)), 2) + "%"
-          }else{
-            if(key === 'profile_last_updt_dt'){
-              keyObj['value'] = selectedField[key].split('T').slice(0,1)
-            }else{
-            keyObj['value'] = selectedField[key]
           }
+          if((key === 'profile_last_updt_dt') || (key === 'min' && selectedField.type === 'date') || (key === 'max' && selectedField.type === 'date') || (key === 'mode' && selectedField.type === 'date') ) {
+            keyObj['value'] = selectedField[key].split('T')[0]
+          }else{
+            keyObj['value'] = selectedField[key]
           }
           profileItems.push(keyObj)
         }
@@ -216,7 +227,7 @@ export const getSelectableColumns = (state, selectedColumn, all = false) => {
     return false
   }).map((col) => {
     let colInstance = columns[col]
-    if(colInstance.type === 'date'){
+    if (colInstance.type === 'date') {
       colInstance.min = colInstance.min.split('T')[0]
       colInstance.max = colInstance.max.split('T')[0]
     }
@@ -233,7 +244,8 @@ export const getSelectableColumns = (state, selectedColumn, all = false) => {
 function initColumns (state, action) {
   return updateObject(state, {
     columns: action.response.columns,
-    categoryColumns: action.response.categoryColumns
+    categoryColumns: action.response.categoryColumns,
+    textColumns: action.response.textColumns
   })
 }
 
@@ -303,6 +315,20 @@ function resetState (state, action) {
   return updateObject(state, {})
 }
 
+function setSelectedFieldCategories(state, action){
+
+  if (action.response.selectedFieldCategories) {
+    console.log("**in the reducer**")
+  console.log(action.response)
+  console.log("***8")
+  console.log(action.response.selectedFieldCategories)
+    return updateObject(state, {
+      selectedCategories: action.response.selectedFieldCategories.categories
+    })
+  } else {
+    return state
+  }
+}
 
 const fieldsReducer = createReducer({ typeFilters: [] }, {
   [ActionTypes.COLUMNS_SUCCESS]: initColumns,
@@ -312,6 +338,7 @@ const fieldsReducer = createReducer({ typeFilters: [] }, {
   [ActionTypes.SET_HIDE_SHOW]: setHideShow,
   [ActionTypes.SET_DEFAULT_HIDE_SHOW]: setDefaultHideShow,
   [ActionTypes.SELECT_FIELD]: setSelectField,
-  [ActionTypes.RESET_STATE]: resetState
+  [ActionTypes.RESET_STATE]: resetState,
+  [ActionTypes.FIELD_DATA_SUCCESS]: setSelectedFieldCategories
 })
 export default fieldsReducer

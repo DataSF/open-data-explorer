@@ -67,7 +67,7 @@ class MetadataCard extends Component {
             </Card>
           </When>
           <Otherwise>
-            <Card className={'metadata-cards cardHolder cardBorderTop-type--' + field.type} onClick={handleOnClick}>
+            <Card className={'metadata-cards cardBorderTop-type--' + field.type} onClick={handleOnClick}>
               <div className={cardBorderClassType}>
                 <CardBlock>
                 <div className={'metadataCardHeader'}>
@@ -91,7 +91,7 @@ class MetadataCard extends Component {
                 <div className={'metadata-card-api-key text-muted'}>
                   <div>{'API Key'} </div>
                   <div className={'metatadata-card-text-indent'}>
-                    &#183; {field.key}
+                    &#183;{field.key}
                   </div>
                 </div>
               </CardBlock>

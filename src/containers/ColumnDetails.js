@@ -12,7 +12,7 @@ import FieldNameFilterDetails from '../containers/FieldNameFilterDetails'
 import { Panel } from 'react-bootstrap'
 import FieldProfile from '../components/FieldProfile'
 
-const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols, selectedProfileInfo}) => (
+const ColumnDetails = ({list, filters, onFilter, sort, onSort, items, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols, selectedProfileInfo, selectedCategories }) => (
   <Row className={'column-details-all-container'}>
     <Col sm={3} className={'field-details-panel-picker-container'}>
     <div>
@@ -76,6 +76,7 @@ const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectabl
             <FieldProfile
               field={selectedColumnDef}
               profileInfo={selectedProfileInfo}
+              selectedCategories = {selectedCategories}
               onClick={ onSelectColumn.bind(this, '')} />
           </div>
         </When>
@@ -95,6 +96,7 @@ const ColumnDetails = ({list, filters,  onFilter, sort, onSort, items, selectabl
 
 const mapStateToProps = (state, ownProps) => {
   let selectable = getSelectableColumnsDetails(state)
+  console.log(state)
   return {
     list: selectable  || {},
     items: getUniqueColumnTypesDetails(state, true),
@@ -104,7 +106,8 @@ const mapStateToProps = (state, ownProps) => {
     selectedProfileInfo: getFieldProfileInfo(state),
     selectedField: getSelectedFieldDetails(state),
     hideshowVal: getSelectableColumnsDetails(state).length,
-    showCols: state.fieldDetailsProps.showCols
+    showCols: state.fieldDetailsProps.showCols,
+    selectedCategories: state.fieldDetailsProps.selectedCategories
   }
 }
 

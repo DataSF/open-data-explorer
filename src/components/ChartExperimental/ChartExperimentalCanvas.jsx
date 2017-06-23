@@ -209,7 +209,7 @@ class ChartExperimentalCanvas extends Component {
     }
     return newChartData
   }
-  
+
   sortChartDataGrpBy (newChartData) {
     let sortedNewChartData = []
     let grpSumDict = {}
@@ -230,7 +230,7 @@ class ChartExperimentalCanvas extends Component {
     if (chartData && chartData.length > 1) {
       if (!isGroupBy) {
         return this.castChartData(chartData, isDtCol, dateBy)
-      } 
+      }
     }
     return chartData
   }
@@ -267,8 +267,25 @@ class ChartExperimentalCanvas extends Component {
     return chartType
   }
 
+  findMaxObjKeyValueGrpBy(chartData){
+    let allVals = []
+    chartData.forEach(function(item){
+      let itemCopy = Object.assign({}, item);
+      delete itemCopy.label
+      let itemVals = Object.values(itemCopy)
+      let itemMax = Math.max.apply(null, itemVals)
+      allVals.push(itemMax)
+    })
+    return Math.max.apply(null, allVals)
+  }
+  setXAxisTickInterval(dateBy){
+    if(dateBy === 'month'){
+      return 12
+    }
+    return 0
+  }
   render () {
-    let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, rollupBy} = this.props
+    let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, rollupBy, dateBy} = this.props
     chartType = this.setDefaultChartType(selectedColumnDef, chartType)
     let fillColor
     let grpColorScale
@@ -291,10 +308,26 @@ class ChartExperimentalCanvas extends Component {
       'double': {'start': '#c71585', 'end': '#ffc0cb'},
       'money': {'start': '#c71585', 'end': '#ffc0cb'}
     }
+    let xAxisInterval = this.setXAxisTickInterval(dateBy)
+    console.log(xAxisInterval)
     let isDateSelectedCol = false
     let colName = ''
+    let maxValue, domainMax
     let numericCol = isColTypeTest(selectedColumnDef, 'number')
     let isGroupBy = this.isGroupByz(groupKeys)
+    if(!isGroupBy){
+      maxValue = findMaxObjKeyValue(chartData, 'value')
+    }else{
+      maxValue = this.findMaxObjKeyValueGrpBy(chartData)
+    }
+    if (maxValue > 10) {
+      let valTickFormater = function (d) { return formatValue(d) }
+    }
+    domainMax = maxValue + (maxValue * 0.05)
+    console.log("***max is here")
+    console.log(domainMax)
+    let yTickCnt = 6
+
     //chartData = this.convertChartData(chartData, selectedColumnDef, dateBy, isGroupBy)
     if (selectedColumnDef) {
       fillColor = fillColorIndex[selectedColumnDef.type]
@@ -302,9 +335,8 @@ class ChartExperimentalCanvas extends Component {
       isDateSelectedCol = this.isSelectedColDate(selectedColumnDef)
       colName = selectedColumnDef.name
     }
-    let xAxisPadding = { left: 50, right: 50 }
-    let xTickCnt = 5
-    let yTickCnt = 6
+    let xAxisPadding = { left: 30, right: 30 }
+    let xTickCnt = 6
     let margin = {top: 1, right: 5, bottom: 1, left: 5}
     let w = this.state.width - (margin.left + margin.right)
     let h = this.state.height - (margin.top + margin.bottom)
@@ -313,15 +345,15 @@ class ChartExperimentalCanvas extends Component {
     // let formatValue = d3.format('d')
     let legendStyle = {
       color: '#666',
-      paddingRight: 40,
-      paddingLeft: 60
+      overflow: 'scroll',
+      position: 'relative',
+      top:'-22%',
+      width:'80%',
+      margin: '0 auto',
+      paddingTop:'1%',
+      paddingBottom:'1%'
     }
     let valTickFormater
-    let maxValue = findMaxObjKeyValue(chartData, 'value')
-    if (maxValue > 10) {
-      valTickFormater = function (d) { return formatValue(d) }
-    }
-    let domainMax = maxValue + (maxValue * 0.05)
     let minTickGap = 200
     if (!rollupBy) {
       rollupBy = 'other'
@@ -333,8 +365,8 @@ class ChartExperimentalCanvas extends Component {
         chartData = chartDataTop15['chartData']
       }
     }
-
     let yAxisWidth = 70
+
     return (
       <div className='chartCanvas'>
         <Choose>
@@ -391,18 +423,19 @@ class ChartExperimentalCanvas extends Component {
                 <ChartExperimentalLineStuff
                   w={w}
                   h={h}
-                  yAxisWidth={yAxisWidth}
                   isGroupBy={isGroupBy}
                   margin={margin}
                   domainMax={domainMax}
-                  yTickCnt={yTickCnt}
-                  minTickGap={minTickGap}
                   rowLabel={rowLabel}
                   fillColor={fillColor}
                   groupKeys={groupKeys}
                   chartData={chartData}
                   colName={colName}
+                  yTickCnt={yTickCnt}
+                  xTickCnt={xTickCnt}
                   xAxisHeight={xAxisHeight}
+                  yAxisWidth={yAxisWidth}
+                  xAxisInterval={xAxisInterval}
                   legendStyle={legendStyle}
                   valTickFormater={valTickFormater}
                   xAxisPadding={xAxisPadding}

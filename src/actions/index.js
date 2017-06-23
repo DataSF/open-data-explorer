@@ -113,6 +113,25 @@ export function loadMetadata (id) {
   }
 }*/
 
+export function loadFieldProps () {
+  return (dispatch, getState) => {
+    // let id = getState().metadata.migrationId ? getState().metadata.migrationId : getState().metadata.id
+    let id = getState().metadata.dataId
+    let promises = []
+    //let columns = getState().columnProps.columns
+    let categoryColumns = getState().columnProps.categoryColumns
+    let textColumns = getState().FieldProps.textColumns
+    console.log('****')
+    console.log(textColumns)
+    for (let i =0; i < categoryColumns.length; i++) {
+      promises.push(dispatch(fetchColumnProps(id, categoryColumns[i])))
+    }
+    return Promise.all(promises)
+  }
+}
+
+
+
 export function loadColumnProps () {
   return (dispatch, getState) => {
     // let id = getState().metadata.migrationId ? getState().metadata.migrationId : getState().metadata.id
@@ -130,6 +149,9 @@ export function loadColumnProps () {
 export const DATA_REQUEST = 'DATA_REQUEST'
 export const DATA_SUCCESS = 'DATA_SUCCESS'
 export const DATA_FAILURE = 'DATA_FAILURE'
+export const FIELD_DATA_REQUEST = 'FIELD_DATA_REQUEST'
+export const FIELD_DATA_SUCCESS = 'FIELD_DATA_SUCCESS'
+export const FIELD_DATA_FAILURE = 'FIELD_DATA_FAILURE'
 
 function fetchData (state, isForTable = false) {
   let endpoint
@@ -144,6 +166,21 @@ function fetchData (state, isForTable = false) {
   return {
     [CALL_API]: {
       types: [DATA_REQUEST, DATA_SUCCESS, DATA_FAILURE],
+      endpoint: endpoint,
+      transform: transform
+    }
+  }
+}
+
+
+function fetchDataTextFieldCategories (state) {
+  let endpoint
+  let transform
+  endpoint = Endpoints.QUERYTEXTCATEGORIES(state)
+  transform = Transforms.QUERYTEXTCATEGORIES
+  return {
+    [CALL_API]: {
+      types: [FIELD_DATA_REQUEST, FIELD_DATA_SUCCESS, FIELD_DATA_FAILURE],
       endpoint: endpoint,
       transform: transform
     }
@@ -202,6 +239,7 @@ export function selectField (column) {
     dispatch({
       type: SELECT_FIELD,
       payload: column})
+    dispatch(fetchDataTextFieldCategories(getState()))
     dispatch(setDefaultHideShow('fieldDetailsProps'))
   }
 }

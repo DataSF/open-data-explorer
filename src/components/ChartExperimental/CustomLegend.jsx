@@ -2,16 +2,20 @@ import React, { Component } from 'react'
 
 class CustomLegend extends Component {
   render () {
-    let {payload} = this.props
-
-    // console.log(payload)
+    let {colName,  isGroupBy} = this.props
+    let payLoad
+    console.log("*****")
+    console.log(colName)
+    if(!isGroupBy){
+      payLoad = [colName]
+    }
     return (
-      <div>
+      <div style={{paddingTop:'-200px'}}>
         <div>Legend</div>
         <ul>
           {
-          payload.map((entry, index) => (
-            <li key={`item-${index}`}>{entry.value}</li>
+          payLoad.map((entry, index) => (
+            <li key={`item-${index}`}>{entry}</li>
           ))
         }
         </ul>

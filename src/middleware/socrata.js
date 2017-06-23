@@ -17,13 +17,15 @@ export const Endpoints = {
   TABLEQUERY: endpointTableQuery,
   COUNT: endpointCount,
   MIGRATION: endpointApiMigration,
-  COLPROPS: endpointColumnProperties
+  COLPROPS: endpointColumnProperties,
+  QUERYTEXTCATEGORIES: constructQueryTextCategories
 }
 
 export const Transforms = {
   METADATA: transformMetadata,
   COLUMNS: transformColumns,
   QUERY: transformQueryData,
+  QUERYTEXTCATEGORIES: transformTextCategoryData,
   TABLEQUERY: transformTableQuery,
   COUNT: transformCount,
   MIGRATION: transformApiMigration,
@@ -48,7 +50,27 @@ export const shouldRunColumnStats = (type, key) => {
 // Construct URL based on chart options
 // TODO - break into smaller functions
 
+function constructQueryTextCategories (state) {
+  console.log("****Constructing a column props****")
+  //let query = selectedField
+  let consumerRoot = API_ROOT.split('/')[2]
+  let consumer = new soda.Consumer(consumerRoot)
+  let id = state.metadata.dataId || state.metadata.id
+  let query = consumer.query().withDataset(id)
+  let base = ', count(*) as count'
+  let selectAsLabel = state.fieldDetailsProps.selectedField + ' as category '+ base
+  let orderBy = 'count desc'
+  query.select(selectAsLabel)
+      .group('category')
+      .order(orderBy)
+  query = query.limit(10)
+  console.log(query.getURL())
+  console.log("***")
+  return query.getURL()
+}
+
 function constructQuery (state) {
+
   let columns = state.columnProps.columns
   let { selectedColumn, dateBy, groupBy, sumBy, filters } = state.query
 
@@ -391,7 +413,7 @@ function addMissingDatesGrpBy(json, state){
   if(isDateColSelected(state)){
     json =  sortDateList(json)
     let grpVals = state.columnProps.columns[state.query.groupBy].categories
-    grpVals = grpVals.map(function(item){ 
+    grpVals = grpVals.map(function(item){
       return item['category']
     })
     let dateBy = getDateGrp(state)
@@ -534,7 +556,20 @@ function  castJson (json, state) {
   }
 
 
-
+function transformTextCategoryData(json, state){
+  json = json.map(function(item){
+    if(!item.category){
+      item.category = "Blank";
+    }
+    return item
+  })
+  return {
+    selectedFieldCategories: {
+      isFetching: false,
+      categories: json
+    }
+  }
+}
 function transformQueryData (json, state) {
   let { query } = state
   let groupKeys = []

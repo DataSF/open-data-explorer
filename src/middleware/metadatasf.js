@@ -54,5 +54,12 @@ function transformColumns (json) {
     }
     return key
   }).filter(n => n)
+  result.textColumns = json.map(function(item){
+    let key
+    if(item.type === 'text'){
+      key =  item.key
+    }
+    return key
+  }).filter(n => n)
   return result
 }
