@@ -24,6 +24,7 @@ class DatasetNav extends Component {
     return (
       <Row className={'chartTabs DatasetNav'}>
         <Col sm={12}>
+        <div  className={'dataset-nav-btns'}>
           <Nav
             bsStyle='pills'
             activeKey={active}
@@ -41,6 +42,7 @@ class DatasetNav extends Component {
               Table Preview
             </NavItem>
           </Nav>
+        </div>
         </Col>
       </Row>)
   }

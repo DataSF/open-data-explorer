@@ -23,16 +23,14 @@ $geometry-multi-line-color: #242F75;
   border-bottom:1px solid #d3d3d3;
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
-}
-
-.cardHolder{
   column-break-inside: avoid;
   display: inline-block;
-
 }
+
 
 .cardBorder {
   border-left-width: 8px;
+  padding-top:1%;
   border-right-width: 2px;
   border-top-width:0px;
   border-bottom: 1px solid #ecf0f1;
@@ -53,6 +51,14 @@ $geometry-multi-line-color: #242F75;
 
 .cardFieldTitle {
   font-size: 25px;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  /* Non standard for webkit */
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
  }
 
 .cardBorder-type--text {
@@ -203,10 +209,19 @@ $geometry-multi-line-color: #242F75;
   column-break-inside: avoid;
   display: inline-block;
   width:100%;
+
 }
 
 .cardFieldTitleHeader {
   font-size: 35px;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  /* Non standard for webkit */
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
  }
 
 /*****headers*****/
@@ -251,8 +266,15 @@ $geometry-multi-line-color: #242F75;
 }
 
 .details-description{
-  margin-right:3%;
+  padding-right:3%;
   font-size:105%;
+  word-break: break-all;
+  /* Non standard for webkit */
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
 }
 
 .cardFieldTitleCount{
@@ -266,7 +288,7 @@ $geometry-multi-line-color: #242F75;
   padding-right:3%;
   padding-top:5%;
   font-size:100%;
-   word-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .metatadata-card-text-indent{
@@ -278,7 +300,8 @@ $geometry-multi-line-color: #242F75;
   border-top: 1px solid #ecf0f1;
   padding-top:5%;
   padding-bottom:3%;
-  font-size:100%;
+  font-size:95%;
+  word-wrap: break-word;
 }
 
 
