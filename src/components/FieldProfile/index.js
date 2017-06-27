@@ -113,8 +113,9 @@ class FieldProfile extends Component {
 
   render () {
     let {field, onClick, profileInfo, selectedCategories} = this.props
-    console.log("********")
-    console.log(selectedCategories)
+    if(!field.name){
+      field.name = field.label
+    }
     let cardBorderClassType = this.setClassNamesTypes (field.type)
     field = this.setFieldProps(field)
     let handleOnClick = typeof onClick === 'function'
@@ -128,7 +129,7 @@ class FieldProfile extends Component {
           <CardBlock>
             <div className={'profile-field-remove glyphicon glyphicon-remove text-muted'}></div>
             <div>
-              <CardTitle className={'profile-field-name'}>{field.label}</CardTitle>
+              <CardTitle className={'profile-field-name'}>{field.name}</CardTitle>
                 <div className={'profile-type profile-type-text--' + field.type}>
                   {field.fieldFormatDisplay} </div>
                 </div>

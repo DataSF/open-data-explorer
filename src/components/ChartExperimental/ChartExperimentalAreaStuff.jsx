@@ -19,7 +19,7 @@ class ChartExperimentalAreaStuff extends Component {
             let colorIndex = groupKeys.indexOf(i)
             return (
               <Area
-                type='monotone'
+                type='linear'
                 dataKey={i}
                 stackId='i'
                 key={i}
@@ -32,10 +32,27 @@ class ChartExperimentalAreaStuff extends Component {
       }
     }
   }
+  setLegendStyleTop(areas, legendStyle){
+    if(areas){
+      if(areas.length <= 20){
+        legendStyle.top = '-20%'
+      }
+      if(areas.length > 20 && areas.length <= 30){
+        legendStyle.top = '-25%'
+      }
+      if(areas.length > 30 && areas.length <= 40){
+        legendStyle.top = '-30%'
+      }
+      if(areas.length > 40 ){
+        legendStyle.top = '-30%'
+      }
+    }
+    return legendStyle
+  }
   render () {
-    let {h, w, isGroupBy, margin, yAxisWidth, rowLabel, groupKeys, fillColor, chartData, yTickCnt, grpColorScale, valTickFormater, domainMax, minTickGap, xAxisHeight, legendStyle, colName} = this.props
+    let {h, w, xAxisPadding, xAxisInterval, isGroupBy, margin, yAxisWidth, rowLabel, groupKeys, fillColor, chartData, yTickCnt, grpColorScale, valTickFormater, domainMax, xAxisHeight, legendStyle, colName} = this.props
     let areas = this.makeAreas(groupKeys, grpColorScale)
-
+    legendStyle = this.setLegendStyleTop(areas, legendStyle)
     return (
       <Choose>
         <When condition={!isGroupBy}>
@@ -46,17 +63,22 @@ class ChartExperimentalAreaStuff extends Component {
             margin={margin}>
             <XAxis
               dataKey='key'
-              minTickGap={minTickGap}
               height={xAxisHeight}
-              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={0} />} />
+              allowDataOverflow={true}
+              interval={xAxisInterval}
+              type={'category'}
+              tickSize={4}
+              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} chartType={'area'} />}
+              padding={xAxisPadding}/>
             <YAxis
               width={yAxisWidth}
+              allowDataOverflow={true}
               tickFormatter={valTickFormater}
               tickCount={yTickCnt}
               domain={[0, domainMax]}
               type='number'
-              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
-            <CartesianGrid strokeDasharray='3 3' vertical={false} />
+              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} chartType={'area'} />} />
+            <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
             <Tooltip />
             <Area
               type='monotone'
@@ -72,17 +94,21 @@ class ChartExperimentalAreaStuff extends Component {
             data={chartData}
             margin={margin}>
             <XAxis
-              dataKey='label'
+              dataKey={'label'}
+              type={'category'}
+              interval={xAxisInterval}
+              allowDataOverflow={true}
               height={xAxisHeight}
-              minTickGap={minTickGap}
-              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={areas.length} />} />
+              tickSize={4}
+              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={areas.length} chartType={'area'} />} />
             <YAxis
               tickFormatter={valTickFormater}
               tickCount={yTickCnt}
               domain={[0, domainMax]}
+              allowDataOverflow={true}
               type='number'
-              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
-            <CartesianGrid strokeDasharray='3 3' vertical={false} />
+              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h}   chartType={'area'}/>} />
+            <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
             <Tooltip />
             <Legend wrapperStyle={legendStyle} />
             {areas}

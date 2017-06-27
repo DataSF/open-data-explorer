@@ -96,7 +96,6 @@ const ColumnDetails = ({list, filters, onFilter, sort, onSort, items, selectable
 
 const mapStateToProps = (state, ownProps) => {
   let selectable = getSelectableColumnsDetails(state)
-  console.log(state)
   return {
     list: selectable  || {},
     items: getUniqueColumnTypesDetails(state, true),

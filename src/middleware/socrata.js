@@ -51,7 +51,7 @@ export const shouldRunColumnStats = (type, key) => {
 // TODO - break into smaller functions
 
 function constructQueryTextCategories (state) {
-  console.log("****Constructing a column props****")
+  //console.log("****Constructing a column props****")
   //let query = selectedField
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
@@ -64,8 +64,8 @@ function constructQueryTextCategories (state) {
       .group('category')
       .order(orderBy)
   query = query.limit(10)
-  console.log(query.getURL())
-  console.log("***")
+  //console.log(query.getURL())
+  //console.log("***")
   return query.getURL()
 }
 

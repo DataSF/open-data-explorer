@@ -4,8 +4,6 @@ class CustomLegend extends Component {
   render () {
     let {colName,  isGroupBy} = this.props
     let payLoad
-    console.log("*****")
-    console.log(colName)
     if(!isGroupBy){
       payLoad = [colName]
     }

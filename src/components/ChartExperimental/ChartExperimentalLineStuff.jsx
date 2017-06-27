@@ -4,7 +4,6 @@ import d3 from 'd3'
 import { XAxis, LineChart, YAxis, CartesianGrid, Line, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
 import CustomXaxisLabel from './CustomXaxisLabel'
-import CustomLegend from './CustomLegend'
 class ChartExperimentalLineStuff extends Component {
 
   makeLines (groupKeys) {
@@ -32,21 +31,35 @@ class ChartExperimentalLineStuff extends Component {
       }
     }
   }
+  setLegendStyleTop(lines, legendStyle){
+    if(lines){
+      if(lines.length <= 20){
+        legendStyle.top = '-20%'
+      }
+      if(lines.length > 20 && lines.length <= 30){
+        legendStyle.top = '-25%'
+      }
+      if(lines.length > 30 && lines.length <= 40){
+        legendStyle.top = '-30%'
+      }
+      if(lines.length > 40 ){
+        legendStyle.top = '-30%'
+      }
+    }
+    return legendStyle
+  }
   render () {
     let {h, w, isGroupBy, yAxisWidth, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, domainMax, yTickCnt, xAxisInterval,  colName, legendStyle, xAxisHeight} = this.props
     let lines = this.makeLines(groupKeys)
-    if(lines){
-      if(lines.length > 23 && lines.length < 50){
-        legendStyle.top = '-27%'
-      }
-      if(lines.length > 50){
-        legendStyle.top = '-48%'
-      }
-    }
+    legendStyle = this.setLegendStyleTop(lines, legendStyle)
     return (
       <Choose>
         <When condition={!isGroupBy}>
-          <LineChart width={w} height={h} data={chartData}>
+          <LineChart
+            width={w}
+            height={h}
+            isAnimationActive={false}
+            data={chartData}>
             <XAxis
               dataKey={'key'}
               allowDataOverflow={true}
@@ -80,7 +93,8 @@ class ChartExperimentalLineStuff extends Component {
             width={w}
             height={h}
             data={chartData}
-            margin={margin} >
+            margin={margin}
+            isAnimationActive={false} >
             <XAxis
               dataKey={'label'}
               type={'category'}
@@ -98,9 +112,10 @@ class ChartExperimentalLineStuff extends Component {
               domain={[0, domainMax]}
               label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h}  chartType={'line'}/>} />
             <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
+            <Legend wrapperStyle={legendStyle} />
             <Tooltip />
             {lines}
-            <Legend wrapperStyle={legendStyle}  />
+
           </LineChart>
         </When>
       </Choose>

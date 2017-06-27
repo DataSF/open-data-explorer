@@ -190,8 +190,6 @@ class ChartExperimentalCanvas extends Component {
     return newChartData
   }
   sortChartDataGrpByDate (newChartData, dateBy) {
-    console.log("new chart data")
-    console.log(newChartData)
     if (dateBy === 'month') {
       newChartData.sort(function(a, b){
         let keyA = new Date(a.label),
@@ -278,11 +276,8 @@ class ChartExperimentalCanvas extends Component {
     })
     return Math.max.apply(null, allVals)
   }
-  setXAxisTickInterval(dateBy){
-    if(dateBy === 'month'){
-      return 12
-    }
-    return 0
+  setXAxisTickInterval(dateBy, chartData){
+    return Math.round(chartData.length * 0.09)
   }
   render () {
     let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, rollupBy, dateBy} = this.props
@@ -308,11 +303,11 @@ class ChartExperimentalCanvas extends Component {
       'double': {'start': '#c71585', 'end': '#ffc0cb'},
       'money': {'start': '#c71585', 'end': '#ffc0cb'}
     }
-    let xAxisInterval = this.setXAxisTickInterval(dateBy)
-    console.log(xAxisInterval)
+    let xAxisInterval = this.setXAxisTickInterval(dateBy, chartData)
     let isDateSelectedCol = false
     let colName = ''
-    let maxValue, domainMax
+    let maxValue, domainMax, valTickFormater
+    let formatValue = d3.format('0,000')
     let numericCol = isColTypeTest(selectedColumnDef, 'number')
     let isGroupBy = this.isGroupByz(groupKeys)
     if(!isGroupBy){
@@ -320,9 +315,7 @@ class ChartExperimentalCanvas extends Component {
     }else{
       maxValue = this.findMaxObjKeyValueGrpBy(chartData)
     }
-    if (maxValue > 10) {
-      let valTickFormater = function (d) { return formatValue(d) }
-    }
+    valTickFormater = function (d) { return formatValue(d) }
     domainMax = maxValue + (maxValue * 0.05)
     console.log("***max is here")
     console.log(domainMax)
@@ -340,20 +333,21 @@ class ChartExperimentalCanvas extends Component {
     let margin = {top: 1, right: 5, bottom: 1, left: 5}
     let w = this.state.width - (margin.left + margin.right)
     let h = this.state.height - (margin.top + margin.bottom)
-    let formatValue = d3.format('.3s')
+
     let xAxisHeight = 100
     // let formatValue = d3.format('d')
     let legendStyle = {
       color: '#666',
-      overflow: 'scroll',
-      position: 'relative',
-      top:'-22%',
-      width:'80%',
-      margin: '0 auto',
+      display: 'block',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width:'70%',
+      position:'relative',
       paddingTop:'1%',
-      paddingBottom:'1%'
+      paddingBottom:'1%',
+      wordBreak: 'break-all',
+      textAlign: 'left'
     }
-    let valTickFormater
     let minTickGap = 200
     if (!rollupBy) {
       rollupBy = 'other'
@@ -409,15 +403,16 @@ class ChartExperimentalCanvas extends Component {
                   groupKeys={groupKeys}
                   chartData={chartData}
                   yTickCnt={yTickCnt}
+                  xAxisPadding={xAxisPadding}
                   xTickCnt={xTickCnt}
                   valTickFormater={valTickFormater}
                   colType={selectedColumnDef.type}
                   colName={colName}
+                  xAxisInterval={xAxisInterval}
                   grpColorScale={grpColorScale}
                   isDateSelectedCol={isDateSelectedCol}
                   xAxisHeight={xAxisHeight}
-                  legendStyle={legendStyle}
-                  xAxisPadding={xAxisPadding} />
+                  legendStyle={legendStyle}/>
               </When>
               <When condition={chartType === 'line'}>
                 <ChartExperimentalLineStuff
@@ -452,7 +447,9 @@ class ChartExperimentalCanvas extends Component {
                   rowLabel={rowLabel}
                   valTickFormater={valTickFormater}
                   fillColor={fillColor}
+                  legendStyle={legendStyle}
                   minTickGap={minTickGap}
+                  xAxisInterval={xAxisInterval}
                   groupKeys={groupKeys}
                   chartData={chartData}
                   yTickCnt={yTickCnt}
@@ -460,8 +457,7 @@ class ChartExperimentalCanvas extends Component {
                   xAxisPadding={xAxisPadding}
                   grpColorScale={grpColorScale}
                   colName={colName}
-                  xAxisHeight={xAxisHeight}
-                  legendStyle={legendStyle} />
+                  xAxisHeight={xAxisHeight}/>
               </When>
               <Otherwise>
                 <div>

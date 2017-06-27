@@ -91,19 +91,19 @@ class ChartExperimentalHistogramStuff extends Component {
             margin={{ right: 10, left: 5 }}
             barCategoryGap={0} >
             <XAxis
-              dataKey='value'
-              type='number'
+              dataKey={'value'}
+              type={'number'}
               domain={[0, maxValueX]}
               height={xAxisHeight}
               label={<CustomXaxisLabel val={'Value of ' + colName} isGroupBy={false} numOfGroups={0} />} />
             <YAxis
-              type='number'
+              type={'number'}
               width={yAxisWidth}
-              label={<CustomYaxisLabel val={'Frequency of Values'} h={h} />}
+              label={<CustomYaxisLabel val={'Frequency of Values'} h={h} chartType={'histogram'} />}
               tickCount={yTickCnt}
               tickFormatter={valTickFormater}
               domain={[0, domainMaxY]} />
-            <CartesianGrid strokeDasharray='3 3' vertical={false} />
+            <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
             <Tooltip content={<HistogramTooltip dx={dx} />} />
             <Bar dataKey='frequency' fill={fillColor} />
           </BarChart>

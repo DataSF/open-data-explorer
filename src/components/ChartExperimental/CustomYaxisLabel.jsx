@@ -10,15 +10,15 @@ class CustomYaxisLabel extends Component {
     let xVal = (0 - ((h / 2) - 55))
     let y = 5.7
     let dy = 16
-    if(chartType === 'line'){
-      dy=25
+    if(chartType === 'line' || chartType === 'area' || chartType === 'histogram' ){
+      dy=20
     }
 
     return (
       <g>
         <text
           x={xVal}
-          y={0 - 5.7}
+          y={0 - y}
           dy={dy}
           textAnchor='middle'
           fill='#666'

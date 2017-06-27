@@ -176,14 +176,23 @@ function fetchData (state, isForTable = false) {
 function fetchDataTextFieldCategories (state) {
   let endpoint
   let transform
-  endpoint = Endpoints.QUERYTEXTCATEGORIES(state)
-  transform = Transforms.QUERYTEXTCATEGORIES
-  return {
-    [CALL_API]: {
-      types: [FIELD_DATA_REQUEST, FIELD_DATA_SUCCESS, FIELD_DATA_FAILURE],
-      endpoint: endpoint,
-      transform: transform
+  //console.log("(*****state before fetch on categories*****")
+  //console.log(state)
+  ///console.log(state.fieldDetailsProps.selectedField)
+  if(state.fieldDetailsProps.selectedField){
+    endpoint = Endpoints.QUERYTEXTCATEGORIES(state)
+    transform = Transforms.QUERYTEXTCATEGORIES
+    return {
+      [CALL_API]: {
+        types: [FIELD_DATA_REQUEST, FIELD_DATA_SUCCESS, FIELD_DATA_FAILURE],
+        endpoint: endpoint,
+        transform: transform
+      }
     }
+  }
+  return {
+    type: FIELD_DATA_SUCCESS,
+    payload: {}
   }
 }
 

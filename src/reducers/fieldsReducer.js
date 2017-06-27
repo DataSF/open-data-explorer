@@ -113,15 +113,25 @@ const PROFILEDISPLAY = {
 export const getColumnDef = (state, column) => {
   let selectedField = state && state.columns ? state.columns[column] : null
   if(selectedField){
-    if(selectedField.categories && selectedField.type === 'date'){
-      selectedField.categories = selectedField.categories.map(function(item){
-        if(item.category){
-          item.category = item.category.split('T')[0]
-        }else{
-          item.category = "Blank"
-        }
-        return item
-      })
+    if(selectedField.categories){
+      if(selectedField.type === 'date'){
+        selectedField.categories = selectedField.categories.map(function(item){
+          if(item.category){
+            item.category = item.category.split('T')[0]
+          }
+          else{
+            item.category = "Blank"
+          }
+          return item
+        })
+      }else {
+        selectedField.categories = selectedField.categories.map(function(item){
+          if( ! item.category){
+            item.category = "Blank"
+          }
+          return item
+        })
+      }
     }
   }
   return selectedField
@@ -316,12 +326,10 @@ function resetState (state, action) {
 }
 
 function setSelectedFieldCategories(state, action){
-
-  if (action.response.selectedFieldCategories) {
-    console.log("**in the reducer**")
-  console.log(action.response)
-  console.log("***8")
-  console.log(action.response.selectedFieldCategories)
+  if (action.payload){
+    return state
+  }
+  else if (action.response.selectedFieldCategories) {
     return updateObject(state, {
       selectedCategories: action.response.selectedFieldCategories.categories
     })
