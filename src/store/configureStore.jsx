@@ -6,6 +6,16 @@ import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
 
 export default function configureStore (initialState) {
+  // unwrap console in development for debugging
+  if (process.env.NODE_ENV === 'development') {
+    let methods = ['debug', 'log', 'info', 'warn', 'error'];
+    for (let m of methods) {
+        if (m in console && console[m].inner) {
+            console[m] = console[m].inner;
+        }
+    }
+  }
+
   let middleware = [thunkMiddleware, api]
 
   if (process.env.NODE_ENV === 'production') {
