@@ -12,7 +12,7 @@ import FieldNameFilterDetails from '../containers/FieldNameFilterDetails'
 import { Panel } from 'react-bootstrap'
 import FieldProfile from '../components/FieldProfile'
 
-const ColumnDetails = ({list, filters, onFilter, sort, onSort, items, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols, selectedProfileInfo, selectedCategories }) => (
+const ColumnDetails = ({list, filters, onFilter, sort, onSort, fieldTypeItems, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols, selectedProfileInfo, selectedCategories }) => (
   <Row className={'column-details-all-container'}>
     <Col sm={3} className={'field-details-panel-picker-container'}>
     <div>
@@ -38,7 +38,7 @@ const ColumnDetails = ({list, filters, onFilter, sort, onSort, items, selectable
               <DefaultListGroup
                 itemComponent={FieldTypeButton}
                 className={'default-list-group'}
-                items={items}
+                items={fieldTypeItems}
                 onSelectListItem={onFilter} />
               <FieldNameFilterDetails />
               <DefaultListGroup
@@ -56,7 +56,7 @@ const ColumnDetails = ({list, filters, onFilter, sort, onSort, items, selectable
           <DefaultListGroup
             itemComponent={FieldTypeButton}
             className={'default-list-group'}
-            items={items}
+            items={fieldTypeItems}
             onSelectListItem={onFilter} />
           <FieldNameFilterDetails />
           <DefaultListGroup
@@ -98,7 +98,7 @@ const mapStateToProps = (state, ownProps) => {
   let selectable = getSelectableColumnsDetails(state)
   return {
     list: selectable  || {},
-    items: getUniqueColumnTypesDetails(state, true),
+    fieldTypeItems: getUniqueColumnTypesDetails(state, true),
     selectableColumns: getSelectableColumnsDetails(state),
     selectedColumn: state.fieldDetailsProps.selectedColumn,
     selectedColumnDef: getSelectedFieldDef(state),

@@ -81,7 +81,7 @@ class ChartExperimentalAreaStuff extends Component {
             <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
             <Tooltip />
             <Area
-              type='monotone'
+              type='linear'
               dataKey='value'
               stroke={fillColor}
               fill={fillColor} />

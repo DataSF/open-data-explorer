@@ -8,6 +8,9 @@
 	margin-right: 0;
 }
 
+#data-table{
+    margin-top: 1em;
+}
 #data-table .pagination {
 	float: right;
 }
@@ -81,6 +84,11 @@ input-mysize{
 }
 .datasetName{
   padding-left:2%;
+  float:left;
+  font-family: Lato,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-weight: 400;
+    line-height: 1.1;
+    color: inherit;
 }
 
 .datasetLinks{
@@ -166,25 +174,41 @@ input-mysize{
 /* Dataset Nav */
 
 .DatasetNav .nav-pills {
-  margin-bottom: 1em;
 }
 
 .DatasetNav .nav-pills > li > a {
-  border: thin solid #ecf0f1;
-
+  /*border: thin solid #ecf0f1;*/
+   border-bottom: 2px solid #ecf0f1;
+    border-top: 2px solid #ecf0f1;
+ border-radius: 0px 0px 0px 0px;
+ position: relative;
+    display: block;
+    padding: 10px 15px;
+      font-size:120%;
 }
 .DatasetNav .nav-pills > li.active > a {
- background-color: #476481
-
+ /*background-color: #476481*/
+ border-bottom: 2px solid #476481;
+ border-top: 2px solid #476481;
+background-color: #fff;
+color:#18BC9C;
+border-radius: 0px 0px 0px 0px;
+position: relative;
+    display: block;
+    padding: 10px 15px;
+    font-size:120%;
 }
 .dataset-nav-btns{
-  padding-left:1%;
+  padding-left:2%;
   margin-top:-.75%;
 }
 
 .last-updted{
-  font-size:150%;
+  font-size:125%;
   padding-left:2%;
+  float:left;
+  padding-bottom:1%;
+  padding-top:0.25%;
 }
 
 

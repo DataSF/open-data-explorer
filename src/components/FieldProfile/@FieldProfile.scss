@@ -31,7 +31,7 @@ $geometry-multi-line-color: #242F75;
   margin-right:10%;
   width:100%;
   padding-top:2%;
-  border-top-width: 2px;
+  border-top-width: 4px;
   column-break-inside: avoid;
   display: inline-block;
   border-bottom:1px solid #d3d3d3;
@@ -60,28 +60,40 @@ $geometry-multi-line-color: #242F75;
 
 
 .profile-field-name {
-  font-size: 325%;
-  padding-top:3%;
+  font-size: 300%;
+  padding-top:2.5%;
   padding-bottom:0%;
+  margin-bottom:-0.25%;
   margin-top:-1%;
+  margin-left:1%;
  }
 
 
 .profile-type {
   font-size: 225%;
   font-style: italic;
-  padding-bottom:1%;
+  margin-bottom:-0.5%;
+  margin-left:1%;
 }
 
 .profile-description{
-  margin-right:3%;
-  font-size:130%;
-  width:100%;
+  font-size:140%;
+  width:90%;
+  margin-top:2%;
+  margin-right:2%;
+  margin-left:1%;
+  padding-bottom:1%;
+  display: inline-block;
+  word-break: break-all;
+  -webkit-hyphens: auto;
+   -moz-hyphens: auto;
+    -ms-hyphens: auto;
+        hyphens: auto;
 }
 
 .profile-api-key{
   font-size:130%;
-  padding-bottom:1%;
+  margin-left:1%;
 }
 
 .profile-field-remove{
@@ -107,7 +119,7 @@ $geometry-multi-line-color: #242F75;
   padding-right:4%;
   font-weight: bold;
   text-overflow: ellipsis;
-   width:40%;
+  width:40%;
 }
 
 .profile-stats-value{
@@ -124,13 +136,16 @@ $geometry-multi-line-color: #242F75;
 }
 
 .profile-stats-container{
-  padding-top:2%;
-  padding-left:1%;
-  padding-bottom:4%;
+  margin:2%;
+  padding-top:1.5%;
+  border: 1px solid #d3d3d3;
+  border-radius: 10px;
+  width:80%;
 }
+
 .profile-stats-tbl-header{
-  font-size:200%;
-  padding-bottom:1%;
+  font-size:250%;
+  padding-left:1%;
 }
 
 .profile-categories-container{

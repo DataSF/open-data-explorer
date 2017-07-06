@@ -136,6 +136,7 @@ class FieldProfile extends Component {
                 <div className={'text-muted profile-api-key'}>
                   {'API Key: ' + field.key}
                 </div>
+
                 <CardText className={'text-left profile-description'}>{field.description}</CardText>
           </CardBlock>
           </div>
@@ -145,7 +146,7 @@ class FieldProfile extends Component {
               <div className='profile-stats-container'>
                 <div className={'profile-stats-tbl-header'}>
                 {'Field Profile Stats'}
-              </div>
+                </div>
               <table className={'profile-stats'}>
                 <tbody>{rows}</tbody>
               </table>
