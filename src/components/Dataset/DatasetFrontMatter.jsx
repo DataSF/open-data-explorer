@@ -20,7 +20,7 @@ class DatasetFrontMatter extends Component {
             <Col sm={12} md={12} className={'dataset-menu'}>
               <h1 className={'datasetName'}> {name}</h1>
               <div className={'datasetDownLoadButtons'}>
-                <ButtonGroup style={{float: 'left', marginTop: '12%', marginRight:'-3%'}}>
+                <ButtonGroup style={{float: 'left'}}>
                 <DownloadLinks apiDomain={apiDomain} id={id} dataId={dataId} />
                 <Button className={'datasetLinks'}  bsSize={'small'} bsStyle='primary' href={`https://dev.socrata.com/foundry/${apiDomain}/${dataId}`} target='_blank'>API Docs</Button>
                 </ButtonGroup>
