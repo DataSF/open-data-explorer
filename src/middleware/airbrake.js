@@ -24,7 +24,7 @@ export default function middlewareFactory(credentials, notify = {}) {
       console.error(error)
       const params = {
         reduxAction: action
-      };
+      }
       airbrakeLog(error, params)
       return error
     }

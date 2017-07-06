@@ -6046,14 +6046,15 @@ react-inspector@^1.1.0:
     babel-runtime "^6.9.2"
     is-dom "^1.0.5"
 
-react-instantsearch@^3.2.1:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-3.3.2.tgz#879f76a9c20d86e028c9a9ae39182d5c7a7db263"
+react-instantsearch@^4.0.7:
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-4.0.7.tgz#ff1f324f8f937ced5ee2508a16dfd29fa3557ba6"
   dependencies:
     algoliasearch "^3.21.1"
     algoliasearch-helper "2.19.0"
     classnames "^2.2.5"
     lodash "^4.17.4"
+    prop-types "^15.5.8"
 
 react-komposer@^1.9.0:
   version "1.13.1"

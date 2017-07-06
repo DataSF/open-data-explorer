@@ -32,11 +32,19 @@ class Catalog extends Component {
     this.unmounting = false
   }
 
+  componentDidMount () {
+    // handle going back in history from a dataset
+    if (this.props.location.query !== '') {
+      this.props.onSearchStateChange({searchState: {...qs.parse(this.props.location.query)}})
+    }
+  }
+
   shouldComponentUpdate (nextProps, nextState) {
     return !isEqual(this.props.searchState, nextProps.searchState)
   }
 
   onSearchStateChange (nextSearchState) {
+    console.log(nextSearchState)
     const THRESHOLD = 700
     const newPush = Date.now()
     this.props.onSearchStateChange({lastPush: newPush})
