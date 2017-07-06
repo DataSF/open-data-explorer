@@ -23,10 +23,11 @@ class DatasetNav extends Component {
     if (!active) active = 'overview'
     return (
       <Row className={'chartTabs DatasetNav'}>
-        <Col sm={12}>
+        <Col sm={8} md={6} lg={6}>
         <div  className={'dataset-nav-btns'}>
           <Nav
-            bsStyle='pills'
+            bsStyle={'pills'}
+            className={'nav-justified'}
             activeKey={active}
             onSelect={this.handleTabSelect}>
             <NavItem eventKey={'overview'} className={'tabSelected'}>

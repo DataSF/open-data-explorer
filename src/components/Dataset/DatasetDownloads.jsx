@@ -27,7 +27,7 @@ class DownloadLinks extends Component {
     })
 
     return (
-      <DropdownButton title='Download' id='bg-nested-dropdown' bsStyle='primary'  className={'datasetLinks'}>
+      <DropdownButton title='Download' id='bg-nested-dropdown' bsStyle='primary' bsSize={'small'} className={'datasetLinks'}>
         {menuItems}
       </DropdownButton>
     )
