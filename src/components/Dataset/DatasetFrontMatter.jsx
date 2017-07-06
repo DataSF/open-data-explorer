@@ -15,7 +15,7 @@ class DatasetFrontMatter extends Component {
     return (
       <div>
       <Row className={'dataSetTitle'} id='header'>
-        <Col sm={8} md={8}>
+        <Col sm={12} md={12}>
           <Row>
             <Col sm={12} md={12} className={'dataset-menu'}>
               <h1 className={'datasetName'}> {name}</h1>
