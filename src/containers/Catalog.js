@@ -19,20 +19,24 @@ class Catalog extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    console.log('props received')
     if (!isEqual(qs.parse(this.props.location.query), qs.parse(nextProps.location.query))) {
       this.props.onSearchStateChange({searchState: {...qs.parse(nextProps.location.query)}})
     }
   }
 
   componentWillUnmount () {
+    console.log('component will unmount')
     this.unmounting = true
   }
 
   componentWillMount () {
+    console.log('component will mount')
     this.unmounting = false
   }
 
   componentDidMount () {
+    console.log('component mounted')
     // handle going back in history from a dataset
     if (this.props.location.query !== '') {
       this.props.onSearchStateChange({searchState: {...qs.parse(this.props.location.query)}})
@@ -45,7 +49,7 @@ class Catalog extends Component {
 
   onSearchStateChange (nextSearchState) {
     console.log(nextSearchState)
-    const THRESHOLD = 700
+    const THRESHOLD = 500
     const newPush = Date.now()
     this.props.onSearchStateChange({lastPush: newPush})
     if (this.props.lastPush && newPush - this.props.lastPush <= THRESHOLD) {

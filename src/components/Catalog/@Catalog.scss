@@ -1,5 +1,5 @@
 .ais-SearchBox__root {
-  max-width: 700px;
+  max-width: 100%;
   margin: 0 5px 5px 0;
 }
 
@@ -22,4 +22,37 @@
 .Catalog__pagination {
   text-align: center;
   width: 100%;
+}
+
+.Catalog__record-description {
+  margin: -15px 205px -15px -15px;
+  padding: 15px;
+  background-color: white;
+}
+
+.Catalog__record-meta {
+  float: right;
+  margin: 0 -15px;
+  padding: 15px;
+  width: 220px;
+}
+
+.Catalog__record-meta-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.Catalog__record-meta-title:first-child {
+  margin-top: 0;
+}
+
+.Catalog__record-meta-value {
+  font-weight: lighter;
+  font-size: 13px;
+  margin-left: 5px;
+}
+
+.Catalog__record .panel-body {
+  background-color: #d7ffd9;
 }
