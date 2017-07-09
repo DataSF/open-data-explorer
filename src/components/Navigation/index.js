@@ -22,9 +22,9 @@ const Navigation = ({ location, pages }) => {
               <span className={'icon-bar'} />
               <span className={'icon-bar'} />
             </button>
-            <a className={'navbar-brand'} href='/'>
-              <Logo />
-            </a>
+            <Link to={'/'} className={'navbar-brand'}>
+              <Logo />  
+            </Link>
           </div>
           <div className={'navbar-collapse collapse'}>
             { showSearch
