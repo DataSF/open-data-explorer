@@ -1,3 +1,7 @@
+label {
+  font-weight: normal;
+}
+
 .navbar-brand {
   padding: 10px;
 }
@@ -17,4 +21,8 @@
     padding-top: 21.5px;
     padding-bottom: 19.5px;
   }
+}
+
+mark {
+  padding: 0;
 }
