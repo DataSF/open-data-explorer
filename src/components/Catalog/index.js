@@ -1,7 +1,7 @@
 import './@Catalog.css'
 
 import React from 'react'
-import { Hits, SearchBox, RefinementList, CurrentRefinements, ClearAll, Pagination, Panel, Highlight } from 'react-instantsearch/dom'
+import { ScrollTo, Hits, SearchBox, RefinementList, CurrentRefinements, ClearAll, Pagination, Panel } from 'react-instantsearch/dom'
 import { connectStats } from 'react-instantsearch/connectors'
 import { Grid, Row, Col, Panel as BSPanel } from 'react-bootstrap'
 import orderBy from 'lodash/orderBy'
@@ -16,21 +16,25 @@ const ConnectedStats = connectStats(CustomStats)
 const Record = (clearSearch, {hit}) => (
   <BSPanel 
     header={<Link to={`${'/' + slugify(hit.category) + '/' + slugify(hit.name) + '/' + hit.systemID}`} onClick={clearSearch}>
-        <Highlight attributeName='name' hit={hit} tagName='mark'/>
+        {hit.name}
       </Link>} 
     className='Catalog__record' 
     bsStyle='primary'>
+    <div className={'Catalog__record-meta-dept'}>
+      <div className={'Catalog__record-meta-dept-label'}>Publishing Department</div>
+      <div className={'Catalog__record-meta-dept-value'}>{hit.publishing_dept}</div>
+    </div>
     <div className={'Catalog__record-meta clearfix'}>
       <div className={'Catalog__record-meta-title'}>Data updated</div>
       <div className={'Catalog__record-meta-value'}>{moment(hit.rowsUpdatedAt * 1000).fromNow()}</div>
       <div className={'Catalog__record-meta-title'}>Target update schedule</div>
       <div className={'Catalog__record-meta-value'}>{hit.publishingFrequency}</div>
       <div className={'Catalog__record-meta-title'}>Category</div>
-      <div className={'Catalog__record-meta-value'}><Highlight attributeName='category' hit={hit} tagName='mark'/></div>
+      <div className={'Catalog__record-meta-value'}>{hit.category}</div>
     </div>
     <div className={'Catalog__record-description clearfix'}>
       <p className={'Catalog__record-description-text'}>
-        <Highlight attributeName='description' hit={hit} tagName='mark'/>
+        {hit.description}
       </p>
       {hit.tags ? (
         <p className={'Catalog__record-tags'}>
@@ -41,15 +45,27 @@ const Record = (clearSearch, {hit}) => (
   </BSPanel>
 )
 
+const labelRefinements = (items) => {
+  let labels = {'category': 'Category: ', 'publishing_dept': 'Department: '}
+  let transform = items.map((item) => {
+    let copy = Object.assign({}, item)
+    copy.label = labels[copy['attributeName']]
+    return copy
+  })
+  return transform
+}
+
 const Search = ({clearSearch}) => (
   <Grid className={'Catalog'}>
     <Row className='Catalog__search'>
-      <Col sm={12}>
-        <SearchBox autoFocus />
-      </Col>
+      <ScrollTo>
+        <Col sm={12}>
+          <SearchBox autoFocus />
+        </Col>
+      </ScrollTo>
       <Col sm={12} className={'Catalog__currentRefinements'}>
         <ConnectedStats />
-          <CurrentRefinements className={'clearfix'} />
+          <CurrentRefinements transformItems={labelRefinements}/>
           <ClearAll />
       </Col>
       <Col sm={2} className='Catalog__refine'>
