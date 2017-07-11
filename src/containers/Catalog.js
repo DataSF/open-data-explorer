@@ -58,9 +58,7 @@ class Catalog extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     searchState: state.search.searchState,
-    lastPush: state.search.lastPush,
-    router: ownProps.router,
-    location: ownProps.location
+    lastPush: state.search.lastPush
   }
 }
 

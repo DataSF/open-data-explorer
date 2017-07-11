@@ -4,7 +4,7 @@ import React from 'react'
 import { SortBy, ScrollTo, Hits, SearchBox, RefinementList, CurrentRefinements, ClearAll, Pagination, Panel } from 'react-instantsearch/dom'
 import { connectStats } from 'react-instantsearch/connectors'
 import { Grid, Row, Col, Panel as BSPanel } from 'react-bootstrap'
-import ShowMore from 'react-show-more'
+import ReadMore from '../ReadMore'
 import orderBy from 'lodash/orderBy'
 import { Link } from 'react-router'
 import slugify from 'underscore.string/slugify'
@@ -33,9 +33,9 @@ const Record = (clearSearch, {hit}) => (
       <div className={'Catalog__record-meta-value'}>{hit.category}</div>
     </div>
     <div className={'Catalog__record-description clearfix'}>
-      <p className={'Catalog__record-description-text'}>
-        <ShowMore>{hit.description}</ShowMore>
-      </p>
+      <div className={'Catalog__record-description-text'}>
+        <ReadMore text={hit.description}/>
+      </div>
       {hit.tags ? (
         <p className={'Catalog__record-tags'}>
           <strong>Tags</strong> <span className={'App--font-thin'}>{hit.tags.join(', ')}</span></p>
