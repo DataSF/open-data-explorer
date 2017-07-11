@@ -7,7 +7,6 @@ import moment from 'moment'
 // '2em'
 class DatasetFrontMatter extends Component {
   render () {
-    console.log(this.props)
     const { name, id, rowsUpdatedAt, apiDomain, dataId } = this.props
     let days_since_last_update =  String(this.props['days_since_last_updated'])
     let dayUpdated = moment(rowsUpdatedAt).format('MM/DD/YYYY')

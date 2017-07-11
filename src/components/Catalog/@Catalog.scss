@@ -1,6 +1,5 @@
 .ais-SearchBox__root {
-  max-width: 700px;
-  margin: 0 5px 5px 0;
+  max-width: 100%;
 }
 
 .Catalog__refine h1 {
@@ -12,14 +11,182 @@
 }
 
 .Catalog__currentRefinements {
-  padding-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  float: left;
+  max-width: 80%;
+}
+
+.Catalog__sortBy {
+  padding: 15px 0;
+  float: right;
+  width: 20%;
+  text-align: right;
+}
+
+.Catalog__sortBy-label {
+  line-height: 31px;
+  margin-right: 5px;
+  opacity: .6;
 }
 
 .Catalog {
   padding-top: 20px;
 }
 
+.Catalog__record {
+  position: relative;
+}
+
 .Catalog__pagination {
   text-align: center;
   width: 100%;
+}
+
+.Catalog__record-description {
+  margin: -15px 205px -15px -15px;
+  padding: 15px;
+  background-color: white;
+}
+
+.Catalog__record-meta {
+  float: right;
+  margin: 0 -15px;
+  padding: 0 15px;
+  width: 220px;
+}
+
+.Catalog__record-meta-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.Catalog__record-meta-title:first-child {
+  margin-top: 0;
+}
+
+.Catalog__record-meta-value {
+  font-weight: lighter;
+  font-size: 13px;
+  margin-left: 5px;
+}
+
+.Catalog__record .panel-title {
+  margin-right: 220px;
+  display: inline-block;
+}
+
+.Catalog__record .panel-body {
+  background-color: #d7ffd9;
+}
+
+.Catalog__record-tags {
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.App--font-thin {
+  font-weight: lighter;
+}
+
+.ais-RefinementList__showMoreDisabled {
+  display: none;
+}
+
+.ais-RefinementList__item input[type=checkbox]:checked~.ais-RefinementList__itemBox {
+  background-color: #75a478;
+}
+
+.ais-RefinementList__item {
+  color: #222;
+}
+
+.ais-RefinementList__itemLabel {
+  font-weight: lighter;
+  font-size: 13px;
+}
+
+.ais-RefinementList__itemCount {
+  color: #222;
+  font-weight: lighter;
+}
+
+.ais-Stats__root {
+  color: #222;
+  font-size: 15px;
+  opacity: 1;
+  float: left;
+  line-height: 31px;
+  margin-top: 5px;
+  margin-right: 5px;
+}
+
+.ais-CurrentRefinements__root {
+  float: left;
+}
+
+.ais-CurrentRefinements__item {
+  border-radius: 0;
+  background-color: transparent;
+  color: #222;
+  font-weight: lighter;
+  padding: 4px 2px;
+  font-size: 13px;
+  margin-right: 5px;
+}
+
+.ais-CurrentRefinements__itemParent {
+  padding: 0 8px;
+  border: #75a478 thin solid;
+  float: left;
+  margin-top: 5px;
+}
+
+.ais-CurrentRefinements__itemClear {
+  color: #75a478;
+}
+
+.ais-ClearAll__root:disabled:disabled, .ais-ClearAll__root:disabled[disabled] {
+  display: none;
+}
+
+.ais-ClearAll__root {
+  font-size: 13px;
+  background: #d7ffd9;
+  line-height: 23px;
+  border: #75a478 thin solid;
+  color: #222;
+  float: left;
+  border-radius: 0;
+  margin-top: 5px;
+}
+
+.ais-Pagination__itemSelected {
+  background-color: #75a478;
+  color: #222;
+}
+
+.Catalog__record-meta-dept {
+  position: absolute;
+  right: 10px;
+  top: -5px;
+  background: #a5d6a7;
+  box-shadow: 1px 2px 0 0 rgba(0,0,0,0.50);
+  width: 200px;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.Catalog__record-meta-dept-label {
+  font-size: 9px;
+}
+
+.Catalog__record-meta-dept-value {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.ais-SortBy__root {
+  float: right;
 }
