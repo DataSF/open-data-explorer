@@ -1,9 +1,10 @@
 import './@Catalog.css'
 
 import React from 'react'
-import { ScrollTo, Hits, SearchBox, RefinementList, CurrentRefinements, ClearAll, Pagination, Panel } from 'react-instantsearch/dom'
+import { SortBy, ScrollTo, Hits, SearchBox, RefinementList, CurrentRefinements, ClearAll, Pagination, Panel } from 'react-instantsearch/dom'
 import { connectStats } from 'react-instantsearch/connectors'
 import { Grid, Row, Col, Panel as BSPanel } from 'react-bootstrap'
+import ShowMore from 'react-show-more'
 import orderBy from 'lodash/orderBy'
 import { Link } from 'react-router'
 import slugify from 'underscore.string/slugify'
@@ -21,7 +22,6 @@ const Record = (clearSearch, {hit}) => (
     className='Catalog__record' 
     bsStyle='primary'>
     <div className={'Catalog__record-meta-dept'}>
-      <div className={'Catalog__record-meta-dept-label'}>Publishing Department</div>
       <div className={'Catalog__record-meta-dept-value'}>{hit.publishing_dept}</div>
     </div>
     <div className={'Catalog__record-meta clearfix'}>
@@ -34,7 +34,7 @@ const Record = (clearSearch, {hit}) => (
     </div>
     <div className={'Catalog__record-description clearfix'}>
       <p className={'Catalog__record-description-text'}>
-        {hit.description}
+        <ShowMore>{hit.description}</ShowMore>
       </p>
       {hit.tags ? (
         <p className={'Catalog__record-tags'}>
@@ -63,11 +63,27 @@ const Search = ({clearSearch}) => (
           <SearchBox autoFocus />
         </Col>
       </ScrollTo>
-      <Col sm={12} className={'Catalog__currentRefinements'}>
-        <ConnectedStats />
+    </Row>
+    <Row>
+      <Col sm={12}>
+        <div className={'Catalog__currentRefinements'}>
+          <ConnectedStats />
           <CurrentRefinements transformItems={labelRefinements}/>
           <ClearAll />
+        </div>
+        <div className={'Catalog__sortBy'}>
+          <span className={'Catalog__sortBy-label'}>Sort by</span>
+          <SortBy
+          items={[
+            { value: 'dev_dataset_search', label: 'Most Relevant' },
+            { value: 'dev_dataset_search_alpha', label: 'A to Z' }
+          ]}
+          defaultRefinement='dev_dataset_search'
+        />
+        </div>
       </Col>
+    </Row>
+    <Row>
       <Col sm={2} className='Catalog__refine'>
         <Panel title='Categories'>
           <RefinementList className='Catalog__refine--category' attributeName='category' />
