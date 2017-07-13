@@ -7,7 +7,7 @@ import {InstantSearch, Configure} from 'react-instantsearch/dom'
 import {createConnector} from 'react-instantsearch'
 import {connectSearchBox} from 'react-instantsearch/connectors'
 import Autosuggest from 'react-autosuggest'
-import { hashHistory } from 'react-router'
+import { browserHistory } from 'react-router'
 import slugify from 'underscore.string/slugify'
 import { updateSearch } from '../actions'
 
@@ -71,7 +71,7 @@ class AutoComplete extends Component {
       onSubmit={(event) => {
         event.preventDefault()
         if (!this.refs.autosuggest.justSelectedSuggestion) {
-          hashHistory.push({
+          browserHistory.push({
             pathname: '/catalog',
             query: {
               query: this.refs.autosuggest.input.value
@@ -105,7 +105,7 @@ class AutoComplete extends Component {
           let link = '/' + slugify(suggestion.category) + '/' + slugify(suggestion.name) + '/' + suggestion.systemID
           this.refs.autosuggest.input.value = ''
           this.props.refine({query: '', hideSuggestions: true})
-          hashHistory.push(link)
+          browserHistory.push(link)
         }}
         renderSuggestionsContainer={renderSuggestionsContainer}
       />
