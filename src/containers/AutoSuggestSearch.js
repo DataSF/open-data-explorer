@@ -105,7 +105,7 @@ class AutoComplete extends Component {
           let link = '/' + slugify(suggestion.category) + '/' + slugify(suggestion.name) + '/' + suggestion.systemID
           this.refs.autosuggest.input.value = ''
           this.props.refine({query: '', hideSuggestions: true})
-          hashHistory.push(link)
+          browserHistory.push(link)
         }}
         renderSuggestionsContainer={renderSuggestionsContainer}
       />
