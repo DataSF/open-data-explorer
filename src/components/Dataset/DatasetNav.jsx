@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { hashHistory } from 'react-router'
+import { browserHistory } from 'react-router'
 import { Row, Col, Nav, NavItem } from 'react-bootstrap'
 
 class DatasetNav extends Component {
@@ -15,7 +15,7 @@ class DatasetNav extends Component {
     if (key === 'overview') {
       key = ''
     }
-    hashHistory.push('/' + pathArray[1] + '/' + pathArray[2] + '/' + pathArray[3] + '/' + key)
+    browserHistory.push('/' + pathArray[1] + '/' + pathArray[2] + '/' + pathArray[3] + '/' + key)
   }
 
   render () {
