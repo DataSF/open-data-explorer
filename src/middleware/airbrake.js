@@ -9,7 +9,13 @@ export default function middlewareFactory(credentials, notify = {}) {
   }
 
   const airbrake = new airbrakeJs(credentials)
+  airbrake.addFilter(notice => {
+    notice.context.environment = process.env.REACT_APP_CONTEXT
+    return notice
+  })
+
   const airbrakeLog = (error, params) => {
+    debugger
     airbrake.addFilter(notice => {
       notice.params = { ...(notice.params || {}), ...params }
       return notice
