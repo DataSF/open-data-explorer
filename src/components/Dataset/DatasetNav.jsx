@@ -33,15 +33,16 @@ class DatasetNav extends Component {
             <NavItem eventKey={'overview'} className={'tabSelected'}>
               Overview
             </NavItem>
-            <NavItem eventKey={'details'} className={'tabSelected'}>
-              Field Details
+            <NavItem eventKey={'table'} className={'tabSelected'}>
+              Table Preview
+            </NavItem>
+            <NavItem eventKey={'fields'} className={'tabSelected'}>
+              Field Definitions
             </NavItem>
             <NavItem eventKey={'charts'} className={'tabSelected'}>
               Charts
             </NavItem>
-            <NavItem eventKey={'table'} className={'tabSelected'}>
-              Table Preview
-            </NavItem>
+            
           </Nav>
         </div>
         </Col>

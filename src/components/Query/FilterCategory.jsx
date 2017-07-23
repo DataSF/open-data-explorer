@@ -36,29 +36,12 @@ class FilterCategory extends Component {
 
     return (
       <div className='category-filter'>
-        <label className='radio-inline'>
-          <input
-            type='radio'
-            value='false'
-            name={filter.key + '_multi'}
-            defaultChecked
-            onClick={this.onFilter.bind(this, {multi: false})}
-          /> Single Option
-        </label>
-        <label className='radio-inline'>
-          <input
-            type='radio'
-            value='and'
-            name={filter.key + '_multi'}
-            onClick={this.onFilter.bind(this, {multi: true})}
-          /> Multiple Options
-        </label>
         <Select
           name='category_2'
           placeholder='Select a category'
           options={options}
           value={selected}
-          multi={multi}
+          multi={true}
           onChange={this.onFilter}
           />
       </div>

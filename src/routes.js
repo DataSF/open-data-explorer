@@ -2,11 +2,11 @@ import React from 'react'
 import { Route, IndexRoute } from 'react-router'
 
 import App from './containers/App'
-import HomePage from './components/HomePage/HomePage'
+import HomePage from './components/HomePage'
 import Catalog from './containers/Catalog'
 import Dataset from './containers/Dataset'
 import DatasetOverview from './containers/DatasetOverview'
-import ColumnDetails from './containers/ColumnDetails'
+import FieldDefinitions from './containers/FieldDefinitions'
 import DataTable from './containers/DataTable'
 import AboutPage from './components/AboutPage'
 import VizContainer from './containers/VizContainer'
@@ -27,7 +27,7 @@ export default (
     <Route path='/:category/:title/:id' components={Dataset}>
       <IndexRoute component={DatasetOverview} />
       <Route path='overview' component={DatasetOverview} />
-      <Route path='details' component={ColumnDetails} />
+      <Route path='fields' component={FieldDefinitions} />
       <Route path='charts' component={VizContainer} />
       <Route path='map' component={Dataset} />
       <Route path='table' component={DataTable} />

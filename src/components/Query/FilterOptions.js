@@ -130,10 +130,10 @@ class FilterOptions extends Component {
     }
 
     return (
-      <Panel collapsible defaultExpanded header='Filter chart by other columns' bsStyle={'primary'}>
+      <Panel collapsible defaultExpanded header='Filter chart by other fields' bsStyle={'primary'}>
         <Select
           name='filters'
-          placeholder="Select fields you'd like to filter by"
+          placeholder="Add filters to visualization"
           options={options}
           onChange={handleAddFilter} />
         {filters ? this.renderFilterList() : false}
