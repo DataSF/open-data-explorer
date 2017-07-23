@@ -31,7 +31,6 @@ class FilterCategory extends Component {
 
   render () {
     let {options, filter} = this.props
-    let multi = filter.options ? filter.options.multi : false
     let selected = filter.options ? filter.options.selected : null
 
     return (
