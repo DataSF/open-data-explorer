@@ -1,5 +1,4 @@
 import 'rc-slider/assets/index.css'
-import './@Query.css'
 import React, { Component } from 'react'
 import { Button } from 'react-bootstrap'
 import Slider from 'rc-slider'

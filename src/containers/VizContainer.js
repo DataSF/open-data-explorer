@@ -12,7 +12,7 @@ import ChartExperimentalTitle from '../components/ChartExperimental/ChartExperim
 import ChartExperimentalSubTitle from '../components/ChartExperimental/ChartExperimentalSubTitle'
 import CopySnippet from '../components/CopySnippet'
 import GroupOptions from '../components/Query/GroupOptions'
-import FilterOptions from '../components/Query/FilterOptions'
+import FilterOptions from '../components/FilterChartOptions'
 import SumOptions from '../components/Query/SumOptions'
 import { Row, Col, Accordion } from 'react-bootstrap'
 import DateToggle from '../components/Query/DateToggle'

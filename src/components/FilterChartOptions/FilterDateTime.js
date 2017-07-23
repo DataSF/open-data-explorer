@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import {Button, Glyphicon} from 'react-bootstrap'
 import DateRangePicker from 'react-bootstrap-daterangepicker'
 import moment from 'moment'
-import './@Query.css'
 
 const ranges = {
   'year': {
