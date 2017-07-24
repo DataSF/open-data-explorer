@@ -232,7 +232,7 @@ function transformMetadata (json) {
     dataChangeFrequency: json.metadata.custom_fields['Publishing Details']['Data change frequency'] || null,
     notes: json.metadata.custom_fields['Detailed Descriptive']['Data notes'] || null,
     programLink: json.metadata.custom_fields['Detailed Descriptive']['Program link'] || null,
-    rowLabel: json.metadata.rowLabel || 'Record',
+    rowLabel: json.metadata.rowLabel === null ? 'Record' : json.metadata.rowLabel,
     tags: json.tags || null,
     category: json['category'] || 'dataset',
     columns: {}
