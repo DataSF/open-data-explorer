@@ -8,13 +8,6 @@
 	margin-right: 0;
 }
 
-#data-table{
-    margin-top: 1em;
-}
-#data-table .pagination {
-	float: right;
-}
-
 #ChartsContainer .column-buttons .btn {
 	margin-right: 5px;
 	margin-bottom: 5px;
@@ -81,17 +74,6 @@ input-mysize{
 
 .datasetOverview{
   margin-top: 2%;
-}
-.datasetName{
-  padding-left:1%;
-  float:left;
-  font-family: Lato,Helvetica Neue,Helvetica,Arial,sans-serif;
-  font-weight: 400;
-  line-height: 1.1;
-  color: inherit;
-  display:inline-block;
-  max-width:75%;
-  padding-right:2.5%;
 }
 
 .datasetDownLoadButtons{
@@ -166,9 +148,6 @@ input-mysize{
   font-family: 'Lato', sans-serif;
 }
 
-
-
-
 /* Dataset Front Matter */
 
 #header p {
@@ -177,43 +156,12 @@ input-mysize{
 
 #header h1 {
   margin-bottom: 2px;
+  margin-top: 10px;
 }
 
-/* Dataset Nav */
-
-.DatasetNav .nav-pills {
-}
-
-.DatasetNav .nav-pills > li > a {
-  /*border: thin solid #ecf0f1;*/
-   border-bottom: 2px solid #ecf0f1;
-    border-top: 2px solid #ecf0f1;
- border-radius: 0px 0px 0px 0px;
- position: relative;
-    display: block;
-    padding: 10px 15px;
-      font-size:120%;
-}
-.DatasetNav .nav-pills > li.active > a {
- /*background-color: #476481*/
- border-bottom: 2px solid #476481;
- border-top: 2px solid #476481;
-background-color: #fff;
-color:#18BC9C;
-border-radius: 0px 0px 0px 0px;
-position: relative;
-    display: block;
-    padding: 10px 15px;
-    font-size:120%;
-}
-.dataset-nav-btns{
-  padding-left:2%;
-  margin-top:-.75%;
-}
-
-.last-updted{
-  font-size:125%;
-  padding-left:2%;
+.last-updated{
+  font-weight: 300;
+  font-size: 125%;
   float:left;
   padding-bottom:1%;
   padding-top:0.25%;
