@@ -120,7 +120,8 @@ class VizContainer extends Component {
                           rowLabel={props.rowLabel}
                           selectedColumnDef={props.selectedColumnDef}
                           groupBy={props.groupBy}
-                          sumBy={props.sumBy} />
+                          sumBy={props.sumBy}
+                          isFetching={props.isFetching} />
                       </When>
                       <When condition={props.chartData.length === 0 && props.filters}>
                         <div className={'filterNone'}>
