@@ -76,7 +76,9 @@ const Search = ({clearSearch}) => (
           <SortBy
           items={[
             { value: 'dev_dataset_search', label: 'Most Relevant' },
-            { value: 'dev_dataset_search_alpha', label: 'A to Z' }
+            { value: 'dev_dataset_search_alpha', label: 'A to Z' },
+            { value: 'dev_dataset_search_created', label: 'Most Recently Created'},
+            { value: 'dev_dataset_search_updated', label: 'Most Recently Updated'}
           ]}
           defaultRefinement='dev_dataset_search'
         />

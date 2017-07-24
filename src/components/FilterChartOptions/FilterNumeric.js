@@ -1,5 +1,4 @@
 import 'rc-slider/assets/index.css'
-import './@Query.css'
 import React, { Component } from 'react'
 import { Button } from 'react-bootstrap'
 import Slider from 'rc-slider'
@@ -16,13 +15,16 @@ class FilterNumeric extends Component {
   }
 
   updateSliderRange (minOrMax, ev) {
-    let nextRange = this.props
+    let { nextRange } = this.props
+    console.log(nextRange)
     let options = {}
-    let value = parseInt(ev.target.value, 10)
-    nextRange = minOrMax === 'min' ? [value, nextRange[1]] : [nextRange[0], value]
-    options.nextRange = nextRange
-    options.filterType = 'numericRange'
-    this.props.updateFilter(this.props.fieldKey, options)
+    if (ev.target.value) {
+      let value = parseInt(ev.target.value, 10)
+      nextRange = minOrMax === 'min' ? [value, nextRange[1]] : [nextRange[0], value]
+      options.nextRange = nextRange
+      options.filterType = 'numericRange'
+      this.props.updateFilter(this.props.fieldKey, options)
+    }
   }
 
   updateInputRange (value) {
@@ -48,6 +50,7 @@ class FilterNumeric extends Component {
 
   render () {
     let {nextRange, min, max} = this.props
+    console.log(nextRange)
     let style = {
       marginBottom: 15
     }
@@ -58,9 +61,9 @@ class FilterNumeric extends Component {
     return (
       <div>
         <div className='input-group input-group-sm' style={style}>
-          <input type='text' className='form-control' placeholder='Min' value={nextRange[0]} onChange={this.updateSliderRange.bind(this, 'min')} />
+          <input type='text' className='form-control' value={nextRange[0]} onChange={this.updateSliderRange.bind(this, 'min')} />
           <span className='input-group-addon'>to</span>
-          <input type='text' className='form-control' placeholder='Max' value={nextRange[1]} onChange={this.updateSliderRange.bind(this, 'max')} />
+          <input type='text' className='form-control' value={nextRange[1]} onChange={this.updateSliderRange.bind(this, 'max')} />
         </div>
         <Slider range
           min={min}

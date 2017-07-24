@@ -8,7 +8,7 @@ import moment from 'moment'
 class DatasetFrontMatter extends Component {
   render () {
     const { name, id, rowsUpdatedAt, apiDomain, dataId } = this.props
-    let days_since_last_update =  String(this.props['days_since_last_updated'])
+    let timeAgo = moment(rowsUpdatedAt).fromNow()
     let dayUpdated = moment(rowsUpdatedAt).format('MM/DD/YYYY')
     let timeUpdated = moment(rowsUpdatedAt).format('hh:mm A')
     return (
@@ -30,7 +30,7 @@ class DatasetFrontMatter extends Component {
         <Col sm={5} md={5}></Col>
       </Row>
       <Row>
-      <div className={'text-muted last-updted'}> Data last updated {days_since_last_update} days ago on {dayUpdated} at {timeUpdated}</div>
+      <div className={'text-muted last-updted'}> Data last updated {timeAgo} on {dayUpdated} at {timeUpdated}</div>
       </Row>
       </div>
     )

@@ -67,7 +67,8 @@ class ChartExperimentalCanvas extends Component {
       height: nextState.height,
       width: nextState.width
     }
-    return !isEqual(thisChart, nextChart)
+
+    return !isEqual(thisChart, nextChart) && !nextProps.isFetching
   }
 
   isSelectedColDate (selectedColumnDef) {

@@ -12,7 +12,7 @@ import ChartExperimentalTitle from '../components/ChartExperimental/ChartExperim
 import ChartExperimentalSubTitle from '../components/ChartExperimental/ChartExperimentalSubTitle'
 import CopySnippet from '../components/CopySnippet'
 import GroupOptions from '../components/Query/GroupOptions'
-import FilterOptions from '../components/Query/FilterOptions'
+import FilterOptions from '../components/FilterChartOptions'
 import SumOptions from '../components/Query/SumOptions'
 import { Row, Col, Accordion } from 'react-bootstrap'
 import DateToggle from '../components/Query/DateToggle'
@@ -42,6 +42,31 @@ class VizContainer extends Component {
     let { props, actions } = this.props
     return (
       <Row>
+        <Col md={3} className={'VizContainer__config'}>
+          <Accordion>
+            <TypeFilter />
+            <ConditionalOnSelect selectedColumn={props.selectedColumn}>
+              <ChartTypePicker
+                chartTypes={props.supportedChartTypes}
+                chartType={props.chartType}
+                onChange={actions.handleChartType} />
+              <FilterOptions
+                filters={props.filters}
+                columns={props.columns}
+                handleAddFilter={actions.handleAddFilter}
+                handleRemoveFilter={actions.handleRemoveFilter}
+                applyFilter={actions.applyFilter}
+                updateFilter={actions.updateFilter}
+                dateBy={props.dateBy} />
+              <Choose>
+                <When condition={props.chartType !== 'histogram'}>
+                  <GroupOptions columns={props.groupableColumns} selected={props.groupBy} onGroupBy={actions.handleGroupBy} />
+                </When>
+              </Choose>
+              <SumOptions columns={props.summableColumns} selected={props.sumBy} onSumBy={actions.handleSumBy} />
+            </ConditionalOnSelect>
+          </Accordion>
+        </Col>
         <Col md={9} className='VizContainer__stage'>
           <Messages messages={props.messages}>
             <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
@@ -95,7 +120,8 @@ class VizContainer extends Component {
                           rowLabel={props.rowLabel}
                           selectedColumnDef={props.selectedColumnDef}
                           groupBy={props.groupBy}
-                          sumBy={props.sumBy} />
+                          sumBy={props.sumBy}
+                          isFetching={props.isFetching} />
                       </When>
                       <When condition={props.chartData.length === 0 && props.filters}>
                         <div className={'filterNone'}>
@@ -110,31 +136,6 @@ class VizContainer extends Component {
               <CopySnippet title='Share this visual' help='Copy the link below to share this page with others' snippet={props.shareLink} />
             </ConditionalOnSelect>
           </Messages>
-        </Col>
-        <Col md={3} className={'VizContainer__config'}>
-          <Accordion>
-            <TypeFilter />
-            <ConditionalOnSelect selectedColumn={props.selectedColumn}>
-              <ChartTypePicker
-                chartTypes={props.supportedChartTypes}
-                chartType={props.chartType}
-                onChange={actions.handleChartType} />
-              <Choose>
-                <When condition={props.chartType !== 'histogram'}>
-                  <GroupOptions columns={props.groupableColumns} selected={props.groupBy} onGroupBy={actions.handleGroupBy} />
-                </When>
-              </Choose>
-              <SumOptions columns={props.summableColumns} selected={props.sumBy} onSumBy={actions.handleSumBy} />
-              <FilterOptions
-                filters={props.filters}
-                columns={props.columns}
-                handleAddFilter={actions.handleAddFilter}
-                handleRemoveFilter={actions.handleRemoveFilter}
-                applyFilter={actions.applyFilter}
-                updateFilter={actions.updateFilter}
-                dateBy={props.dateBy} />
-            </ConditionalOnSelect>
-          </Accordion>
         </Col>
       </Row>
     )
