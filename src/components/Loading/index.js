@@ -41,7 +41,6 @@ class Loading extends Component {
   render () {
     // let { isFetching } = this.props
     let { show } = this.state
-    console.log(show)
     let type = this.props.type ? this.props.type : ''
     let classNames = `Loading-wrapper ${type}`
     return (

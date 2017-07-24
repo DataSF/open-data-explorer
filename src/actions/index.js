@@ -121,8 +121,6 @@ export function loadFieldProps () {
     //let columns = getState().columnProps.columns
     let categoryColumns = getState().columnProps.categoryColumns
     let textColumns = getState().FieldProps.textColumns
-    console.log('****')
-    console.log(textColumns)
     for (let i =0; i < categoryColumns.length; i++) {
       promises.push(dispatch(fetchColumnProps(id, categoryColumns[i])))
     }
