@@ -16,7 +16,6 @@ class FilterNumeric extends Component {
 
   updateSliderRange (minOrMax, ev) {
     let { nextRange } = this.props
-    console.log(nextRange)
     let options = {}
     if (ev.target.value) {
       let value = parseInt(ev.target.value, 10)
@@ -50,7 +49,6 @@ class FilterNumeric extends Component {
 
   render () {
     let {nextRange, min, max} = this.props
-    console.log(nextRange)
     let style = {
       marginBottom: 15
     }
