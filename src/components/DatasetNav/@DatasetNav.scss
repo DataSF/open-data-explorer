@@ -1,0 +1,30 @@
+#DatasetNav {
+    background-color: #f6f6f6;
+}
+
+/* Dataset Nav */
+
+.DatasetNav .nav-pills {
+}
+
+.DatasetNav .nav-pills > li > a {
+  /*border: thin solid #ecf0f1;*/
+   border-bottom: 2px solid #ecf0f1;
+    border-top: 2px solid #ecf0f1;
+ border-radius: 0px 0px 0px 0px;
+ position: relative;
+    display: block;
+    padding: 10px 15px;
+      font-size:100%;
+}
+.DatasetNav .nav-pills > li.active > a {
+ /*background-color: #476481*/
+ border-bottom: 2px solid #476481;
+ border-top: 2px solid #476481;
+background-color: #fff;
+color:#18BC9C;
+}
+
+#DatasetNav .nav-pills li + li {
+    margin-left: 0;
+}

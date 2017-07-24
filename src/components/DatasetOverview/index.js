@@ -55,25 +55,26 @@ class DatasetOverview extends Component {
       }
 
       overviewContent = (
-        <Row id='DatasetOverview-description' className='DatasetOverview'>
-          <Col sm={7} className={'description'}>
-            <h2>Description</h2>
-            <p>{description}</p>
-            <h2>Publishing Health</h2>
-            <p>This data should be <b>updated {publishingFrequency ? publishingFrequency.toLowerCase() : ''}</b>. It was last updated on {dayUpdated} at {timeUpdated}</p>
-            {documents}
-          </Col>
-          <Col sm={5} className={'dataSetInfo'}>
-            <h2>Additional Information</h2>
-            <h3 className={'text-muted'}>Publishing Department</h3>
-            <p>{publishingDepartment}</p>
-            <h3 className={'text-muted'}>License</h3>
-            <p><a href={licenseLink}>{licenseName}</a></p>
-            <h3 className={'text-muted'}>Number of Rows</h3>
-            <p>{numberFormat(parseInt(rowCount, 10))}</p>
-            {tagList}
-          </Col>
-        </Row>
+        <div className='container'>
+          <Row id='DatasetOverview' className='DatasetOverview'>
+            <Col sm={7} className={'description'}>
+              <p>{description}</p>
+              <h2>Publishing Health</h2>
+              <p>This data should be <b>updated {publishingFrequency ? publishingFrequency.toLowerCase() : ''}</b>. It was last updated on {dayUpdated} at {timeUpdated}</p>
+              {documents}
+            </Col>
+            <Col sm={5} className={'dataSetInfo'}>
+              <h2>Additional Information</h2>
+              <h3 className={'text-muted'}>Publishing Department</h3>
+              <p>{publishingDepartment}</p>
+              <h3 className={'text-muted'}>License</h3>
+              <p><a href={licenseLink}>{licenseName}</a></p>
+              <h3 className={'text-muted'}>Number of Rows</h3>
+              <p>{numberFormat(parseInt(rowCount, 10))}</p>
+              {tagList}
+            </Col>
+          </Row>
+        </div>
       )
     }
     return overviewContent
