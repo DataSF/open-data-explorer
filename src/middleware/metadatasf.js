@@ -31,6 +31,8 @@ export const TransformsSF = {
 
 
 function transformMetadata (json) {
+  // Set default rowLabel
+  json[0].rowLabel = json[0].rowLabel || 'Record'
   let metadata = json[0]
   return metadata
 }

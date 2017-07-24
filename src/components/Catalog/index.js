@@ -46,7 +46,7 @@ const Record = (clearSearch, {hit}) => (
 )
 
 const labelRefinements = (items) => {
-  let labels = {'category': 'Category: ', 'publishing_dept': 'Department: '}
+  let labels = {'category': 'Category: ', 'publishing_dept': 'Department: ', 'fieldTypes': 'Field Types: '}
   let transform = items.map((item) => {
     let copy = Object.assign({}, item)
     copy.label = labels[copy['attributeName']]
@@ -89,6 +89,9 @@ const Search = ({clearSearch}) => (
       <Col sm={2} className='Catalog__refine'>
         <Panel title='Categories'>
           <RefinementList className='Catalog__refine--category' attributeName='category' />
+        </Panel>
+        <Panel title='Field Types'>
+          <RefinementList className='Catalog__refine--field-types' attributeName='fieldTypes' transformItems={items => orderBy(items, ['label', 'count'], ['asc', 'desc'])} />
         </Panel>
         <Panel title='Departments'>
           <RefinementList className='Catalog__refine--department' attributeName='publishing_dept' withSearchBox showMore limitMax={52} transformItems={items => orderBy(items, ['label', 'count'], ['asc', 'desc'])} />
