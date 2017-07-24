@@ -1,8 +1,8 @@
-import './@Query.css'
+import './@FilterOptions.css'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import { Well, Button, Panel } from 'react-bootstrap'
+import { Button, Panel } from 'react-bootstrap'
 import FilterDateTime from './FilterDateTime'
 import FilterCategory from './FilterCategory'
 import FilterNumeric from './FilterNumeric'
@@ -88,7 +88,7 @@ class FilterOptions extends Component {
       }
 
       let filterOption = (
-        <Well bsSize='small' className='filter' key={filter.key}>
+        <div className='filter' key={filter.key}>
           <div className='filter-content'>
             <Button className='close' onClick={handleRemoveFilter.bind(this, filter.key)}>
               &times;
@@ -96,7 +96,7 @@ class FilterOptions extends Component {
             <h4>{filter.name}</h4>
             {filterContent}
           </div>
-        </Well>)
+        </div>)
 
       return filterOption
     })
@@ -130,10 +130,10 @@ class FilterOptions extends Component {
     }
 
     return (
-      <Panel collapsible defaultExpanded header='Filter chart by other columns' bsStyle={'primary'}>
+      <Panel collapsible defaultExpanded header='Filter chart by other fields' bsStyle={'primary'}>
         <Select
           name='filters'
-          placeholder="Select fields you'd like to filter by"
+          placeholder='Add filters to visualization'
           options={options}
           onChange={handleAddFilter} />
         {filters ? this.renderFilterList() : false}

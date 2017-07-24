@@ -1,4 +1,4 @@
-import './@CopySnippet.scss'
+import './@CopySnippet.css'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Form, FormGroup, FormControl, Button } from 'react-bootstrap'

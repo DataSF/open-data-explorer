@@ -9,19 +9,33 @@ class CustomXaxisLabel extends Component {
       val = val.slice(0, (val.length - 1))
     }
     val = titleize(val.toLowerCase())
-    let xVal = (viewBox.width / 2)
-    let yVal = 0
+    let xVal = (viewBox.width / 2)+5
+    let yVal = viewBox.height
     if (isGroupBy) {
-      if (numOfGrps < 13) {
-        yVal = viewBox.height - 80
-      } else if (numOfGrps > 13 && numOfGrps < 35) {
-        yVal = viewBox.height - 105
-      } else if (numOfGrps > 35 && numOfGrps < 44) {
-        yVal = viewBox.height - 165
-      } else {
-        yVal = viewBox.height - 150
+      //console.log("grps")
+      if (numOfGrps > 0 && numOfGrps <= 20) {
+        yVal = yVal/2+ 145
+      }else if(numOfGrps > 20  && numOfGrps <= 25) {
+        // console.log("**in here 20 to 25")
+        yVal = yVal/2+ 138
+      }else if(numOfGrps > 25  && numOfGrps <= 40) {
+        // console.log("**in here 20 to 30")
+        yVal = yVal/2+ 130
+      } else if(numOfGrps > 40  && numOfGrps <= 50) {
+        // console.log("**in here 40 to 50")
+        yVal = yVal/2+ 140
+      } else if(numOfGrps > 50  && numOfGrps <= 60) {
+        // console.log("**in here 40 to 50")
+        yVal = yVal/2+ 150
       }
-    } else {
+      else if(numOfGrps > 50  && numOfGrps < 100) {
+        // console.log("**in here 50-100 plus")
+        yVal = yVal/2+ 140
+      }else{
+        yVal = yVal/2+ 145
+      }
+
+    }else{
       yVal = viewBox.height - 65
     }
     return (
@@ -29,7 +43,7 @@ class CustomXaxisLabel extends Component {
         <text
           x={xVal}
           y={yVal}
-          dy={16}
+          dy={1}
           style={{fontSize: 15}}
           textAnchor='middle'
           fill='#666'>

@@ -36,7 +36,7 @@
 
 .ribbon {
   z-index: 9999;
-  background-color: #a00;
+  background-color: #e0b566;
   overflow: hidden;
   white-space: nowrap;
   /* top left corner */
@@ -84,4 +84,23 @@
 .navbar .ais-InstantSearch__root {
   display: inline-block;
   float: left;
+}
+
+.navbar #feedbackButton {
+  padding-top: 8.5px;
+  padding-bottom: 8.5px;
+  margin-top: 13px;
+  border: 1px solid #fff;
+  min-width: 159px;
+  text-align: center;
+  color:#fff;
+}
+
+#feedbackButton + .dropdown-menu {
+  min-width: 159px;
+  border: none;
+}
+
+#Navigation .nav li.dropdown {
+  margin-left: 15px;
 }

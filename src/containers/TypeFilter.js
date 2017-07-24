@@ -15,20 +15,22 @@ const TypeFilter = ({items, selectableColumns, onFilter, onSelectColumn, selecte
       <When condition={selectedColumnDef}>
         <Choose>
           <When condition={showCols !== 'hide'}>
-            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected Field'>
+            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected field'>
               <DefaultListGroup
                 itemComponent={FieldButton}
                 items={selectedField}
+                popOverPlacement={'left'}
                 onSelectListItem={onSelectColumn} />
               <HideShowButton itemProps={{'value': hideshowVal, 'isSelected': showCols}} onClick={setHideShow} showCols={showCols} />
             </Panel>
           </When>
           <Otherwise>
-            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected Field'>
+            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected field'>
               <DefaultListGroup
                 itemComponent={FieldButton}
                 items={selectedField}
                 onSelectListItem={onSelectColumn} />
+              <h5>Filter field list by type</h5>
               <DefaultListGroup
                 itemComponent={FieldTypeButton}
                 className={'default-list-group'}
@@ -38,6 +40,7 @@ const TypeFilter = ({items, selectableColumns, onFilter, onSelectColumn, selecte
               <DefaultListGroup
                 itemComponent={FieldButton}
                 items={selectableColumns}
+                popOverPlacement={'left'}
                 onSelectListItem={onSelectColumn} />
               <HideShowButton itemProps={{'value': hideshowVal, 'isSelected': showCols}} onClick={setHideShow} showCols={showCols} />
             </Panel>
@@ -46,6 +49,7 @@ const TypeFilter = ({items, selectableColumns, onFilter, onSelectColumn, selecte
       </When>
       <Otherwise>
         <Panel collapsible defaultExpanded header='Select a field' bsStyle={'primary'}>
+          <h5>Filter field list by type</h5>
           <DefaultListGroup
             itemComponent={FieldTypeButton}
             className={'default-list-group'}
@@ -53,6 +57,7 @@ const TypeFilter = ({items, selectableColumns, onFilter, onSelectColumn, selecte
             onSelectListItem={onFilter} />
           <FieldNameFilter />
           <DefaultListGroup
+            popOverPlacement={'left'}
             itemComponent={FieldButton}
             items={selectableColumns}
             onSelectListItem={onSelectColumn} />
@@ -73,10 +78,10 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onFilter: item => dispatch(filterColumnList('typeFilters', item)),
+  onFilter: item => dispatch(filterColumnList('typeFilters', item, 'columnProps')),
   onSelectColumn: (key) => dispatch(selectColumn(key)),
-  setHideShow: showCols => dispatch(setHideShow(showCols)),
-  resetState: resetState => dispatch(resetState())
+  setHideShow: showCols => dispatch(setHideShow(showCols, 'columnProps')),
+  resetState: resetState => dispatch(resetState('columnProps'))
 })
 
 export default connect(

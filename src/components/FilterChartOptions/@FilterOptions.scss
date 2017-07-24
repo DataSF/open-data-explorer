@@ -1,0 +1,18 @@
+.filter {
+  z-index: 0;
+  margin-bottom: 1.25em;
+}
+
+.filter h4 {
+  border-bottom: thin #e3e3e3 solid;
+  font-weight: 300;
+}
+
+.filter .close {
+  color: #222;
+}
+
+.filter .close:hover {
+  background: transparent;
+  border: none;
+}

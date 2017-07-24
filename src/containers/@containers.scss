@@ -70,15 +70,14 @@
   position: absolute;
   right: 0;
   bottom: 0;
-  top: 221px;
+  top: 240px;
   overflow: scroll;
-  padding-right: 35px;
 }
 
 .VizContainer__stage {
   position: absolute;
   width: 74%;
-  top: 221px;
+  top: 250px;
   bottom: 0;
   overflow: scroll;
 }
@@ -89,6 +88,10 @@
 
 .VizContainer__config input {
   border-radius: 0;
+}
+
+.VizContainer__config h5 {
+  border-bottom: thin gray solid;
 }
 
 .panel-group .panel + .panel {
@@ -130,4 +133,43 @@
   border: 3px dashed;
   border-color: #ecf0f1;
   font-size:175%;
+}
+
+.columnDetailsContainer{
+  margin-right:2%;
+  margin-left:0.5%;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+}
+
+.column-details-container-wrapper{
+  overflow:scroll;
+  padding-right: 35px;
+  right: 0;
+  bottom: 0;
+  top: 240px;
+  position:absolute;
+}
+.column-details-picker-panel{
+  border: 1px solid #d3d3d3;
+}
+
+.column-details-all-container{
+  padding-left:1%;
+}
+
+.fieldProfileContainer{
+  margin-right:5%;
+  margin-left: -0.25%;
+}
+
+.field-details-panel-picker-container{
+  overflow:scroll;
+  position: absolute;
+  bottom: 0;
+  top:240px;
+}
+
+.Chart__header{
+  padding-bottom:2%;
 }

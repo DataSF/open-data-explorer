@@ -18,10 +18,11 @@ class ChartExperimentalLineStuff extends Component {
             let colorIndex = groupKeys.indexOf(i)
             return (
               <Line
-                type='monotone'
+                type='linear'
                 dataKey={i}
                 stackId='a'
                 key={i}
+                dot={false}
                 stroke={colorScale(colorIndex)} />)
           }
           return false
@@ -30,32 +31,59 @@ class ChartExperimentalLineStuff extends Component {
       }
     }
   }
+  setLegendStyleTop(lines, legendStyle){
+    if(lines){
+      if(lines.length <= 20){
+        legendStyle.top = '-20%'
+      }
+      if(lines.length > 20 && lines.length <= 30){
+        legendStyle.top = '-25%'
+      }
+      if(lines.length > 30 && lines.length <= 40){
+        legendStyle.top = '-30%'
+      }
+      if(lines.length > 40 ){
+        legendStyle.top = '-30%'
+      }
+    }
+    return legendStyle
+  }
   render () {
-    let {h, w, isGroupBy, yAxisWidth, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, domainMax, minTickGap, yTickCnt, colName, legendStyle, xAxisHeight} = this.props
+    let {h, w, isGroupBy, yAxisWidth, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, domainMax, yTickCnt, xAxisInterval,  colName, legendStyle, xAxisHeight} = this.props
     let lines = this.makeLines(groupKeys)
-
+    legendStyle = this.setLegendStyleTop(lines, legendStyle)
     return (
       <Choose>
         <When condition={!isGroupBy}>
-          <LineChart width={w} height={h} data={chartData}>
+          <LineChart
+            width={w}
+            height={h}
+            isAnimationActive={false}
+            data={chartData}>
             <XAxis
-              dataKey='key'
-              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} />}
-              minTickGap={minTickGap}
+              dataKey={'key'}
+              allowDataOverflow={true}
+              interval={xAxisInterval}
+              type={'category'}
+              tickSize={4}
+              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} chartType={'line'} />}
               padding={xAxisPadding}
               height={xAxisHeight} />
+            <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
             <YAxis
               width={yAxisWidth}
-              type='number'
-              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />}
+              type={'number'}
+              tickSize={3}
+              allowDataOverflow={true}
               tickCount={yTickCnt}
+              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} chartType={'line'}/>}
               tickFormatter={valTickFormater}
               domain={[0, domainMax]} />
-            <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
             <Line
-              type='monotone'
+              type='linear'
               strokeWidth='3'
               dataKey='value'
+              dot={false}
               stroke={fillColor} />
             <Tooltip />
           </LineChart>
@@ -65,22 +93,29 @@ class ChartExperimentalLineStuff extends Component {
             width={w}
             height={h}
             data={chartData}
-            margin={margin} >
+            margin={margin}
+            isAnimationActive={false} >
             <XAxis
-              dataKey='label'
+              dataKey={'label'}
+              type={'category'}
+              interval={xAxisInterval}
+              allowDataOverflow={true}
               height={xAxisHeight}
-              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={lines.length} />}
-              minTickGap={minTickGap}
+              tickSize={4}
+              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={lines.length} chartType={'line'} />}
               padding={xAxisPadding} />
             <YAxis
               tickFormatter={valTickFormater}
-              tickCount={yTickCnt}
+              type={'number'}
+              tickCount={ yTickCnt}
+              allowDataOverflow={true}
               domain={[0, domainMax]}
-              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
-            <CartesianGrid strokeDasharray='3 3' vertical={false} />
+              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h}  chartType={'line'}/>} />
+            <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
+            <Legend wrapperStyle={legendStyle} />
             <Tooltip />
             {lines}
-            <Legend wrapperStyle={legendStyle} />
+
           </LineChart>
         </When>
       </Choose>

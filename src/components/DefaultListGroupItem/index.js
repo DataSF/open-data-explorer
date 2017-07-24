@@ -6,14 +6,14 @@ import './@DefaultListGroupItem.css'
 class DefaultListGroupItem extends Component {
   render () {
     let {itemProps, onClick, buttonOverlay} = this.props
+    let popOverPlacement = itemProps.hoverSide ? itemProps.hoverSide : 'left'
     let handleOnClick = typeof onClick === 'function'
       ? () => onClick(itemProps.fxnParams)
       : false
-
     return (
       <Choose>
         <When condition={buttonOverlay}>
-          <OverlayTrigger key={itemProps.value} trigger={['hover', 'focus']} placement='left' overlay={buttonOverlay}>
+          <OverlayTrigger key={itemProps.value} trigger={['hover', 'focus']} placement={popOverPlacement} overlay={buttonOverlay}>
             <ListGroupItem className={itemProps.className}
               onClick={handleOnClick}>
               {itemProps.label}

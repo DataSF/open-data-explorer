@@ -8,7 +8,7 @@ const FieldNameFilter = ({onFilter}) => (
 )
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onFilter: item => dispatch(filterColumnList('fieldNameFilter', item))
+  onFilter: item => dispatch(filterColumnList('fieldNameFilter', item, 'columnProps'))
 })
 
 export default connect(

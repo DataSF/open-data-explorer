@@ -1,3 +1,7 @@
+label {
+  font-weight: normal;
+}
+
 .navbar-brand {
   padding: 10px;
 }
@@ -8,8 +12,14 @@
 }
 
 .jumbotron {
-  background-color: #2C3E50;
+  background-color: #133140;
   color: #FFFFFF;
+}
+
+.dropdown-menu {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
 }
 
 @media (min-width: 768px) {
@@ -17,4 +27,8 @@
     padding-top: 21.5px;
     padding-bottom: 19.5px;
   }
+}
+
+mark {
+  padding: 0;
 }

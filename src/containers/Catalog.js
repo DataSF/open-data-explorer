@@ -9,44 +9,35 @@ import { updateSearch, clearSearch } from '../actions'
 
 class Catalog extends Component {
 
-  constructor (props) {
-    super(props)
-
-    // We set this and update it to deal with an issue where onSearchStateChange is called as the component is
-    // unmounting. This was causing the component to get trapped and remounted because the state would get updated
-    // before the location changed
-    this.unmounting = false
+  constructor(props) {
+    super(props);
+    this.state = { searchState: { ...qs.parse(props.router.location.query) } };
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (!isEqual(qs.parse(this.props.location.query), qs.parse(nextProps.location.query))) {
-      this.props.onSearchStateChange({searchState: {...qs.parse(nextProps.location.query)}})
+  componentWillReceiveProps() {
+    this.setState({ searchState: qs.parse(this.props.router.location.query) });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !isEqual(this.state.searchState, nextState.searchState);
+  }
+
+  onSearchStateChange(nextSearchState) {
+    const THRESHOLD = 700;
+    const newPush = Date.now();
+    this.setState({ lastPush: newPush, searchState: nextSearchState });
+    if (this.state.lastPush && newPush - this.state.lastPush <= THRESHOLD) {
+      this.props.router.replace(
+        nextSearchState ? `${this.props.location.pathname}?${qs.stringify(nextSearchState)}` : ''
+      );
+    } else {
+      this.props.router.push(
+        nextSearchState ? `${this.props.location.pathname}?${qs.stringify(nextSearchState)}` : ''
+      );
     }
   }
 
-  componentWillUnmount () {
-    this.unmounting = true
-  }
-
-  componentWillMount () {
-    this.unmounting = false
-  }
-
-  shouldComponentUpdate (nextProps, nextState) {
-    return !isEqual(this.props.searchState, nextProps.searchState)
-  }
-
-  onSearchStateChange (nextSearchState) {
-    const THRESHOLD = 700
-    const newPush = Date.now()
-    this.props.onSearchStateChange({lastPush: newPush})
-    if (this.props.lastPush && newPush - this.props.lastPush <= THRESHOLD) {
-      this.props.router.replace(nextSearchState ? `${this.props.location.pathname}?${qs.stringify(nextSearchState)}` : '')
-      this.props.onSearchStateChange({searchState: nextSearchState})
-    } else if (!this.unmounting) {
-      this.props.router.push(nextSearchState ? `${this.props.location.pathname}?${qs.stringify(nextSearchState)}` : '')
-    }
-  }
+  createURL = state => `${this.props.location.pathname}?${qs.stringify(state)}`;
 
   render () {
     return (
@@ -54,9 +45,9 @@ class Catalog extends Component {
         appId='N6IVMSP2S4'
         apiKey='3bd0fc517f80911bf21045747262a1bd'
         indexName='dev_dataset_search'
-        searchState={this.props.searchState}
+        searchState={this.state.searchState}
         onSearchStateChange={this.onSearchStateChange.bind(this)}
-        createURL={state => `?${qs.stringify(this.props.searchState)}`}
+        createURL={state => this.createURL.bind(this)}
       >
         <Search clearSearch={this.props.clearSearch} />
       </InstantSearch>
@@ -67,9 +58,7 @@ class Catalog extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     searchState: state.search.searchState,
-    lastPush: state.search.lastPush,
-    router: ownProps.router,
-    location: ownProps.location
+    lastPush: state.search.lastPush
   }
 }
 

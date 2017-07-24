@@ -11,7 +11,8 @@ class FieldTypeButton extends Component {
     let itemProps = {...item}
     itemProps.className = setClassNamesListItem(itemProps, 'value')
     itemProps.otherComponents = itemProps.isSelected ? checked : null
-    itemProps.label += ' (' + itemProps.count + ')'
+    //itemProps.label += ' (' + itemProps.count + ')'
+    itemProps.label = [itemProps.label + " ", <span className='type-count'>{itemProps.count}</span>]
     itemProps.fxnParams = itemProps.value
     return itemProps
   }

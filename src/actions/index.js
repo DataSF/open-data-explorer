@@ -113,6 +113,23 @@ export function loadMetadata (id) {
   }
 }*/
 
+export function loadFieldProps () {
+  return (dispatch, getState) => {
+    // let id = getState().metadata.migrationId ? getState().metadata.migrationId : getState().metadata.id
+    let id = getState().metadata.dataId
+    let promises = []
+    //let columns = getState().columnProps.columns
+    let categoryColumns = getState().columnProps.categoryColumns
+    // let textColumns = getState().FieldProps.textColumns
+    for (let i =0; i < categoryColumns.length; i++) {
+      promises.push(dispatch(fetchColumnProps(id, categoryColumns[i])))
+    }
+    return Promise.all(promises)
+  }
+}
+
+
+
 export function loadColumnProps () {
   return (dispatch, getState) => {
     // let id = getState().metadata.migrationId ? getState().metadata.migrationId : getState().metadata.id
@@ -130,6 +147,9 @@ export function loadColumnProps () {
 export const DATA_REQUEST = 'DATA_REQUEST'
 export const DATA_SUCCESS = 'DATA_SUCCESS'
 export const DATA_FAILURE = 'DATA_FAILURE'
+export const FIELD_DATA_REQUEST = 'FIELD_DATA_REQUEST'
+export const FIELD_DATA_SUCCESS = 'FIELD_DATA_SUCCESS'
+export const FIELD_DATA_FAILURE = 'FIELD_DATA_FAILURE'
 
 function fetchData (state, isForTable = false) {
   let endpoint
@@ -147,6 +167,30 @@ function fetchData (state, isForTable = false) {
       endpoint: endpoint,
       transform: transform
     }
+  }
+}
+
+
+function fetchDataTextFieldCategories (state) {
+  let endpoint
+  let transform
+  //console.log("(*****state before fetch on categories*****")
+  //console.log(state)
+  ///console.log(state.fieldDetailsProps.selectedField)
+  if(state.fieldDetailsProps.selectedField){
+    endpoint = Endpoints.QUERYTEXTCATEGORIES(state)
+    transform = Transforms.QUERYTEXTCATEGORIES
+    return {
+      [CALL_API]: {
+        types: [FIELD_DATA_REQUEST, FIELD_DATA_SUCCESS, FIELD_DATA_FAILURE],
+        endpoint: endpoint,
+        transform: transform
+      }
+    }
+  }
+  return {
+    type: FIELD_DATA_SUCCESS,
+    payload: {}
   }
 }
 
@@ -175,12 +219,13 @@ export const SET_HIDE_SHOW = 'SET_HIDE_SHOW'
 export const SET_DEFAULT_HIDE_SHOW = 'SET_DEFAULT_HIDE_SHOW'
 export const SET_DEFAULT_CHARTTYPE = 'SET_DEFAULT_CHARTTYPE'
 
-export function filterColumnList (key, item) {
+export function filterColumnList (key, item, target) {
   return {
     type: FILTER_COLUMN_LIST,
     payload: {
       key,
-      item
+      item,
+      target
     }
   }
 }
@@ -190,25 +235,39 @@ export function selectColumn (column) {
     dispatch({
       type: SELECT_COLUMN,
       payload: column})
-    dispatch(fetchData(getState()))
-    dispatch(setDefaultChartType(column))
-    dispatch(setDefaultHideShow())
+    dispatch(setDefaultHideShow('columnProps'))
+    if (column !== null) {
+      dispatch(fetchData(getState()))
+      dispatch(setDefaultChartType(column))
+    }
   }
 }
 
-export function setHideShow (showCols) {
+export function selectField (column) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SELECT_FIELD,
+      payload: column})
+    dispatch(fetchDataTextFieldCategories(getState()))
+    dispatch(setDefaultHideShow('fieldDetailsProps'))
+  }
+}
+
+export function setHideShow (showCols, target) {
   return (dispatch, getState) => {
     dispatch({
       type: SET_HIDE_SHOW,
-      payload: showCols})
+      payload: {'showCols': showCols, 'target': target}
+    })
   }
 }
 
-export function setDefaultHideShow () {
+
+export function setDefaultHideShow (target) {
   return (dispatch, getState) => {
     dispatch({
       type: SET_DEFAULT_HIDE_SHOW,
-      showCols: 'show'
+      payload: {'showCols': 'show', 'target': target}
     })
   }
 }
@@ -338,9 +397,10 @@ export function updateFilter (key, options) {
   }
 }
 
-export function resetState () {
+export function resetState (target) {
   return {
-    type: RESET_STATE
+    type: RESET_STATE,
+    payload: target
   }
 }
 
@@ -388,6 +448,9 @@ export const loadQueryStateFromString = (q) => (dispatch, getState) => {
 
 export const UPDATE_SEARCH = 'UPDATE_SEARCH'
 export const CLEAR_SEARCH = 'CLEAR_SEARCH'
+export const SELECT_FIELD = 'SELECT_FIELD'
+export const SET_SELECTED_FIELD_DETAILS = 'SET_SELECTED_FIELD_DETAILS'
+
 
 export function updateSearch (searchState) {
   return {

@@ -8,10 +8,6 @@
 	margin-right: 0;
 }
 
-#data-table .pagination {
-	float: right;
-}
-
 #ChartsContainer .column-buttons .btn {
 	margin-right: 5px;
 	margin-bottom: 5px;
@@ -79,7 +75,10 @@ input-mysize{
 .datasetOverview{
   margin-top: 2%;
 }
-.datasetName{
+
+.datasetDownLoadButtons{
+  padding-top:3%;
+  display:inline-block;
 }
 
 .datasetLinks{
@@ -149,9 +148,6 @@ input-mysize{
   font-family: 'Lato', sans-serif;
 }
 
-
-
-
 /* Dataset Front Matter */
 
 #header p {
@@ -160,24 +156,15 @@ input-mysize{
 
 #header h1 {
   margin-bottom: 2px;
+  margin-top: 10px;
 }
 
-/* Dataset Nav */
-
-.DatasetNav .nav-pills {
-  margin-bottom: 1em;
+.last-updated{
+  font-weight: 300;
+  font-size: 125%;
+  float:left;
+  padding-bottom:1%;
+  padding-top:0.25%;
 }
-
-.DatasetNav .nav-pills > li > a {
-  border: thin solid #ecf0f1;
-
-}
-.DatasetNav .nav-pills > li.active > a {
- background-color: #476481
-
-}
-
-
-
 
 
