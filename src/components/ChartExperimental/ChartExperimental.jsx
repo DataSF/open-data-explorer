@@ -28,6 +28,8 @@ class ChartExperimental extends Component {
     let {columns, query, ...other} = metadata
     groupKeys = query.groupKeys
     let chartData = this.props.chart.chartData
+    // console.log("***chart data***")
+    // console.log(chartData)
     let otherProps = {...other}
     let displayChartOptions = null
     otherProps.selectedColumnDef = query.selectedColumn ? columns[query.selectedColumn] : null

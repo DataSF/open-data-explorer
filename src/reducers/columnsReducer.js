@@ -29,10 +29,11 @@ function sortColumns (a, b) {
 }
 
 function isSelectable (columns, col) {
-  let colTypesAccepted = ['number', 'boolean', 'date']
+  let colTypesAccepted = ['boolean', 'date']
   let regex = /(^(lat|lon)[a-z]*|^(x|y)$)/i
   let geoFields = regex.test(columns[col].key)
-  let selectable = (!columns[col].unique && !geoFields && ((['text', 'number'].indexOf(columns[col].type) > -1) || colTypesAccepted.indexOf(columns[col].type) > -1))
+  // selectable if they are text or numeric columns that are categories and not geoFields OR is one of the type boolean, date and number
+  let selectable = ((typeof columns[col].categories !== 'undefined') && !geoFields && ['text', 'number'].indexOf(columns[col].type) > -1) || colTypesAccepted.indexOf(columns[col].type) > -1
   return selectable
 }
 
