@@ -318,8 +318,8 @@ class ChartExperimentalCanvas extends Component {
     }
     valTickFormater = function (d) { return formatValue(d) }
     domainMax = maxValue + (maxValue * 0.05)
-    console.log("***max is here")
-    console.log(domainMax)
+    // console.log("***max is here")
+    // console.log(domainMax)
     let yTickCnt = 6
 
     //chartData = this.convertChartData(chartData, selectedColumnDef, dateBy, isGroupBy)

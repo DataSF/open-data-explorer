@@ -128,8 +128,6 @@ export function loadFieldProps () {
   }
 }
 
-
-
 export function loadColumnProps () {
   return (dispatch, getState) => {
     // let id = getState().metadata.migrationId ? getState().metadata.migrationId : getState().metadata.id

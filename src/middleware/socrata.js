@@ -617,26 +617,15 @@ function transformApiMigration (json) {
   return {dataId: json.nbeId}
 }
 
+
 function transformColumnProperties (json, state, params) {
-  let maxRecord = parseInt(maxBy(json, function (o) { return parseInt(o.count, 10) },).count, 10)
-  let checkFirst = maxRecord / state.metadata.rowCount
-  let checkNumCategories = json.length / state.metadata.rowCount
-  let transformed = {
-    columns: {}
+  return {
+    columns: {
+      [params['key']]: {
+        categories: json
+      }
+    }
   }
-  transformed.columns[params['key']] = {}
-  if ((checkFirst <= 0.95 && checkFirst >= 0.05 && checkNumCategories <= 0.95) && maxRecord !== '1' && json.length !== 50000) {
-    transformed.columns[params['key']].categories = json
-    transformed.categoryColumns = [params['key']]
-  } else if (maxRecord === 1) {
-    transformed.columns[params['key']].unique = true
-  }
-
-  if (checkFirst === 1) {
-    transformed.columns[params['key']].singleValue = true
-  }
-
-  return transformed
 }
 
 
