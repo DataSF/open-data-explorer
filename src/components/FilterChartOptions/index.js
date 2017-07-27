@@ -104,25 +104,14 @@ class FilterOptions extends Component {
   }
 
   render () {
-    let { handleAddFilter, columns, filters } = this.props
+    let { handleAddFilter, options, filters } = this.props
     let booleans = false
-    // todo: these are specific to Socrata, filterable columns should just be set in the state when columns are processed
-    const notFilters = ['boolean', 'location', 'url']
-
-    let options = Object.keys(columns).filter((column) => {
-      let option = columns[column]
-      if (option.unique) return false
-      if (option.type === 'boolean') booleans = true
-      if (notFilters.indexOf(option.type) > -1) return false
-      if (!option.categories && option.type === 'text') return false
-      if (option.singleValue) return false
-      return true
-    }).map((column, i) => {
-      let option = columns[column]
-      return {
-        value: option.key,
-        label: option.name
+    options = options.filter(field => {
+      if (field.type === 'boolean') {
+        booleans = true
+        return false
       }
+      return true
     })
 
     if (booleans) {
@@ -133,7 +122,7 @@ class FilterOptions extends Component {
       <Panel collapsible defaultExpanded header='Filter chart by other fields' bsStyle={'primary'}>
         <Select
           name='filters'
-          placeholder='Add filters to visualization'
+          placeholder='Add fields to filter by'
           options={options}
           onChange={handleAddFilter} />
         {filters ? this.renderFilterList() : false}

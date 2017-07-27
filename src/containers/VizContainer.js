@@ -53,6 +53,7 @@ class VizContainer extends Component {
               <FilterOptions
                 filters={props.filters}
                 columns={props.columns}
+                options={props.selectableColumns}
                 handleAddFilter={actions.handleAddFilter}
                 handleRemoveFilter={actions.handleRemoveFilter}
                 applyFilter={actions.applyFilter}
