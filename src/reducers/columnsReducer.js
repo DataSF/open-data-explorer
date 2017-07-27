@@ -75,7 +75,7 @@ export const getGroupableColumns = (state, selectedColumn) => {
   selectedColumn = selectedColumn || ''
   if (!columns) return []
   return Object.keys(columns).filter((col) => {
-    return (columns[col].key !== selectedColumn && columns[col].categories)
+    return (columns[col].key !== selectedColumn && columns[col].categories && (columns[col].type === 'text' || (columns[col].type === 'number' && parseInt(columns[col].cardinality, 10) < 15 )))
   }).map((col) => {
     return {label: columns[col].name, value: columns[col].key}
   }).sort(sortColumns)
@@ -99,7 +99,7 @@ export const getSelectedField = (state, selectedColumn) => {
   }).sort(sortColumns)
 }
 
-export const getSelectableColumns = (state, selectedColumn, all = false) => {
+export const getSelectableColumns = (state, selectedColumn, all = false, ignoreTypeFilters = false) => {
   let { columns, typeFilters, fieldNameFilter } = state
   if (!columns) return []
   return Object.keys(columns).filter((col) => {
@@ -113,9 +113,13 @@ export const getSelectableColumns = (state, selectedColumn, all = false) => {
     if (fieldNameFilter && columns[col].name.toLowerCase().indexOf(fieldNameFilter.toLowerCase()) === -1) {
       return false
     }
+    if (ignoreTypeFilters && selectable) {
+      return true
+    }
     if (selectable && typeFilters.length > 0 && typeFilters.indexOf(columns[col].type) > -1) {
       return true
-    } else if (selectable && typeFilters.length === 0) {
+    }
+    if (selectable && typeFilters.length === 0) {
       return true
     }
     return false
