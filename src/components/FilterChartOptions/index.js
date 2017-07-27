@@ -24,7 +24,7 @@ class FilterOptions extends Component {
       let checkboxOptions = {}
       if (key !== 'booleans') {
         filter = columns[key]
-        filterType = (filter.type === 'text' || filter.type === 'number') && filter.categories ? 'category' : filter.type
+        filterType = (filter.type === 'text') && filter.categories ? 'category' : filter.type
       } else {
         filter = {key: 'booleans', name: 'True/False fields'}
         filterType = 'boolean'

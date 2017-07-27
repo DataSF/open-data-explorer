@@ -1,5 +1,4 @@
 import soda from 'soda-js'
-import maxBy from 'lodash/maxBy'
 import uniq from 'lodash/uniq'
 import difference from 'lodash/difference'
 import { replacePropertyNameValue } from '../helpers'
@@ -30,21 +29,6 @@ export const Transforms = {
   COUNT: transformCount,
   MIGRATION: transformApiMigration,
   COLPROPS: transformColumnProperties
-}
-
-export const shouldRunColumnStats = (type, key) => {
-  /*
-   * below is a bit of a hack to get around the fact that some categorical fields are encoded as numbers on the portal
-   * we don't want to run column stats against all numeric columns, so this allows us to control that, the regex below may need to be
-   * tuned as is, it could create false positives. This is okay for now, something we can optimize later
-  */
-  let regex = /(year|day|date|month|district|yr|code|id|x|y|lat|lon)/g
-  let isCategorical = regex.test(key)
-  if (type === 'text' || (isCategorical && type === 'number')) {
-    return true
-  } else {
-    return false
-  }
 }
 
 // Construct URL based on chart options
@@ -151,7 +135,7 @@ function constructQuery (state) {
         let join = filter.options.join || 'or'
         let joined = filter.options.selected.join(' ' + join + ' ')
         query.where(joined)
-      } else if (column.type === 'number' && !column.categories && filter.options && filter.options.currentRange) {
+      } else if (column.type === 'number' && filter.options && filter.options.currentRange) {
         let first = parseInt(filter.options.currentRange[0], 10)
         let last = parseInt(filter.options.currentRange[1], 10)
         query.where(key + '>=' + first + ' and ' + key + '<=' + last)
