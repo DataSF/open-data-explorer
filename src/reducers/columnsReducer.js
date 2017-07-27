@@ -135,12 +135,14 @@ export const getSelectableColumns = (state, selectedColumn, all = false) => {
 
 export const getSummableColumns = (state) => {
   let { columns } = state
-  let colTypesAccepted = ['number', 'money', 'double']
+  let colTypesAccepted = ['number']
+  let regex = /(^(lat|lon|supervisor)[a-z]*|^(x|y)$)/i
 
   if (!columns) return []
-
+  
+  
   return Object.keys(columns).filter((col) => {
-    return (!columns[col].categories && !columns[col].unique && colTypesAccepted.indexOf(columns[col].type) > -1)
+    return (parseFloat(columns[col].distinctness) < 0.95 && colTypesAccepted.indexOf(columns[col].type) > -1 && !regex.test(columns[col].name))
   }).map((col) => {
     return {label: columns[col].name, value: columns[col].key}
   }).sort(sortColumns)
