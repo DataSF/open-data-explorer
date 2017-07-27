@@ -244,7 +244,7 @@ class ChartExperimentalCanvas extends Component {
 
   isGroupByz (groupByKeys, barChartType) {
     if (groupByKeys) {
-      if (groupByKeys.length > 1) {
+      if (groupByKeys.length > 0) {
         return true
       }
     }
