@@ -71,7 +71,10 @@ function updateFilter (state, action) {
 }
 
 function resetState (state, action) {
-  return initialState
+  if (action.type === ActionTypes.METADATA_REQUEST || action.payload === 'query') {
+    return initialState
+  }
+  return state
 }
 
 function updateFromQueryString (state, action) {
@@ -80,6 +83,7 @@ function updateFromQueryString (state, action) {
 
 export const queryReducer = (state = initialState, action) => {
   switch (action.type) {
+    case ActionTypes.RESET_STATE:
     case ActionTypes.METADATA_REQUEST: return resetState(state, action)
     case ActionTypes.SELECT_COLUMN: return selectColumn(state, action)
     case ActionTypes.DATA_REQUEST: return dataRequest(state, action)

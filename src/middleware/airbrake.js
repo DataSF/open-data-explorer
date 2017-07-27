@@ -15,7 +15,6 @@ export default function middlewareFactory(credentials, notify = {}) {
   })
 
   const airbrakeLog = (error, params) => {
-    debugger
     airbrake.addFilter(notice => {
       notice.params = { ...(notice.params || {}), ...params }
       return notice

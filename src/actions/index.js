@@ -237,6 +237,8 @@ export function selectColumn (column) {
     if (column !== null) {
       dispatch(fetchData(getState()))
       dispatch(setDefaultChartType(column))
+    } else if (column === null) {      
+      dispatch(resetState('query'))
     }
   }
 }

@@ -232,16 +232,11 @@ function setDefaultHideShow (state, action) {
 }
 
 function resetState (state, action) {
-  if (action.payload.target !== 'columnProps') {
+  if (action.payload !== 'columnProps') {
     return state
   }
   return updateObject(state, {})
 }
-
-
-
-
-
 
 const columnsReducer = createReducer({ typeFilters: [] }, {
   [ActionTypes.COLUMNS_SUCCESS]: initColumns, 
