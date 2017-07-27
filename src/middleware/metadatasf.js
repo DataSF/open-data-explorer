@@ -51,11 +51,12 @@ function transformColumns (json) {
   result['columns'] = columns
   result.categoryColumns = json.map(function(item){
     let key
-    if(item.isCategory){
-      key =  item.key
+    if(item.isCategory && item.type.indexOf('geometry') === -1) {
+      key = item.key
     }
     return key
   }).filter(n => n)
+
   result.textColumns = json.map(function(item){
     let key
     if(item.type === 'text'){
