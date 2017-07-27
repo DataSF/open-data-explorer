@@ -10,6 +10,7 @@ class GroupOptions extends Component {
       columns.length !== 0
       ? <Panel collapsible defaultExpanded header='Group by another field' bsStyle={'primary'}>
         <Select
+          className={'GroupOptions__select'}
           name='groupby'
           placeholder='Select a field to group by'
           options={columns}

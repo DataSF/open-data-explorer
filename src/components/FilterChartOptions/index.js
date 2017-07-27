@@ -119,8 +119,9 @@ class FilterOptions extends Component {
     }
 
     return (
-      <Panel collapsible defaultExpanded header='Filter chart by other fields' bsStyle={'primary'}>
+      <Panel className={'FilterChartOptions__root'} collapsible defaultExpanded header='Filter chart by other fields' bsStyle={'primary'}>
         <Select
+          className={'FilterChartOptions__select'}
           name='filters'
           placeholder='Add fields to filter by'
           options={options}

@@ -16,3 +16,11 @@
   background: transparent;
   border: none;
 }
+
+.FilterChartOptions__select {
+  z-index: 10;
+}
+
+.FilterChartOptions__root .Select {
+  z-index: 9;
+}

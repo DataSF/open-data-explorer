@@ -10,6 +10,7 @@ class SumOptions extends Component {
       columns.length !== 0
         ? <Panel collapsible defaultExpanded header='Sum by a numeric field' bsStyle={'primary'}>
           <Select
+            className={'SumOptions__select'}
             name='sumby'
             placeholder='Select a field to sum by'
             options={columns}
