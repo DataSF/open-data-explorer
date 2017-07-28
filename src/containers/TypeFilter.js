@@ -8,7 +8,6 @@ import FieldButton from '../components/FieldButton'
 import HideShowButton from '../components/HideShowButton/'
 import FieldNameFilter from '../containers/FieldNameFilter'
 import { Panel } from 'react-bootstrap'
-import PanelHeader from '../components/PanelHeader'
 
 const TypeFilter = ({items, selectableColumns, onFilter, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols}) => (
   <div>
