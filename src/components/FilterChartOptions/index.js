@@ -81,7 +81,8 @@ class FilterOptions extends Component {
             nextRange={nextRange}
             filter={filters[key]}
             applyFilter={applyFilter}
-            updateFilter={updateFilter} />
+            updateFilter={updateFilter}
+            format={filter.format} />
           break
         default:
           return null
