@@ -8,6 +8,7 @@ import FieldButton from '../components/FieldButton'
 import HideShowButton from '../components/HideShowButton/'
 import FieldNameFilter from '../containers/FieldNameFilter'
 import { Panel } from 'react-bootstrap'
+import PanelHeader from '../components/PanelHeader'
 
 const TypeFilter = ({items, selectableColumns, onFilter, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols}) => (
   <div>
@@ -15,7 +16,7 @@ const TypeFilter = ({items, selectableColumns, onFilter, onSelectColumn, selecte
       <When condition={selectedColumnDef}>
         <Choose>
           <When condition={showCols !== 'hide'}>
-            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected field'>
+            <Panel collapsible defaultExpanded bsStyle='primary' header={<h4>Selected field <span className='glyphicon collapse-icon' ariaHidden></span></h4>}>
               <DefaultListGroup
                 itemComponent={FieldButton}
                 items={selectedField}
@@ -25,7 +26,7 @@ const TypeFilter = ({items, selectableColumns, onFilter, onSelectColumn, selecte
             </Panel>
           </When>
           <Otherwise>
-            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected field'>
+            <Panel collapsible defaultExpanded bsStyle='primary' header={<h4>Selected field <span className='glyphicon collapse-icon' ariaHidden></span></h4>}>
               <DefaultListGroup
                 itemComponent={FieldButton}
                 items={selectedField}
@@ -48,7 +49,7 @@ const TypeFilter = ({items, selectableColumns, onFilter, onSelectColumn, selecte
         </Choose>
       </When>
       <Otherwise>
-        <Panel collapsible defaultExpanded header='Select a field' bsStyle={'primary'}>
+        <Panel collapsible defaultExpanded header={<h4>Select a field <span className='glyphicon collapse-icon' ariaHidden></span></h4>} bsStyle={'primary'}>
           <h5>Filter field list by type</h5>
           <DefaultListGroup
             itemComponent={FieldTypeButton}

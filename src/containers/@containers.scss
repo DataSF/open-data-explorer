@@ -173,3 +173,24 @@
 .Chart__header{
   padding-bottom:2%;
 }
+
+.panel-heading a {
+  display: block;
+  padding: 10px 15px;
+  margin: -10px -15px;
+  cursor: pointer;
+}
+
+.panel-heading .glyphicon.collapse-icon {
+  float: right;
+}
+
+a .glyphicon.collapse-icon:before {
+  content: "\e252";
+}
+
+a.collapsed .glyphicon.collapse-icon:before {
+  content: "\e253";
+}
+
+
