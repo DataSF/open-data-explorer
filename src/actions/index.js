@@ -465,3 +465,30 @@ export function clearSearch () {
   }
 }
 
+export const RELATEDDATASET_REQUEST = 'RELATEDDATASET_REQUEST'
+export const RELATEDDATASET_SUCCESS = 'RELATEDDATASET_SUCCESS'
+export const RELATEDDATASET_FAILURE = 'RELATEDDATASET_FAILURE'
+
+// Fetches a single user from Github API.
+// Relies on the custom API middleware defined in ../middleware/api.js.
+function fetchRelatedDatasets (id) {
+  console.log("in here calling")
+  console.log(id)
+  console.log("********")
+  return {
+    [CALL_API]: {
+      types: [RELATEDDATASET_REQUEST, RELATEDDATASET_SUCCESS, RELATEDDATASET_FAILURE],
+      endpoint: EndpointsSF.RELATEDDATASETS(id),
+      transform: TransformsSF.RELATEDDATASETS
+    }
+  }
+}
+
+export function loadRelatedDatasets (id) {
+  console.log('loading the related datasets***')
+  console.log(id)
+  return (dispatch, getState) => {
+    return Promise.all([dispatch(fetchRelatedDatasets(id))])
+  }
+}
+

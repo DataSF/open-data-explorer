@@ -4,14 +4,41 @@ import React, { Component } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import { format } from 'd3'
 import moment from 'moment'
+import { OverlayTrigger, Popover } from 'react-bootstrap'
 
 class DatasetOverview extends Component {
+
+   constructor (props) {
+    super(props)
+  }
+
+  componentDidMount () {
+    console.log("**** in here again after mounting*****")
+    console.log(this.props)
+    let fbf = this.props.location.pathname.split("/")
+    let id = fbf[fbf.length-1]
+    if (id) {
+      console.log("fbf")
+      console.log(id)
+      let cool = this.props.loadRelatedDatasets(id)
+      console.log(cool)
+    }
+  }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.metadata.dataId ) {
+       let fbf = this.props.location.pathname.split("/")
+      let id = fbf[fbf.length-1]
+       this.props.loadRelatedDatasets(id)
+    }
+  }
+
+
   renderAttachmentsList (attachments, id) {
     let attachmentList
     if(attachments){
       attachmentList = attachments.map((att, idx, array) => {
       return (
-        <li className={'list-group-item'} key={idx}>
+        <li className={'overview-attachment-list'} key={idx}>
           <a href={'https://data.sfgov.org/api/views/' + id + '/files/' + att.assetId + '?download=true&filename=' + att.filename}>
             {att.name}
           </a>
@@ -20,15 +47,77 @@ class DatasetOverview extends Component {
     }
     return attachmentList
   }
+  makeDatasetFactsTable (factItems, classNameTdHead, classNameTdValue) {
+    let factItemsLst = factItems.map(function (factItem) {
+      return (
+        <tr  key={Math.random()}>
+          <td className={classNameTdHead}>{factItem.header}</td>
+          <td className={classNameTdValue}>{factItem.value}</td>
+        </tr>
+      )
+    })
+    return factItemsLst
+  }
+
+  renderPublishingInfo( publishing_faqs ) {
+    let publishingFaqsList = publishing_faqs.map(function(publishing_faq){
+      let textStuff = publishing_faq.header + ": " + publishing_faq.value
+      return (
+        <li className={'overview-publishing-details-items'}>
+          {textStuff}
+        </li>
+      )
+    })
+    return publishingFaqsList
+  }
+  renderPublishingHealthPopover(){
+    return (
+      <Popover
+        id={'popover-overview-publishing-health'}
+        title={'Publishing Health'}>
+         <div className={'popover-overview-publishing-health-container'}>
+          <div className={'popover-overview-publishing-health-title'}>
+            {'The publishing health indicates whether or not a dataset is being updated as specified by its publishing schedule'}
+          <div className={'popover-overview-publishing-health-items'}><span className={'overview-publishing-health-healthy overview-publishing-health-popover'}> {'On time'} </span> {'- indicates that dataset updated on time' }</div>
+          <div className={'popover-overview-publishing-health-items'}><span className={'overview-publishing-health-delayed overview-publishing-health-popover'}> {'Delayed'} </span> {'- indicates that dataset is late to update' }</div>
+          <div className={'popover-overview-publishing-health-items'}><span className={'overview-publishing-health-stale overview-publishing-health-popover'}> {'Stale'} </span> {'- indicates that dataset has not been updated in more than two times the time period indicated in publishing frequency'}</div>
+          </div>
+         </div>
+      </Popover>
+    )
+  }
+  renderPublishingHealthSpan (publishing_health) {
+    let cssName = 'overview-publishing-health overview-publishing-health-' + publishing_health.className
+    let popOverStuff = this.renderPublishingHealthPopover()
+    return (
+      <OverlayTrigger
+        key={Math.random()}
+        trigger={['hover', 'focus']}
+        placement={'right'}
+        overlay={popOverStuff}>
+        <li className={'overview-publishing-details-items'}>
+          {'Publishing Health: '}
+          <span className={cssName}> {publishing_health.value} </span>
+        </li>
+      </OverlayTrigger>
+    )
+  }
+
 
   render () {
-    const { id, description, publishingDepartment, licenseLink, licenseName, rowCount, rowsUpdatedAt, publishingFrequency, notes, attachments, programLink, tags } = this.props.metadata
+    console.log(this.props)
+    const { id, description, publishingDepartment, licenseLink, licenseName, rowCount, rowsUpdatedAt, publishingFrequency, notes, attachments, programLink, tags, datasetFacts, colCounts, publishing_faqs, publishing_health} = this.props.metadata
     let numberFormat = format(',')
     let dayUpdated = moment(rowsUpdatedAt).format('MM/DD/YYYY')
     let timeUpdated = moment(rowsUpdatedAt).format('hh:mm A')
     let overviewContent = null
     let attachmentList = this.renderAttachmentsList( attachments, id)
-    if (this.props.metadata) {
+    let datasetFactsTbl =  this.makeDatasetFactsTable(datasetFacts, 'overview-dataset-facts-td', 'overview-dataset-facts-td')
+    let datasetFieldCntTbl = this.makeDatasetFactsTable(colCounts, 'overview-dataset-facts-td',  'overview-dataset-cnts-td-value')
+    let publishingHealthSpan = [this.renderPublishingHealthSpan(publishing_health)]
+    let publishingFaqItems =  publishingHealthSpan.concat(this.renderPublishingInfo( publishing_faqs ) )
+
+      if (this.props.metadata) {
       // assemble related documents
       let documents = []
       let tagList = null
@@ -54,30 +143,80 @@ class DatasetOverview extends Component {
           )
       }
 
-      overviewContent = (
-        <div className='container'>
-          <Row id='DatasetOverview' className='DatasetOverview'>
-            <Col sm={7} className={'description'}>
-              <p>{description}</p>
-              <h2>Publishing Health</h2>
-              <p>This data should be <b>updated {publishingFrequency ? publishingFrequency.toLowerCase() : ''}</b>. It was last updated on {dayUpdated} at {timeUpdated}</p>
-              {documents}
-            </Col>
-            <Col sm={5} className={'dataSetInfo'}>
-              <h2>Additional Information</h2>
-              <h3 className={'text-muted'}>Publishing Department</h3>
-              <p>{publishingDepartment}</p>
-              <h3 className={'text-muted'}>License</h3>
-              <p><a href={licenseLink}>{licenseName}</a></p>
-              <h3 className={'text-muted'}>Number of Rows</h3>
-              <p>{numberFormat(parseInt(rowCount, 10))}</p>
-              {tagList}
-            </Col>
-          </Row>
-        </div>
-      )
     }
-    return overviewContent
+    return (
+      <div className={'container overview'}>
+        <div className={'overview-description'}>
+          <div>
+            {description}
+          </div>
+          <Choose>
+            <When condition={notes}>
+              <div className={'overview-description-notes'}>
+                {notes}
+              </div>
+            </When>
+          </Choose>
+          <Choose>
+            <When condition={attachments}>
+              <div className={'overview-attachments'}>
+                <div className={'overview-attachments-header'}>
+                  <span style={{ 'color': '#939393'}}>{'Related Documents'}</span>
+                </div>
+                <ul>
+                  {attachmentList}
+                </ul>
+              </div>
+            </When>
+          </Choose>
+        </div>
+        <div className={'overview-description-breakline'}></div>
+        <div className={'overview-department-license'}>
+          {'Data published by '} <span style={{ 'fontWeight': 600,
+            color: '#939393', 'fontSize': '22px'}}>{publishingDepartment}</span>
+          {' under the '} <a href={licenseLink}>{licenseName}</a>
+        </div>
+        <div className={'overview-description-breakline'}></div>
+        <Row className={'overview-extended-content'}>
+          <Col sm={5} className={'overview-table-info'}>
+            <div className={'overview-table-dataset-facts'}>
+              <div className={'overview-table-info-header'}>
+                {'Dataset Facts'}
+              </div>
+              <table className={'overview-table-info-dataset-facts'}>
+                {datasetFactsTbl}
+              </table>
+            </div>
+            <div className={'overview-table-dataset-field-cnts'}>
+              <div className={'overview-table-info-header'}>
+                { 'Whats Inside This Dataset'}
+              </div>
+              <table className={'overview-table-info-dataset-facts'}>
+                {datasetFieldCntTbl}
+              </table>
+            </div>
+          </Col>
+          <Col sm={6} className={'overview-publishing-details'}>
+            <div className={'overview-publishing-details-area'}>
+              <div className={'overview-publishing-details-title'}>
+                {'Publishing Details'}
+              </div>
+              <div className={'overview-publishing-details-items'}>
+                <ul className={'overview-publishing-details-items-list'}>
+                  {publishingFaqItems}
+                </ul>
+              </div>
+            </div>
+          </Col>
+        </Row>
+        <div className={'overview-description-breakline'}></div>
+        <div className={'overview-related-datasets-container'}>
+          <div className={'overview-table-info-header'}>
+            {'Related Datasets'}
+          </div>
+        </div>
+      </div>
+    )
   }
 }
 

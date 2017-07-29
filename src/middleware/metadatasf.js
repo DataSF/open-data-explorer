@@ -7,13 +7,13 @@ const geoTypeMappings = {
   'geometry: polygon': 'geometry-polygon',
   'geometry: multiline': 'geometry-multi-line',
   'geometry: multipolygon': 'geometry-multi-polygon',
-  'geometry: multipoint': 'geometry-multi-point',
+  'geometry: multipoint': 'geometry-multi-point'
 }
-
 
 export const EndpointsSF = {
   METADATA: endpointMetadata,
-  COLUMNS: endpointColumns
+  COLUMNS: endpointColumns,
+  RELATEDDATASETS: endpointRelatedDatasets
 }
 
 function endpointMetadata (id) {
@@ -22,11 +22,16 @@ function endpointMetadata (id) {
 
 function endpointColumns (id) {
   return API_ROOT + `fielddetails/${id}`
- }
+}
+function endpointRelatedDatasets (id) {
+  console.log(API_ROOT + `relateddatasets/${id}`)
+  return API_ROOT + `relateddatasets/${id}`
+}
 
 export const TransformsSF = {
   METADATA: transformMetadata,
-  COLUMNS: transformColumns
+  COLUMNS: transformColumns,
+  RELATEDDATASETS: transformRelatedDatasets
 }
 
 
@@ -64,4 +69,10 @@ function transformColumns (json) {
     return key
   }).filter(n => n)
   return result
+}
+
+function transformRelatedDatasets (json) {
+  console.log(json)
+  let relatedDatasets = json
+  return relatedDatasets
 }
