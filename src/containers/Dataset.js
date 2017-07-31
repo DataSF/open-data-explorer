@@ -7,6 +7,15 @@ import { API_DOMAIN } from '../constants/AppConstants'
 
 class Dataset extends Component {
 
+  constructor(props) {
+    super(props)
+
+    // to capture height of sub-component
+    this.state = {
+      frontMatterHeight: 50
+    }
+  }
+
   componentWillMount () {
     this.props.onLoad()
   }
@@ -17,8 +26,21 @@ class Dataset extends Component {
     }
   }
 
+  componentDidUpdate (prevProps, prevState) {
+    let height = document.getElementById('DatasetFrontmatter').clientHeight
+    if (prevState.frontMatterHeight !== height) {
+      this.setState({ 
+        frontMatterHeight: height
+      })
+    }
+  }
+
   render () {
     const { metadata, children, ...other } = this.props
+    const childrenWithHeight = React.Children.map(children, 
+      (child) => React.cloneElement(child, { 
+        frontMatterHeight: this.state.frontMatterHeight
+      }))
     return (
       <div>
         <section id={'DatasetFrontmatter'}>
@@ -28,7 +50,7 @@ class Dataset extends Component {
           <DatasetNav id={metadata.id} dataId={metadata.dataId} hasGeo={metadata.hasGeo} {...other} />
         </section>
         <section id={'DatasetChildren'}>
-          {children}
+          {childrenWithHeight}
         </section>
       </div>
     )

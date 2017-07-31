@@ -68,18 +68,40 @@
 
 .VizContainer__config {
   position: absolute;
+  padding: 0;
   right: 0;
   bottom: 0;
+  width: 25%;
   top: 240px;
-  overflow: scroll;
+  overflow-y: scroll;
+}
+
+.VizContainer__config .panel-group {
+  margin-bottom: 0;
 }
 
 .VizContainer__stage {
   position: absolute;
-  width: 74%;
+  padding:0;
+  width: 75%;
   top: 250px;
+  left: 0;
   bottom: 0;
-  overflow: scroll;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+.Chart__root {
+  margin: 15px;
 }
 
 .reset-padding {

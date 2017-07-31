@@ -1,6 +1,5 @@
 import * as ActionTypes from '../actions'
 import merge from 'lodash/merge'
-import union from 'lodash/union'
 import uniq from 'lodash/uniq'
 
 export const metadataReducer = (state = {}, action) => {
@@ -11,10 +10,6 @@ export const metadataReducer = (state = {}, action) => {
       case ActionTypes.COUNT_SUCCESS:
       case ActionTypes.METADATA_SUCCESS:
       case ActionTypes.MIGRATION_SUCCESS:
-      case ActionTypes.COLPROPS_SUCCESS:
-        if (ActionTypes.COLPROPS_SUCCESS) {
-          action.response.categoryColumns = union([], state.categoryColumns, action.response.categoryColumns)
-        }
         return merge({}, state, action.response)
       // remove - move to table and chart objects
       case ActionTypes.DATA_SUCCESS:
@@ -44,15 +39,6 @@ export const metadataReducer = (state = {}, action) => {
           tablePage: action.page
         }
       })
-    case ActionTypes.METADATA_REQUEST:
-      let freshState = {
-        query: {
-          isFetching: true,
-          dateBy: 'year'
-        },
-        columns: {}
-      }
-      return merge({}, freshState)
     // move to table
     case ActionTypes.SORT_COLUMN:
       let updatedState = {

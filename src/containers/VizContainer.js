@@ -40,9 +40,12 @@ class VizContainer extends Component {
 
   render () {
     let { props, actions } = this.props
+    let absoluteTop = {
+      top: (props.frontMatterHeight + 65 + 45) + 'px'
+    }
     return (
       <Row>
-        <Col md={3} className={'VizContainer__config'}>
+        <Col className={'VizContainer__config'} style={absoluteTop}>
           <Accordion>
             <TypeFilter />
             <ConditionalOnSelect selectedColumn={props.selectedColumn}>
@@ -68,71 +71,73 @@ class VizContainer extends Component {
             </ConditionalOnSelect>
           </Accordion>
         </Col>
-        <Col md={9} className='VizContainer__stage'>
+        <Col className='VizContainer__stage' style={absoluteTop}>
           <Messages messages={props.messages}>
             <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
-              <div className='Chart__header'>
-                <Row>
-                  <Col md={9}>
-                    <ChartExperimentalTitle
-                      columns={props.columns}
-                      rowLabel={props.rowLabel}
-                      selectedColumnDef={props.selectedColumnDef}
-                      groupBy={props.groupBy}
-                      sumBy={props.sumBy} />
-                    <ChartExperimentalSubTitle
-                      columns={props.columns}
-                      filters={props.filters}
-                      chartData={props.chartData}
-                      rollupBy={props.rollupBy} />
-                  </Col>
-                  <Col md={3}>
-                    <Choose>
-                      <When condition={props.selectedColumnDef && props.selectedColumnDef.type === 'date'}>
-                        <DateToggle
-                          dateBy={props.dateBy}
-                          changeDateBy={actions.changeDateBy}
-                          selectedColumnDef={props.selectedColumnDef} />
-                      </When>
-                      <Otherwise>
-                        <OtherDataToggle
-                          chartData={props.chartData}
-                          rollupBy={props.rollupBy}
-                          chartType={props.chartType}
-                          changeRollupBy={actions.changeRollupBy}
-                          selectedColumnDef={props.selectedColumnDef} />
-                      </Otherwise>
-                    </Choose>
-                  </Col>
-                </Row>
+              <div className='Chart__root'>
+                <div className='Chart__header'>
+                  <Row>
+                    <Col md={9}>
+                      <ChartExperimentalTitle
+                        columns={props.columns}
+                        rowLabel={props.rowLabel}
+                        selectedColumnDef={props.selectedColumnDef}
+                        groupBy={props.groupBy}
+                        sumBy={props.sumBy} />
+                      <ChartExperimentalSubTitle
+                        columns={props.columns}
+                        filters={props.filters}
+                        chartData={props.chartData}
+                        rollupBy={props.rollupBy} />
+                    </Col>
+                    <Col md={3}>
+                      <Choose>
+                        <When condition={props.selectedColumnDef && props.selectedColumnDef.type === 'date'}>
+                          <DateToggle
+                            dateBy={props.dateBy}
+                            changeDateBy={actions.changeDateBy}
+                            selectedColumnDef={props.selectedColumnDef} />
+                        </When>
+                        <Otherwise>
+                          <OtherDataToggle
+                            chartData={props.chartData}
+                            rollupBy={props.rollupBy}
+                            chartType={props.chartType}
+                            changeRollupBy={actions.changeRollupBy}
+                            selectedColumnDef={props.selectedColumnDef} />
+                        </Otherwise>
+                      </Choose>
+                    </Col>
+                  </Row>
+                </div>
+                <Loading isFetching={props.isFetching} type='centered'>
+                  <Choose>
+                    <When condition={props.chartData}>
+                      <Choose>
+                        <When condition={props.chartData.length > 0}>
+                          <ChartExperimentalCanvas
+                            chartData={props.chartData || []}
+                            chartType={props.chartType}
+                            dateBy={props.dateBy}
+                            rollupBy={props.rollupBy}
+                            groupKeys={props.groupKeys}
+                            filters={props.filters}
+                            rowLabel={props.rowLabel}
+                            selectedColumnDef={props.selectedColumnDef}
+                            groupBy={props.groupBy}
+                            sumBy={props.sumBy}
+                            isFetching={props.isFetching} />
+                        </When>
+                        <When condition={props.chartData.length === 0 && props.filters}>
+                          <div className={'filterNone'}>
+                              Based on the filters you've applied, your query retrieved no results. Remove some of the filters and try again.
+                          </div>
+                        </When>
+                      </Choose>
+                    </When>
+                  </Choose>
+                </Loading>
               </div>
-              <Loading isFetching={props.isFetching} type='centered'>
-                <Choose>
-                  <When condition={props.chartData}>
-                    <Choose>
-                      <When condition={props.chartData.length > 0}>
-                        <ChartExperimentalCanvas
-                          chartData={props.chartData || []}
-                          chartType={props.chartType}
-                          dateBy={props.dateBy}
-                          rollupBy={props.rollupBy}
-                          groupKeys={props.groupKeys}
-                          filters={props.filters}
-                          rowLabel={props.rowLabel}
-                          selectedColumnDef={props.selectedColumnDef}
-                          groupBy={props.groupBy}
-                          sumBy={props.sumBy}
-                          isFetching={props.isFetching} />
-                      </When>
-                      <When condition={props.chartData.length === 0 && props.filters}>
-                        <div className={'filterNone'}>
-                            Based on the filters you've applied, your query retrieved no results. Remove some of the filters and try again.
-                        </div>
-                      </When>
-                    </Choose>
-                  </When>
-                </Choose>
-              </Loading>
               <CopySnippet title='Embed this visual' help='Copy the code snippet below and embed in your website' snippet={props.embedCode} />
               <CopySnippet title='Share this visual' help='Copy the link below to share this page with others' snippet={props.shareLink} />
             </ConditionalOnSelect>
@@ -160,7 +165,8 @@ VizContainer.propTypes = {
     rowLabel: PropTypes.string,
     groupableColumns: PropTypes.array,
     selectableColumns: PropTypes.array,
-    shareLink: PropTypes.string
+    shareLink: PropTypes.string,
+    frontMatterHeight: PropTypes.number
   })
 }
 
@@ -175,6 +181,7 @@ const mapStateToProps = (state, ownProps) => {
   const embedCode = '<iframe src="' + embedLink + '" width="100%" height="400" allowfullscreen frameborder="0"></iframe>'
   return {
     props: {
+      frontMatterHeight: ownProps.frontMatterHeight,
       id,
       embedCode,
       shareLink,
