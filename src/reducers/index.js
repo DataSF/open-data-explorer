@@ -1,7 +1,7 @@
 import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
 // import reducers and selectors
-import { metadataReducer } from './metadataReducer'
+import { metadataReducer, makeDatasetFactDict, makeColTypesCnt, makePublishingFacts, calculatePublishingHealth } from './metadataReducer'
 import columnsReducer, * as fromColumns from './columnsReducer'
 import { queryReducer } from './queryReducer'
 import { chartReducer } from './chartReducer'
@@ -63,5 +63,18 @@ export const getSelectedColumnDef = state =>
 
 export const getSupportedChartTypes = state =>
   fromColumns.getSupportedChartTypes(state.columnProps, state.query.selectedColumn)
+
+export const makeDatasetFactDictFxn = state =>
+  makeDatasetFactDict(state)
+
+export const makeColTypesCntFxn = state =>
+  makeColTypesCnt(state)
+
+export const makePublishingFactsFxn =  state =>
+  makePublishingFacts(state)
+
+export const calculatePublishingHealthFxn = state =>
+  calculatePublishingHealth(state)
+
 
 export default rootReducer

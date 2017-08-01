@@ -22,11 +22,11 @@ const DatasetNav = ({routes, location, hasGeo, id, dataId}) => {
   return (
     <div className='container'>
       <Row className={'chartTabs DatasetNav'}>
-        <Col sm={12}>
+        <Col sm={8}>
         <div className={'dataset-nav-btns'}>
           <Nav
             bsStyle={'pills'}
-            className={'nav'}
+            className={'nav nav-justified'}
             activeKey={active}
             onSelect={handleTabSelect}>
             <NavItem eventKey={'overview'} className={'tabSelected'}>

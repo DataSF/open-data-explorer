@@ -12,7 +12,7 @@ const DatasetFrontMatter = ({name, id, rowsUpdatedAt, apiDomain, dataId}) => {
       <Row className={'dataSetTitle'} id='header'>
         <Col sm={12} md={12}>
           <h1 className={'datasetName'}> {name}</h1>
-          <div className={'text-muted last-updated'}> Data last updated {timeAgo}</div>
+          <div className={'last-updated'}> Data last updated {timeAgo}</div>
         </Col>
       </Row>
     </div>
