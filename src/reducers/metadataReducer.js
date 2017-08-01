@@ -1,9 +1,8 @@
 import * as ActionTypes from '../actions'
 import merge from 'lodash/merge'
-import uniq from 'lodash/uniq'
 
 export const metadataReducer = (state = {}, action) => {
-  
+
   if (action.response) {
     switch (action.type) {
       case ActionTypes.COUNT_SUCCESS:
