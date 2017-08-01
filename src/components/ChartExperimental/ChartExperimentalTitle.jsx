@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Glyphicon } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
 import { toTitleCase } from '../../helpers'
@@ -33,13 +34,13 @@ class ChartExperimentalTitle extends Component {
   }
 
   render () {
-    let {columns, sumBy, rowLabel, groupBy, selectedColumnDef} = this.props
+    let {columns, sumBy, rowLabel, groupBy, selectedColumnDef, showHideModal} = this.props
     let a = this.buildA(columns, sumBy, rowLabel)
     let b = selectedColumnDef.name
     let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
     let title = this.buildTitle(a, b, columns, groupBy, isNumericCol)
     return (
-      <h2 className={'Chart__title'}>{title}</h2>
+      <h2 className={'Chart__title'}>{title} <Glyphicon glyph='share-alt' onClick={showHideModal} /></h2>
     )
   }
 }

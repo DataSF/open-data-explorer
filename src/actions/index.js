@@ -465,3 +465,12 @@ export function clearSearch () {
   }
 }
 
+
+export const SHOW_HIDE_MODAL = 'SHOW_HIDE_MODAL'
+
+export function showHideModal (target) {
+  return {
+    type: SHOW_HIDE_MODAL,
+    payload: target
+  }
+}

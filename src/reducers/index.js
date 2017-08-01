@@ -8,6 +8,7 @@ import { chartReducer } from './chartReducer'
 import { tableReducer } from './tableReducer'
 import { messagesReducer } from './messagesReducer'
 import { searchReducer } from './searchReducer'
+import { uiReducer } from './uiReducer'
 import fieldsReducer, * as fromFields from './fieldsReducer'
 
 
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   fieldDetailsProps: fieldsReducer,
   messages: messagesReducer,
   search: searchReducer,
+  ui: uiReducer,
   routing
 })
 
