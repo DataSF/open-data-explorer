@@ -12,6 +12,7 @@ const DefaultListGroup = ({itemComponent, className, items, onSelectListItem, po
     ? items.map((item, index) => <ComponentToRender itemProps={item} key={`item-${index}`} onClick={onSelectListItem} hoverSide={hoverSide} />)
     : <div />
   }
+  
   return (
     <ListGroup fill className={className}>
       {content}

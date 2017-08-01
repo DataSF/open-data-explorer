@@ -8,27 +8,25 @@ class ChartExperimentalLineStuff extends Component {
 
   makeLines (groupKeys) {
     let lines = []
-    if (groupKeys) {
-      if (groupKeys.length > 1) {
-        let colorScale = d3.scale.linear().domain([1, groupKeys.length])
-          .interpolate(d3.interpolateHcl)
-          .range([d3.rgb('#007AFF'), d3.rgb('#FFF500')])
-        lines = groupKeys.map(function (i) {
-          if (i) {
-            let colorIndex = groupKeys.indexOf(i)
-            return (
-              <Line
-                type='linear'
-                dataKey={i}
-                stackId='a'
-                key={i}
-                dot={false}
-                stroke={colorScale(colorIndex)} />)
-          }
-          return false
-        })
-        return lines
-      }
+    if (groupKeys && groupKeys.length > 0) {
+      let colorScale = d3.scale.linear().domain([1, groupKeys.length])
+        .interpolate(d3.interpolateHcl)
+        .range([d3.rgb('#007AFF'), d3.rgb('#FFF500')])
+      lines = groupKeys.map(function (i) {
+        if (i) {
+          let colorIndex = groupKeys.indexOf(i)
+          return (
+            <Line
+              type='linear'
+              dataKey={i}
+              stackId='a'
+              key={i}
+              dot={false}
+              stroke={colorScale(colorIndex)} />)
+        }
+        return false
+      })
+      return lines
     }
   }
   setLegendStyleTop(lines, legendStyle){

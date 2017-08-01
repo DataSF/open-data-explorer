@@ -13,7 +13,7 @@ const ChartTypePicker = ({chartTypes, chartType, onChange}) => {
   })
 
   return (
-    <Panel collapsible defaultExpanded bsStyle='primary' header='Choose chart type'>
+    <Panel collapsible defaultExpanded bsStyle='primary' header={<h4>Choose a chart type <span className='glyphicon collapse-icon' ariaHidden></span></h4>}>
       {options}
     </Panel>
   )

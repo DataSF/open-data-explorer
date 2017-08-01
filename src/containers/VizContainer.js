@@ -53,6 +53,7 @@ class VizContainer extends Component {
               <FilterOptions
                 filters={props.filters}
                 columns={props.columns}
+                options={props.filterableColumns}
                 handleAddFilter={actions.handleAddFilter}
                 handleRemoveFilter={actions.handleRemoveFilter}
                 applyFilter={actions.applyFilter}
@@ -195,7 +196,8 @@ const mapStateToProps = (state, ownProps) => {
       rowLabel: metadata.rowLabel,
       summableColumns: getSummableColumns(state),
       groupableColumns: getGroupableColumns(state),
-      selectableColumns: getSelectableColumns(state)
+      selectableColumns: getSelectableColumns(state),
+      filterableColumns: getSelectableColumns(state, false, true)
     }
   }
 }
