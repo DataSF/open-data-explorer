@@ -148,18 +148,14 @@
 }
 
 .columnDetailsContainer{
-  margin-right:2%;
-  margin-left:0.5%;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  margin: 15px;
 }
 
 .column-details-container-wrapper{
-  overflow:scroll;
-  padding-right: 35px;
+  overflow-y:scroll;
+  padding: 0;
   right: 0;
   bottom: 0;
-  top: 240px;
   position:absolute;
 }
 .column-details-picker-panel{
@@ -176,10 +172,11 @@
 }
 
 .field-details-panel-picker-container{
-  overflow:scroll;
+  overflow-y:scroll;
   position: absolute;
   bottom: 0;
-  top:240px;
+  left: 0;
+  padding: 0;
 }
 
 .Chart__header{

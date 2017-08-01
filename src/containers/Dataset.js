@@ -12,7 +12,8 @@ class Dataset extends Component {
 
     // to capture height of sub-component
     this.state = {
-      frontMatterHeight: 50
+      frontMatterHeight: 50,
+      topOffset: 160
     }
   }
 
@@ -30,7 +31,8 @@ class Dataset extends Component {
     let height = document.getElementById('DatasetFrontmatter').clientHeight
     if (prevState.frontMatterHeight !== height) {
       this.setState({ 
-        frontMatterHeight: height
+        frontMatterHeight: height,
+        topOffset: height + 45 + 65
       })
     }
   }
@@ -38,9 +40,7 @@ class Dataset extends Component {
   render () {
     const { metadata, children, ...other } = this.props
     const childrenWithHeight = React.Children.map(children, 
-      (child) => React.cloneElement(child, { 
-        frontMatterHeight: this.state.frontMatterHeight
-      }))
+      (child) => React.cloneElement(child, this.state))
     return (
       <div>
         <section id={'DatasetFrontmatter'}>
