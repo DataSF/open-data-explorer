@@ -92,7 +92,7 @@ class ChartOptions extends Component {
     return (
       selectedColumn
       ? (
-        <Panel collapsible defaultExpanded className='chart' header={<h4>Filter options <span className='glyphicon collapse-icon' ariaHidden></span></h4>}>
+        <Panel collapsible defaultExpanded className='chart' header={<h4>Filter options <span className='glyphicon collapse-icon' aria-hidden></span></h4>}>
           {sumByOptions}
         </Panel>
       ) : false
