@@ -243,7 +243,7 @@ export const makePublishingFacts = (state) => {
     'publishingFrequency': 'Publishing Frequency',
     'dataChangeFrequency': 'Data Change Frequency' ,
     'createdAt': 'Dataset Creation Date',
-    'days_since_first_created': 'Dataset Age',
+    // 'days_since_first_created': 'Dataset Age',
   }
   let publishingFaqs = []
   Object.keys(pubFieldDetails).forEach(function (key) {
