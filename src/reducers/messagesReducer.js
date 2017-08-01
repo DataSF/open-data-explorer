@@ -18,7 +18,6 @@ function clearAllMessages (state, action) {
 export const messagesReducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.QS_FAILURE:
-    case ActionTypes.COUNT_FAILURE:
     case ActionTypes.COLPROPS_FAILURE:
     case ActionTypes.DATA_FAILURE: return setMessage(state, action)
     case ActionTypes.METADATA_REQUEST:

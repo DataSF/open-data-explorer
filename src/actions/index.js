@@ -37,34 +37,6 @@ function fetchColumns (id) {
   }
 }
 
-export const MIGRATION_REQUEST = 'MIGRATION_REQUEST'
-export const MIGRATION_FAILURE = 'MIGRATION_FAILURE'
-export const MIGRATION_SUCCESS = 'MIGRATION_SUCCESS'
-
-// function fetchMigrationId (id) {
-//  return {
-//   [CALL_API]: {
-//      types: [MIGRATION_REQUEST, MIGRATION_SUCCESS, MIGRATION_FAILURE],
-//      endpoint: Endpoints.MIGRATION(id),
-//      transform: Transforms.MIGRATION
-//    }
-//  }
-// }
-
-export const COUNT_REQUEST = 'COUNT_REQUEST'
-export const COUNT_SUCCESS = 'COUNT_SUCCESS'
-export const COUNT_FAILURE = 'COUNT_FAILURE'
-
-//function countRows (id) {
-//  return {
-//    [CALL_API]: {
-//      types: [COUNT_REQUEST, COUNT_SUCCESS, COUNT_FAILURE],
-//      endpoint: Endpoints.COUNT(id),
-//      transform: Transforms.COUNT
-//    }
-//  }
-//}
-
 export const COLPROPS_REQUEST = 'COLPROPS_REQUEST'
 export const COLPROPS_SUCCESS = 'COLPROPS_SUCCESS'
 export const COLPROPS_FAILURE = 'COLPROPS_FAILURE'

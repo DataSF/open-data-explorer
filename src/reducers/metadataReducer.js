@@ -2,29 +2,6 @@ import * as ActionTypes from '../actions'
 import merge from 'lodash/merge'
 import moment from 'moment'
 
-export const metadataReducer = (state = {}, action) => {
-
-  if (action.response) {
-    switch (action.type) {
-      case ActionTypes.COUNT_SUCCESS:
-      case ActionTypes.METADATA_SUCCESS:
-      case ActionTypes.MIGRATION_SUCCESS:
-        return merge({}, state, action.response)
-      case ActionTypes.RELATEDDATASET_SUCCESS:
-        let merged = merge({}, state, action.response)
-        return Object.assign({}, state, merged)
-      default:
-        return state
-    }
-  }
-
-  switch (action.type) {
-    default:
-      return state
-
-  }
-}
-
 function makePercent (item) {
   let prcnt =parseFloat(item) * 100
   return String(prcnt.toFixed(2)) + "%"
@@ -140,4 +117,23 @@ export const makePublishingFacts = (state) => {
     }
   })
   return publishingFaqs
+}
+
+export const metadataReducer = (state = {}, action) => {
+
+  if (action.response) {
+    switch (action.type) {
+      case ActionTypes.METADATA_SUCCESS:
+      case ActionTypes.RELATEDDATASET_SUCCESS:
+        return Object.assign({}, state, action.response)
+      default:
+        return state
+    }
+  }
+
+  switch (action.type) {
+    default:
+      return state
+
+  }
 }
