@@ -91,7 +91,8 @@ export function loadMetadata (id) {
   return (dispatch, getState) => {
     return Promise.all([
       dispatch(fetchMetadata(id)),
-      dispatch(fetchColumns(id))
+      dispatch(fetchColumns(id)),
+      dispatch(loadRelatedDatasets(id))
       ]).then(() => {
         return Promise.all([
           dispatch(loadColumnProps()),
@@ -468,7 +469,6 @@ export function clearSearch () {
   }
 }
 
-
 export const SHOW_HIDE_MODAL = 'SHOW_HIDE_MODAL'
 
 export function showHideModal (target) {
@@ -477,3 +477,29 @@ export function showHideModal (target) {
     payload: target
   }
 }
+
+export const RELATEDDATASET_REQUEST = 'RELATEDDATASET_REQUEST'
+export const RELATEDDATASET_SUCCESS = 'RELATEDDATASET_SUCCESS'
+export const RELATEDDATASET_FAILURE = 'RELATEDDATASET_FAILURE'
+
+// Fetches a related datasets from the metadata API.
+// Relies on the custom API middleware defined in ../middleware/api.js.
+function fetchRelatedDatasets (id) {
+  // console.log("** fetching related datasets***")
+  // console.log(fbf)
+  // console.log("********")
+  return {
+    [CALL_API]: {
+      types: [RELATEDDATASET_REQUEST, RELATEDDATASET_SUCCESS, RELATEDDATASET_FAILURE],
+      endpoint: EndpointsSF.RELATEDDATASETS(id),
+      transform: TransformsSF.RELATEDDATASETS
+    }
+  }
+}
+
+export function loadRelatedDatasets (id) {
+  return (dispatch, getState) => {
+    return Promise.all([dispatch(fetchRelatedDatasets(id))])
+  }
+}
+

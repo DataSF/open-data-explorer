@@ -287,7 +287,6 @@ function transformColumns (json) {
     }
   }
   response.columns = columns
-
   return response
 }
 

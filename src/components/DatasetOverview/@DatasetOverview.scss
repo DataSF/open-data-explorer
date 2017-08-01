@@ -1,6 +1,6 @@
 .DatasetOverview h3 {
 	border-bottom: dotted thin #333;
-	padding-bottom: 4px;	
+	padding-bottom: 4px;
 }
 
 .DatasetOverview .description p {
@@ -9,4 +9,135 @@
 
 #DatasetOverview {
 	margin-top: 10px;
+}
+
+.overview{
+  padding-top:1.5%;
+}
+
+.overview-description{
+  margin-right:5%;
+  font-size: 20px;
+}
+
+.overview-description-breakline{
+  border-bottom: solid 3px #ecf0f1;
+  padding-top: 1.5%;
+  margin-bottom:1%;
+}
+
+.overview-description-notes{
+  padding-top: 1%;
+}
+
+.overview-department-license{
+  font-size: 21px;
+}
+
+.overview-attachments-header{
+  padding-top:1%;
+  padding-left: 2%;
+}
+li.overview-attachment-list{
+  color:#7e7e7e;
+}
+
+.overview-publishing-details{
+  font-size:18px;
+}
+
+.overview-table-info{
+  padding-top:0.5%;
+}
+
+.overview-table-info-header{
+  font-size:21px;
+  padding-bottom:1%;
+}
+
+.overview-table-info-dataset-facts{
+    /*border: 1px solid black;*/
+    border: 1px solid #ecf0f1;
+    font-size: 16px;
+    width:90%;
+}
+
+.overview-dataset-facts-td{
+  /*border: 1px solid black;*/
+   border-right: 1px solid #ecf0f1;
+   padding:1%;
+   width: 50%;
+}
+
+.overview-table-info-dataset-facts tr:nth-child(odd) {
+  background-color: #ecf0f1;
+  color: #000000;
+}
+
+.overview-dataset-cnts-td-value{
+  padding-left:2%;
+  /*border: 1px solid black;*/
+}
+
+.overview-table-dataset-field-cnts{
+  margin-top:3%;
+}
+
+.overview-publishing-details-area{
+  /*border: 3px solid rgb(71, 100, 129)*/
+  background-color: #ecf0f1;
+  /*border:3px solid #2f5161;*/
+  margin-top:6.30%;
+  -webkit-background-clip: padding-box; /* for Safari */
+  background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
+  width:75%;
+}
+
+.overview-publishing-details-title{
+  padding-top:3%;
+  font-size:25px;
+   /*color: rgb(71, 100, 129);*/
+   font-style: italic;
+   margin-bottom:-1%;
+   padding-left:6%;
+}
+.overview-publishing-details-items{
+  font-size:20px;
+  padding-top:2%;
+  padding-bottom:2%;
+  padding-left:2%;
+  padding-right:2%;
+}
+span.overview-publishing-health-healthy{
+  color: #009900;
+  font-weight: 600;
+}
+
+span.overview-publishing-health-stale{
+  color: #990000;
+  font-weight: 600;
+}
+
+span.overview-publishing-health-delayed{
+  color: #FF7619;
+  font-weight: 600;
+}
+
+span.overview-publishing-health{
+  font-size: 24px;
+}
+
+span.overview-publishing-health-popover{
+  font-size: 18px;
+}
+
+.popover-overview-publishing-health-items{
+  margin: 1%;
+}
+
+.popover-overview-publishing-health-title{
+  margin-bottom:1%;
+}
+.overview-extended-content{
+  margin-bottom:1%;
 }
