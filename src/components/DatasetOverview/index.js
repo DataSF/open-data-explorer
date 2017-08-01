@@ -1,37 +1,12 @@
 import './@DatasetOverview.css'
 
 import React, { Component } from 'react'
-import { Row, Col } from 'react-bootstrap'
-import { format } from 'd3'
-import moment from 'moment'
-import { OverlayTrigger, Popover } from 'react-bootstrap'
+import { Row, Col, OverlayTrigger, Popover } from 'react-bootstrap'
+// import { format } from 'd3'
+// import moment from 'moment'
+import RelatedDatasetTable from '../RelatedDatasetTable'
 
 class DatasetOverview extends Component {
-
-   constructor (props) {
-    super(props)
-  }
-
-  componentDidMount () {
-    console.log("**** in here again after mounting*****")
-    console.log(this.props)
-    let fbf = this.props.location.pathname.split("/")
-    let id = fbf[fbf.length-1]
-    if (id) {
-      console.log("fbf")
-      console.log(id)
-      let cool = this.props.loadRelatedDatasets(id)
-      console.log(cool)
-    }
-  }
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.metadata.dataId ) {
-       let fbf = this.props.location.pathname.split("/")
-      let id = fbf[fbf.length-1]
-       this.props.loadRelatedDatasets(id)
-    }
-  }
-
 
   renderAttachmentsList (attachments, id) {
     let attachmentList
@@ -63,7 +38,7 @@ class DatasetOverview extends Component {
     let publishingFaqsList = publishing_faqs.map(function(publishing_faq){
       let textStuff = publishing_faq.header + ": " + publishing_faq.value
       return (
-        <li className={'overview-publishing-details-items'}>
+        <li key={Math.random()} className={'overview-publishing-details-items'}>
           {textStuff}
         </li>
       )
@@ -104,13 +79,13 @@ class DatasetOverview extends Component {
   }
 
 
+
   render () {
-    console.log(this.props)
-    const { id, description, publishingDepartment, licenseLink, licenseName, rowCount, rowsUpdatedAt, publishingFrequency, notes, attachments, programLink, tags, datasetFacts, colCounts, publishing_faqs, publishing_health} = this.props.metadata
-    let numberFormat = format(',')
-    let dayUpdated = moment(rowsUpdatedAt).format('MM/DD/YYYY')
-    let timeUpdated = moment(rowsUpdatedAt).format('hh:mm A')
-    let overviewContent = null
+    const { id, description, publishingDepartment, licenseLink, licenseName, notes, attachments, programLink, datasetFacts, colCounts, publishing_faqs, publishing_health, relatedDatasets, relatedDatasetCnt} = this.props.metadata
+    // let numberFormat = format(',')
+    // let dayUpdated = moment(rowsUpdatedAt).format('MM/DD/YYYY')
+    // let timeUpdated = moment(rowsUpdatedAt).format('hh:mm A')
+    // let overviewContent = null
     let attachmentList = this.renderAttachmentsList( attachments, id)
     let datasetFactsTbl =  this.makeDatasetFactsTable(datasetFacts, 'overview-dataset-facts-td', 'overview-dataset-facts-td')
     let datasetFieldCntTbl = this.makeDatasetFactsTable(colCounts, 'overview-dataset-facts-td',  'overview-dataset-cnts-td-value')
@@ -120,7 +95,7 @@ class DatasetOverview extends Component {
       if (this.props.metadata) {
       // assemble related documents
       let documents = []
-      let tagList = null
+      // let tagList = null
       if (notes || attachments || programLink) documents.push(<h2 key='title'>Notes and Supporting Documentation</h2>)
       if (notes) documents.push(<p key='notes'>{notes}</p>)
       if (programLink) documents.push(<p key='programLink'><a href={programLink} target={'_blank'}>Learn more about the program</a> related to this dataset</p>)
@@ -134,14 +109,14 @@ class DatasetOverview extends Component {
       }
 
       // join tags with comma
-      if (tags) {
-        tagList = (
-          <div>
-            <h3 className={'text-muted'}>Tags</h3>
-            <p>{tags}</p>
-          </div>
-          )
-      }
+      //if (tags) {
+      //  tagList = (
+      //     <div>
+      //      <h3 className={'text-muted'}>Tags</h3>
+      //      <p>{tags}</p>
+      //    </div>
+      //    )
+      // }
 
     }
     return (
@@ -161,7 +136,10 @@ class DatasetOverview extends Component {
             <When condition={attachments}>
               <div className={'overview-attachments'}>
                 <div className={'overview-attachments-header'}>
-                  <span style={{ 'color': '#939393'}}>{'Related Documents'}</span>
+                  <span style={{ 'color': '#939393'}}>
+                    {'Related Documents '}
+                    <span className={'glyphicon glyphicon-folder-open'}></span>
+                  </span>
                 </div>
                 <ul>
                   {attachmentList}
@@ -184,7 +162,9 @@ class DatasetOverview extends Component {
                 {'Dataset Facts'}
               </div>
               <table className={'overview-table-info-dataset-facts'}>
+                 <tbody>
                 {datasetFactsTbl}
+                </tbody>
               </table>
             </div>
             <div className={'overview-table-dataset-field-cnts'}>
@@ -192,7 +172,9 @@ class DatasetOverview extends Component {
                 { 'Whats Inside This Dataset'}
               </div>
               <table className={'overview-table-info-dataset-facts'}>
-                {datasetFieldCntTbl}
+                <tbody>
+                  {datasetFieldCntTbl}
+                </tbody>
               </table>
             </div>
           </Col>
@@ -209,13 +191,22 @@ class DatasetOverview extends Component {
             </div>
           </Col>
         </Row>
-        <div className={'overview-description-breakline'}></div>
-        <div className={'overview-related-datasets-container'}>
-          <div className={'overview-table-info-header'}>
-            {'Related Datasets'}
-          </div>
-        </div>
+        <Choose>
+          <When condition={relatedDatasets}>
+            <Row>
+              <div className={'overview-description-breakline'}></div>
+              <Col sm={12} className={'overview-publishing-details'}>
+                <RelatedDatasetTable className={'related-dataset-overview-table'}
+                  relatedDatasets={relatedDatasets}
+                  relatedDatasetCnt={relatedDatasetCnt} />
+              </Col>
+            </Row>
+          </When>
+        </Choose>
+
+
       </div>
+
     )
   }
 }

@@ -56,13 +56,15 @@ li.overview-attachment-list{
 }
 
 .overview-table-info-dataset-facts{
-    border: 1px solid black;
+    /*border: 1px solid black;*/
+    border: 1px solid #ecf0f1;
     font-size: 16px;
     width:90%;
 }
 
 .overview-dataset-facts-td{
-   border: 1px solid black;
+  /*border: 1px solid black;*/
+   border-right: 1px solid #ecf0f1;
    padding:1%;
    width: 50%;
 }
@@ -74,7 +76,7 @@ li.overview-attachment-list{
 
 .overview-dataset-cnts-td-value{
   padding-left:2%;
-  border: 1px solid black;
+  /*border: 1px solid black;*/
 }
 
 .overview-table-dataset-field-cnts{
@@ -82,7 +84,8 @@ li.overview-attachment-list{
 }
 
 .overview-publishing-details-area{
-  border: 3px solid rgb(71, 100, 129);
+  /*border: 3px solid rgb(71, 100, 129)*/
+  background-color: #ecf0f1;
   /*border:3px solid #2f5161;*/
   margin-top:6.30%;
   -webkit-background-clip: padding-box; /* for Safari */
@@ -93,7 +96,7 @@ li.overview-attachment-list{
 .overview-publishing-details-title{
   padding-top:3%;
   font-size:25px;
-  color: rgb(71, 100, 129);
+   /*color: rgb(71, 100, 129);*/
    font-style: italic;
    margin-bottom:-1%;
    padding-left:6%;

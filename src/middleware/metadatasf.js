@@ -1,4 +1,5 @@
 
+//import titleize from 'titleize'
 
 const API_ROOT = 'http://metadatasf.tk/api/v1/'
 const geoTypeMappings = {
@@ -24,7 +25,7 @@ function endpointColumns (id) {
   return API_ROOT + `fielddetails/${id}`
 }
 function endpointRelatedDatasets (id) {
-  console.log(API_ROOT + `relateddatasets/${id}`)
+  //console.log(API_ROOT + `relateddatasets/${id}`)
   return API_ROOT + `relateddatasets/${id}`
 }
 
@@ -71,8 +72,41 @@ function transformColumns (json) {
   return result
 }
 
+function getRelatedDeparts(json){
+  let depts = {}
+  json.forEach(function(item){
+    //item.dataset_name = titleize(item.dataset_name)
+    item.description = item.description.substring(0,250) + ' ...'
+    // item.department = titleize(item.department)
+    if(typeof item.keywords !== 'undefined'){
+      item.keywords = item.keywords.split(", ")
+      item.keywords = item.keywords.join(", ")
+    }
+
+    if(Object.keys(depts).indexOf(item.department) === -1){
+      depts[item.department] = [item]
+    }else{
+      let linksList = depts[item.department]
+      depts[item.department] = linksList.concat([item])
+    }
+  })
+  let sortedDeptsList = Object.keys(depts).sort(function(a, b) {
+    return depts[depts[a].length] - depts[depts[b].length]
+  })
+  let deptsSorted =  []
+
+  sortedDeptsList.forEach(function(dept){
+    let deptItem = {'dept': dept, 'links': depts[dept]}
+    deptsSorted.push(deptItem)
+  })
+  return deptsSorted
+}
+
 function transformRelatedDatasets (json) {
-  console.log(json)
-  let relatedDatasets = json
-  return relatedDatasets
+  let relatedDatasetCnt = String(json.length)
+  json = getRelatedDeparts(json)
+  return {
+    'relatedDatasetCnt': relatedDatasetCnt,
+    'relatedDatasets': json,
+  }
 }

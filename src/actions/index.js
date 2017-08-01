@@ -91,7 +91,8 @@ export function loadMetadata (id) {
   return (dispatch, getState) => {
     return Promise.all([
       dispatch(fetchMetadata(id)),
-      dispatch(fetchColumns(id))
+      dispatch(fetchColumns(id)),
+      dispatch(loadRelatedDatasets(id))
       ]).then(() => {
         return dispatch(loadColumnProps())
       })
@@ -469,12 +470,12 @@ export const RELATEDDATASET_REQUEST = 'RELATEDDATASET_REQUEST'
 export const RELATEDDATASET_SUCCESS = 'RELATEDDATASET_SUCCESS'
 export const RELATEDDATASET_FAILURE = 'RELATEDDATASET_FAILURE'
 
-// Fetches a single user from Github API.
+// Fetches a related datasets from the metadata API.
 // Relies on the custom API middleware defined in ../middleware/api.js.
 function fetchRelatedDatasets (id) {
-  console.log("in here calling")
-  console.log(id)
-  console.log("********")
+  // console.log("** fetching related datasets***")
+  // console.log(fbf)
+  // console.log("********")
   return {
     [CALL_API]: {
       types: [RELATEDDATASET_REQUEST, RELATEDDATASET_SUCCESS, RELATEDDATASET_FAILURE],
@@ -485,8 +486,6 @@ function fetchRelatedDatasets (id) {
 }
 
 export function loadRelatedDatasets (id) {
-  console.log('loading the related datasets***')
-  console.log(id)
   return (dispatch, getState) => {
     return Promise.all([dispatch(fetchRelatedDatasets(id))])
   }

@@ -12,6 +12,9 @@ export const metadataReducer = (state = {}, action) => {
       case ActionTypes.COUNT_SUCCESS:
       case ActionTypes.METADATA_SUCCESS:
       case ActionTypes.MIGRATION_SUCCESS:
+      case ActionTypes.RELATEDDATASET_SUCCESS:
+        let merged = merge({}, state, action.response)
+        return Object.assign({}, state, merged)
       case ActionTypes.COLPROPS_SUCCESS:
         if (ActionTypes.COLPROPS_SUCCESS) {
           action.response.categoryColumns = union([], state.categoryColumns, action.response.categoryColumns)
@@ -19,13 +22,13 @@ export const metadataReducer = (state = {}, action) => {
         return merge({}, state, action.response)
       // remove - move to table and chart objects
       case ActionTypes.DATA_SUCCESS:
-        let merged = merge({}, state, action.response)
+        let merged2 = merge({}, state, action.response)
         if (action.response.query) {
-          merged.query.data = action.response.query.data
+          merged2.query.data = action.response.query.data
         } else {
-          merged.table.data = action.response.table.data
+          merged2.table.data = action.response.table.data
         }
-        return Object.assign({}, state, merged)
+        return Object.assign({}, state, merged2)
       default:
         return state
     }
@@ -195,7 +198,7 @@ export const makeColTypesCnt = (state) => {
   let colCounts = []
   Object.keys(colTypesCnt).forEach(function (key) {
       if ((state.metadata[key]) && (typeof state.metadata[key] !== 'undefined')) {
-        if( parseInt(state.metadata[key]) !== 0){
+        if( parseInt(state.metadata[key], 10) !== 0){
           colCounts.push({'header': colTypesCnt[key], 'value': state.metadata[key]})
         }
       }
@@ -217,11 +220,11 @@ export const calculatePublishingHealth = (state) => {
   }
   if (Object.keys(healthThresholds).includes(pubFreq)) {
     let timeIntervals = healthThresholds[pubFreq]
-    if (parseInt(dayslastUpdt) <= timeIntervals[0]) {
+    if (parseInt(dayslastUpdt, 10) <= timeIntervals[0]) {
       return {'value': 'On Time', 'className': 'healthy'}
-    } else if ((parseInt(dayslastUpdt) > timeIntervals[0]) && (parseInt(dayslastUpdt) <= timeIntervals[1])) {
+    } else if ((parseInt(dayslastUpdt, 10) > timeIntervals[0]) && (parseInt(dayslastUpdt, 10) <= timeIntervals[1])) {
       return {'value': 'Delayed', 'className': 'delayed'}
-    } else if (parseInt(dayslastUpdt) > timeIntervals[1]) {
+    } else if (parseInt(dayslastUpdt, 10) > timeIntervals[1]) {
       return {'value': 'Stale', 'className': 'stale'}
     }
   }
