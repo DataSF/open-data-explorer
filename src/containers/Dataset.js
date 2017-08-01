@@ -29,10 +29,12 @@ class Dataset extends Component {
 
   componentDidUpdate (prevProps, prevState) {
     let height = document.getElementById('DatasetFrontmatter').clientHeight
+    let viewportHeight = window.innerHeight
     if (prevState.frontMatterHeight !== height) {
       this.setState({ 
         frontMatterHeight: height,
-        topOffset: height + 45 + 65
+        topOffset: height + 45 + 65,
+        viewportHeight
       })
     }
   }

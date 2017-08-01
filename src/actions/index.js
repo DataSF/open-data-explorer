@@ -93,7 +93,10 @@ export function loadMetadata (id) {
       dispatch(fetchMetadata(id)),
       dispatch(fetchColumns(id))
       ]).then(() => {
-        return dispatch(loadColumnProps())
+        return Promise.all([
+          dispatch(loadColumnProps()),
+          dispatch(loadTable())
+        ])
       })
     }
   }

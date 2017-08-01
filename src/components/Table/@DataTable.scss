@@ -1,5 +1,11 @@
-#data-table{
-}
 #data-table .pagination {
-	float: right;
+	margin-top: 0;
+}
+
+#data-table {
+	margin: 0 15px;
+}
+
+.Table__sort-link {
+	cursor: pointer;
 }

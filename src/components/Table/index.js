@@ -1,4 +1,5 @@
 import 'fixed-data-table/dist/fixed-data-table.css'
+import './@DataTable.css'
 import React, { Component } from 'react'
 import { Pagination } from 'react-bootstrap'
 import {Table, Column, Cell} from 'fixed-data-table'
@@ -8,11 +9,19 @@ import { format as formatD3 } from 'd3'
 
 var SortTypes = {
   ASC: 'asc',
-  DESC: 'desc'
+  DESC: 'desc',
+  NONE: null
 }
 
-function reverseSortDirection (sortDir) {
-  return sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC
+function switchDirection (sortDir) {
+  switch (sortDir) {
+    case SortTypes.ASC:
+      return SortTypes.DESC
+    case SortTypes.DESC:
+      return SortTypes.NONE
+    default:
+      return SortTypes.ASC
+  }
 }
 
 class SortHeaderCell extends Component {
@@ -27,8 +36,8 @@ class SortHeaderCell extends Component {
 
     return (
       <Cell {...props}>
-        <a onClick={this._onSortChange}>
-          {children} {sortDir ? (sortDir === SortTypes.DESC ? '↓' : '↑') : ''}
+        <a className='Table__sort-link' onClick={this._onSortChange}>
+          {children} {sortDir ? (sortDir === SortTypes.DESC ? '↑' : '↓') : ''}
         </a>
       </Cell>
     )
@@ -38,8 +47,7 @@ class SortHeaderCell extends Component {
     e.preventDefault()
 
     if (this.props.onSortChange) {
-      this.props.onSortChange(this.props.columnKey, this.props.sortDir ? reverseSortDirection(this.props.sortDir) : SortTypes.DESC
-      )
+      this.props.onSortChange(this.props.columnKey, switchDirection(this.props.sortDir))
     }
   }
 }
@@ -76,30 +84,17 @@ class DataTable extends Component {
     this.handlePagination = this.handlePagination.bind(this)
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.metadata.id && !this.props.metadata.table) {
-      this.props.loadTable()
-    }
-  }
-
-  componentDidMount () {
-    if (this.props.metadata.id && !this.props.metadata.table) {
-      this.props.loadTable()
-    }
-  }
-
   handlePagination (page) {
     this.props.updatePage(page - 1)
   }
 
   render () {
-    let { metadata, columns } = this.props
-    let { table, rowCount } = metadata
+    let { columns, rowCount, table } = this.props
     let tableContainer = null
 
-    if (table && table.data && table.data.length > 0) {
+    if (table && table.tableData && table.tableData.length > 0) {
       let perPage = 1000
-      let tableRows = table.data.length
+      let tableRows = table.tableData.length
       let items = Math.ceil(parseInt(rowCount, 10) / perPage)
 
       columns = Object.keys(columns).map((key, i) => {
@@ -116,7 +111,7 @@ class DataTable extends Component {
           allowCellsRecycling
           cell={
             <DynamicCell
-              data={table.data}
+              data={table.tableData}
               field={key}
               format={column.format} />
           }
@@ -129,12 +124,13 @@ class DataTable extends Component {
             rowsCount={tableRows}
             rowHeight={50}
             headerHeight={50}
-            width={this.props.containerWidth}
-            height={500}>
+            width={this.props.containerWidth - 30}
+            height={(this.props.viewportHeight - this.props.topOffset - 50)}>
             {columns}
           </Table>
+          <div style={{textAlign: 'center'}}>
           <Pagination
-            bsSize='small'
+            bsSize='medium'
             items={items}
             activePage={table.tablePage + 1}
             maxButtons={10}
@@ -144,6 +140,7 @@ class DataTable extends Component {
             next
             ellipsis
             onSelect={this.handlePagination} />
+          </div>
         </div>
       )
     }

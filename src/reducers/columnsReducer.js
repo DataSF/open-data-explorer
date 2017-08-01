@@ -178,9 +178,15 @@ function initColumns (state, action) {
   })
 }
 
-//function updateColumns (state, action) {
-//  return merge({}, state, action.response)
-//}
+function sortColumn (state, action) {
+  return merge({}, state, {
+    columns: {
+      [action.key]: {
+        sortDir: action.dir
+      }
+    }
+  })
+}
 
 function loadColumnProperties (state, action) {
   action.response.categoryColumns = union([], state.categoryColumns, action.response.categoryColumns)
@@ -245,6 +251,7 @@ const columnsReducer = createReducer({ typeFilters: [] }, {
   [ActionTypes.SORT_COLUMN_LIST]: sortColumnList,
   [ActionTypes.SET_HIDE_SHOW]: setHideShow,
   [ActionTypes.SET_DEFAULT_HIDE_SHOW]: setDefaultHideShow,
-  [ActionTypes.RESET_STATE]: resetState
+  [ActionTypes.RESET_STATE]: resetState,
+  [ActionTypes.SORT_COLUMN]: sortColumn
 })
 export default columnsReducer
