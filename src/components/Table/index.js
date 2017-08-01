@@ -54,7 +54,7 @@ class SortHeaderCell extends Component {
 
 class DynamicCell extends Component {
   render () {
-    const { rowIndex, field, data, format, ...props } = this.props
+    const { rowIndex, field, data, format, type, ...props } = this.props
     let content
     if (format === 'location' && data[rowIndex][field]) {
       content = data[rowIndex][field].coordinates[1] + ', ' + data[rowIndex][field].coordinates[0]
@@ -65,7 +65,11 @@ class DynamicCell extends Component {
     } else if (format === 'money' && data[rowIndex][field]) {
       let dollars = formatD3('$,')
       content = dollars(data[rowIndex][field])
-    } else {
+    } else if (type.indexOf('geometry') > -1 && format !== 'location') {
+      // TODO: output wkt from geom
+      content = ''
+    } 
+    else {
       content = data[rowIndex][field]
     }
 
@@ -113,7 +117,8 @@ class DataTable extends Component {
             <DynamicCell
               data={table.tableData}
               field={key}
-              format={column.format} />
+              format={column.format}
+              type={column.type} />
           }
           width={200} />
       })
