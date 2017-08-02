@@ -1,5 +1,4 @@
 import * as ActionTypes from '../actions'
-import merge from 'lodash/merge'
 import moment from 'moment'
 
 function makePercent (item) {
@@ -132,6 +131,8 @@ export const metadataReducer = (state = {}, action) => {
   }
 
   switch (action.type) {
+    case ActionTypes.METADATA_REQUEST:
+      return {}
     default:
       return state
 

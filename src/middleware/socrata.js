@@ -182,7 +182,7 @@ function endpointTableQuery (state) {
 
   if (table.sorted && table.sorted.length > 0) {
     table.sorted.forEach((key) => {
-      if (columns[key].sortDir !== null) {
+      if (columns[key] && columns[key].sortDir !== null) {
         query.order(key + ' ' + columns[key].sortDir)
       }
     })
