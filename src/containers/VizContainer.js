@@ -21,7 +21,7 @@ import Loading from '../components/Loading'
 import Messages from '../components/Messages'
 import './@containers.css'
 
-import TypeFilter from '../containers/TypeFilter'
+import ChartFieldSelector from '../containers/ChartFieldSelector'
 import ModalShare from '../containers/ModalShare'
 
 import { BASE_HREF } from '../constants/AppConstants'
@@ -48,7 +48,7 @@ class VizContainer extends Component {
         <ModalShare />
         <Col className={'VizContainer__config'} style={absoluteTop}>
           <Accordion>
-            <TypeFilter />
+            <ChartFieldSelector />
             <ConditionalOnSelect selectedColumn={props.selectedColumn}>
               <ChartTypePicker
                 chartTypes={props.supportedChartTypes}
