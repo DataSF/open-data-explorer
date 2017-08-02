@@ -172,7 +172,7 @@ function endpointTableQuery (state) {
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
   let id = state.metadata.dataId || state.metadata.id
-  let table = state.metadata.table
+  let { table, columnProps: { columns }} = state
   let page = table.tablePage || 0
 
   let query = consumer.query()
@@ -182,7 +182,9 @@ function endpointTableQuery (state) {
 
   if (table.sorted && table.sorted.length > 0) {
     table.sorted.forEach((key) => {
-      query.order(key + ' ' + state.metadata.columns[key].sortDir)
+      if (columns[key] && columns[key].sortDir !== null) {
+        query.order(key + ' ' + columns[key].sortDir)
+      }
     })
   }
 

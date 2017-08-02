@@ -3,9 +3,8 @@
   top: 0;
   bottom: 0;
   padding:17%;
-  border: 3px dashed;
-  border-color: #ecf0f1;
-  color: #ecf0f1;
+  color: #bdbdbd;
+  background-color: #ecf0f1;
   font-size:275%;
 }
 
@@ -94,4 +93,14 @@
 .Chart__sub-title {
   margin-left: 72px;
   color: #96989a;
+}
+
+.Chart__title .glyphicon {
+  font-size: 80%;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+.Chart__title .glyphicon:hover {
+  color: #18BC9C;
 }

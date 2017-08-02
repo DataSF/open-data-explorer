@@ -3,10 +3,12 @@ import { loadTable, sortColumn, updatePage } from '../actions'
 import DataTable from '../components/Table'
 
 const mapStateToProps = (state, ownProps) => {
-  const { metadata, columnProps } = state
+  const { table, columnProps, metadata } = state
   return {
-    metadata,
-    columns: columnProps.columns
+    table,
+    columns: columnProps.columns,
+    rowCount: metadata.rowCount,
+    viewportHeight: ownProps.viewportHeight
   }
 }
 

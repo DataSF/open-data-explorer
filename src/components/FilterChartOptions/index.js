@@ -120,7 +120,7 @@ class FilterOptions extends Component {
     }
 
     return (
-      <Panel className={'FilterChartOptions__root'} collapsible defaultExpanded header={<h4>Filter by other fields <span className='glyphicon collapse-icon' ariaHidden></span></h4>} bsStyle={'primary'}>
+      <Panel className={'FilterChartOptions__root'} collapsible defaultExpanded header={<h4>Filter by other fields <span className='glyphicon collapse-icon' aria-hidden></span></h4>} bsStyle={'primary'}>
         <Select
           className={'FilterChartOptions__select'}
           name='filters'

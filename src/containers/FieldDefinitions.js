@@ -12,9 +12,13 @@ import FieldNameFilterDetails from '../containers/FieldNameFilterDetails'
 import { Panel } from 'react-bootstrap'
 import FieldProfile from '../components/FieldProfile'
 
-const ColumnDetails = ({list, filters, onFilter, sort, onSort, fieldTypeItems, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols, selectedProfileInfo, selectedCategories }) => (
+const ColumnDetails = ({topOffset, list, filters, onFilter, sort, onSort, fieldTypeItems, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols, selectedProfileInfo, selectedCategories }) => {
+  let absoluteTop = {
+      top: (topOffset) + 'px'
+    }
+  return (
   <Row className={'column-details-all-container'}>
-    <Col sm={3} className={'field-details-panel-picker-container'}>
+    <Col sm={3} className={'field-details-panel-picker-container'} style={absoluteTop}>
     <div>
       <Choose>
         <When condition={selectedColumnDef}>
@@ -69,7 +73,7 @@ const ColumnDetails = ({list, filters, onFilter, sort, onSort, fieldTypeItems, s
     </Choose>
   </div>
     </Col>
-    <Col sm={9} className={'column-details-container-wrapper'}>
+    <Col sm={9} className={'column-details-container-wrapper'} style={absoluteTop}>
       <Choose>
         <When condition={selectedColumnDef}>
           <div className={'fieldProfileContainer'}>
@@ -91,8 +95,8 @@ const ColumnDetails = ({list, filters, onFilter, sort, onSort, fieldTypeItems, s
         </Otherwise>
       </Choose>
     </Col>
-  </Row>
-)
+  </Row>)
+}
 
 const mapStateToProps = (state, ownProps) => {
   let selectable = getSelectableColumnsDetails(state)

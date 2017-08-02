@@ -4,13 +4,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns, getSupportedChartTypes } from '../reducers'
-import { selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy, loadQueryStateFromString, changeRollupBy } from '../actions'
+import { showHideModal, selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy, loadQueryStateFromString, changeRollupBy } from '../actions'
 import BlankChart from '../components/ChartExperimental/BlankChart'
 import ConditionalOnSelect from '../components/ConditionalOnSelect'
 import ChartExperimentalCanvas from '../components/ChartExperimental/ChartExperimentalCanvas'
 import ChartExperimentalTitle from '../components/ChartExperimental/ChartExperimentalTitle'
 import ChartExperimentalSubTitle from '../components/ChartExperimental/ChartExperimentalSubTitle'
-import CopySnippet from '../components/CopySnippet'
 import GroupOptions from '../components/Query/GroupOptions'
 import FilterOptions from '../components/FilterChartOptions'
 import SumOptions from '../components/Query/SumOptions'
@@ -23,6 +22,7 @@ import Messages from '../components/Messages'
 import './@containers.css'
 
 import TypeFilter from '../containers/TypeFilter'
+import ModalShare from '../containers/ModalShare'
 
 import { BASE_HREF } from '../constants/AppConstants'
 
@@ -40,9 +40,13 @@ class VizContainer extends Component {
 
   render () {
     let { props, actions } = this.props
+    let absoluteTop = {
+      top: (props.topOffset) + 'px'
+    }
     return (
       <Row>
-        <Col md={3} className={'VizContainer__config'}>
+        <ModalShare />
+        <Col className={'VizContainer__config'} style={absoluteTop}>
           <Accordion>
             <TypeFilter />
             <ConditionalOnSelect selectedColumn={props.selectedColumn}>
@@ -68,73 +72,74 @@ class VizContainer extends Component {
             </ConditionalOnSelect>
           </Accordion>
         </Col>
-        <Col md={9} className='VizContainer__stage'>
+        <Col className='VizContainer__stage' style={absoluteTop}>
           <Messages messages={props.messages}>
             <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
-              <div className='Chart__header'>
-                <Row>
-                  <Col md={9}>
-                    <ChartExperimentalTitle
-                      columns={props.columns}
-                      rowLabel={props.rowLabel}
-                      selectedColumnDef={props.selectedColumnDef}
-                      groupBy={props.groupBy}
-                      sumBy={props.sumBy} />
-                    <ChartExperimentalSubTitle
-                      columns={props.columns}
-                      filters={props.filters}
-                      chartData={props.chartData}
-                      rollupBy={props.rollupBy} />
-                  </Col>
-                  <Col md={3}>
-                    <Choose>
-                      <When condition={props.selectedColumnDef && props.selectedColumnDef.type === 'date'}>
-                        <DateToggle
-                          dateBy={props.dateBy}
-                          changeDateBy={actions.changeDateBy}
-                          selectedColumnDef={props.selectedColumnDef} />
-                      </When>
-                      <Otherwise>
-                        <OtherDataToggle
-                          chartData={props.chartData}
-                          rollupBy={props.rollupBy}
-                          chartType={props.chartType}
-                          changeRollupBy={actions.changeRollupBy}
-                          selectedColumnDef={props.selectedColumnDef} />
-                      </Otherwise>
-                    </Choose>
-                  </Col>
-                </Row>
+              <div className='Chart__root'>
+                <div className='Chart__header'>
+                  <Row>
+                    <Col md={9}>
+                      <ChartExperimentalTitle
+                        columns={props.columns}
+                        rowLabel={props.rowLabel}
+                        selectedColumnDef={props.selectedColumnDef}
+                        groupBy={props.groupBy}
+                        sumBy={props.sumBy}
+                        showHideModal={actions.showHideModal} />
+                      <ChartExperimentalSubTitle
+                        columns={props.columns}
+                        filters={props.filters}
+                        chartData={props.chartData}
+                        rollupBy={props.rollupBy} />
+                    </Col>
+                    <Col md={3}>
+                      <Choose>
+                        <When condition={props.selectedColumnDef && props.selectedColumnDef.type === 'date'}>
+                          <DateToggle
+                            dateBy={props.dateBy}
+                            changeDateBy={actions.changeDateBy}
+                            selectedColumnDef={props.selectedColumnDef} />
+                        </When>
+                        <Otherwise>
+                          <OtherDataToggle
+                            chartData={props.chartData}
+                            rollupBy={props.rollupBy}
+                            chartType={props.chartType}
+                            changeRollupBy={actions.changeRollupBy}
+                            selectedColumnDef={props.selectedColumnDef} />
+                        </Otherwise>
+                      </Choose>
+                    </Col>
+                  </Row>
+                </div>
+                <Loading isFetching={props.isFetching} type='centered'>
+                  <Choose>
+                    <When condition={props.chartData}>
+                      <Choose>
+                        <When condition={props.chartData.length > 0}>
+                          <ChartExperimentalCanvas
+                            chartData={props.chartData || []}
+                            chartType={props.chartType}
+                            dateBy={props.dateBy}
+                            rollupBy={props.rollupBy}
+                            groupKeys={props.groupKeys}
+                            filters={props.filters}
+                            rowLabel={props.rowLabel}
+                            selectedColumnDef={props.selectedColumnDef}
+                            groupBy={props.groupBy}
+                            sumBy={props.sumBy}
+                            isFetching={props.isFetching} />
+                        </When>
+                        <When condition={props.chartData.length === 0 && props.filters}>
+                          <div className={'filterNone'}>
+                              Based on the filters you've applied, your query retrieved no results. Remove some of the filters and try again.
+                          </div>
+                        </When>
+                      </Choose>
+                    </When>
+                  </Choose>
+                </Loading>
               </div>
-              <Loading isFetching={props.isFetching} type='centered'>
-                <Choose>
-                  <When condition={props.chartData}>
-                    <Choose>
-                      <When condition={props.chartData.length > 0}>
-                        <ChartExperimentalCanvas
-                          chartData={props.chartData || []}
-                          chartType={props.chartType}
-                          dateBy={props.dateBy}
-                          rollupBy={props.rollupBy}
-                          groupKeys={props.groupKeys}
-                          filters={props.filters}
-                          rowLabel={props.rowLabel}
-                          selectedColumnDef={props.selectedColumnDef}
-                          groupBy={props.groupBy}
-                          sumBy={props.sumBy}
-                          isFetching={props.isFetching} />
-                      </When>
-                      <When condition={props.chartData.length === 0 && props.filters}>
-                        <div className={'filterNone'}>
-                            Based on the filters you've applied, your query retrieved no results. Remove some of the filters and try again.
-                        </div>
-                      </When>
-                    </Choose>
-                  </When>
-                </Choose>
-              </Loading>
-              <CopySnippet title='Embed this visual' help='Copy the code snippet below and embed in your website' snippet={props.embedCode} />
-              <CopySnippet title='Share this visual' help='Copy the link below to share this page with others' snippet={props.shareLink} />
             </ConditionalOnSelect>
           </Messages>
         </Col>
@@ -160,7 +165,7 @@ VizContainer.propTypes = {
     rowLabel: PropTypes.string,
     groupableColumns: PropTypes.array,
     selectableColumns: PropTypes.array,
-    shareLink: PropTypes.string
+    frontMatterHeight: PropTypes.number
   })
 }
 
@@ -170,14 +175,14 @@ const mapStateToProps = (state, ownProps) => {
   let queryState = Object.assign({}, query)
   delete queryState.isFetching
   const encodedJSON = encodeURIComponent(JSON.stringify(queryState))
-  const shareLink = BASE_HREF + '/#' + ownProps.location.pathname + '?q=' + encodedJSON
   const embedLink = BASE_HREF + '/#/e/' + id + '?q=' + encodedJSON
   const embedCode = '<iframe src="' + embedLink + '" width="100%" height="400" allowfullscreen frameborder="0"></iframe>'
   return {
     props: {
+      frontMatterHeight: ownProps.frontMatterHeight,
+      topOffset: ownProps.topOffset,
       id,
       embedCode,
-      shareLink,
       messages,
       supportedChartTypes: getSupportedChartTypes(state),
       queryString: ownProps.location.query.q,
@@ -241,6 +246,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       },
       loadQueryStateFromString: (q) => {
         return dispatch(loadQueryStateFromString(q))
+      },
+      showHideModal: () => {
+        return dispatch(showHideModal('share'))
       }
     }
   }

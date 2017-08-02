@@ -7,18 +7,6 @@ import Root from './containers/Root'
 import configureStore from './store'
 
 const initialState = {
-  metadata: {
-    query: {
-      dateBy: 'year',
-      rollupBy: 'other'
-    },
-    table: {
-      tablePage: 0
-    }
-  },
-  table: {
-    tablePage: 0
-  },
   query: {
     groupKeys: []
   }

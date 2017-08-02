@@ -8,7 +8,7 @@ class GroupOptions extends Component {
     let { columns, selected, onGroupBy } = this.props
     return (
       columns.length !== 0
-      ? <Panel collapsible defaultExpanded header={<h4>Group by another field <span className='glyphicon collapse-icon' ariaHidden></span></h4>} bsStyle={'primary'}>
+      ? <Panel collapsible defaultExpanded header={<h4>Group by another field <span className='glyphicon collapse-icon' aria-hidden></span></h4>} bsStyle={'primary'}>
         <Select
           className={'GroupOptions__select'}
           name='groupby'
