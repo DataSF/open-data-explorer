@@ -98,35 +98,10 @@
   margin: -15px;
 }
 
-.VizContainer__config input {
-  border-radius: 0;
-}
 
 .panel-group .panel + .panel {
   margin-top: 0;
 }
-
-.VizContainer__config .panel-group .panel {
-  border-radius: 0;
-}
-
-.VizContainer__config .panel-heading {
-  border-radius: 0;
-}
-
-.VizContainer__config .panel-primary {
-  border-color: #d3d3d3;
-}
-
-.VizContainer__config .list-group {
-  margin-bottom: 0;
-}
-
-.VizContainer__config .list-group-item:first-child,
-.VizContainer__config .list-group-item:last-child
- {
-    border-radius: 0;
-  }
 
 .VizContainer__config p.help-text {
   padding: 5px 10px 5px 20px;
