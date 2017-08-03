@@ -4,13 +4,8 @@ import { Row, Col } from 'react-bootstrap'
 import FieldColumns from '../components/FieldColumns'
 import { filterColumnList, selectField, setHideShow, sortColumnList} from '../actions'
 import { getUniqueColumnTypesDetails, getSelectableColumnsDetails, getSelectedFieldDef, getSelectedFieldDetails, getFieldProfileInfo} from '../reducers'
-import DefaultListGroup from '../components/DefaultListGroup'
-import FieldTypeButton from '../components/FieldTypeButton'
-import FieldButton from '../components/FieldButton'
-import HideShowButton from '../components/HideShowButton/'
-import FieldNameFilterDetails from '../containers/FieldNameFilterDetails'
-import { Panel } from 'react-bootstrap'
 import FieldProfile from '../components/FieldProfile'
+import FieldDefFieldSelector from './FieldDefFieldSelector'
 
 const ColumnDetails = ({topOffset, list, filters, onFilter, sort, onSort, fieldTypeItems, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols, selectedProfileInfo, selectedCategories }) => {
   let absoluteTop = {
@@ -19,59 +14,7 @@ const ColumnDetails = ({topOffset, list, filters, onFilter, sort, onSort, fieldT
   return (
   <Row className={'column-details-all-container'}>
     <Col sm={3} className={'field-details-panel-picker-container'} style={absoluteTop}>
-    <div>
-      <Choose>
-        <When condition={selectedColumnDef}>
-          <Choose>
-          <When condition={showCols !== 'hide'}>
-            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected Field' className={'column-details-picker-panel'}>
-              <DefaultListGroup
-                itemComponent={FieldButton}
-                items={selectedField}
-                onSelectListItem={onSelectColumn}
-                popOverPlacement={'right'} />
-              <HideShowButton itemProps={{'value': hideshowVal, 'isSelected': showCols}} onClick={setHideShow} showCols={showCols} />
-            </Panel>
-          </When>
-          <Otherwise>
-            <Panel collapsible defaultExpanded bsStyle='primary' header='Selected Field' className={'column-details-picker-panel'}>
-              <DefaultListGroup
-                itemComponent={FieldButton}
-                items={selectedField}
-                onSelectListItem={onSelectColumn} />
-              <DefaultListGroup
-                itemComponent={FieldTypeButton}
-                className={'default-list-group'}
-                items={fieldTypeItems}
-                onSelectListItem={onFilter} />
-              <FieldNameFilterDetails />
-              <DefaultListGroup
-                itemComponent={FieldButton}
-                items={selectableColumns}
-                onSelectListItem={onSelectColumn}
-                popOverPlacement={'right'} />
-              <HideShowButton itemProps={{'value': hideshowVal, 'isSelected': showCols}} onClick={setHideShow} showCols={showCols} />
-            </Panel>
-          </Otherwise>
-        </Choose>
-      </When>
-      <Otherwise>
-        <Panel collapsible defaultExpanded header='Select a field' bsStyle={'primary'} className={'column-details-picker-panel'}>
-          <DefaultListGroup
-            itemComponent={FieldTypeButton}
-            className={'default-list-group'}
-            items={fieldTypeItems}
-            onSelectListItem={onFilter} />
-          <FieldNameFilterDetails />
-          <DefaultListGroup
-            itemComponent={FieldButton}
-            items={selectableColumns}
-            popOverPlacement={'right'}
-            onSelectListItem={onSelectColumn} />
-        </Panel>
-      </Otherwise>
-    </Choose>
-  </div>
+    <FieldDefFieldSelector />
     </Col>
     <Col sm={9} className={'column-details-container-wrapper'} style={absoluteTop}>
       <Choose>
@@ -101,7 +44,7 @@ const ColumnDetails = ({topOffset, list, filters, onFilter, sort, onSort, fieldT
 const mapStateToProps = (state, ownProps) => {
   let selectable = getSelectableColumnsDetails(state)
   return {
-    list: selectable  || {},
+    list: selectable || {},
     fieldTypeItems: getUniqueColumnTypesDetails(state, true),
     selectableColumns: getSelectableColumnsDetails(state),
     selectedColumn: state.fieldDetailsProps.selectedColumn,

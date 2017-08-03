@@ -51,7 +51,7 @@ class Dataset extends Component {
         <section id={'DatasetNav'}>
           <DatasetNav id={metadata.id} dataId={metadata.dataId} hasGeo={metadata.hasGeo} {...other} />
         </section>
-        <section id={'DatasetChildren'}>
+        <section id={'DatasetChildren'} style={{width: '100%', minHeight: '100px'}}>
           {childrenWithHeight}
         </section>
       </div>

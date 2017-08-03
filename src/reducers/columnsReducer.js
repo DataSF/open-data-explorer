@@ -3,6 +3,10 @@ import merge from 'lodash/merge'
 import union from 'lodash/union'
 import { updateObject, createReducer, deleteFromArray } from './reducerUtilities'
 
+let initialState = { 
+  typeFilters: [] 
+}
+
 const COLTYPES = {
   'boolean': 'True/False',
   'text': 'Text',
@@ -238,19 +242,20 @@ function setDefaultHideShow (state, action) {
 }
 
 function resetState (state, action) {
-  if (action.payload !== 'columnProps') {
-    return state
+  if (action.type === ActionTypes.METADATA_REQUEST || action.payload === 'columnProps') {
+    return initialState
   }
-  return updateObject(state, {})
+  return state
 }
 
-const columnsReducer = createReducer({ typeFilters: [] }, {
+const columnsReducer = createReducer(initialState, {
   [ActionTypes.COLUMNS_SUCCESS]: initColumns, 
   [ActionTypes.COLPROPS_SUCCESS]: loadColumnProperties,
   [ActionTypes.FILTER_COLUMN_LIST]: filterColumnList,
   [ActionTypes.SORT_COLUMN_LIST]: sortColumnList,
   [ActionTypes.SET_HIDE_SHOW]: setHideShow,
   [ActionTypes.SET_DEFAULT_HIDE_SHOW]: setDefaultHideShow,
+  [ActionTypes.METADATA_REQUEST]: resetState,
   [ActionTypes.RESET_STATE]: resetState,
   [ActionTypes.SORT_COLUMN]: sortColumn
 })
