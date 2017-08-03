@@ -1,0 +1,21 @@
+.FieldSelector__field-types-search-wrapper h5 {
+    border-bottom: thin gray solid;
+}
+
+.FieldSelector__field-search input {
+    border-bottom: 0;
+    border-radius: 0;
+}
+
+.ColumnSelector-list-group-item {
+    border-right: 2px solid #dce4ec;
+}
+
+.ColumnSelector-list-group-item:first-child {
+    border-radius: 0;
+}
+
+.ColumnSelector-list-group-item:last-child {
+    border-radius: 0;
+    border-bottom: 2px solid #dce4ec;
+}

@@ -8,6 +8,8 @@ import HideShowButton from '../HideShowButton'
 import TypeButtonComponent from '../FieldTypeButton'
 import FieldButtonComponent from '../FieldButton'
 
+import './@FieldSelector.css'
+
 const FieldSelector = ({title, types, onSelectListItem, hideshowVal, showCols, setHideShow, popOverPlacement, selectableColumns, selectedField, onSelectColumn, onFilterTypes, onFilterList}) => {
   return (
     <Panel className='FieldSelector__root' collapsible defaultExpanded bsStyle='primary' header={<h4>{title} <span className='glyphicon collapse-icon' aria-hidden></span></h4>}>
@@ -30,7 +32,7 @@ const FieldSelector = ({title, types, onSelectListItem, hideshowVal, showCols, s
           <DefaultListGroup
             itemComponent={FieldButtonComponent}
             items={selectableColumns}
-            popOverPlacement={'left'}
+            popOverPlacement={popOverPlacement}
             onSelectListItem={onSelectColumn} />
         </div>
       </div>)

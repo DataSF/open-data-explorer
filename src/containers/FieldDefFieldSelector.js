@@ -10,7 +10,8 @@ const mapStateToProps = (state, ownProps) => ({
   selectedField: getSelectedFieldDetails(state),
   title: getSelectedFieldDetails(state).length > 0 ? 'Selected field' : 'Select a field',
   hideshowVal: getSelectableColumnsDetails(state).length,
-  showCols: state.fieldDetailsProps.showCols
+  showCols: state.fieldDetailsProps.showCols,
+  popOverPlacement: 'right'
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
