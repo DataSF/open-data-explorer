@@ -14,7 +14,7 @@ class DatasetOverview extends Component {
       attachmentList = attachments.map((att, idx, array) => {
       return (
         <li className={'overview-attachment-list'} key={idx}>
-          <a href={'https://data.sfgov.org/api/views/' + id + '/files/' + att.assetId + '?download=true&filename=' + att.filename}>
+          <a href={att.url}>
             {att.name}
           </a>
         </li>)
