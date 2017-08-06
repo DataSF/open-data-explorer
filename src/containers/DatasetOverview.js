@@ -5,17 +5,13 @@ import { loadRelatedDatasets } from '../actions'
 
 const mapStateToProps = (state, ownProps) => {
   const { metadata } = state
-  metadata.datasetFacts = makeDatasetFactDictFxn(state)
-  metadata.colCounts = makeColTypesCntFxn(state)
-  metadata.publishingFacts = makePublishingFactsFxn(state)
-  metadata.publishing_health = calculatePublishingHealthFxn(state)
-  metadata.publishing_faqs = makePublishingFactsFxn(state)
-  if (state.routing.locationBeforeTransitions.pathname) {
-    let route = state.routing.locationBeforeTransitions.pathname.split("/")
-    metadata.fbf = route[route.length-1]
-  }
   return {
-    metadata
+    metadata,
+    datasetFacts: makeDatasetFactDictFxn(state),
+    colCounts: makeColTypesCntFxn(state),
+    publishingFacts: makePublishingFactsFxn(state),
+    publishing_health: calculatePublishingHealthFxn(state),
+    publishing_faqs: makePublishingFactsFxn(state)
   }
 }
 
