@@ -14,15 +14,15 @@ const CustomStats = ({nbHits}) => <span className={'ais-Stats__root clearfix'}>{
 
 const ConnectedStats = connectStats(CustomStats)
 
-const Record = (clearSearch, {hit}) => (
+const Record = (onClickRecord, {hit}) => (
   <BSPanel 
-    header={<Link to={`${'/' + slugify(hit.category) + '/' + slugify(hit.name) + '/' + hit.systemID}`} onClick={clearSearch}>
+    header={<Link to={`${'/' + slugify(hit.category) + '/' + slugify(hit.name) + '/' + hit.objectID}`} onClick={onClickRecord.bind(this,hit)}>
         {hit.name}
       </Link>} 
     className='Catalog__record' 
     bsStyle='primary'>
     <div className={'Catalog__record-meta-dept'}>
-      <div className={'Catalog__record-meta-dept-value'}>{hit.publishing_dept}</div>
+      <div className={'Catalog__record-meta-dept-value'}>{hit.publishingDepartment}</div>
     </div>
     <div className={'Catalog__record-meta clearfix'}>
       <div className={'Catalog__record-meta-title'}>Data updated</div>
@@ -31,22 +31,27 @@ const Record = (clearSearch, {hit}) => (
       <div className={'Catalog__record-meta-value'}>{hit.publishingFrequency}</div>
       <div className={'Catalog__record-meta-title'}>Category</div>
       <div className={'Catalog__record-meta-value'}>{hit.category}</div>
+      <div className={'Catalog__record-meta-title'}>Row count</div>
+      <div className={'Catalog__record-meta-value'}>{hit.rowCount.toLocaleString()}</div>
     </div>
     <div className={'Catalog__record-description clearfix'}>
       <div className={'Catalog__record-description-text'}>
         <ReadMore text={hit.description}/>
       </div>
-      {hit.tags ? (
+      {hit.keywords ? (
         <p className={'Catalog__record-tags'}>
-          <strong>Tags</strong> <span className={'App--font-thin'}>{hit.tags.join(', ')}</span></p>
+          <strong>Tags</strong> <span className={'App--font-thin'}>{hit.keywords.join(', ')}</span></p>
         ) : false 
       }
+      <div className={'Catalog__record-extras'}>
+          Row count: 200,000
+        </div>
     </div>
   </BSPanel>
 )
 
 const labelRefinements = (items) => {
-  let labels = {'category': 'Category: ', 'publishing_dept': 'Department: ', 'fieldTypes': 'Field Types: '}
+  let labels = {'category': 'Category: ', 'publishingDepartment': 'Department: ', 'fieldTypes': 'Field Types: '}
   let transform = items.map((item) => {
     let copy = Object.assign({}, item)
     copy.label = labels[copy['attributeName']]
@@ -55,7 +60,7 @@ const labelRefinements = (items) => {
   return transform
 }
 
-const Search = ({clearSearch}) => (
+const Search = ({onClickRecord}) => (
   <Grid className={'Catalog'}>
     <Row className='Catalog__search'>
       <ScrollTo>
@@ -77,8 +82,8 @@ const Search = ({clearSearch}) => (
           items={[
             { value: 'dev_dataset_search', label: 'Most Relevant' },
             { value: 'dev_dataset_search_alpha', label: 'A to Z' },
-            { value: 'dev_dataset_search_created', label: 'Most Recently Created'},
-            { value: 'dev_dataset_search_updated', label: 'Most Recently Updated'}
+            { value: 'dev_dataset_search_created', label: 'Recently Created'},
+            { value: 'dev_dataset_search_updated', label: 'Recently Updated'}
           ]}
           defaultRefinement='dev_dataset_search'
         />
@@ -94,11 +99,11 @@ const Search = ({clearSearch}) => (
           <RefinementList className='Catalog__refine--field-types' attributeName='fieldTypes' transformItems={items => orderBy(items, ['label', 'count'], ['asc', 'desc'])} />
         </Panel>
         <Panel title='Departments'>
-          <RefinementList className='Catalog__refine--department' attributeName='publishing_dept' withSearchBox showMore limitMax={52} transformItems={items => orderBy(items, ['label', 'count'], ['asc', 'desc'])} />
+          <RefinementList className='Catalog__refine--department' attributeName='publishingDepartment' withSearchBox showMore limitMax={52} transformItems={items => orderBy(items, ['label', 'count'], ['asc', 'desc'])} />
         </Panel>
       </Col>
       <Col sm={10}>
-        <Hits hitComponent={Record.bind(this, clearSearch)} />
+        <Hits hitComponent={Record.bind(this, onClickRecord)} />
         <div className={'Catalog__pagination'}>
           <Pagination />
         </div>

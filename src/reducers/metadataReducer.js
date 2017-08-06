@@ -1,20 +1,26 @@
 import * as ActionTypes from '../actions'
 import moment from 'moment'
+import { createReducer } from './reducerUtilities'
+
+let initialState = { isFetching: true }
 
 function makePercent (item) {
   let prcnt =parseFloat(item) * 100
   return String(prcnt.toFixed(2)) + "%"
 }
+
 export const makeDatasetFactDict = (state) => {
-  const propsToKeep = {'rowCount': 'Number of Rows',
-                        'rowLabel': 'Row Label',
-                        'rowIdentifier': 'Row Identifier',
-                        'documented_percentage': 'Percent of Fields Documented',
-                        'dupe_record_percent': 'Duplicate Record Percent',
-                        'category': 'Category',
-                        'keywords': 'Tags'
-                      }
+  const propsToKeep = {
+    'rowCount': 'Number of Rows',
+    'rowLabel': 'Row Label',
+    'rowIdentifier': 'Row Identifier',
+    'documented_percentage': 'Percent of Fields Documented',
+    'dupe_record_percent': 'Duplicate Record Percent',
+    'category': 'Category',
+    'keywords': 'Tags'
+  }
   let datasetFacts = []
+
   Object.keys(propsToKeep).forEach(function (key) {
       if ((state.metadata[key]) && (typeof state.metadata[key] !== 'undefined')) {
         let value = state.metadata[key]
@@ -22,7 +28,7 @@ export const makeDatasetFactDict = (state) => {
           value = makePercent(state.metadata[key])
         }
         if(key === 'keywords'){
-          let tags = value.split(",")
+          let tags = value
           value = tags.join(", ")
         }
         datasetFacts.push({'header': propsToKeep[key], 'value': value})
@@ -48,6 +54,7 @@ export const makeColTypesCnt = (state) => {
     'multipolygon_count': 'Geometry: Multipolygon Field Count'
   }
   let colCounts = []
+
   Object.keys(colTypesCnt).forEach(function (key) {
       if ((state.metadata[key]) && (typeof state.metadata[key] !== 'undefined')) {
         if( parseInt(state.metadata[key], 10) !== 0){
@@ -88,14 +95,12 @@ function parseDt(dt){
   return dt[0]
 }
 
-
 export const makePublishingFacts = (state) => {
   const pubFieldDetails = {
     'days_since_last_updated':'Last Updated',
     'publishingFrequency': 'Publishing Frequency',
     'dataChangeFrequency': 'Data Change Frequency' ,
-    'createdAt': 'Dataset Creation Date',
-    // 'days_since_first_created': 'Dataset Age',
+    'createdAt': 'Dataset Creation Date'
   }
   let publishingFaqs = []
   Object.keys(pubFieldDetails).forEach(function (key) {
@@ -118,23 +123,36 @@ export const makePublishingFacts = (state) => {
   return publishingFaqs
 }
 
-export const metadataReducer = (state = {}, action) => {
+//case reducers
 
-  if (action.response) {
-    switch (action.type) {
-      case ActionTypes.METADATA_SUCCESS:
-      case ActionTypes.RELATEDDATASET_SUCCESS:
-        return Object.assign({}, state, action.response)
-      default:
-        return state
-    }
-  }
-
-  switch (action.type) {
-    case ActionTypes.METADATA_REQUEST:
-      return {}
-    default:
-      return state
-
-  }
+function updateData (state, action) {
+  return Object.assign({}, state, action.response)
 }
+
+function resetState (state, action) {
+  if (ActionTypes.METADATA_REQUEST && state.fromSearch !== true) {
+    return initialState
+  }
+  return state
+}
+
+function preloadMetadata (state, action) {
+  let data = action.payload
+  data.fromSearch = true
+  data.relatedDatasetCnt = 0
+  data.relatedDatasets = []
+  data.attachments = null
+  data.notes = null
+  data.createdAt = moment(data.createdAt * 1000).format()
+  data.rowsUpdatedAt = moment(data.rowsUpdatedAt * 1000).format()
+  return Object.assign({}, state, data)
+}
+
+// reducer
+
+export const metadataReducer = createReducer(initialState, {
+  [ActionTypes.METADATA_SUCCESS]: updateData,
+  [ActionTypes.RELATEDDATASET_SUCCESS]: updateData,
+  [ActionTypes.METADATA_REQUEST]: resetState,
+  [ActionTypes.SELECT_SEARCH_RECORD]: preloadMetadata
+})

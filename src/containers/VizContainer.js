@@ -112,7 +112,7 @@ class VizContainer extends Component {
                     </Col>
                   </Row>
                 </div>
-                <Loading isFetching={props.isFetching} type='centered'>
+                <Loading isFetching={props.isFetching} type='centered' wraps='chart'>
                   <Choose>
                     <When condition={props.chartData}>
                       <Choose>

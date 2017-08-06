@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { loadMetadata, loadColumnProps, loadTable } from '../actions'
 import DatasetFrontMatter from '../components/DatasetFrontMatter'
 import DatasetNav from '../components/DatasetNav'
+import Loading from '../components/Loading'
 import { API_DOMAIN } from '../constants/AppConstants'
 
 class Dataset extends Component {
@@ -28,7 +29,8 @@ class Dataset extends Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    let height = document.getElementById('DatasetFrontmatter').clientHeight
+    // TODO: may be more foolproof to get this by ref
+    let height = document.getElementById('DatasetFrontmatter') ? document.getElementById('DatasetFrontmatter').clientHeight : prevState.frontMatterHeight
     let viewportHeight = window.innerHeight
     if (prevState.frontMatterHeight !== height) {
       this.setState({ 
@@ -40,29 +42,40 @@ class Dataset extends Component {
   }
 
   render () {
-    const { metadata, children, ...other } = this.props
+    const { rowsUpdatedAt, name, id, dataId, hasGeo, isFetching, children, ...other } = this.props
     const childrenWithHeight = React.Children.map(children, 
       (child) => React.cloneElement(child, this.state))
+
     return (
-      <div>
+      <Loading isFetching={true} hideChildrenWhileLoading={true} type='centered'>
         <section id={'DatasetFrontmatter'}>
-          <DatasetFrontMatter apiDomain={API_DOMAIN} {...metadata} />
+          <DatasetFrontMatter 
+            apiDomain={API_DOMAIN} 
+            name={name} 
+            id={id}
+            dataId={dataId}
+            rowsUpdatedAt={rowsUpdatedAt} />
         </section>
         <section id={'DatasetNav'}>
-          <DatasetNav id={metadata.id} dataId={metadata.dataId} hasGeo={metadata.hasGeo} {...other} />
+          <DatasetNav id={id} dataId={dataId} hasGeo={hasGeo} {...other} />
         </section>
         <section id={'DatasetChildren'} style={{width: '100%', minHeight: '100px'}}>
           {childrenWithHeight}
         </section>
-      </div>
+      </Loading>
     )
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { metadata } = state
+  const { rowsUpdatedAt, name, id, dataId, hasGeo, isFetching } = state.metadata
   return {
-    metadata
+    name,
+    id,
+    dataId,
+    hasGeo,
+    isFetching,
+    rowsUpdatedAt
   }
 }
 

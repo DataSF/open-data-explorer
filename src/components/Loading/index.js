@@ -39,15 +39,17 @@ class Loading extends Component {
   }
 
   render () {
-    // let { isFetching } = this.props
+    let { isFetching, hideChildrenWhileLoading, wraps } = this.props
     let { show } = this.state
     let type = this.props.type ? this.props.type : ''
-    let classNames = `Loading-wrapper ${type}`
+    let rootClass = wraps ? 'Loading__root' + '--' + wraps : 'Loading__root'
+    let showChildren = !hideChildrenWhileLoading || (hideChildrenWhileLoading && !isFetching)
+    let classNames = `${rootClass} ${type}`
     return (
       <div className={classNames}>
         <IconLoading show={show} />
         <div>
-          {this.props.children}
+          {showChildren ? this.props.children : null}
         </div>
       </div>
     )

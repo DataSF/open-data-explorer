@@ -423,7 +423,7 @@ export const loadQueryStateFromString = (q) => (dispatch, getState) => {
 }
 
 export const UPDATE_SEARCH = 'UPDATE_SEARCH'
-export const CLEAR_SEARCH = 'CLEAR_SEARCH'
+export const SELECT_SEARCH_RECORD = 'SELECT_SEARCH_RECORD'
 export const SELECT_FIELD = 'SELECT_FIELD'
 export const SET_SELECTED_FIELD_DETAILS = 'SET_SELECTED_FIELD_DETAILS'
 
@@ -435,9 +435,10 @@ export function updateSearch (searchState) {
   }
 }
 
-export function clearSearch () {
+export function selectSearchRecord (record) {
   return {
-    type: CLEAR_SEARCH
+    type: SELECT_SEARCH_RECORD,
+    payload: record
   }
 }
 
@@ -471,7 +472,7 @@ function fetchRelatedDatasets (id) {
 
 export function loadRelatedDatasets (id) {
   return (dispatch, getState) => {
-    return Promise.all([dispatch(fetchRelatedDatasets(id))])
+    return dispatch(fetchRelatedDatasets(id))
   }
 }
 

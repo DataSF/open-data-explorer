@@ -1,25 +1,25 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { InstantSearch } from 'react-instantsearch/dom'
+import { InstantSearch, Configure } from 'react-instantsearch/dom'
 import Search from '../components/Catalog'
 import isEqual from 'lodash/isEqual'
 import {withRouter} from 'react-router'
 import qs from 'qs'
-import { updateSearch, clearSearch } from '../actions'
+import { updateSearch, selectSearchRecord } from '../actions'
 
 class Catalog extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { searchState: { ...qs.parse(props.router.location.query) } };
+    this.state = { searchState: qs.parse(this.props.router.location.query) }
   }
 
   componentWillReceiveProps() {
-    this.setState({ searchState: qs.parse(this.props.router.location.query) });
+    this.setState({ searchState: qs.parse(this.props.router.location.query) })
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return !isEqual(this.state.searchState, nextState.searchState);
+    return !isEqual(this.state.searchState, nextState.searchState)
   }
 
   onSearchStateChange(nextSearchState) {
@@ -49,7 +49,8 @@ class Catalog extends Component {
         onSearchStateChange={this.onSearchStateChange.bind(this)}
         createURL={state => this.createURL.bind(this)}
       >
-        <Search clearSearch={this.props.clearSearch} />
+        <Configure hitsPerPage={10} page={1} />
+        <Search onClickRecord={this.props.onClickRecord} />
       </InstantSearch>
     )
   }
@@ -65,7 +66,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSearchStateChange: (searchState) => dispatch(updateSearch(searchState)),
-    clearSearch: () => dispatch(clearSearch())
+    onClickRecord: (record) => dispatch(selectSearchRecord(record))
   }
 }
 

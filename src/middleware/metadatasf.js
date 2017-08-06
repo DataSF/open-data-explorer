@@ -25,7 +25,6 @@ function endpointColumns (id) {
   return API_ROOT + `fielddetails/${id}`
 }
 function endpointRelatedDatasets (id) {
-  //console.log(API_ROOT + `relateddatasets/${id}`)
   return API_ROOT + `relateddatasets/${id}`
 }
 
@@ -38,8 +37,10 @@ export const TransformsSF = {
 
 function transformMetadata (json) {
   // Set default rowLabel
-  json[0].rowLabel = json[0].rowLabel || 'Record'
   let metadata = json[0]
+  metadata.rowLabel = metadata.rowLabel || 'Row'
+  metadata.keywords = metadata.keywords !== null ? metadata.keywords.split(',') : []
+  metadata.isFetching = false
   return metadata
 }
 

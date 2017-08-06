@@ -9,7 +9,7 @@ import {connectSearchBox} from 'react-instantsearch/connectors'
 import Autosuggest from 'react-autosuggest'
 import { browserHistory } from 'react-router'
 import slugify from 'underscore.string/slugify'
-import { updateSearch } from '../actions'
+import { updateSearch, selectSearchRecord } from '../actions'
 
 class AutoSuggestSearch extends Component {
   render () {
@@ -23,7 +23,11 @@ class AutoSuggestSearch extends Component {
         <div>
           <Configure hitsPerPage={5} />
           <VirtualSearchBox />
-          <ConnectedAutoComplete attributes={[]} className={this.props.className} onSearchStateChange={this.props.updateSearch} />
+          <ConnectedAutoComplete 
+            attributes={[]} 
+            className={this.props.className} 
+            onSearchStateChange={this.props.updateSearch} 
+            onSelectRecord={this.props.onSelectRecord} />
         </div>
       </InstantSearch>
     )
@@ -102,9 +106,10 @@ class AutoComplete extends Component {
           onChange: () => {}
         }}
         onSuggestionSelected={(event, {suggestion, suggestionIndex}) => {
-          let link = '/' + slugify(suggestion.category) + '/' + slugify(suggestion.name) + '/' + suggestion.systemID
+          let link = '/' + slugify(suggestion.category) + '/' + slugify(suggestion.name) + '/' + suggestion.objectID
           this.refs.autosuggest.input.value = ''
           this.props.refine({query: '', hideSuggestions: true})
+          this.props.onSelectRecord(suggestion)
           browserHistory.push(link)
         }}
         renderSuggestionsContainer={renderSuggestionsContainer}
@@ -129,7 +134,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    updateSearch: (searchState) => dispatch(updateSearch(searchState))
+    updateSearch: (searchState) => dispatch(updateSearch(searchState)),
+    onSelectRecord: (record) => dispatch(selectSearchRecord(record))
   }
 }
 
