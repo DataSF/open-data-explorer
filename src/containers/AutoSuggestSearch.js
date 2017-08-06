@@ -40,8 +40,10 @@ const connectAutoComplete = createConnector({
   displayName: 'AutoComplete',
   getProvidedProps (props, state, search) {
     const hits = search.results ? search.results.hits : []
+    const isInputBlank = state.query ? state.query.trim() === '' : true
+    const noSuggestions = !isInputBlank && hits.length === 0
     return {
-      hits, query: state.query !== undefined ? state.query : ''
+      hits, noSuggestions, query: state.query !== undefined ? state.query : ''
     }
   },
   // we update the state of <InstantSearch/> to trigger a new search.
@@ -57,16 +59,28 @@ const connectAutoComplete = createConnector({
   }
 })
 
-const renderSuggestionsContainer = ({ containerProps, children, query }) => (
-  <div {...containerProps}>
-    {children}
-    {
-      <div className='AutoSuggestSearch__footer'>
-        Press 'enter' to search catalog for <strong>{query}</strong>
-      </div>
+const renderSuggestionsContainer = (noSuggestions, autosuggestComponent, { containerProps, children, query }) => {
+  if (noSuggestions) {
+    containerProps = {...containerProps}
+    containerProps.className = containerProps.className + ' react-autosuggest__suggestions-container--open'
+    if (autosuggestComponent) {
+      autosuggestComponent.input.classList.add('react-autosuggest__input--open')
     }
+  }
+
+  return (
+    <div {...containerProps}>
+      {children}
+      {noSuggestions
+      ? <div className={'AutoSuggestSearch__no-results'}>
+          No results found based on your search term.
+        </div>
+      : <div className='AutoSuggestSearch__footer'>
+          Press 'enter' to search entire data catalog for <strong>{query}</strong>
+        </div>
+      }
   </div>
-)
+)}
 
 class AutoComplete extends Component {
   render () {
@@ -112,7 +126,7 @@ class AutoComplete extends Component {
           this.props.onSelectRecord(suggestion)
           browserHistory.push(link)
         }}
-        renderSuggestionsContainer={renderSuggestionsContainer}
+        renderSuggestionsContainer={renderSuggestionsContainer.bind(this, this.props.noSuggestions, this.refs.autosuggest)}
       />
     </form>
   }
