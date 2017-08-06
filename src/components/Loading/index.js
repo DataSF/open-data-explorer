@@ -42,7 +42,7 @@ class Loading extends Component {
     let { isFetching, hideChildrenWhileLoading, wraps } = this.props
     let { show } = this.state
     let type = this.props.type ? this.props.type : ''
-    let rootClass = wraps ? 'Loading__root' + '--' + wraps : 'Loading__root'
+    let rootClass = wraps ? 'Loading__root--' + wraps : 'Loading__root'
     let showChildren = !hideChildrenWhileLoading || (hideChildrenWhileLoading && !isFetching)
     let classNames = `${rootClass} ${type}`
     return (
