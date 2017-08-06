@@ -139,6 +139,7 @@ function resetState (state, action) {
 function preloadMetadata (state, action) {
   let data = action.payload
   data.fromSearch = true
+  data.isFetching = false
   data.relatedDatasetCnt = 0
   data.relatedDatasets = []
   data.attachments = null

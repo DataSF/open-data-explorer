@@ -41,6 +41,7 @@ function transformMetadata (json) {
   metadata.rowLabel = metadata.rowLabel || 'Row'
   metadata.keywords = metadata.keywords !== null ? metadata.keywords.split(',') : []
   metadata.isFetching = false
+  metadata.fromSearch = false
   return metadata
 }
 
