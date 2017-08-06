@@ -2,9 +2,9 @@ import './@DatasetOverview.css'
 
 import React, { Component } from 'react'
 import { Row, Col, OverlayTrigger, Popover } from 'react-bootstrap'
-// import { format } from 'd3'
-// import moment from 'moment'
 import RelatedDatasetTable from '../RelatedDatasetTable'
+import { setDocumentTitle } from '../../helpers'
+
 
 class DatasetOverview extends Component {
 
@@ -81,12 +81,8 @@ class DatasetOverview extends Component {
 
 
   render () {
-    const { datasetFacts, colCounts, publishing_health, publishing_faqs } = this.props
+    const { datasetFacts, colCounts, publishing_health, publishing_faqs, name } = this.props
     const { id, description, publishingDepartment, licenseLink, licenseName, notes, attachments, programLink, relatedDatasets, relatedDatasetCnt} = this.props.metadata
-    // let numberFormat = format(',')
-    // let dayUpdated = moment(rowsUpdatedAt).format('MM/DD/YYYY')
-    // let timeUpdated = moment(rowsUpdatedAt).format('hh:mm A')
-    // let overviewContent = null
     let attachmentList = this.renderAttachmentsList( attachments, id)
     let datasetFactsTbl =  this.makeDatasetFactsTable(datasetFacts, 'overview-dataset-facts-td', 'overview-dataset-facts-td')
     let datasetFieldCntTbl = this.makeDatasetFactsTable(colCounts, 'overview-dataset-facts-td',  'overview-dataset-cnts-td-value')
@@ -94,6 +90,10 @@ class DatasetOverview extends Component {
     let publishingFaqItems =  publishingHealthSpan.concat(this.renderPublishingInfo( publishing_faqs ) )
 
     let descPara = description ? description.split('\n\n').map((paragraph) => <p>{paragraph}</p>) : null
+
+    if(name) {
+      setDocumentTitle(name + ' | Overview')
+    }
 
       if (this.props.metadata) {
       // assemble related documents

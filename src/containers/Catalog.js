@@ -6,6 +6,7 @@ import isEqual from 'lodash/isEqual'
 import {withRouter} from 'react-router'
 import qs from 'qs'
 import { updateSearch, selectSearchRecord } from '../actions'
+import { setDocumentTitle } from '../helpers'
 
 class Catalog extends Component {
 
@@ -40,6 +41,7 @@ class Catalog extends Component {
   createURL = state => `${this.props.location.pathname}?${qs.stringify(state)}`;
 
   render () {
+    setDocumentTitle('Data Catalog')
     return (
       <InstantSearch
         appId='N6IVMSP2S4'

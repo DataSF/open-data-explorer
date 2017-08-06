@@ -3,9 +3,11 @@ import './@HomePage.css'
 import React, { Component } from 'react'
 import AutoSuggestSearch from '../../containers/AutoSuggestSearch'
 import { Link } from 'react-router'
+import { setDocumentTitle } from '../../helpers'
 
 class HomePage extends Component {
   render () {
+    setDocumentTitle(false)
     return (
       <div id='main-container'>
         <section id='jumbo-search' className={'jumbotron jumbotron-default homepage'}>

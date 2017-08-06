@@ -19,6 +19,7 @@ import OtherDataToggle from '../components/Query/OtherDataToggle'
 import ChartTypePicker from '../components/ChartTypePicker'
 import Loading from '../components/Loading'
 import Messages from '../components/Messages'
+import { setDocumentTitle } from '../helpers'
 import './@containers.css'
 
 import ChartFieldSelector from '../containers/ChartFieldSelector'
@@ -43,6 +44,11 @@ class VizContainer extends Component {
     let absoluteTop = {
       top: (props.topOffset) + 'px'
     }
+
+    if (props.name) {
+      setDocumentTitle(props.name + ' | Charts')
+    }
+
     return (
       <Row>
         <ModalShare />
@@ -179,6 +185,7 @@ const mapStateToProps = (state, ownProps) => {
   const embedCode = '<iframe src="' + embedLink + '" width="100%" height="400" allowfullscreen frameborder="0"></iframe>'
   return {
     props: {
+      name: ownProps.name,
       frontMatterHeight: ownProps.frontMatterHeight,
       topOffset: ownProps.topOffset,
       id,

@@ -6,6 +6,7 @@ import {Table, Column, Cell} from 'fixed-data-table'
 import moment from 'moment'
 import Dimensions from 'react-dimensions'
 import { format as formatD3 } from 'd3'
+import { setDocumentTitle } from '../../helpers'
 
 var SortTypes = {
   ASC: 'asc',
@@ -93,8 +94,12 @@ class DataTable extends Component {
   }
 
   render () {
-    let { columns, rowCount, table } = this.props
+    let { columns, rowCount, table, name } = this.props
     let tableContainer = null
+
+    if(name) {
+      setDocumentTitle(name + ' | Table Preview')
+    }
 
     if (table && table.tableData && table.tableData.length > 0) {
       let perPage = 1000

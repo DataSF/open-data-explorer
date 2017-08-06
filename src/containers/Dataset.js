@@ -43,8 +43,7 @@ class Dataset extends Component {
 
   render () {
     const { rowsUpdatedAt, name, id, dataId, hasGeo, isFetching, children, ...other } = this.props
-    const childrenWithHeight = React.Children.map(children, 
-      (child) => React.cloneElement(child, this.state))
+    const childrenWithDatasetProps = React.Children.map(children, (child) => React.cloneElement(child, {...this.state, name}))
 
     return (
       <Loading isFetching={isFetching} hideChildrenWhileLoading={true} type='centered'>
@@ -60,7 +59,7 @@ class Dataset extends Component {
           <DatasetNav id={id} dataId={dataId} hasGeo={hasGeo} {...other} />
         </section>
         <section id={'DatasetChildren'} style={{width: '100%', minHeight: '100px'}}>
-          {childrenWithHeight}
+          {childrenWithDatasetProps}
         </section>
       </Loading>
     )

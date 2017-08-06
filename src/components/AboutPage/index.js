@@ -1,8 +1,10 @@
 import React from 'react'
 import { Grid } from 'react-bootstrap'
+import { setDocumentTitle } from '../../helpers'
 
 export default class AboutPage extends React.Component {
   render () {
+    setDocumentTitle('About')
     return (
       <Grid fluid id='main-container' className={'catalogMain'}>
         <h2>This site is in ALPHA: Were just getting started and adding new features. </h2>
