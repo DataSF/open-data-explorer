@@ -93,6 +93,8 @@ class DatasetOverview extends Component {
     let publishingHealthSpan = [this.renderPublishingHealthSpan(publishing_health)]
     let publishingFaqItems =  publishingHealthSpan.concat(this.renderPublishingInfo( publishing_faqs ) )
 
+    let descPara = description ? description.split('\n\n').map((paragraph) => <p>{paragraph}</p>) : null
+
       if (this.props.metadata) {
       // assemble related documents
       let documents = []
@@ -109,28 +111,16 @@ class DatasetOverview extends Component {
           )
       }
 
-      // join tags with comma
-      //if (tags) {
-      //  tagList = (
-      //     <div>
-      //      <h3 className={'text-muted'}>Tags</h3>
-      //      <p>{tags}</p>
-      //    </div>
-      //    )
-      // }
-
     }
     return (
       <div className={'container overview'}>
         <div className={'overview-description'}>
-          <div>
-            {description}
-          </div>
+          {descPara}
           <Choose>
             <When condition={notes}>
-              <div className={'overview-description-notes'}>
+              <p>
                 {notes}
-              </div>
+              </p>
             </When>
           </Choose>
           <Choose>
