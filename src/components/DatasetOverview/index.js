@@ -193,7 +193,7 @@ class DatasetOverview extends Component {
           </Col>
         </Row>
         <Choose>
-          <When condition={relatedDatasets}>
+          <When condition={relatedDatasets && relatedDatasets.length !== 0}>
             <Row>
               <div className={'overview-description-breakline'}></div>
               <Col sm={12} className={'overview-publishing-details'}>
@@ -204,8 +204,6 @@ class DatasetOverview extends Component {
             </Row>
           </When>
         </Choose>
-
-
       </div>
 
     )
