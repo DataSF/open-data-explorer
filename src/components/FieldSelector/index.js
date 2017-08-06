@@ -17,6 +17,7 @@ const FieldSelector = ({title, types, onSelectListItem, hideshowVal, showCols, s
       <DefaultListGroup
         itemComponent={FieldButtonComponent}
         items={selectedField}
+        popOverPlacement={popOverPlacement}
         onSelectListItem={onSelectColumn} />
       : null}
       {selectedField.length === 0 || showCols !== 'show' || typeof showCols === 'undefined' ?
