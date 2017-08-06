@@ -6044,9 +6044,9 @@ react-inspector@^1.1.0:
     babel-runtime "^6.9.2"
     is-dom "^1.0.5"
 
-react-instantsearch@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-4.0.0.tgz#9fa009ceac65c4842ec9aa4a41178b10a69d95e6"
+react-instantsearch@^4.0.10:
+  version "4.0.10"
+  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-4.0.10.tgz#472ca4f8a7a471db095ee5135f1c20eced6f248f"
   dependencies:
     algoliasearch "^3.21.1"
     algoliasearch-helper "2.19.0"
