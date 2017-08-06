@@ -47,7 +47,7 @@ class Dataset extends Component {
       (child) => React.cloneElement(child, this.state))
 
     return (
-      <Loading isFetching={true} hideChildrenWhileLoading={true} type='centered'>
+      <Loading isFetching={isFetching} hideChildrenWhileLoading={true} type='centered'>
         <section id={'DatasetFrontmatter'}>
           <DatasetFrontMatter 
             apiDomain={API_DOMAIN} 
