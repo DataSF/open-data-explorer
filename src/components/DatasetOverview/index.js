@@ -81,7 +81,8 @@ class DatasetOverview extends Component {
 
 
   render () {
-    const { id, description, publishingDepartment, licenseLink, licenseName, notes, attachments, programLink, datasetFacts, colCounts, publishing_faqs, publishing_health, relatedDatasets, relatedDatasetCnt} = this.props.metadata
+    const { datasetFacts, colCounts, publishing_health, publishing_faqs } = this.props
+    const { id, description, publishingDepartment, licenseLink, licenseName, notes, attachments, programLink, relatedDatasets, relatedDatasetCnt} = this.props.metadata
     // let numberFormat = format(',')
     // let dayUpdated = moment(rowsUpdatedAt).format('MM/DD/YYYY')
     // let timeUpdated = moment(rowsUpdatedAt).format('hh:mm A')
