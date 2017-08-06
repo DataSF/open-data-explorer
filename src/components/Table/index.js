@@ -58,7 +58,7 @@ class DynamicCell extends Component {
     let content
     if (format === 'location' && data[rowIndex][field]) {
       content = data[rowIndex][field].coordinates[1] + ', ' + data[rowIndex][field].coordinates[0]
-    } else if (format === 'boolean') {
+    } else if (type === 'boolean') {
       content = data[rowIndex][field] ? 'Yes' : 'No'
     } else if (format === 'calendar_date' && data[rowIndex][field]) {
       content = moment(data[rowIndex][field]).format('MM/DD/YYYY')
