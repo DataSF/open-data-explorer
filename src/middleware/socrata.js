@@ -106,8 +106,8 @@ function constructQuery (state) {
       let filter = filters[key]
 
       if (filter.options && column.type === 'date') {
-        let start = filter.options.min.format('YYYY-MM-DD')
-        let end = filter.options.max.format('YYYY-MM-DD')
+        let start = moment(filter.options.min).format('YYYY-MM-DDTHH:mm:ss.SSS')
+        let end = moment(filter.options.max).format('YYYY-MM-DDTHH:mm:ss.SSS')
         query.where(key + '>="' + start + '" and ' + key + '<="' + end + '"')
       } else if (column.categories && filter.options && filter.options.selected) {
         let enclose = '"'

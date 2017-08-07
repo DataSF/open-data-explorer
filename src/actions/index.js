@@ -207,7 +207,7 @@ export function selectColumn (column) {
     dispatch({
       type: SELECT_COLUMN,
       payload: column})
-    dispatch(setDefaultHideShow('columnProps'))
+    dispatch(setHideShow(false, 'columnProps'))
     if (column !== null) {
       dispatch(fetchData(getState()))
       dispatch(setDefaultChartType(column))
@@ -223,7 +223,7 @@ export function selectField (column) {
       type: SELECT_FIELD,
       payload: column})
     dispatch(fetchDataTextFieldCategories(getState()))
-    dispatch(setDefaultHideShow('fieldDetailsProps'))
+    dispatch(setHideShow(false, 'fieldDetailsProps'))
   }
 }
 
@@ -232,16 +232,6 @@ export function setHideShow (showCols, target) {
     dispatch({
       type: SET_HIDE_SHOW,
       payload: {'showCols': showCols, 'target': target}
-    })
-  }
-}
-
-
-export function setDefaultHideShow (target) {
-  return (dispatch, getState) => {
-    dispatch({
-      type: SET_DEFAULT_HIDE_SHOW,
-      payload: {'showCols': 'show', 'target': target}
     })
   }
 }
