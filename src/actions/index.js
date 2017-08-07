@@ -2,8 +2,6 @@ import { CALL_API } from '../middleware'
 //import { Endpoints, Transforms, shouldRunColumnStats } from '../middleware/socrata'
 
 import { Endpoints, Transforms } from '../middleware/socrata'
-
-
 import { EndpointsSF, TransformsSF } from '../middleware/metadatasf'
 
 import {isColTypeTest} from '../helpers'
