@@ -10,7 +10,6 @@ const API_ROOT = 'https://data.sfgov.org/'
 
 // Export constants
 export const Endpoints = {
-  METADATA: endpointMetadata,
   COLUMNS: endpointColumns,
   QUERY: endpointQuery,
   TABLEQUERY: endpointTableQuery,
@@ -21,7 +20,6 @@ export const Endpoints = {
 }
 
 export const Transforms = {
-  METADATA: transformMetadata,
   COLUMNS: transformColumns,
   QUERY: transformQueryData,
   QUERYTEXTCATEGORIES: transformTextCategoryData,
@@ -101,7 +99,7 @@ function constructQuery (state) {
   }
 
   // Where (filter)
-  if (columnType === 'date' || (columnType === 'number' && !isCategory)) query = query.where('label is not null')
+  if (columnType === 'date') query = query.where('label is not null')
   if (filters) {
     for (let key in filters) {
       let column = key !== 'booleans' ? columns[key] : {type: 'boolean'}
@@ -152,10 +150,6 @@ function endpointApiMigration (id) {
   return API_ROOT + `api/migrations/${id}.json`
 }
 
-function endpointMetadata (id) {
-  return API_ROOT + `api/views/${id}.json`
-}
-
 function endpointCount (id) {
   return API_ROOT + `resource/${id}.json?$select=count(*)`
 }
@@ -200,69 +194,6 @@ function endpointColumnProperties (id, key) {
 }
 
 // Transforms
-
-function transformMetadata (json) {
-  let metadata = {
-    id: json['id'],
-    dataId: json['id'],
-    name: json['name'],
-    description: json['description'],
-    type: json['viewType'],
-    createdAt: json['createdAt'],
-    rowsUpdatedAt: json['rowsUpdatedAt'],
-    viewModifiedAt: json['viewLastModified'],
-    licenseName: json.license.name || null,
-    licenseLink: json.license.termsLink || null,
-    publishingDepartment: json.metadata.custom_fields['Department Metrics']['Publishing Department'] || null,
-    publishingFrequency: json.metadata.custom_fields['Publishing Details']['Publishing frequency'] || null,
-    dataChangeFrequency: json.metadata.custom_fields['Publishing Details']['Data change frequency'] || null,
-    notes: json.metadata.custom_fields['Detailed Descriptive']['Data notes'] || null,
-    programLink: json.metadata.custom_fields['Detailed Descriptive']['Program link'] || null,
-    rowLabel: json.metadata.rowLabel === null ? 'Record' : json.metadata.rowLabel,
-    tags: json.tags || null,
-    category: json['category'] || 'dataset',
-    columns: {}
-  }
-
-  if (json.viewType === 'geo') {
-    metadata.dataId = json.childViews[0]
-  }
-
-  if (json.metadata.attachments) {
-    metadata.attachments = json.metadata.attachments
-  }
-
-  for (let column of json.columns) {
-    let typeCast = {
-      'calendar_date': 'date',
-      'currency': 'number',
-      'money': 'number',
-      'checkbox': 'boolean'
-    }
-    let type = typeCast[column['dataTypeName']] || column['dataTypeName']
-    let format = column['dataTypeName']
-
-    let col = {
-      id: column['id'],
-      key: column['fieldName'],
-      name: column['name'].replace(/[_-]/g, ' '),
-      description: column['description'] || '',
-      type,
-      format}
-
-    if (column['cachedContents']) {
-      col.non_null = column['cachedContents']['non_null'] || 0
-      col.null = column['cachedContents']['null'] || 0
-      col.count = col.non_null + col.null
-      col.min = column['cachedContents']['smallest'] || null
-      col.max = column['cachedContents']['largest'] || null
-    }
-
-    metadata.columns[column['fieldName']] = col
-  }
-
-  return metadata
-}
 
 function transformColumns (json) {
   let response = {}
