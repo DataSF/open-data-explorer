@@ -43,9 +43,6 @@ const Record = (onClickRecord, {hit}) => (
           <strong>Tags</strong> <span className={'App--font-thin'}>{hit.keywords.join(', ')}</span></p>
         ) : false 
       }
-      <div className={'Catalog__record-extras'}>
-          Row count: 200,000
-        </div>
     </div>
   </BSPanel>
 )
