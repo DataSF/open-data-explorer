@@ -174,6 +174,7 @@ const mapStateToProps = (state, ownProps) => {
   const encodedJSON = encodeURIComponent(JSON.stringify(queryState))
   const embedLink = BASE_HREF + '/#/e/' + id + '?q=' + encodedJSON
   const embedCode = '<iframe src="' + embedLink + '" width="100%" height="400" allowfullscreen frameborder="0"></iframe>'
+  const exclude = query.filters ? Object.keys(query.filters) : []
   return {
     props: {
       name: ownProps.name,
@@ -200,7 +201,7 @@ const mapStateToProps = (state, ownProps) => {
       summableColumns: getSummableColumns(state),
       groupableColumns: getGroupableColumns(state),
       selectableColumns: getSelectableColumns(state),
-      filterableColumns: getSelectableColumns(state, false, true)
+      filterableColumns: getSelectableColumns(state, false, true, exclude)
     }
   }
 }
