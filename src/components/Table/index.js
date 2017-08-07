@@ -6,6 +6,7 @@ import {Table, Column, Cell} from 'fixed-data-table'
 import moment from 'moment'
 import Dimensions from 'react-dimensions'
 import { format as formatD3 } from 'd3'
+import { setDocumentTitle } from '../../helpers'
 
 var SortTypes = {
   ASC: 'asc',
@@ -58,7 +59,7 @@ class DynamicCell extends Component {
     let content
     if (format === 'location' && data[rowIndex][field]) {
       content = data[rowIndex][field].coordinates[1] + ', ' + data[rowIndex][field].coordinates[0]
-    } else if (format === 'boolean') {
+    } else if (type === 'boolean') {
       content = data[rowIndex][field] ? 'Yes' : 'No'
     } else if (format === 'calendar_date' && data[rowIndex][field]) {
       content = moment(data[rowIndex][field]).format('MM/DD/YYYY')
@@ -93,8 +94,12 @@ class DataTable extends Component {
   }
 
   render () {
-    let { columns, rowCount, table } = this.props
+    let { columns, rowCount, table, name } = this.props
     let tableContainer = null
+
+    if(name) {
+      setDocumentTitle(name + ' | Table Preview')
+    }
 
     if (table && table.tableData && table.tableData.length > 0) {
       let perPage = 1000

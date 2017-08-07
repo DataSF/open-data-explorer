@@ -9,14 +9,13 @@ const mapStateToProps = (state, ownProps) => ({
   selectableColumns: getSelectableColumns(state),
   selectedField: getSelectedField(state),
   title: getSelectedField(state).length > 0 ? 'Selected field' : 'Select a field',
-  hideshowVal: getSelectableColumns(state).length,
   showCols: state.columnProps.showCols
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onFilterTypes: item => dispatch(filterColumnList('typeFilters', item, 'columnProps')),
   onFilterList: item => dispatch(filterColumnList('fieldNameFilter', item, 'columnProps')),
-  onSelectColumn: (key) => dispatch(selectColumn(key)),
+  onSelectColumn: key => dispatch(selectColumn(key)),
   setHideShow: showCols => dispatch(setHideShow(showCols, 'columnProps')),
   resetState: resetState => dispatch(resetState('columnProps'))
 })

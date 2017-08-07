@@ -14,6 +14,7 @@ H.transformOthers = require('./transformOthers.js')
 H.sumObj = require('./sumObj.js')
 H.sortObj = require('./sortObj.js')
 H.setClassNamesListItem = require('./setClassNamesListItem.js')
+H.setDocumentTitle = require('./setDocumentTitle.js')
 // Implement chaining
 H.prototype = {
   value: function value () {

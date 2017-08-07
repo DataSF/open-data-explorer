@@ -2,9 +2,9 @@ import './@DatasetOverview.css'
 
 import React, { Component } from 'react'
 import { Row, Col, OverlayTrigger, Popover } from 'react-bootstrap'
-// import { format } from 'd3'
-// import moment from 'moment'
 import RelatedDatasetTable from '../RelatedDatasetTable'
+import { setDocumentTitle } from '../../helpers'
+
 
 class DatasetOverview extends Component {
 
@@ -14,7 +14,7 @@ class DatasetOverview extends Component {
       attachmentList = attachments.map((att, idx, array) => {
       return (
         <li className={'overview-attachment-list'} key={idx}>
-          <a href={'https://data.sfgov.org/api/views/' + id + '/files/' + att.assetId + '?download=true&filename=' + att.filename}>
+          <a href={att.url}>
             {att.name}
           </a>
         </li>)
@@ -81,16 +81,19 @@ class DatasetOverview extends Component {
 
 
   render () {
-    const { id, description, publishingDepartment, licenseLink, licenseName, notes, attachments, programLink, datasetFacts, colCounts, publishing_faqs, publishing_health, relatedDatasets, relatedDatasetCnt} = this.props.metadata
-    // let numberFormat = format(',')
-    // let dayUpdated = moment(rowsUpdatedAt).format('MM/DD/YYYY')
-    // let timeUpdated = moment(rowsUpdatedAt).format('hh:mm A')
-    // let overviewContent = null
+    const { datasetFacts, colCounts, publishing_health, publishing_faqs, name } = this.props
+    const { id, description, publishingDepartment, licenseLink, licenseName, notes, attachments, programLink, relatedDatasets, relatedDatasetCnt} = this.props.metadata
     let attachmentList = this.renderAttachmentsList( attachments, id)
     let datasetFactsTbl =  this.makeDatasetFactsTable(datasetFacts, 'overview-dataset-facts-td', 'overview-dataset-facts-td')
     let datasetFieldCntTbl = this.makeDatasetFactsTable(colCounts, 'overview-dataset-facts-td',  'overview-dataset-cnts-td-value')
     let publishingHealthSpan = [this.renderPublishingHealthSpan(publishing_health)]
     let publishingFaqItems =  publishingHealthSpan.concat(this.renderPublishingInfo( publishing_faqs ) )
+
+    let descPara = description ? description.split('\n\n').map((paragraph) => <p>{paragraph}</p>) : null
+
+    if(name) {
+      setDocumentTitle(name + ' | Overview')
+    }
 
       if (this.props.metadata) {
       // assemble related documents
@@ -108,28 +111,16 @@ class DatasetOverview extends Component {
           )
       }
 
-      // join tags with comma
-      //if (tags) {
-      //  tagList = (
-      //     <div>
-      //      <h3 className={'text-muted'}>Tags</h3>
-      //      <p>{tags}</p>
-      //    </div>
-      //    )
-      // }
-
     }
     return (
       <div className={'container overview'}>
         <div className={'overview-description'}>
-          <div>
-            {description}
-          </div>
+          {descPara}
           <Choose>
             <When condition={notes}>
-              <div className={'overview-description-notes'}>
+              <p>
                 {notes}
-              </div>
+              </p>
             </When>
           </Choose>
           <Choose>
@@ -192,7 +183,7 @@ class DatasetOverview extends Component {
           </Col>
         </Row>
         <Choose>
-          <When condition={relatedDatasets}>
+          <When condition={relatedDatasets && relatedDatasets.length !== 0}>
             <Row>
               <div className={'overview-description-breakline'}></div>
               <Col sm={12} className={'overview-publishing-details'}>
@@ -203,8 +194,6 @@ class DatasetOverview extends Component {
             </Row>
           </When>
         </Choose>
-
-
       </div>
 
     )

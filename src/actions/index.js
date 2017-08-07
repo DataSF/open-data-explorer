@@ -2,8 +2,6 @@ import { CALL_API } from '../middleware'
 //import { Endpoints, Transforms, shouldRunColumnStats } from '../middleware/socrata'
 
 import { Endpoints, Transforms } from '../middleware/socrata'
-
-
 import { EndpointsSF, TransformsSF } from '../middleware/metadatasf'
 
 import {isColTypeTest} from '../helpers'
@@ -209,7 +207,7 @@ export function selectColumn (column) {
     dispatch({
       type: SELECT_COLUMN,
       payload: column})
-    dispatch(setDefaultHideShow('columnProps'))
+    dispatch(setHideShow(false, 'columnProps'))
     if (column !== null) {
       dispatch(fetchData(getState()))
       dispatch(setDefaultChartType(column))
@@ -225,7 +223,7 @@ export function selectField (column) {
       type: SELECT_FIELD,
       payload: column})
     dispatch(fetchDataTextFieldCategories(getState()))
-    dispatch(setDefaultHideShow('fieldDetailsProps'))
+    dispatch(setHideShow(false, 'fieldDetailsProps'))
   }
 }
 
@@ -234,16 +232,6 @@ export function setHideShow (showCols, target) {
     dispatch({
       type: SET_HIDE_SHOW,
       payload: {'showCols': showCols, 'target': target}
-    })
-  }
-}
-
-
-export function setDefaultHideShow (target) {
-  return (dispatch, getState) => {
-    dispatch({
-      type: SET_DEFAULT_HIDE_SHOW,
-      payload: {'showCols': 'show', 'target': target}
     })
   }
 }
@@ -423,7 +411,7 @@ export const loadQueryStateFromString = (q) => (dispatch, getState) => {
 }
 
 export const UPDATE_SEARCH = 'UPDATE_SEARCH'
-export const CLEAR_SEARCH = 'CLEAR_SEARCH'
+export const SELECT_SEARCH_RECORD = 'SELECT_SEARCH_RECORD'
 export const SELECT_FIELD = 'SELECT_FIELD'
 export const SET_SELECTED_FIELD_DETAILS = 'SET_SELECTED_FIELD_DETAILS'
 
@@ -435,9 +423,10 @@ export function updateSearch (searchState) {
   }
 }
 
-export function clearSearch () {
+export function selectSearchRecord (record) {
   return {
-    type: CLEAR_SEARCH
+    type: SELECT_SEARCH_RECORD,
+    payload: record
   }
 }
 
@@ -471,7 +460,7 @@ function fetchRelatedDatasets (id) {
 
 export function loadRelatedDatasets (id) {
   return (dispatch, getState) => {
-    return Promise.all([dispatch(fetchRelatedDatasets(id))])
+    return dispatch(fetchRelatedDatasets(id))
   }
 }
 

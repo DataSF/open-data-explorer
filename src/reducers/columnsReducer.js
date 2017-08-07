@@ -103,7 +103,7 @@ export const getSelectedField = (state, selectedColumn) => {
   }).sort(sortColumns)
 }
 
-export const getSelectableColumns = (state, selectedColumn, all = false, ignoreTypeFilters = false) => {
+export const getSelectableColumns = (state, selectedColumn, all = false, ignoreTypeFilters = false, exclude = []) => {
   let { columns, typeFilters, fieldNameFilter } = state
   if (!columns) return []
   return Object.keys(columns).filter((col) => {
@@ -111,10 +111,13 @@ export const getSelectableColumns = (state, selectedColumn, all = false, ignoreT
     if (all) return true
 
     let selectable = isSelectable(columns, col)
-    if (state.showCols === 'hide' && col === selectedColumn) {
+    if (col === selectedColumn) {
       return false
     }
     if (fieldNameFilter && columns[col].name.toLowerCase().indexOf(fieldNameFilter.toLowerCase()) === -1) {
+      return false
+    }
+    if (exclude.indexOf(col) > -1) {
       return false
     }
     if (ignoreTypeFilters && selectable) {

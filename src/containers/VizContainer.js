@@ -19,6 +19,7 @@ import OtherDataToggle from '../components/Query/OtherDataToggle'
 import ChartTypePicker from '../components/ChartTypePicker'
 import Loading from '../components/Loading'
 import Messages from '../components/Messages'
+import { setDocumentTitle } from '../helpers'
 import './@containers.css'
 
 import ChartFieldSelector from '../containers/ChartFieldSelector'
@@ -43,6 +44,11 @@ class VizContainer extends Component {
     let absoluteTop = {
       top: (props.topOffset) + 'px'
     }
+
+    if (props.name) {
+      setDocumentTitle(props.name + ' | Charts')
+    }
+
     return (
       <Row>
         <ModalShare />
@@ -73,7 +79,6 @@ class VizContainer extends Component {
           </Accordion>
         </Col>
         <Col className='VizContainer__stage' style={absoluteTop}>
-          <Messages messages={props.messages}>
             <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
               <div className='Chart__root'>
                 <div className='Chart__header'>
@@ -112,36 +117,28 @@ class VizContainer extends Component {
                     </Col>
                   </Row>
                 </div>
-                <Loading isFetching={props.isFetching} type='centered'>
-                  <Choose>
-                    <When condition={props.chartData}>
-                      <Choose>
-                        <When condition={props.chartData.length > 0}>
-                          <ChartExperimentalCanvas
-                            chartData={props.chartData || []}
-                            chartType={props.chartType}
-                            dateBy={props.dateBy}
-                            rollupBy={props.rollupBy}
-                            groupKeys={props.groupKeys}
-                            filters={props.filters}
-                            rowLabel={props.rowLabel}
-                            selectedColumnDef={props.selectedColumnDef}
-                            groupBy={props.groupBy}
-                            sumBy={props.sumBy}
-                            isFetching={props.isFetching} />
-                        </When>
-                        <When condition={props.chartData.length === 0 && props.filters}>
-                          <div className={'filterNone'}>
-                              Based on the filters you've applied, your query retrieved no results. Remove some of the filters and try again.
-                          </div>
-                        </When>
-                      </Choose>
-                    </When>
-                  </Choose>
+                <Loading isFetching={props.isFetching} type='centered' wraps='chart'>
+                  <Messages messages={props.messages}>
+                    <Choose>
+                      <When condition={props.chartData}>
+                        <ChartExperimentalCanvas
+                          chartData={props.chartData || []}
+                          chartType={props.chartType}
+                          dateBy={props.dateBy}
+                          rollupBy={props.rollupBy}
+                          groupKeys={props.groupKeys}
+                          filters={props.filters}
+                          rowLabel={props.rowLabel}
+                          selectedColumnDef={props.selectedColumnDef}
+                          groupBy={props.groupBy}
+                          sumBy={props.sumBy}
+                          isFetching={props.isFetching} />
+                      </When>
+                    </Choose>
+                  </Messages>
                 </Loading>
               </div>
             </ConditionalOnSelect>
-          </Messages>
         </Col>
       </Row>
     )
@@ -177,8 +174,10 @@ const mapStateToProps = (state, ownProps) => {
   const encodedJSON = encodeURIComponent(JSON.stringify(queryState))
   const embedLink = BASE_HREF + '/#/e/' + id + '?q=' + encodedJSON
   const embedCode = '<iframe src="' + embedLink + '" width="100%" height="400" allowfullscreen frameborder="0"></iframe>'
+  const exclude = query.filters ? Object.keys(query.filters) : []
   return {
     props: {
+      name: ownProps.name,
       frontMatterHeight: ownProps.frontMatterHeight,
       topOffset: ownProps.topOffset,
       id,
@@ -202,7 +201,7 @@ const mapStateToProps = (state, ownProps) => {
       summableColumns: getSummableColumns(state),
       groupableColumns: getGroupableColumns(state),
       selectableColumns: getSelectableColumns(state),
-      filterableColumns: getSelectableColumns(state, false, true)
+      filterableColumns: getSelectableColumns(state, false, true, exclude)
     }
   }
 }

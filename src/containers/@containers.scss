@@ -60,6 +60,16 @@
   background-color: #ddd;
 }
 
+.AutoSuggestSearch__root {
+  position: relative;
+}
+
+.AutoSuggestSearch__no-results {
+  padding: 10px 20px;
+  font-style: italic;
+  color: #adadad;
+}
+
 .AutoSuggestSearch__footer {
   border-top: thin solid #d3d3d3;
   padding: 10px 20px;

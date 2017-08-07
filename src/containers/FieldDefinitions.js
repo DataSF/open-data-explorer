@@ -6,11 +6,16 @@ import { filterColumnList, selectField, setHideShow, sortColumnList} from '../ac
 import { getUniqueColumnTypesDetails, getSelectableColumnsDetails, getSelectedFieldDef, getSelectedFieldDetails, getFieldProfileInfo} from '../reducers'
 import FieldProfile from '../components/FieldProfile'
 import FieldDefFieldSelector from './FieldDefFieldSelector'
+import { setDocumentTitle } from '../helpers'
 
-const ColumnDetails = ({topOffset, list, filters, onFilter, sort, onSort, fieldTypeItems, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols, selectedProfileInfo, selectedCategories }) => {
+const ColumnDetails = ({name, topOffset, list, filters, onFilter, sort, onSort, fieldTypeItems, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols, selectedProfileInfo, selectedCategories }) => {
   let absoluteTop = {
       top: (topOffset) + 'px'
     }
+  
+  if(name) {
+    setDocumentTitle(name + ' | Field Definitions')
+  }
   return (
   <Row className={'column-details-all-container'}>
     <Col sm={3} className={'field-details-panel-picker-container'} style={absoluteTop}>

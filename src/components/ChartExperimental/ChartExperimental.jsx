@@ -38,31 +38,24 @@ class ChartExperimental extends Component {
     let chartType = chartDisplay.chartType
     return (
       <Row>
-        <Choose>
-          <When condition={chartData.length > 0}>
-            <ChartExperimentalCanvas
-              chart={chart}
-              chartData={chartData}
-              groupKeys={groupKeys}
-              changeDateBy={changeDateBy}
-              changeRollupBy={changeRollupBy}
-              columns={columns}
-              {...otherProps}
-              query={query}
-              dateBy={query.dateBy}
-              rollupBy={query.rollupBy}
-              groupBy={query.groupBy}
-              sumBy={query.sumBy}
-              filters={query.filters}
-              chartType={chartType}
-              applyChartType={applyChartType}
-              displayChartOptions={displayChartOptions}
-            />
-          </When>
-          <When condition={chartData.length === 0}>
-            <h2> Based on your filters, your query retrieved no results </h2>
-          </When>
-        </Choose>
+        <ChartExperimentalCanvas
+          chart={chart}
+          chartData={chartData}
+          groupKeys={groupKeys}
+          changeDateBy={changeDateBy}
+          changeRollupBy={changeRollupBy}
+          columns={columns}
+          {...otherProps}
+          query={query}
+          dateBy={query.dateBy}
+          rollupBy={query.rollupBy}
+          groupBy={query.groupBy}
+          sumBy={query.sumBy}
+          filters={query.filters}
+          chartType={chartType}
+          applyChartType={applyChartType}
+          displayChartOptions={displayChartOptions}
+        />
         <Panel
           {...query}
           columns={columns}

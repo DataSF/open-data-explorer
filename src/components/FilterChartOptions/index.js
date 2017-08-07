@@ -101,7 +101,7 @@ class FilterOptions extends Component {
 
       return filterOption
     })
-    return filterOptions
+    return (<div className='FilterChartOptions__filter-options'>{filterOptions}</div>)
   }
 
   render () {

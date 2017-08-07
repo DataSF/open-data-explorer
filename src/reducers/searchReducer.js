@@ -12,12 +12,12 @@ function updateSearch (state, action) {
   return updateObject(state, action.payload)
 }
 
-function clearSearch (state, action) {
+function selectSearchRecord (state, action) {
   return initialState
 }
 
 // create reducer
 export const searchReducer = createReducer(initialState, {
   [ActionTypes.UPDATE_SEARCH]: updateSearch,
-  [ActionTypes.CLEAR_SEARCH]: clearSearch
+  [ActionTypes.SELECT_SEARCH_RECORD]: selectSearchRecord
 })

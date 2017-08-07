@@ -9,7 +9,7 @@ import {connectSearchBox} from 'react-instantsearch/connectors'
 import Autosuggest from 'react-autosuggest'
 import { browserHistory } from 'react-router'
 import slugify from 'underscore.string/slugify'
-import { updateSearch } from '../actions'
+import { updateSearch, selectSearchRecord } from '../actions'
 
 class AutoSuggestSearch extends Component {
   render () {
@@ -23,7 +23,11 @@ class AutoSuggestSearch extends Component {
         <div>
           <Configure hitsPerPage={5} />
           <VirtualSearchBox />
-          <ConnectedAutoComplete attributes={[]} className={this.props.className} onSearchStateChange={this.props.updateSearch} />
+          <ConnectedAutoComplete 
+            attributes={[]} 
+            className={this.props.className} 
+            onSearchStateChange={this.props.updateSearch} 
+            onSelectRecord={this.props.onSelectRecord} />
         </div>
       </InstantSearch>
     )
@@ -36,8 +40,10 @@ const connectAutoComplete = createConnector({
   displayName: 'AutoComplete',
   getProvidedProps (props, state, search) {
     const hits = search.results ? search.results.hits : []
+    const isInputBlank = state.query ? state.query.trim() === '' : true
+    const noSuggestions = !isInputBlank && hits.length === 0
     return {
-      hits, query: state.query !== undefined ? state.query : ''
+      hits, noSuggestions, query: state.query !== undefined ? state.query : ''
     }
   },
   // we update the state of <InstantSearch/> to trigger a new search.
@@ -53,16 +59,28 @@ const connectAutoComplete = createConnector({
   }
 })
 
-const renderSuggestionsContainer = ({ containerProps, children, query }) => (
-  <div {...containerProps}>
-    {children}
-    {
-      <div className='AutoSuggestSearch__footer'>
-        Press 'enter' to search catalog for <strong>{query}</strong>
-      </div>
+const renderSuggestionsContainer = (noSuggestions, autosuggestComponent, { containerProps, children, query }) => {
+  if (noSuggestions) {
+    containerProps = {...containerProps}
+    containerProps.className = containerProps.className + ' react-autosuggest__suggestions-container--open'
+    if (autosuggestComponent) {
+      autosuggestComponent.input.classList.add('react-autosuggest__input--open')
     }
+  }
+
+  return (
+    <div {...containerProps}>
+      {children}
+      {noSuggestions
+      ? <div className={'AutoSuggestSearch__no-results'}>
+          No results found based on your search term.
+        </div>
+      : <div className='AutoSuggestSearch__footer'>
+          Press 'enter' to search entire data catalog for <strong>{query}</strong>
+        </div>
+      }
   </div>
-)
+)}
 
 class AutoComplete extends Component {
   render () {
@@ -102,12 +120,13 @@ class AutoComplete extends Component {
           onChange: () => {}
         }}
         onSuggestionSelected={(event, {suggestion, suggestionIndex}) => {
-          let link = '/' + slugify(suggestion.category) + '/' + slugify(suggestion.name) + '/' + suggestion.systemID
+          let link = '/' + slugify(suggestion.category) + '/' + slugify(suggestion.name) + '/' + suggestion.objectID
           this.refs.autosuggest.input.value = ''
           this.props.refine({query: '', hideSuggestions: true})
+          this.props.onSelectRecord(suggestion)
           browserHistory.push(link)
         }}
-        renderSuggestionsContainer={renderSuggestionsContainer}
+        renderSuggestionsContainer={renderSuggestionsContainer.bind(this, this.props.noSuggestions, this.refs.autosuggest)}
       />
     </form>
   }
@@ -129,7 +148,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    updateSearch: (searchState) => dispatch(updateSearch(searchState))
+    updateSearch: (searchState) => dispatch(updateSearch(searchState)),
+    onSelectRecord: (record) => dispatch(selectSearchRecord(record))
   }
 }
 

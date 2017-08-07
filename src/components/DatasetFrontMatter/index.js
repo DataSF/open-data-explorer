@@ -5,8 +5,6 @@ import moment from 'moment'
 // '2em'
 const DatasetFrontMatter = ({name, id, rowsUpdatedAt, apiDomain, dataId}) => {
   let timeAgo = moment(rowsUpdatedAt).fromNow()
-  //let dayUpdated = moment(rowsUpdatedAt).format('MM/DD/YYYY')
-  //let timeUpdated = moment(rowsUpdatedAt).format('hh:mm A')
   return (
     <div className='container'>
       <Row className={'dataSetTitle'} id='header'>
