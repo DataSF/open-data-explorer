@@ -56,59 +56,32 @@ class ChartExperimentalHistogramStuff extends Component {
     let barData = this.makeBarData(histogramData)
     let maxValueX = findMaxObjKeyValue(barData, 'value') * 1.10
     let domainMaxY = findMaxObjKeyValue(barData, 'frequency') * 1.03
-    // let domainMaxY = maxValue + (maxValueY * 0.03)
-    const zerosDivStyle = {
-      width: w,
-      height: h
-    }
-    const innnerZerosDivStyle = {
-      width: w,
-      margin: '15% 5% 5% 5%',
-      padding: '10px',
-      position: 'relative',
-      color: fillColor
-    }
-    const zeroMsg = {
-      fontSize: '75%'
-    }
 
     return (
-      <Choose>
-        <When condition={dx === 0}>
-          <div className='zeros' style={zerosDivStyle}>
-            <div style={innnerZerosDivStyle}>
-              <p>No Chart to Display</p>
-              <p style={zeroMsg}> Column Only Contains 0 Values </p>
-            </div>
-          </div>
-        </When>
-        <Otherwise>
-          <BarChart
-            width={w}
-            height={h}
-            data={barData}
-            barGap={0}
-            margin={{ right: 10, left: 5 }}
-            barCategoryGap={0} >
-            <XAxis
-              dataKey={'value'}
-              type={'number'}
-              domain={[0, maxValueX]}
-              height={xAxisHeight}
-              label={<CustomXaxisLabel val={'Value of ' + colName} isGroupBy={false} numOfGroups={0} />} />
-            <YAxis
-              type={'number'}
-              width={yAxisWidth}
-              label={<CustomYaxisLabel val={'Frequency of Values'} h={h} chartType={'histogram'} />}
-              tickCount={yTickCnt}
-              tickFormatter={valTickFormater}
-              domain={[0, domainMaxY]} />
-            <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
-            <Tooltip content={<HistogramTooltip dx={dx} />} />
-            <Bar dataKey='frequency' fill={fillColor} />
-          </BarChart>
-        </Otherwise>
-      </Choose>
+      <BarChart
+        width={w}
+        height={h}
+        data={barData}
+        barGap={0}
+        margin={{ right: 10, left: 5 }}
+        barCategoryGap={0} >
+        <XAxis
+          dataKey={'value'}
+          type={'number'}
+          domain={[0, maxValueX]}
+          height={xAxisHeight}
+          label={<CustomXaxisLabel val={'Value of ' + colName} isGroupBy={false} numOfGroups={0} />} />
+        <YAxis
+          type={'number'}
+          width={yAxisWidth}
+          label={<CustomYaxisLabel val={'Frequency of Values'} h={h} chartType={'histogram'} />}
+          tickCount={yTickCnt}
+          tickFormatter={valTickFormater}
+          domain={[0, domainMaxY]} />
+        <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
+        <Tooltip content={<HistogramTooltip dx={dx} />} />
+        <Bar dataKey='frequency' fill={fillColor} />
+      </BarChart>
     )
   }
 }
