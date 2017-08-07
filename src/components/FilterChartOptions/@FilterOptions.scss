@@ -1,5 +1,4 @@
 .filter {
-  z-index: 0;
   margin-bottom: 1.25em;
 }
 
@@ -17,10 +16,10 @@
   border: none;
 }
 
-.FilterChartOptions__select {
+.FilterChartOptions__filter-options .Select {
   z-index: 10;
 }
 
-.FilterChartOptions__root .Select {
-  z-index: 9;
+.FilterChartOptions__select {
+  z-index: 11;
 }
