@@ -5954,6 +5954,13 @@ react-date-range@^0.9.4:
     moment "^2.10.6"
     prop-types "^15.5.10"
 
+react-day-picker@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-6.1.0.tgz#81122c34bfb4eeec288ec31709e8aa6d4bc161cc"
+  dependencies:
+    object-assign "^4.1.1"
+    prop-types "^15.5.10"
+
 react-dev-utils@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-3.0.0.tgz#3677f37718ba0cae892ba9c01fe54d1622e6ef7c"
