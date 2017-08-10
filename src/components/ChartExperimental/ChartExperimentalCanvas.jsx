@@ -256,7 +256,7 @@ class ChartExperimentalCanvas extends Component {
     return chartType
   }
 
-  findMaxObjKeyValueGrpBy(chartData){
+  findMaxObjKeyValueGrpByUnStacked(chartData){
     let allVals = []
     chartData.forEach(function(item){
       let itemCopy = Object.assign({}, item);
@@ -267,9 +267,31 @@ class ChartExperimentalCanvas extends Component {
     })
     return Math.max.apply(null, allVals)
   }
+
+   findMaxObjKeyValueGrpByStacked(chartData){
+    let allVals = []
+    chartData.forEach(function(item){
+      let itemCopy = Object.assign({}, item);
+      delete itemCopy.label
+      let colSum = Object.values(itemCopy).reduce((a, b) => a + b, 0)
+      allVals.push(colSum)
+    })
+    return Math.max.apply(null, allVals)
+  }
+
+
   setXAxisTickInterval(dateBy, chartData){
     return Math.round(chartData.length * 0.09)
   }
+
+  getMaxGrpBy (chartType, chartData) {
+    if (chartType === 'line') {
+      return this.findMaxObjKeyValueGrpByUnStacked(chartData)
+    } else {
+      return this.findMaxObjKeyValueGrpByStacked(chartData)
+    }
+  }
+
   render () {
     let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, rollupBy, dateBy} = this.props
     chartType = this.setDefaultChartType(selectedColumnDef, chartType)
@@ -301,10 +323,13 @@ class ChartExperimentalCanvas extends Component {
     let formatValue = d3.format('0,000')
     let numericCol = isColTypeTest(selectedColumnDef, 'number')
     let isGroupBy = this.isGroupByz(groupKeys)
+    if(isGroupBy && groupKeys.length === 1){
+      isGroupBy = false
+    }
     if(!isGroupBy){
       maxValue = findMaxObjKeyValue(chartData, 'value')
     }else{
-      maxValue = this.findMaxObjKeyValueGrpBy(chartData)
+      maxValue = this.getMaxGrpBy (chartType, chartData)
     }
     valTickFormater = function (d) { return formatValue(d) }
     domainMax = maxValue + (maxValue * 0.05)

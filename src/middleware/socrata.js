@@ -492,13 +492,29 @@ function transformQueryData (json, state) {
 
   if (query.groupBy && json.length > 0) {
     groupKeys = uniq(json.map((obj) => {
-      return obj[query.groupBy]
+      if(Object.keys(obj).indexOf('label') > -1){
+        return obj[query.groupBy]
+      }else{
+        return "Blank"
+      }
     }))
-    json = reduceGroupedData(json, query.groupBy)
-    json = addMissingDatesGrpBy(json, state)
-    json = castJsonGrpBy(json, state)
-    if(!isDateColSelected(state)) {
-      json = sortJsonGrpBy (json)
+    console.log(groupKeys)
+    ///for weird edges casese where someone filters a group by;
+    ///we essentially want it to be a normal chart if there is only 1 item in the group.
+    if(groupKeys.length === 1){
+      json = json.map(function(item){
+        return {'key':item.key, 'label':item.label, 'value':parseInt(item.value)}
+      })
+      json = replacePropertyNameValue(json, 'label', 'undefined', 'blank')
+      json = addMissingDates(json, state)
+      json =  castJson (json, state)
+    } else {
+      json = reduceGroupedData(json, query.groupBy)
+      json = addMissingDatesGrpBy(json, state)
+      json = castJsonGrpBy(json, state)
+      if(!isDateColSelected(state)) {
+        json = sortJsonGrpBy (json)
+      }
     }
   }
   if(json.length > 0 && !query.groupBy){

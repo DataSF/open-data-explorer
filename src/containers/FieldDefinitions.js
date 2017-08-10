@@ -16,8 +16,9 @@ const ColumnDetails = ({name, topOffset, list, filters, onFilter, sort, onSort, 
   if(name) {
     setDocumentTitle(name + ' | Field Definitions')
   }
+  console.log(containerHeight-topOffset)
   let containerHeightStyle = {
-    height: (containerHeight+100) + 'px', 'position': 'relative'
+    height: (containerHeight-topOffset-50) + 'px', 'position': 'relative'
   }
   return (
 
@@ -85,7 +86,9 @@ const mapStateToProps = (state, ownProps) => {
     selectedField: getSelectedFieldDetails(state),
     showCols: state.fieldDetailsProps.showCols,
     selectedCategories: state.fieldDetailsProps.selectedCategories,
-    containerHeight: ownProps.viewportHeight
+    containerHeight: ownProps.viewportHeight,
+    topOffset: ownProps.topOffset
+
   }
 }
 
