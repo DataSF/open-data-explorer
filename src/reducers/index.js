@@ -54,6 +54,9 @@ export const getGroupableColumns = state =>
 export const getSelectableColumns = (state, all = false, ignoreTypeFilters = false, exclude = []) => 
   fromColumns.getSelectableColumns(state.columnProps, state.query.selectedColumn, all, ignoreTypeFilters, exclude)
 
+export const getFilterableColumns = (state, exclude = []) =>
+  fromColumns.getSelectableColumns(state.columnProps, state.query.selectedColumn, false, true, exclude, true)
+
 export const getSummableColumns = state =>
   fromColumns.getSummableColumns(state.columnProps)
 
