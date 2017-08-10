@@ -95,7 +95,7 @@ class FieldColumns extends Component {
   }
 
   render () {
-    let {fieldList, sortBy,onClick} = this.props
+    let {fieldList, sortBy,onClick, displayType} = this.props
     let fieldCards = []
     const COLTYPES = {
       'boolean': 'True/False',
@@ -129,12 +129,13 @@ class FieldColumns extends Component {
     fieldCards = this.cardSort(fieldCards, sortBy,  headersObj.headerTypes)
     fieldCards = this.makeMetadataCards(fieldCards, onClick)
     }
-
+    console.log(displayType)
     return (
-    <CardColumns>
-        {fieldCards}
-    </CardColumns>
-         )
+
+          <CardColumns>
+            {fieldCards}
+          </CardColumns>
+    )
   }
 }
 

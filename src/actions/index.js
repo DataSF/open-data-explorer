@@ -211,7 +211,7 @@ export function selectColumn (column) {
     if (column !== null) {
       dispatch(fetchData(getState()))
       dispatch(setDefaultChartType(column))
-    } else if (column === null) {      
+    } else if (column === null) {
       dispatch(resetState('query'))
     }
   }
@@ -330,6 +330,8 @@ export const APPLY_CHART_TYPE = 'APPLY_CHART_TYPE'
 export const UPDATE_FROM_QS = 'UPDATE_FROM_QS'
 export const QS_FAILURE = 'QS_FAILURE'
 export const RESET_STATE = 'RESET_STATE'
+export const DISPLAY_FIELD_PROFILES_LIST = 'DISPLAY_FIELD_PROFILES_LIST'
+
 export function addFilter (key) {
   return {
     type: ADD_FILTER,
@@ -340,6 +342,13 @@ export function applyChartType (chartType) {
   return {
     type: APPLY_CHART_TYPE,
     chartType}
+}
+
+export function displayFieldProfilesList (displayType) {
+  return {
+    type: DISPLAY_FIELD_PROFILES_LIST,
+    payload: displayType
+  }
 }
 
 export function removeFilter (key) {

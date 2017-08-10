@@ -132,13 +132,7 @@
   margin: 15px;
 }
 
-.column-details-container-wrapper{
-  overflow-y:scroll;
-  padding: 0;
-  right: 0;
-  bottom: 0;
-  position:absolute;
-}
+
 .column-details-picker-panel{
   border: 1px solid #d3d3d3;
 }
@@ -149,15 +143,29 @@
 
 .fieldProfileContainer{
   margin-right:5%;
-  margin-left: -0.25%;
+  /*margin-left: -0.25%;*/
+  margin-top:2%;
+}
+
+.field_details{
 }
 
 .field-details-panel-picker-container{
+  margin-top:1.5%;
   overflow-y:scroll;
   position: absolute;
   bottom: 0;
   left: 0;
+  padding-left: 15px;
+}
+
+.column-details-container-wrapper{
+  overflow-y:scroll;
   padding: 0;
+  right: 0;
+  bottom: 0;
+  position:absolute;
+  padding-left:1%;
 }
 
 .Chart__header{
@@ -183,4 +191,17 @@ a.collapsed .glyphicon.collapse-icon:before {
   content: "\e253";
 }
 
+.list-card-option{
+  float:left;
+  font-size:25px;
+  padding-right:10px;
+}
 
+.list-card-option-text{
+  font-size:23px;
+}
+.list-card-option-wrapper{
+  float: right;
+  margin-right:10%;
+  color: #b4bcc2;
+}
