@@ -29,6 +29,7 @@ class ChartExperimentalBarStuff extends Component {
         return bars
       }
     }
+    return bars
   }
 
   getChartProperties (chartData) {

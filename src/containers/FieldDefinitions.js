@@ -16,8 +16,9 @@ const ColumnDetails = ({name, topOffset, list, filters, onFilter, sort, onSort, 
   if(name) {
     setDocumentTitle(name + ' | Field Definitions')
   }
+  console.log(containerHeight-topOffset)
   let containerHeightStyle = {
-    height: (containerHeight+100) + 'px', 'position': 'relative'
+    height: (containerHeight-topOffset-50) + 'px', 'position': 'relative'
   }
   return (
 
@@ -74,6 +75,8 @@ const ColumnDetails = ({name, topOffset, list, filters, onFilter, sort, onSort, 
 
 const mapStateToProps = (state, ownProps) => {
   let selectable = getSelectableColumnsDetails(state)
+  console.log("***")
+  console.log(ownProps)
   return {
     list: selectable || {},
     fieldTypeItems: getUniqueColumnTypesDetails(state, true),
@@ -86,7 +89,9 @@ const mapStateToProps = (state, ownProps) => {
     hideshowVal: getSelectableColumnsDetails(state).length,
     showCols: state.fieldDetailsProps.showCols,
     selectedCategories: state.fieldDetailsProps.selectedCategories,
-    containerHeight: ownProps.viewportHeight
+    containerHeight: ownProps.viewportHeight,
+    topOffset: ownProps.topOffset
+
   }
 }
 
