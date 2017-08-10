@@ -1,7 +1,7 @@
 import './@daterangepicker.css'
 import React, { Component } from 'react'
 import {Button, Glyphicon} from 'react-bootstrap'
-import DateRangePicker from 'react-bootstrap-daterangepicker'
+import DateRangePicker from '../DateRangePicker'
 import moment from 'moment'
 
 const ranges = {
@@ -51,20 +51,19 @@ class FilterDateTime extends Component {
     let start = moment(this.props.startDate).format('MM/DD/YYYY')
     let end = moment(this.props.endDate).format('MM/DD/YYYY')
     let label = start + ' to ' + end
-    // let { dateBy } = this.props
+    let { dateBy } = this.props
     if (start === end) {
       label = start
     }
 
     return (
-      <DateRangePicker startDate={moment(this.props.startDate)} endDate={moment(this.props.endDate)} ranges={ranges['month']} onEvent={this.onFilter} opens='left'>
+      <DateRangePicker startDate={moment(this.props.startDate)} endDate={moment(this.props.endDate)} ranges={ranges[dateBy]} onEvent={this.onFilter} opens='left'>
         <Button className='selected-date-range-btn' style={{width: '100%'}}>
           <div className='pull-left'><Glyphicon glyph='calendar' /></div>
           <div className='pull-right'>
             <span>
-              {label}&nbsp;
+              {label}
             </span>
-            <span className='caret' />
           </div>
         </Button>
       </DateRangePicker>

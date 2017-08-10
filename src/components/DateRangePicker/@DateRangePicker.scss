@@ -1,0 +1,28 @@
+.DateRangePicker__root {
+    max-width: none;
+}
+
+.DateRangePicker__list-item {
+    background-color: #eee;
+    border-radius: 4px;
+    margin: 8px 0;
+    padding: 5px 0 5px 10px;
+    cursor: pointer;
+}
+
+.DateRangePicker__list-item:hover {
+    background-color: #d7ffd9;
+}
+
+.DateRangePicker__list-item--active,
+.DateRangePicker__list-item--active:hover {
+    background-color: #3e5a6b;
+    color: #ffffff;
+}
+
+
+
+.DateRangePicker__list {
+    min-width: 150px;
+    float: right;
+}
