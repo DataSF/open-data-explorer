@@ -113,6 +113,7 @@ class FieldProfile extends Component {
 
   render () {
     let {field, onClick, profileInfo, selectedCategories} = this.props
+    console.log(profileInfo)
     if(!field.name){
       field.name = field.label
     }
