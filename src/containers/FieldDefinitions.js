@@ -9,7 +9,6 @@ import FieldDefFieldSelector from './FieldDefFieldSelector'
 import { setDocumentTitle } from '../helpers'
 
 const ColumnDetails = ({name, topOffset, list, filters, onFilter, sort, onSort, fieldTypeItems, selectableColumns, onSelectColumn, selectedColumnDef, hideshowVal, selectedField, setHideShow, showCols, selectedProfileInfo, selectedCategories, containerHeight, displayFieldProfilesList, displayType}) => {
-  console.log(containerHeight )
   let absoluteTop = {
       top: (10) + 'px'
     }
@@ -75,7 +74,6 @@ const ColumnDetails = ({name, topOffset, list, filters, onFilter, sort, onSort, 
 
 const mapStateToProps = (state, ownProps) => {
   let selectable = getSelectableColumnsDetails(state)
-  console.log(state)
   return {
     list: selectable || {},
     fieldTypeItems: getUniqueColumnTypesDetails(state, true),
