@@ -58,6 +58,8 @@ class ChartExperimentalHistogramStuff extends Component {
     let domainMaxY = findMaxObjKeyValue(barData, 'frequency') * 1.03
 
     return (
+      <Choose>
+      <When condition={chartData.length > 0}>
       <BarChart
         width={w}
         height={h}
@@ -82,6 +84,8 @@ class ChartExperimentalHistogramStuff extends Component {
         <Tooltip content={<HistogramTooltip dx={dx} />} />
         <Bar dataKey='frequency' fill={fillColor} />
       </BarChart>
+      </When>
+      </Choose>
     )
   }
 }

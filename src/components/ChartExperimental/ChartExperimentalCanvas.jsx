@@ -302,6 +302,10 @@ class ChartExperimentalCanvas extends Component {
     }
   }
 
+  roundNumberByPower (num, tensBaseToRoundTo) {
+    return Math.ceil(num/tensBaseToRoundTo)*tensBaseToRoundTo
+  }
+
   render () {
     let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, rollupBy, dateBy} = this.props
     chartType = this.setDefaultChartType(selectedColumnDef, chartType)
@@ -327,6 +331,7 @@ class ChartExperimentalCanvas extends Component {
       'money': {'start': '#c71585', 'end': '#ffc0cb'}
     }
     let xAxisInterval = this.setXAxisTickInterval(dateBy, chartData)
+
     let isDateSelectedCol = false
     let colName = ''
     let maxValue, domainMax, valTickFormater
@@ -345,7 +350,35 @@ class ChartExperimentalCanvas extends Component {
     domainMax = maxValue + (maxValue * 0.05)
     // console.log("***max is here")
     // console.log(domainMax)
-    let yTickCnt = 6
+    let yTickCnt = 10
+    let valueAxisTickLst = []
+    let valueAxisTickIncrement = Math.round(maxValue * 1.05,0)
+
+    if(maxValue < 50){
+      valueAxisTickIncrement = Math.round((valueAxisTickIncrement/9), 2)
+    }else if( maxValue > 10 && maxValue < 100 ){
+       valueAxisTickIncrement =  this.roundNumberByPower( (valueAxisTickIncrement/ 9), 10)
+    }else if( maxValue > 100 && maxValue < 1000 ){
+      valueAxisTickIncrement = this.roundNumberByPower( (valueAxisTickIncrement/ 9), 100)
+    }else if( maxValue > 1000){
+      valueAxisTickIncrement =this.roundNumberByPower( (valueAxisTickIncrement/ 9), 1000)
+    }
+    let valueAxisTickIncrementLast = 0
+
+    for (let i=0; i< 11; i++) {
+      if(valueAxisTickIncrementLast < ( maxValue + (valueAxisTickIncrement*2))){
+         valueAxisTickLst.push(valueAxisTickIncrementLast)
+        valueAxisTickIncrementLast = valueAxisTickIncrementLast + valueAxisTickIncrement
+      }else{
+        break
+      }
+
+    }
+
+    console.log("***** y ticks*****")
+    console.log(valueAxisTickLst)
+    console.log(valueAxisTickIncrement )
+    console.log("********")
 
     //chartData = this.convertChartData(chartData, selectedColumnDef, dateBy, isGroupBy)
     if (selectedColumnDef) {
@@ -453,6 +486,7 @@ class ChartExperimentalCanvas extends Component {
                   chartData={chartData}
                   colName={colName}
                   yTickCnt={yTickCnt}
+                  valueAxisTickLst={valueAxisTickLst}
                   xTickCnt={xTickCnt}
                   xAxisHeight={xAxisHeight}
                   yAxisWidth={yAxisWidth}
@@ -479,6 +513,7 @@ class ChartExperimentalCanvas extends Component {
                   groupKeys={groupKeys}
                   chartData={chartData}
                   yTickCnt={yTickCnt}
+                  valueAxisTickLst={valueAxisTickLst}
                   xTickCnt={xTickCnt}
                   xAxisPadding={xAxisPadding}
                   grpColorScale={grpColorScale}

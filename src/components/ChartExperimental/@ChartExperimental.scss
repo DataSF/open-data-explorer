@@ -104,3 +104,7 @@
 .Chart__title .glyphicon:hover {
   color: #18BC9C;
 }
+
+.recharts-cartesian-grid-horizontal line:first-child {
+    display: none;
+}

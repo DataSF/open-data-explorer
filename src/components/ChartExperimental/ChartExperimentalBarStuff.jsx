@@ -7,6 +7,7 @@ import CustomXaxisLabel from './CustomXaxisLabel'
 import CustomKeyAxisTick from './CustomKeyAxisTick'
 
 class ChartExperimentalBarStuff extends Component {
+
   makeBars (groupKeys, grpColorScale) {
     let bars = []
     if (groupKeys) {
@@ -72,6 +73,8 @@ class ChartExperimentalBarStuff extends Component {
     let xpadding = {bottom: 300}
     legendStyle = this.setLegendStyleTop(bars, legendStyle)
     return (
+      <Choose>
+      <When condition={chartData.length > 0}>
       <Choose>
         <When condition={isDateSelectedCol}>
           <Choose>
@@ -231,6 +234,8 @@ class ChartExperimentalBarStuff extends Component {
             </When>
           </Choose>
         </Otherwise>
+      </Choose>
+      </When>
       </Choose>
     )
   }
