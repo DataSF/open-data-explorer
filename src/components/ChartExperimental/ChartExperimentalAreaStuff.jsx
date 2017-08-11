@@ -50,69 +50,74 @@ class ChartExperimentalAreaStuff extends Component {
     return legendStyle
   }
   render () {
-    let {h, w, xAxisPadding, xAxisInterval, isGroupBy, margin, yAxisWidth, rowLabel, groupKeys, fillColor, chartData, yTickCnt, grpColorScale, valTickFormater, domainMax, xAxisHeight, legendStyle, colName} = this.props
+    let {h, w, xAxisPadding, xAxisInterval, isGroupBy, margin, yAxisWidth, rowLabel, groupKeys, fillColor, chartData, yTickCnt, grpColorScale, valTickFormater, domainMax, xAxisHeight, legendStyle, colName, valueAxisTickLst} = this.props
     let areas = this.makeAreas(groupKeys, grpColorScale)
     legendStyle = this.setLegendStyleTop(areas, legendStyle)
     return (
       <Choose>
-        <When condition={!isGroupBy}>
-          <AreaChart
-            width={w}
-            height={h}
-            data={chartData}
-            margin={margin}>
-            <XAxis
-              dataKey='key'
-              height={xAxisHeight}
-              allowDataOverflow={true}
-              interval={xAxisInterval}
-              type={'category'}
-              tickSize={4}
-              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} chartType={'area'} />}
-              padding={xAxisPadding}/>
-            <YAxis
-              width={yAxisWidth}
-              allowDataOverflow={true}
-              tickFormatter={valTickFormater}
-              tickCount={yTickCnt}
-              domain={[0, domainMax]}
-              type='number'
-              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} chartType={'area'} />} />
-            <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
-            <Tooltip />
-            <Area
-              type='linear'
-              dataKey='value'
-              stroke={fillColor}
-              fill={fillColor} />
-          </AreaChart>
-        </When>
-        <When condition={isGroupBy}>
-          <AreaChart
-            width={w}
-            height={h}
-            data={chartData}
-            margin={margin}>
-            <XAxis
-              dataKey={'label'}
-              type={'category'}
-              interval={xAxisInterval}
-              allowDataOverflow={true}
-              height={xAxisHeight}
-              tickSize={4}
-              label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={areas.length} chartType={'area'} />} />
-            <YAxis
-              tickFormatter={valTickFormater}
-              tickCount={yTickCnt}
-              domain={[0, domainMax]}
-              allowDataOverflow={true}
-              type='number'
-              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h}   chartType={'area'}/>} />
-            <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
-            <Tooltip />
-            <Legend wrapperStyle={legendStyle} />
-            {areas}
-          </AreaChart>
+        <When condition={chartData.length > 0}>
+          <Choose>
+          <When condition={!isGroupBy}>
+            <AreaChart
+              width={w}
+              height={h}
+              data={chartData}
+              margin={margin}>
+              <XAxis
+                dataKey='key'
+                height={xAxisHeight}
+                allowDataOverflow={true}
+                interval={xAxisInterval}
+                type={'category'}
+                tickSize={4}
+                //label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} chartType={'area'} />}
+                label={colName}
+                padding={xAxisPadding}/>
+              <YAxis
+                width={yAxisWidth}
+                domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
+                ticks={valueAxisTickLst}
+                tickFormatter={valTickFormater}
+                //tickCount={yTickCnt}
+                type='number'
+                label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} chartType={'area'} />} />
+              <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
+              <Tooltip />
+              <Area
+                type='linear'
+                dataKey='value'
+                stroke={fillColor}
+                fill={fillColor} />
+            </AreaChart>
+          </When>
+          <When condition={isGroupBy}>
+            <AreaChart
+              width={w}
+              height={h}
+              data={chartData}
+              margin={margin}>
+              <XAxis
+                dataKey={'label'}
+                type={'category'}
+                interval={xAxisInterval}
+                allowDataOverflow={true}
+                height={xAxisHeight}
+                tickSize={4}
+                label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={areas.length} chartType={'area'} />} />
+              <YAxis
+                tickFormatter={valTickFormater}
+                domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
+                ticks={valueAxisTickLst}
+                domain={[0, domainMax]}
+                type='number'
+                label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h}   chartType={'area'}/>} />
+              <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
+              <Tooltip />
+              <Legend wrapperStyle={legendStyle} />
+              {areas}
+            </AreaChart>
+          </When>
+        </Choose>
         </When>
       </Choose>
     )

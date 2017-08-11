@@ -167,6 +167,10 @@ VizContainer.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => {
+  //console.log("*****state***")
+  //console.log(state)
+  //console.log("******ownProps****")
+  //console.log(ownProps)
   const { metadata, chart, columnProps, query, messages } = state
   const id = ownProps.params.id
   let queryState = Object.assign({}, query)
@@ -186,7 +190,7 @@ const mapStateToProps = (state, ownProps) => {
       supportedChartTypes: getSupportedChartTypes(state),
       queryString: ownProps.location.query.q,
       chartType: chart.chartType,
-      chartData: chart.chartData,
+      chartData: chart.chartData || [],
       groupKeys: chart.groupKeys,
       selectedColumn: query.selectedColumn,
       selectedColumnDef: getSelectedColumnDef(state),

@@ -468,6 +468,11 @@ function  castJson (json, state) {
     } else {
       formattedJson = formatJsonCol(json)
     }
+    formattedJson = formattedJson.map(function(item){
+      item.value = parseInt(item.value)
+      return item
+    })
+    console.log(formattedJson)
     return formattedJson
   }
 
