@@ -48,8 +48,9 @@ class FilterDateTime extends Component {
   }
 
   render () {
-    let start = moment(this.props.startDate).format('MM/DD/YYYY')
-    let end = moment(this.props.endDate).format('MM/DD/YYYY')
+    let { startDate, endDate, dataRange } = this.props
+    let start = moment(startDate).format('MM/DD/YYYY')
+    let end = moment(endDate).format('MM/DD/YYYY')
     let label = start + ' to ' + end
     let { dateBy } = this.props
     if (start === end) {
@@ -57,7 +58,7 @@ class FilterDateTime extends Component {
     }
 
     return (
-      <DateRangePicker startDate={moment(this.props.startDate)} endDate={moment(this.props.endDate)} ranges={ranges[dateBy]} onEvent={this.onFilter} opens='left'>
+      <DateRangePicker dataRange={dataRange} startDate={moment(startDate)} endDate={moment(endDate)} ranges={ranges['month']} onEvent={this.onFilter} opens='left'>
         <Button className='selected-date-range-btn' style={{width: '100%'}}>
           <div className='pull-left'><Glyphicon glyph='calendar' /></div>
           <div className='pull-right'>
