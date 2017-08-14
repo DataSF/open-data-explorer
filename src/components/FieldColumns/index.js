@@ -95,7 +95,7 @@ class FieldColumns extends Component {
   }
 
   render () {
-    let {fieldList, sortBy,onClick, displayType} = this.props
+    let {fieldList, sortBy,onClick} = this.props
     let fieldCards = []
     const COLTYPES = {
       'boolean': 'True/False',
