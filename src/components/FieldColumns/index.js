@@ -130,12 +130,12 @@ class FieldColumns extends Component {
     fieldCards = this.cardSort(fieldCards, sortBy,  headersObj.headerTypes)
     fieldCards = this.makeMetadataCards(fieldCards, onClick)
     }
-
     return (
-    <CardColumns>
-        {fieldCards}
-    </CardColumns>
-         )
+
+          <CardColumns>
+            {fieldCards}
+          </CardColumns>
+    )
   }
 }
 

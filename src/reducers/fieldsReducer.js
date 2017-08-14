@@ -128,6 +128,9 @@ export const getColumnDef = (state, column) => {
         selectedField.categories = selectedField.categories.map(function(item){
           if( ! item.category){
             item.category = "Blank"
+          }else if(typeof(item.category) === "boolean"){
+            // variable is a boolean
+            item.category = "True"
           }
           return item
         })
@@ -153,9 +156,9 @@ export const getFieldProfileInfo = (state, column) => {
           keyObj['label'] = PROFILELABELS[key]
           keyObj['labelDisplay'] = PROFILEDISPLAY[key]
           if(percentageFields.indexOf(key) > -1){
-            keyObj['value'] = String(Math.round((parseFloat(selectedField[key])* 100)), 2) + "%"
+            keyObj['value'] = String(Math.round((parseFloat(selectedField[key]) * 100)), 5 ) + "%"
           }
-          if((key === 'profile_last_updt_dt') || (key === 'min' && selectedField.type === 'date') || (key === 'max' && selectedField.type === 'date') || (key === 'mode' && selectedField.type === 'date') ) {
+          else if((key === 'profile_last_updt_dt') || (key === 'min' && selectedField.type === 'date') || (key === 'max' && selectedField.type === 'date') || (key === 'mode' && selectedField.type === 'date') ) {
             keyObj['value'] = selectedField[key].split('T')[0]
           }else{
             keyObj['value'] = selectedField[key]
@@ -304,10 +307,18 @@ function setHideShow (state, action) {
 
 function setSelectField(state, action) {
   return updateObject(state, {
-    selectedField: action.payload
+    selectedField: action.payload,
+    displayType: "cards"
   })
-
 }
+
+function setFieldProfilesDisplayList(state, action) {
+  return updateObject(state, {
+    displayType: action.payload
+  })
+}
+
+
 
 function setDefaultHideShow (state, action) {
   if (action.payload.target !== 'fieldDetailsProps') {
@@ -349,6 +360,7 @@ const fieldsReducer = createReducer({ typeFilters: [] }, {
   [ActionTypes.SET_DEFAULT_HIDE_SHOW]: setDefaultHideShow,
   [ActionTypes.SELECT_FIELD]: setSelectField,
   [ActionTypes.RESET_STATE]: resetState,
-  [ActionTypes.FIELD_DATA_SUCCESS]: setSelectedFieldCategories
+  [ActionTypes.FIELD_DATA_SUCCESS]: setSelectedFieldCategories,
+  [ActionTypes.DISPLAY_FIELD_PROFILES_LIST]: setFieldProfilesDisplayList
 })
 export default fieldsReducer
