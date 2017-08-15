@@ -44,18 +44,18 @@ class ChartExperimentalHistogramStuff extends Component {
   }
 
   render () {
-    let {h, w, yAxisWidth, fillColor, chartData, yTickCnt, valTickFormater, xAxisHeight, colName} = this.props
-    let freqs = this.explodeFrequencies(chartData)
-    let xScale = this.getXScale(freqs, w)
-    let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(15))
-    let histogramData = histogramDataFn(freqs)
-    let dx = 0
-    if (histogramData[0]) {
-      dx = histogramData[0]['dx']
-    }
-    let barData = this.makeBarData(histogramData)
-    let maxValueX = findMaxObjKeyValue(barData, 'value') * 1.10
-    let domainMaxY = findMaxObjKeyValue(barData, 'frequency') * 1.03
+    let {h, w, yAxisWidth, fillColor, chartData, yTickCnt, valTickFormater, xAxisHeight, colName, valueAxisTickLst,dx,isFetching} = this.props
+    //let freqs = this.explodeFrequencies(chartData)
+    //let xScale = this.getXScale(freqs, w)
+    //let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(15))
+    //let histogramData = histogramDataFn(freqs)
+    console.log("**** histogram****")
+    console.log(chartData)
+    console.log(isFetching)
+    console.log("*******")
+
+    let maxValueX = findMaxObjKeyValue(chartData, 'value') * 1.10
+    //let domainMaxY = findMaxObjKeyValue(barData, 'frequency') * 1.03
 
     return (
       <Choose>
@@ -63,7 +63,7 @@ class ChartExperimentalHistogramStuff extends Component {
       <BarChart
         width={w}
         height={h}
-        data={barData}
+        data={chartData}
         barGap={0}
         margin={{ right: 10, left: 5 }}
         barCategoryGap={0} >
@@ -79,7 +79,9 @@ class ChartExperimentalHistogramStuff extends Component {
           label={<CustomYaxisLabel val={'Frequency of Values'} h={h} chartType={'histogram'} />}
           tickCount={yTickCnt}
           tickFormatter={valTickFormater}
-          domain={[0, domainMaxY]} />
+          //domain={[0, domainMaxY]}
+          ticks={valueAxisTickLst}
+          domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]} />
         <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
         <Tooltip content={<HistogramTooltip dx={dx} />} />
         <Bar dataKey='frequency' fill={fillColor} />

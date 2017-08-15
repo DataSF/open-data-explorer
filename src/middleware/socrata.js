@@ -223,10 +223,14 @@ function transformColumns (json) {
 
 // refactor
 function reduceGroupedData (data, groupBy) {
-
   // collect unique labels
   let groupedData = uniq(data.map((obj) => {
-    return obj['label']
+
+    if(Object.keys(obj).indexOf('label') > -1){
+        return obj['label']
+    }else{
+      return "Blank"
+    }
   })).map((label) => {
     return {label: label}
   })
@@ -472,7 +476,6 @@ function  castJson (json, state) {
       item.value = parseInt(item.value)
       return item
     })
-    console.log(formattedJson)
     return formattedJson
   }
 
@@ -493,17 +496,35 @@ function transformTextCategoryData(json, state){
 }
 function transformQueryData (json, state) {
   let { query } = state
+  console.log(query)
   let groupKeys = []
-
   if (query.groupBy && json.length > 0) {
     groupKeys = uniq(json.map((obj) => {
-      if(Object.keys(obj).indexOf('label') > -1){
+      if(Object.keys(obj).indexOf(query.groupBy) > -1){
         return obj[query.groupBy]
       }else{
         return "Blank"
       }
     }))
-    console.log(groupKeys)
+    let grpCol = query.groupBy
+    json = json.map(function(obj){
+      if(Object.keys(obj).indexOf(query.groupBy) > -1) {
+        if(Object.keys(obj).indexOf('label') > -1) {
+          return obj
+        }else{
+          obj['label'] = "Blank"
+          return obj
+        }
+      }else{
+        obj[grpCol] = "Blank"
+        if(Object.keys(obj).indexOf('label') > -1) {
+          return obj
+        }else{
+          obj['label'] = "Blank"
+          return obj
+        }
+      }
+    })
     ///for weird edges casese where someone filters a group by;
     ///we essentially want it to be a normal chart if there is only 1 item in the group.
     if(groupKeys.length === 1){

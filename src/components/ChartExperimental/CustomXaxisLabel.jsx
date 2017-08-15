@@ -9,21 +9,24 @@ class CustomXaxisLabel extends Component {
       val = val.slice(0, (val.length - 1))
     }
     val = titleize(val.toLowerCase())
-    let xVal = (viewBox.width / 2)+5
+    let xVal = (viewBox.width / 2)+10
     let yVal = viewBox.height
     if (isGroupBy) {
       //console.log("grps")
       if (numOfGrps > 0 && numOfGrps <= 20) {
-        yVal = yVal/2+ 145
+        console.log("**yval****")
+        console.log(yVal)
+        console.log("***")
+        yVal = yVal + 300
       }else if(numOfGrps > 20  && numOfGrps <= 25) {
         // console.log("**in here 20 to 25")
-        yVal = yVal/2+ 138
+        yVal = yVal + 120
       }else if(numOfGrps > 25  && numOfGrps <= 40) {
         // console.log("**in here 20 to 30")
-        yVal = yVal/2+ 130
+        yVal = yVal + 120
       } else if(numOfGrps > 40  && numOfGrps <= 50) {
         // console.log("**in here 40 to 50")
-        yVal = yVal/2+ 140
+        yVal = yVal + 120
       } else if(numOfGrps > 50  && numOfGrps <= 60) {
         // console.log("**in here 40 to 50")
         yVal = yVal/2+ 150
@@ -36,7 +39,8 @@ class CustomXaxisLabel extends Component {
       }
 
     }else{
-      yVal = viewBox.height - 65
+      yVal  = 443
+      //yVal = viewBox.height - 65
     }
     return (
       <g className={'recharts-cartesian-axis-label'}>

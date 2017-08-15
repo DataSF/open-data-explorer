@@ -13,6 +13,8 @@ class CustomYaxisLabel extends Component {
     if(chartType === 'line' || chartType === 'area' || chartType === 'histogram' ){
       dy=20
     }
+    console.log("****value len***")
+    console.log(val)
 
     return (
       <g>
