@@ -7,7 +7,7 @@ import CustomXaxisLabel from './CustomXaxisLabel'
 class ChartExperimentalLineStuff extends Component {
 
 
-  makeLines (groupKeys) {
+  makeLines (groupKeys, rowLabel) {
     let lines = []
     if (groupKeys && groupKeys.length > 0) {
       let colorScale = d3.scale.linear().domain([1, groupKeys.length])
@@ -21,6 +21,7 @@ class ChartExperimentalLineStuff extends Component {
               type='linear'
               dataKey={i}
               connectNulls={true}
+              unit={" " + rowLabel}
               stackId='a'
               key={i}
               dot={false}
@@ -50,8 +51,8 @@ class ChartExperimentalLineStuff extends Component {
     return legendStyle
   }
   render () {
-    let {h, w, isGroupBy, yAxisWidth, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, domainMax, xAxisInterval,  colName, legendStyle, xAxisHeight, valueAxisTickLst} = this.props
-    let lines = this.makeLines(groupKeys)
+    let {h, w, isGroupBy, yAxisWidth, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, xAxisInterval, colName, legendStyle, xAxisHeight, valueAxisTickLst} = this.props
+    let lines = this.makeLines(groupKeys, rowLabel)
     let tickMax = valueAxisTickLst[valueAxisTickLst.length-1]
     legendStyle = this.setLegendStyleTop(lines, legendStyle)
     return (
@@ -68,8 +69,6 @@ class ChartExperimentalLineStuff extends Component {
                 interval={xAxisInterval}
                 type={'category'}
                 tickSize={4}
-                label={colName}
-                //strokeWidth={'10'}
                 label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} chartType={'line'} />}
                 padding={xAxisPadding}
                 height={xAxisHeight} />
@@ -84,6 +83,7 @@ class ChartExperimentalLineStuff extends Component {
                 tickFormatter={valTickFormater} />
               <Line
                 type={'linear'}
+                unit={" " + rowLabel}
                 strokeWidth={'3'}
                 dataKey={'value'}
                 dot={false}

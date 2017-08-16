@@ -4,8 +4,9 @@ function H (value) {
   this._wrapped = value
 }
 
-H.findCeiling = require('/findCeiling.js')
-H.roundNumberByPower = require('/roundNumberByPower.js')
+H.roundAxisZeros = require('./roundAxisZeros.js')
+H.findCeiling = require('./findCeiling.js')
+H.roundNumberByPower = require('./roundNumberByPower.js')
 H.toTitleCase = require('./toTitleCase')
 H.findMinObjKeyValue = require('./findMinObjKeyValue.js')
 H.findMaxObjKeyValue = require('./findMaxObjKeyValue.js')
@@ -17,6 +18,7 @@ H.sumObj = require('./sumObj.js')
 H.sortObj = require('./sortObj.js')
 H.setClassNamesListItem = require('./setClassNamesListItem.js')
 H.setDocumentTitle = require('./setDocumentTitle.js')
+H.padDomainMax = require('./padDomainMax.js')
 // Implement chaining
 H.prototype = {
   value: function value () {

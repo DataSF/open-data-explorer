@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns, getSupportedChartTypes, setDefaultChartTypeAfterLoad, isGroupByz, getMaxDomain, roundAxisZeros} from '../reducers'
+import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns, getSupportedChartTypes, setDefaultChartTypeAfterLoad, isGroupByz, getMaxDomain, setXAxisTickInterval, explodeFrequencies} from '../reducers'
 import { showHideModal, selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy, loadQueryStateFromString, changeRollupBy } from '../actions'
 import BlankChart from '../components/ChartExperimental/BlankChart'
 import ConditionalOnSelect from '../components/ConditionalOnSelect'
@@ -19,13 +19,12 @@ import OtherDataToggle from '../components/Query/OtherDataToggle'
 import ChartTypePicker from '../components/ChartTypePicker'
 import Loading from '../components/Loading'
 import Messages from '../components/Messages'
-import { setDocumentTitle, isColTypeTest } from '../helpers'
+import { setDocumentTitle, isColTypeTest, roundAxisZeros } from '../helpers'
 import './@containers.css'
-
 import ChartFieldSelector from '../containers/ChartFieldSelector'
 import ModalShare from '../containers/ModalShare'
+import { BASE_HREF, NUMBEROFTICKSY, NUMBEROFTICKSX, MAXPOWEROFT10 } from '../constants/AppConstants'
 
-import { BASE_HREF } from '../constants/AppConstants'
 
 class VizContainer extends Component {
   componentWillMount () {
@@ -126,6 +125,9 @@ class VizContainer extends Component {
                           chartType={props.chartType}
                           isFetching={props.isFetching}
                           dateBy={props.dateBy}
+                          maxPowerOf10={MAXPOWEROFT10}
+                          yTickCnt={NUMBEROFTICKSY}
+                          xTickCnt={NUMBEROFTICKSX}
                           rollupBy={props.rollupBy}
                           isGroupBy={props.isGroupBy}
                           groupKeys={props.groupKeys}
@@ -134,8 +136,10 @@ class VizContainer extends Component {
                           selectedColumnDef={props.selectedColumnDef}
                           groupBy={props.groupBy}
                           sumBy={props.sumBy}
+                          freqs={props.freqs}
                           domainMax={props.domainMax}
                           colName={props.colName}
+                          valueAxisTickLst={props.valueAxisTickLst || []}
                           isDateSelectedCol={props.isDateSelectedCol}
                           numericCol={props.numericCol} />
                       </When>
@@ -176,11 +180,8 @@ const mapStateToProps = (state, ownProps) => {
   //console.log(state)
   //console.log("******ownProps****")
   //console.log(ownProps)
-
-
   const { metadata, chart, columnProps, query, messages } = state
   let colName = ''
-  const  yTickCnt = 10
   let selectedColumnDef = getSelectedColumnDef(state)
   let chartType = chart.chartType
   if(typeof chartType !== 'undefined' && chartType.length < 1){
@@ -198,13 +199,8 @@ const mapStateToProps = (state, ownProps) => {
     colName = selectedColumnDef.name
   }
   let chartData = chart.chartData || []
-  console.log("domain max***")
   let domainMax = getMaxDomain(chartData, isGroupBy, chartType)
-  const numberOfTicks = 10
-  const maxPowerOf10 = 10
-  let valueAxisTickLst = roundAxisZeros(domainMax, numberOfTicks, maxPowerOf10)
-  console.log("*****")
-  console.log(valueAxisTickLst)
+  let valueAxisTickLst = roundAxisZeros(domainMax, NUMBEROFTICKSY, MAXPOWEROFT10)
   return {
     props: {
       name: ownProps.name,
@@ -233,7 +229,9 @@ const mapStateToProps = (state, ownProps) => {
       rollupBy: query.rollupBy,
       filters: query.filters,
       rowLabel: metadata.rowLabel,
+      freqs: explodeFrequencies(chartData, chartType),
       domainMax: domainMax,
+      xAxisInterval: setXAxisTickInterval(chartData),
       summableColumns: getSummableColumns(state),
       groupableColumns: getGroupableColumns(state),
       selectableColumns: getSelectableColumns(state),

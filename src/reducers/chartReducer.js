@@ -1,7 +1,7 @@
 import * as ActionTypes from '../actions'
 import { updateObject, createReducer } from './reducerUtilities'
-import { findMaxObjKeyValue, isColTypeTest, sumObj, sortObj, transformOthers , fillArray, findCeiling, roundNumberByPower} from '../helpers'
-import d3 from 'd3'
+import { findMaxObjKeyValue, fillArray, isColTypeTest, padDomainMax} from '../helpers'
+// import d3 from 'd3'
 // case reducers
 
 
@@ -118,59 +118,37 @@ function findMaxObjKeyValueGrpByStacked(chartData){
 }
 
 export const getMaxDomain = (chartData, isGroupBy, chartType)  => {
-  let maxValue, domainMax
-  if(chartData.length > 0){
-    console.log("****in hereeee*****")
-    if(!isGroupBy){
+  let maxValue = 0
+  if (chartData.length > 0){
+    if (!isGroupBy){
       maxValue = findMaxObjKeyValue(chartData, 'value')
-      }else{
-        maxValue = getMaxGrpBy (chartType, chartData)
-    }
-    console.log(maxValue)
-    if(maxValue){
-      if( 1 > maxValue){
-        domainMax = maxValue * 2
-      }
-      else if (1 < maxValue < 5){
-        domainMax = maxValue * 1.3
-      }
-      else if (5 < maxValue < 10){
-        domainMax = maxValue * 1.10
-      }
-      else {
-        domainMax = maxValue * 1.03
-      }
+    } else {
+      maxValue = getMaxGrpBy(chartType, chartData)
     }
   }
+  let domainMax = padDomainMax(maxValue)
   return domainMax
 }
 
-
-
-export const roundAxisZeros = (maxValue, numberOfTicks, maxPowerOf10) => {
-    // rounds the max value to nearest ceiling
-    let valueAxisTickLst = []
-    if(maxValue){
-      let valueAxisTickIncrement = Math.round(maxValue, 0)
-      if (maxValue < 50) {
-        valueAxisTickIncrement = Math.round((maxValue / (numberOfTicks-1)), 2)
-      } else {
-        let powerToRound = findCeiling(maxValue, maxPowerOf10)
-        valueAxisTickIncrement = roundNumberByPower((maxValue / numberOfTicks), powerToRound)
-      }
-      let valueAxisTickIncrementLast = 0
-      for (let i = 0; i < numberOfTicks; i++) {
-        if (valueAxisTickIncrementLast < (maxValue + valueAxisTickIncrement)) {
-          valueAxisTickLst.push(valueAxisTickIncrementLast)
-          valueAxisTickIncrementLast = valueAxisTickIncrementLast + valueAxisTickIncrement
-        } else {
-          break
-        }
-      }
-    }
-    return valueAxisTickLst
+export const setXAxisTickInterval = (chartData) => {
+  let xAxisInterval
+  if(chartData){
+    xAxisInterval =  Math.round(chartData.length * 0.09)
+  }
+  return xAxisInterval
 }
 
+
+export const explodeFrequencies =  (chartData, chartType) => {
+  let freqs = []
+  if(chartData.length > 0 && chartType === 'histogram') {
+    chartData.forEach(function (el) {
+    // function fillArray (value, len, arr)
+      freqs = fillArray(Number(el.key), Number(el.value), freqs)
+    })
+  }
+  return freqs
+}
 // slice reducer - chart
 export const chartReducer = createReducer({}, {
   [ActionTypes.METADATA_REQUEST]: resetState,
