@@ -473,7 +473,7 @@ function  castJson (json, state) {
       formattedJson = formatJsonCol(json)
     }
     formattedJson = formattedJson.map(function(item){
-      item.value = parseInt(item.value)
+      item.value = parseInt(item.value, 10)
       return item
     })
     return formattedJson
@@ -529,7 +529,7 @@ function transformQueryData (json, state) {
     ///we essentially want it to be a normal chart if there is only 1 item in the group.
     if(groupKeys.length === 1){
       json = json.map(function(item){
-        return {'key':item.key, 'label':item.label, 'value':parseInt(item.value)}
+        return {'key':item.key, 'label':item.label, 'value':parseInt(item.value, 10)}
       })
       json = replacePropertyNameValue(json, 'label', 'undefined', 'blank')
       json = addMissingDates(json, state)

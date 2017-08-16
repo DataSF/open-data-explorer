@@ -5,7 +5,7 @@ module.exports = function findCeiling (maxValue, maxPowerOf10) {
   let zeros = Math.pow(10, zerosRange[i])
   let zerosNext = Math.pow(10, zerosRange[i + 1])
   if ((zeros < maxValue) && (zerosNext > maxValue)) {
-    if (i != 0) {
+    if (i !== 0) {
       return Math.pow(10, zerosRange[i -1])
     } else {
         return zeros

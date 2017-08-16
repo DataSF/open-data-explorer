@@ -88,13 +88,22 @@ export const makePublishingFactsFxn = state =>
 export const calculatePublishingHealthFxn = state =>
   calculatePublishingHealth(state)
 
-export const setDefaultChartTypeAfterLoad = state =>
-  fromCharts.setDefaultChartTypeAfterLoad(state)
+export const setDefaultChartTypeAfterLoad = (selectedColumnDef, chartType) =>
+  fromCharts.setDefaultChartTypeAfterLoad(selectedColumnDef, chartType)
 
 export const isGroupByz = groupKeys =>
   fromCharts.isGroupByz(groupKeys)
 
 export const getMaxDomain = (chartData, isGroupBy, chartType) =>
   fromCharts.getMaxDomain(chartData, isGroupBy, chartType)
+
+//export const roundAxisZeros = (maxValue, numberOfTicks, maxPowerOf10) =>
+//  fromCharts.roundAxisZeros(maxValue, numberOfTicks, maxPowerOf10)
+
+export const setXAxisTickInterval = (chartData) =>
+  fromCharts.setXAxisTickInterval(chartData)
+
+export const explodeFrequencies = (chartData, chartType) =>
+  fromCharts.explodeFrequencies(chartData, chartType)
 
 export default rootReducer

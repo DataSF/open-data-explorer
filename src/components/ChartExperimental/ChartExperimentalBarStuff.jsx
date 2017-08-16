@@ -8,7 +8,7 @@ import CustomKeyAxisTick from './CustomKeyAxisTick'
 
 class ChartExperimentalBarStuff extends Component {
 
-  makeBars (groupKeys, grpColorScale) {
+  makeBars (groupKeys, grpColorScale, rowLabel) {
     let bars = []
     if (groupKeys) {
       if (groupKeys.length > 1) {
@@ -23,6 +23,7 @@ class ChartExperimentalBarStuff extends Component {
                 dataKey={i}
                 stackId='a'
                 key={i}
+                unit={" " + rowLabel}
                 fill={colorScale(colorIndex)} />)
           }
           return false
@@ -67,13 +68,12 @@ class ChartExperimentalBarStuff extends Component {
     return legendStyle
   }
   render () {
-    let {h, w, xAxisInterval, xAxisPadding, isGroupBy, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater, grpColorScale, colName, domainMax, isDateSelectedCol, legendStyle, xAxisHeight, yAxisWidth, valueAxisTickLst} = this.props
-    let bars = this.makeBars(groupKeys, grpColorScale)
+    let {h, w, xAxisInterval, xAxisPadding, isGroupBy, rowLabel, groupKeys, fillColor, chartData, valTickFormater, grpColorScale, colName, isDateSelectedCol, legendStyle, xAxisHeight, yAxisWidth, valueAxisTickLst} = this.props
+    let bars = this.makeBars(groupKeys, grpColorScale, rowLabel)
     let chartProperties = this.getChartProperties(chartData)
     let xpadding = {bottom: 300}
+    const barLabelStyle = { fill: '#133140', fontSize: '15px', paddingBottom:'15px'}
     legendStyle = this.setLegendStyleTop(bars, legendStyle)
-    console.log("****")
-    console.log(chartData)
     return (
       <Choose>
       <When condition={chartData.length > 0}>
@@ -92,7 +92,6 @@ class ChartExperimentalBarStuff extends Component {
                   tickSize={4}
                   padding={xAxisPadding}
                   label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} chartType={'line'} />}
-                  //label={colName}
                   height={xAxisHeight} />
                 <YAxis
                   tickFormatter={valTickFormater}
@@ -104,7 +103,10 @@ class ChartExperimentalBarStuff extends Component {
                   width={yAxisWidth}
                 <CartesianGrid stroke='#eee'  strokeDasharray='3 3' vertical={false} />
                 <Tooltip />
-                <Bar dataKey='value' fill={fillColor} />
+                <Bar dataKey={'value'}
+                    fill={fillColor}
+                    unit={" " + rowLabel}
+                    label={barLabelStyle}  />
               </BarChart>
             </When>
             <Otherwise>
@@ -161,7 +163,10 @@ class ChartExperimentalBarStuff extends Component {
                   width={yAxisWidth} />
                 <CartesianGrid stroke='#eee' strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
                 <Tooltip />
-                <Bar dataKey='value' fill={fillColor} />
+                <Bar dataKey='value'
+                fill={fillColor}
+                unit={" " + rowLabel}
+                label={barLabelStyle} />
               </BarChart>
             </When>
             <When condition={!isGroupBy && !chartProperties.manyBars}>
@@ -185,7 +190,10 @@ class ChartExperimentalBarStuff extends Component {
                   label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
                 <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
                 <Tooltip />
-                <Bar dataKey='value' fill={fillColor} />
+                <Bar dataKey='value'
+                    fill={fillColor}
+                    unit={" " + rowLabel}
+                    label={barLabelStyle} />
               </BarChart>
             </When>
             <When condition={isGroupBy && chartProperties.manyBars}>
@@ -226,7 +234,6 @@ class ChartExperimentalBarStuff extends Component {
                   label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={bars.length} />} />
                 <YAxis
                   tickFormatter={valTickFormater}
-                  // tickCount={yTickCnt}
                   ticks={valueAxisTickLst}
                   domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
                   type={'number'}

@@ -7,7 +7,7 @@ import CustomXaxisLabel from './CustomXaxisLabel'
 
 class ChartExperimentalAreaStuff extends Component {
 
-  makeAreas (groupKeys, grpColorScale) {
+  makeAreas (groupKeys, grpColorScale, rowLabel) {
     let areas = []
     if (groupKeys) {
       if (groupKeys.length > 1) {
@@ -23,6 +23,7 @@ class ChartExperimentalAreaStuff extends Component {
                 dataKey={i}
                 stackId='i'
                 key={i}
+                unit={" " + rowLabel}
                 stroke={colorScale('colorIndex')}
                 fill={colorScale(colorIndex)} />)
           }
@@ -50,8 +51,8 @@ class ChartExperimentalAreaStuff extends Component {
     return legendStyle
   }
   render () {
-    let {h, w, xAxisPadding, xAxisInterval, isGroupBy, margin, yAxisWidth, rowLabel, groupKeys, fillColor, chartData, grpColorScale, valTickFormater, domainMax, xAxisHeight, legendStyle, colName, valueAxisTickLst, valueTickStyle} = this.props
-    let areas = this.makeAreas(groupKeys, grpColorScale)
+    let {h, w, xAxisPadding, xAxisInterval, isGroupBy, margin, yAxisWidth, rowLabel, groupKeys, fillColor, chartData, grpColorScale, valTickFormater, xAxisHeight, legendStyle, colName, valueAxisTickLst, valueTickStyle} = this.props
+    let areas = this.makeAreas(groupKeys, grpColorScale, rowLabel)
     legendStyle = this.setLegendStyleTop(areas, legendStyle)
     return (
       <Choose>
@@ -86,7 +87,8 @@ class ChartExperimentalAreaStuff extends Component {
                 type='linear'
                 dataKey='value'
                 stroke={fillColor}
-                fill={fillColor} />
+                fill={fillColor}
+                unit={" " + rowLabel} />
             </AreaChart>
           </When>
           <When condition={isGroupBy}>
