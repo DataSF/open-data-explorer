@@ -43,17 +43,12 @@ class ChartExperimentalHistogramStuff extends Component {
     return barData
   }
 
-  render () {
-    let {h, w, yAxisWidth, fillColor, chartData, yTickCnt, valTickFormater, xAxisHeight, colName, valueAxisTickLst,dx,isFetching} = this.props
-    //let freqs = this.explodeFrequencies(chartData)
-    //let xScale = this.getXScale(freqs, w)
-    //let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(15))
-    //let histogramData = histogramDataFn(freqs)
-    console.log("**** histogram****")
-    console.log(chartData)
-    console.log(isFetching)
-    console.log("*******")
 
+  render () {
+    let {h, w, yAxisWidth, fillColor, chartData, yTickCnt, valTickFormater, xAxisHeight, colName, valueAxisTickLst,dx,isFetching, isGroupBy } = this.props
+
+    console.log("*** is group by**")
+    console.log(isGroupBy)
     let maxValueX = findMaxObjKeyValue(chartData, 'value') * 1.10
     //let domainMaxY = findMaxObjKeyValue(barData, 'frequency') * 1.03
 

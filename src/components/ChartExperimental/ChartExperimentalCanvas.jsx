@@ -71,201 +71,6 @@ class ChartExperimentalCanvas extends Component {
     return !isEqual(thisChart, nextChart) && !nextProps.isFetching
   }
 
-  isSelectedColDate (selectedColumnDef) {
-    if (selectedColumnDef.type === 'date') {
-      return true
-    }
-    return false
-  }
-
-  formatChartDataDates (itemList, dateBy) {
-    let yrFormat = d3.time.format('%Y')
-    let monthFormat = d3.time.format('%m-%Y')
-    itemList = itemList.map(function (item, index) {
-      let dt = item['label'].split('T')
-      dt = dt[0].split('-')
-      if (dateBy === 'month') {
-        item['key'] = monthFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
-      } else {
-        item['key'] = yrFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
-      }
-      item['value'] = Number(item['value'])
-      return item
-    })
-    return itemList
-  }
-
-  formatChartDataDatesGrpBy (itemList, dateBy) {
-    let yrFormat = d3.time.format('%Y')
-    let monthFormat = d3.time.format('%m-%Y')
-    itemList = itemList.map(function (item, index) {
-      if (dateBy === 'month') {
-        item['label'] = monthFormat(new Date(item['label']))
-      } else {
-        item['label'] = yrFormat(new Date(item['label']))
-      }
-      return item
-    })
-    return itemList
-  }
-
-  formatChartDataCol (itemList) {
-    itemList = itemList.map(function (item, index) {
-      item['key'] = String(item['label'])
-      item['value'] = Number(item['value'])
-      return item
-    })
-    return itemList
-  }
-
-  formatBlankChartData (itemList) {
-    itemList = itemList.map(function (item, index) {
-      if (item['key'] === 'undefined') {
-        item['blank'] = Number(item['value'])
-      }
-      return item
-    })
-    delete itemList['undefined']
-    return itemList
-  }
-
-  formatWhiteSpaceChartData (itemList) {
-    itemList = itemList.map(function (item, index) {
-      item['key'] = item['key'].replace(/(\r\n|\n|\r|\t)/gm, 'whitespace')
-      item['key'] = item['key'].replace('  ', 'whitespace')
-      if (item['key'] === ' ') {
-        item['key'] = 'whitespace'
-      }
-      return item
-    })
-    return itemList
-  }
-
-  castChartData (chartData, isDtCol, dateBy) {
-    let newChartData = []
-    if (isDtCol) {
-      newChartData = this.formatChartDataDates(chartData, dateBy)
-    } else {
-      newChartData = this.formatChartDataCol(chartData)
-    }
-    newChartData = this.formatBlankChartData(newChartData)
-    newChartData = this.formatWhiteSpaceChartData(newChartData)
-    return newChartData
-  }
-
-  formatChartDataGrpBy (itemList, dateBy, isDateCol) {
-    let newdict = {}
-    let yrFormat = d3.time.format('%Y')
-    let monthFormat = d3.time.format('%m-%Y')
-    Object.keys(itemList).forEach(function (key, index) {
-      if (key === 'label') {
-        newdict[key] = String(itemList[key])
-        if (newdict[key] === 'undefined') {
-          newdict[key] = 'blank'
-        }
-      } else if (key === 'undefined') {
-        newdict['blank'] = Number(itemList[key])
-      } else {
-        newdict[key] = Number(itemList[key])
-      }
-    })
-
-    if (isDateCol) {
-      let dt = newdict['label'].split('T')
-      dt = dt[0].split('-')
-      if (dateBy === 'month') {
-        newdict['label'] = monthFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
-      } else {
-        newdict['label'] = yrFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
-      }
-    }
-    return newdict
-  }
-
-  castChartDataGrpBy (chartData, isDtCol, dateBy) {
-    let newChartData = []
-    for (let i = 0; i < chartData.length; i++) {
-      let newdict = this.formatChartDataGrpBy(chartData[i], dateBy, isDtCol)
-      newChartData.push(newdict)
-    }
-    return newChartData
-  }
-  sortChartDataGrpByDate (newChartData, dateBy) {
-    if (dateBy === 'month') {
-      newChartData.sort(function(a, b){
-        let keyA = new Date(a.label),
-        keyB = new Date(b.label);
-      // Compare the 2 dates
-      if(keyA < keyB) return -1;
-      if(keyA > keyB) return 1;
-      return 0
-  })
-
-    } else {
-      newChartData.sort(function (a, b) {
-        return Number(a.label) - Number(b.label)
-      })
-    }
-    return newChartData
-  }
-
-  sortChartDataGrpBy (newChartData) {
-    let sortedNewChartData = []
-    let grpSumDict = {}
-    Object.keys(newChartData).forEach(function (key, index) {
-      grpSumDict[key] = sumObj(newChartData[key], 'label')
-    })
-    let sorted = sortObj(grpSumDict)
-    for (let i = 0; i < sorted.length; i++) {
-      let idx = sorted[i][0]
-      sortedNewChartData.push(newChartData[idx])
-    }
-    return sortedNewChartData
-  }
-
-  convertChartData (chartData, selectedColumnDef, dateBy, isGroupBy) {
-    //let newChartData = []
-    let isDtCol = isColTypeTest(selectedColumnDef, 'date')
-    if (chartData && chartData.length > 1) {
-      if (!isGroupBy) {
-        return this.castChartData(chartData, isDtCol, dateBy)
-      }
-    }
-    return chartData
-  }
-
-  getMaxDate (dateBy, chartType, chartData) {
-    let maxDt = ''
-    if (chartType === 'line') {
-      maxDt = Math.max.apply(Math, chartData.map(function (o) { return o.key }))
-    }
-    return maxDt
-  }
-
-  isGroupByz (groupByKeys, barChartType) {
-    if (groupByKeys) {
-      if (groupByKeys.length > 0) {
-        return true
-      }
-    }
-    return false
-  }
-
-  setDefaultChartType (selectedColumnDef, chartType) {
-    let isDateCol = isColTypeTest(selectedColumnDef, 'date')
-    let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
-    if (!(chartType)) {
-      if (isDateCol) {
-        chartType = 'line'
-      } else if (isNumericCol) {
-        chartType = 'histogram'
-      } else {
-        chartType = 'bar'
-      }
-    }
-    return chartType
-  }
-
   findMaxObjKeyValueGrpByUnStacked(chartData){
     let allVals = []
     chartData.forEach(function(item){
@@ -349,68 +154,29 @@ class ChartExperimentalCanvas extends Component {
     return {'fontSize':'100%'}
   }
 
-  explodeFrequencies (chartData) {
-    console.log("*****")
+  makeHistogramData(chartData, w ){
+    let freqs = this.explodeFrequencies(chartData)
+    let xScale = this.getXScale(freqs, w)
+    let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(15))
+    let histogramData = histogramDataFn(freqs)
+    console.log("**** histogram****")
     console.log(chartData)
-    let freqs = []
-    chartData.forEach(function (el) {
-      // function fillArray (value, len, arr)
-      freqs = fillArray(Number(el.key), Number(el.value), freqs)
-    })
-    return freqs
+    console.log("*******")
   }
 
-  getXScale (chartData, width) {
-    return d3.scale.linear().domain([0, d3.max(chartData)]).range([0, width])
-  }
-  getYScale (chartData, height) {
-    return d3.scale.linear().domain([0, d3.max(chartData, (d) => d.y)]).range([height, 0])
-  }
-
-  getNumberOfBins (freqs) {
-    return d3.thresholdFreedmanDiaconis(freqs, Math.min.apply(null, freqs), Math.max.apply(null, freqs))
-  }
-
-  makeBarData (histogramData) {
-    function findMean (data) {
-      // first pop off the non-numeric keys.
-      let min = data['x']
-      let max = min + data['dx']
-      return (max + min) / 2
-    }
-    let barData = histogramData.map(function (d, i) {
-      let mean = findMean(d)
-      return {'value': mean, 'frequency': d.y}
-    })
-    return barData
-  }
 
   render () {
-    let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, rollupBy, dateBy, isFetching} = this.props
-    chartType = this.setDefaultChartType(selectedColumnDef, chartType)
+    let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, rollupBy, dateBy, isFetching, isGroupBy, numericCol, isDateSelectedCol, domainMax, colName } = this.props
+    //chartType = this.setDefaultChartType(selectedColumnDef, chartType)
     let dx = 0
     let margin = {top: 1, right: 5, bottom: 1, left: 5}
-
-
+    //console.log("group by***")
+    // console.log(isSelectedColDate)
+    //console.log(isGroupBy)
+    //console.log(isDateSelectedCol)
     let w = this.state.width - (margin.left + margin.right)
     let h = this.state.height - (margin.top + margin.bottom)
 
-    if ((chartType === 'histogram') && (!isFetching)) {
-      console.log("*** in here******")
-      console.log(isFetching)
-      console.log(chartData)
-      if (typeof chartData != "undefined") {
-        let freqs = this.explodeFrequencies(chartData)
-        let xScale = this.getXScale(freqs, w)
-        let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(15))
-        chartData = histogramDataFn(freqs)
-        if (chartData[0]) {
-          dx = chartData[0]['dx']
-        }
-        let chartData = this.makeBarData(chartData)
-      }
-      ///let domainMaxY = findMaxObjKeyValue(barData, 'frequency') * 1.03
-    }
 
     let fillColor
     let grpColorScale
@@ -434,36 +200,39 @@ class ChartExperimentalCanvas extends Component {
       'money': {'start': '#c71585', 'end': '#ffc0cb'}
     }
     let xAxisInterval = this.setXAxisTickInterval(dateBy, chartData)
-
-    let isDateSelectedCol = false
-    let colName = ''
-    let maxValue, domainMax, valTickFormater, valueTickStyle
+    //let domainMax
+    //let isDateSelectedCol = false
+    let maxValue, valTickFormater, valueTickStyle
     let formatValue = d3.format('0,000')
-    let numericCol = isColTypeTest(selectedColumnDef, 'number')
-    let isGroupBy = this.isGroupByz(groupKeys)
-    if(isGroupBy && groupKeys.length === 1){
-      isGroupBy = false
-    }
-    if(!isGroupBy){
-      maxValue = findMaxObjKeyValue(chartData, 'value')
-    }else{
-      maxValue = this.getMaxGrpBy (chartType, chartData)
-    }
+    //let numericCol = isColTypeTest(selectedColumnDef, 'number')
+    console.log("**** numberic col***")
+    console.log(numericCol)
+    console.log("***domainMax***")
+    console.log(domainMax)
+    //let isGroupBy = this.isGroupByz(groupKeys)
+    //if(isGroupBy && groupKeys.length === 1){
+    //  isGroupBy = false
+    //}
+    //if(!isGroupBy){
+    //  maxValue = findMaxObjKeyValue(chartData, 'value')
+    //}else{
+    //  maxValue = this.getMaxGrpBy (chartType, chartData)
+    //}
 
     valTickFormater = function (d) { return formatValue(d) }
 
-    if( 1 > maxValue){
-      domainMax = maxValue * 2
-    }
-    else if (1 < maxValue < 5){
-      domainMax = maxValue * 1.3
-    }
-    else if (5 < maxValue < 10){
-      domainMax = maxValue * 1.10
-    }
-    else {
-      domainMax = maxValue * 1.03
-    }
+    //if( 1 > maxValue){
+    //  domainMax = maxValue * 2
+    //}
+    //else if (1 < maxValue < 5){
+    //  domainMax = maxValue * 1.3
+    //}
+    //else if (5 < maxValue < 10){
+    //  domainMax = maxValue * 1.10
+    //}
+    //else {
+    //  domainMax = maxValue * 1.03
+    //}
     // console.log("***max is here")
     // console.log(domainMax)
     let yTickCnt = 10
@@ -472,14 +241,12 @@ class ChartExperimentalCanvas extends Component {
       valueAxisTickLst = this.roundAxisZeros(domainMax, yTickCnt, 8)
       valueTickStyle = this.setFontSizeTicks(domainMax)
     }
-
-
     //chartData = this.convertChartData(chartData, selectedColumnDef, dateBy, isGroupBy)
     if (selectedColumnDef) {
       fillColor = fillColorIndex[selectedColumnDef.type]
       grpColorScale = groupByColorIndex[selectedColumnDef.type]
-      isDateSelectedCol = this.isSelectedColDate(selectedColumnDef)
-      colName = selectedColumnDef.name
+      //isDateSelectedCol = this.isSelectedColDate(selectedColumnDef)
+      //colName = selectedColumnDef.name
     }
     let xAxisPadding = { left: 30, right: 30 }
     let xTickCnt = 6
@@ -522,7 +289,6 @@ class ChartExperimentalCanvas extends Component {
                       h={h}
                       yAxisWidth={yAxisWidth}
                       xAxisHeight={xAxisHeight}
-                      domainMax={domainMax}
                       isGroupBy={isGroupBy}
                       margin={margin}
                       dx={dx}
