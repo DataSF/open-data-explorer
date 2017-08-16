@@ -4,7 +4,7 @@ import { combineReducers } from 'redux'
 import { metadataReducer, makeDatasetFactDict, makeColTypesCnt, makePublishingFacts, calculatePublishingHealth } from './metadataReducer'
 import columnsReducer, * as fromColumns from './columnsReducer'
 import { queryReducer } from './queryReducer'
-import { chartReducer } from './chartReducer'
+import chartReducer, * as fromCharts from './chartReducer'
 import { tableReducer } from './tableReducer'
 import { messagesReducer } from './messagesReducer'
 import { searchReducer } from './searchReducer'
@@ -58,7 +58,7 @@ export const getUniqueColumnTypes = (state, selectable) =>
 export const getGroupableColumns = state =>
   fromColumns.getGroupableColumns(state.columnProps, state.query.selectedColumn)
 
-export const getSelectableColumns = (state, all = false, ignoreTypeFilters = false, exclude = []) => 
+export const getSelectableColumns = (state, all = false, ignoreTypeFilters = false, exclude = []) =>
   fromColumns.getSelectableColumns(state.columnProps, state.query.selectedColumn, all, ignoreTypeFilters, exclude)
 
 export const getFilterableColumns = (state, exclude = []) =>
@@ -82,11 +82,19 @@ export const makeDatasetFactDictFxn = state =>
 export const makeColTypesCntFxn = state =>
   makeColTypesCnt(state)
 
-export const makePublishingFactsFxn =  state =>
+export const makePublishingFactsFxn = state =>
   makePublishingFacts(state)
 
 export const calculatePublishingHealthFxn = state =>
   calculatePublishingHealth(state)
 
+export const setDefaultChartTypeAfterLoad = state =>
+  fromCharts.setDefaultChartTypeAfterLoad(state)
+
+export const isGroupByz = groupKeys =>
+  fromCharts.isGroupByz(groupKeys)
+
+export const getMaxDomain = (chartData, isGroupBy, chartType) =>
+  fromCharts.getMaxDomain(chartData, isGroupBy, chartType)
 
 export default rootReducer

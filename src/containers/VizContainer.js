@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns, getSupportedChartTypes, getFilterableColumns } from '../reducers'
+import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns, getSupportedChartTypes, setDefaultChartTypeAfterLoad, isGroupByz, getMaxDomain, roundAxisZeros} from '../reducers'
 import { showHideModal, selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy, loadQueryStateFromString, changeRollupBy } from '../actions'
 import BlankChart from '../components/ChartExperimental/BlankChart'
 import ConditionalOnSelect from '../components/ConditionalOnSelect'
@@ -19,7 +19,7 @@ import OtherDataToggle from '../components/Query/OtherDataToggle'
 import ChartTypePicker from '../components/ChartTypePicker'
 import Loading from '../components/Loading'
 import Messages from '../components/Messages'
-import { setDocumentTitle } from '../helpers'
+import { setDocumentTitle, isColTypeTest } from '../helpers'
 import './@containers.css'
 
 import ChartFieldSelector from '../containers/ChartFieldSelector'
@@ -124,15 +124,20 @@ class VizContainer extends Component {
                         <ChartExperimentalCanvas
                           chartData={props.chartData || []}
                           chartType={props.chartType}
+                          isFetching={props.isFetching}
                           dateBy={props.dateBy}
                           rollupBy={props.rollupBy}
+                          isGroupBy={props.isGroupBy}
                           groupKeys={props.groupKeys}
                           filters={props.filters}
                           rowLabel={props.rowLabel}
                           selectedColumnDef={props.selectedColumnDef}
                           groupBy={props.groupBy}
                           sumBy={props.sumBy}
-                          isFetching={props.isFetching} />
+                          domainMax={props.domainMax}
+                          colName={props.colName}
+                          isDateSelectedCol={props.isDateSelectedCol}
+                          numericCol={props.numericCol} />
                       </When>
                     </Choose>
                   </Messages>
@@ -171,7 +176,16 @@ const mapStateToProps = (state, ownProps) => {
   //console.log(state)
   //console.log("******ownProps****")
   //console.log(ownProps)
+
+
   const { metadata, chart, columnProps, query, messages } = state
+  let colName = ''
+  const  yTickCnt = 10
+  let selectedColumnDef = getSelectedColumnDef(state)
+  let chartType = chart.chartType
+  if(typeof chartType !== 'undefined' && chartType.length < 1){
+    chartType = setDefaultChartTypeAfterLoad(selectedColumnDef, chartType)
+  }
   const id = ownProps.params.id
   let queryState = Object.assign({}, query)
   delete queryState.isFetching
@@ -179,6 +193,18 @@ const mapStateToProps = (state, ownProps) => {
   const embedLink = BASE_HREF + '/#/e/' + id + '?q=' + encodedJSON
   const embedCode = '<iframe src="' + embedLink + '" width="100%" height="400" allowfullscreen frameborder="0"></iframe>'
   const exclude = query.filters ? Object.keys(query.filters) : []
+  let isGroupBy = isGroupByz(chart.groupKeys)
+  if (selectedColumnDef) {
+    colName = selectedColumnDef.name
+  }
+  let chartData = chart.chartData || []
+  console.log("domain max***")
+  let domainMax = getMaxDomain(chartData, isGroupBy, chartType)
+  const numberOfTicks = 10
+  const maxPowerOf10 = 10
+  let valueAxisTickLst = roundAxisZeros(domainMax, numberOfTicks, maxPowerOf10)
+  console.log("*****")
+  console.log(valueAxisTickLst)
   return {
     props: {
       name: ownProps.name,
@@ -187,21 +213,27 @@ const mapStateToProps = (state, ownProps) => {
       id,
       embedCode,
       messages,
+      numericCol: isColTypeTest(selectedColumnDef, 'number'),
+      colName: colName,
+      isGroupBy: isGroupBy,
+      isDateSelectedCol: isColTypeTest(selectedColumnDef, 'date'),
       supportedChartTypes: getSupportedChartTypes(state),
       queryString: ownProps.location.query.q,
-      chartType: chart.chartType,
-      chartData: chart.chartData || [],
+      chartType: chartType,
+      chartData: chartData,
       groupKeys: chart.groupKeys,
       selectedColumn: query.selectedColumn,
-      selectedColumnDef: getSelectedColumnDef(state),
+      selectedColumnDef: selectedColumnDef,
       columns: columnProps.columns,
       isFetching: query.isFetching,
+      valueAxisTickLst: valueAxisTickLst,
       groupBy: query.groupBy,
       sumBy: query.sumBy,
       dateBy: query.dateBy || 'year',
       rollupBy: query.rollupBy,
       filters: query.filters,
       rowLabel: metadata.rowLabel,
+      domainMax: domainMax,
       summableColumns: getSummableColumns(state),
       groupableColumns: getGroupableColumns(state),
       selectableColumns: getSelectableColumns(state),

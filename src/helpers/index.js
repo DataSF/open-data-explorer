@@ -4,6 +4,8 @@ function H (value) {
   this._wrapped = value
 }
 
+H.findCeiling = require('/findCeiling.js')
+H.roundNumberByPower = require('/roundNumberByPower.js')
 H.toTitleCase = require('./toTitleCase')
 H.findMinObjKeyValue = require('./findMinObjKeyValue.js')
 H.findMaxObjKeyValue = require('./findMaxObjKeyValue.js')
