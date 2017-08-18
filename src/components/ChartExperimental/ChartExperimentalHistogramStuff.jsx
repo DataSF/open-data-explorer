@@ -49,15 +49,11 @@ class ChartExperimentalHistogramStuff extends Component {
       dx = histogramData[0]['dx']
     }
     let barData = this.makeBarData(histogramData)
-    console.log("**** bar data***")
-    console.log(barData)
     let domainMaxX = Math.round(padDomainMax((findMaxObjKeyValue(barData, 'value'))* 1.10)  ,5)
     let domainMaxY = Math.round(padDomainMax(findMaxObjKeyValue(barData, 'frequency')), 5)
     let valueAxisTickLstY = roundAxisZeros(domainMaxY, 10, 10)
     let valueAxisTickLstX = roundAxisZeros(domainMaxX, 6, 10)
     valueAxisTickLstX =  valueAxisTickLstX.slice(1, valueAxisTickLstX.length)
-    console.log("x ticks")
-    console.log(valueAxisTickLstX)
     return (
       <Choose>
       <When condition={barData.length > 0}>

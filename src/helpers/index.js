@@ -4,6 +4,11 @@ function H (value) {
   this._wrapped = value
 }
 
+
+H.getMaxDomain = require('./getMaxDomain.js')
+H.findMaxObjKeyValueGrpByStacked = require('./findMaxObjKeyValueGrpByStacked.js')
+H.findMaxObjKeyValueGrpByUnStacked = require('./findMaxObjKeyValueGrpByUnStacked.js')
+H.getMaxGrpBy = require('./getMaxGrpBy.js')
 H.roundAxisZeros = require('./roundAxisZeros.js')
 H.findCeiling = require('./findCeiling.js')
 H.roundNumberByPower = require('./roundNumberByPower.js')

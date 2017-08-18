@@ -1,6 +1,6 @@
 import * as ActionTypes from '../actions'
 import { updateObject, createReducer } from './reducerUtilities'
-import { findMaxObjKeyValue, fillArray,transformOthers,  isColTypeTest, padDomainMax} from '../helpers'
+import { fillArray } from '../helpers'
 // import d3 from 'd3'
 // case reducers
 
@@ -8,10 +8,12 @@ import { findMaxObjKeyValue, fillArray,transformOthers,  isColTypeTest, padDomai
 function updateData (state, action) {
   if (action.response.query) {
     return updateObject(state, {
-      chartData: action.response.query.originalData,
+      chartData: action.response.query.originalData || [],
       transformedChartData: action.response.query.data,
       isFetching: false,
-      groupKeys: action.response.query.groupKeys
+      groupKeys: action.response.query.groupKeys,
+      domainMax: action.response.query.domainMax,
+      rollupBy: action.response.query.rollupBy,
     })
   } else {
     return state
@@ -36,7 +38,7 @@ function resetState (state, action) {
 
 function changeRollUpBy (state, action) {
   console.log("***** roll up by option*****")
-  console.log(action)
+  //console.log(action)
   return updateObject(state, {
     rollupBy: action.payload
   })
@@ -52,23 +54,7 @@ function clearData (state, action) {
 }
 */
 
-export const setDefaultChartTypeAfterLoad = (selectedColumnDef, chartType) => {
-  if(selectedColumnDef){
-    let isDateCol = isColTypeTest(selectedColumnDef, 'date')
-    let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
-    if (!(chartType)) {
-      if (isDateCol) {
-        chartType = 'line'
-      } else if (isNumericCol) {
-        chartType = 'histogram'
-      } else {
-        chartType = 'bar'
-      }
-    }
-    return chartType
-  }
-  return chartType
-}
+
 
 
 export const isGroupByz = (groupByKeys) => {
@@ -93,49 +79,7 @@ export const isSelectedColDate = (selectedColumnDef) => {
   return false
 }
 
-function getMaxGrpBy (chartType, chartData) {
-    if (chartType === 'line') {
-      return findMaxObjKeyValueGrpByUnStacked(chartData)
-    } else {
-      return findMaxObjKeyValueGrpByStacked(chartData)
-    }
-}
 
-function findMaxObjKeyValueGrpByUnStacked(chartData){
-    let allVals = []
-    chartData.forEach(function(item){
-      let itemCopy = Object.assign({}, item);
-      delete itemCopy.label
-      let itemVals = Object.values(itemCopy)
-      let itemMax = Math.max.apply(null, itemVals)
-      allVals.push(itemMax)
-    })
-    return Math.max.apply(null, allVals)
-}
-
-function findMaxObjKeyValueGrpByStacked(chartData){
-    let allVals = []
-    chartData.forEach(function(item){
-      let itemCopy = Object.assign({}, item);
-      delete itemCopy.label
-      let colSum = Object.values(itemCopy).reduce((a, b) => a + b, 0)
-      allVals.push(colSum)
-    })
-    return Math.max.apply(null, allVals)
-}
-
-export const getMaxDomain = (chartData, isGroupBy, chartType)  => {
-  let maxValue = 0
-  if (chartData.length > 0){
-    if (!isGroupBy){
-      maxValue = findMaxObjKeyValue(chartData, 'value')
-    } else {
-      maxValue = getMaxGrpBy(chartType, chartData)
-    }
-  }
-  let domainMax = padDomainMax(maxValue)
-  return domainMax
-}
 
 export const setXAxisTickInterval = (chartData) => {
   let xAxisInterval
@@ -157,23 +101,25 @@ export const explodeFrequencies = (chartData, chartType) => {
   return freqs
 }
 
-export const rollUpOtherBars = (chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax) => {
-  if(typeof chartData !== 'undefined'){
-    console.log("*** in here rolling****")
-    if ((chartData.length > 0) && (rollupBy === 'other')) {
-      let isDtCol = isColTypeTest(selectedColumnDef, 'date')
-      if (!isDtCol) {
-        let chartDataTop15 = transformOthers(chartData, domainMax, isGroupBy)
-        if (chartDataTop15) {
-          return chartDataTop15['chartData']
-        }
-      }
+
+
+export const rollUpChartData = (query,chartType, chartData) => {
+  let rollupBy = false
+  if(Object.keys(query).indexOf('rollupBy') > -1 ) {
+    rollupBy = query.rollupBy
+  }
+  else if (chartType && chartData){
+    if((chartType === 'bar') && (chartData.length > 12) && !rollupBy) {
+      rollupBy = 'other'
+    }else{
+      rollupBy = 'none'
     }
   }else{
-    chartData = []
+    rollupBy = 'none'
   }
-  return chartData
+  return rollupBy
 }
+
 
 // slice reducer - chart
 export const chartReducer = createReducer({}, {
