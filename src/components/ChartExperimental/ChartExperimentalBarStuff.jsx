@@ -165,9 +165,7 @@ class ChartExperimentalBarStuff extends Component {
                 <CartesianGrid stroke='#eee' strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
                 <Tooltip />
                 <Bar dataKey='value'
-                fill={fillColor}
-                // unit={" " + rowLabel}
-                label={barLabelStyle} />
+                fill={fillColor}  />
               </BarChart>
             </When>
             <When condition={!isGroupBy && !chartProperties.manyBars}>
@@ -194,7 +192,7 @@ class ChartExperimentalBarStuff extends Component {
                 <Bar dataKey={'value'}
                     fill={fillColor}
                     // unit={" " + rowLabel}
-                    label={barLabelStyle} />
+                    // label={barLabelStyle} />
               </BarChart>
             </When>
             <When condition={isGroupBy && chartProperties.manyBars}>
