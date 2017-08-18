@@ -7,6 +7,8 @@ import CustomXaxisLabel from './CustomXaxisLabel'
 import CustomKeyAxisTick from './CustomKeyAxisTick'
 
 class ChartExperimentalBarStuff extends Component {
+//  // unit={" " + rowLabel}
+//  label={barLabelStyle}
 
   makeBars (groupKeys, grpColorScale, rowLabel) {
     let bars = []
@@ -23,7 +25,7 @@ class ChartExperimentalBarStuff extends Component {
                 dataKey={i}
                 stackId='a'
                 key={i}
-                unit={" " + rowLabel}
+                // unit={" " + rowLabel}
                 fill={colorScale(colorIndex)} />)
           }
           return false
@@ -104,9 +106,8 @@ class ChartExperimentalBarStuff extends Component {
                 <CartesianGrid stroke='#eee'  strokeDasharray='3 3' vertical={false} />
                 <Tooltip />
                 <Bar dataKey={'value'}
-                    fill={fillColor}
-                    unit={" " + rowLabel}
-                    label={barLabelStyle}  />
+                    fill={fillColor} />
+
               </BarChart>
             </When>
             <Otherwise>
@@ -165,7 +166,7 @@ class ChartExperimentalBarStuff extends Component {
                 <Tooltip />
                 <Bar dataKey='value'
                 fill={fillColor}
-                unit={" " + rowLabel}
+                // unit={" " + rowLabel}
                 label={barLabelStyle} />
               </BarChart>
             </When>
@@ -190,9 +191,9 @@ class ChartExperimentalBarStuff extends Component {
                   label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
                 <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
                 <Tooltip />
-                <Bar dataKey='value'
+                <Bar dataKey={'value'}
                     fill={fillColor}
-                    unit={" " + rowLabel}
+                    // unit={" " + rowLabel}
                     label={barLabelStyle} />
               </BarChart>
             </When>

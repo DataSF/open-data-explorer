@@ -57,19 +57,25 @@ class ChartExperimentalCanvas extends Component {
     This component needs to be refactored to handle resizing on a container, for now, we'll update the component always
     We should also not rerender the char
     */
+
     let thisChart = {
       chartData: this.props.chartData,
       chartType: this.props.chartType,
       height: this.state.height,
-      width: this.state.width
+      width: this.state.width,
+      rollupBy: this.props.rollupBy
+      //chartDataLen: this.props.chartdata.length
     }
     let nextChart = {
       chartData: nextProps.chartData,
       chartType: nextProps.chartType,
       height: nextState.height,
-      width: nextState.width
+      width: nextState.width,
+      rollupBy: nextProps.rollupBy
     }
-
+    console.log("**** wowo")
+    console.log(this.props)
+    console.log(nextProps)
     return !isEqual(thisChart, nextChart) && !nextProps.isFetching
   }
 
@@ -84,6 +90,9 @@ class ChartExperimentalCanvas extends Component {
 
   render () {
     let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, rollupBy, isFetching, isGroupBy, numericCol, isDateSelectedCol, domainMax, colName, valueAxisTickLst, xAxisInterval, freqs, yTickCnt, xTickCnt, maxPowerOf10} = this.props
+    console.log("in the chart canvase")
+    console.log(chartData)
+    console.log("***")
     const formatValue = d3.format('0,000')
     const valTickFormater = function (d) { return formatValue(d) }
     const xAxisPadding = { left: 30, right: 30 }
@@ -134,16 +143,10 @@ class ChartExperimentalCanvas extends Component {
     }
 
     let minTickGap = 200
-    if (!rollupBy) {
-      rollupBy = 'other'
-    }
-    let isDtCol = isColTypeTest(selectedColumnDef, 'date')
-    if (rollupBy === 'other' && !isDtCol && chartData) {
-      let chartDataTop15 = transformOthers(chartData, domainMax, isGroupBy)
-      if (chartDataTop15) {
-        chartData = chartDataTop15['chartData']
-      }
-    }
+    //if (!rollupBy) {
+    //  rollupBy = 'other'
+    //}
+
     //histogramData =  this,makeHistogramData(chartData, w, chartType, noOfBins)
 
 

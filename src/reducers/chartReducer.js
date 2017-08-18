@@ -1,6 +1,6 @@
 import * as ActionTypes from '../actions'
 import { updateObject, createReducer } from './reducerUtilities'
-import { findMaxObjKeyValue, fillArray, isColTypeTest, padDomainMax} from '../helpers'
+import { findMaxObjKeyValue, fillArray,transformOthers,  isColTypeTest, padDomainMax} from '../helpers'
 // import d3 from 'd3'
 // case reducers
 
@@ -26,7 +26,7 @@ function changeChartType (state, action) {
 
 function setDefaultChartType (state, action) {
   return updateObject(state, {
-    chartType: action.chartType
+    chartType: action.chartType,
   })
 }
 
@@ -34,6 +34,13 @@ function resetState (state, action) {
   return {}
 }
 
+function changeRollUpBy (state, action) {
+  console.log("***** roll up by option*****")
+  console.log(action)
+  return updateObject(state, {
+    rollupBy: action.payload
+  })
+}
 
 /*
 function clearData (state, action) {
@@ -139,7 +146,7 @@ export const setXAxisTickInterval = (chartData) => {
 }
 
 
-export const explodeFrequencies =  (chartData, chartType) => {
+export const explodeFrequencies = (chartData, chartType) => {
   let freqs = []
   if(chartData.length > 0 && chartType === 'histogram') {
     chartData.forEach(function (el) {
@@ -149,10 +156,30 @@ export const explodeFrequencies =  (chartData, chartType) => {
   }
   return freqs
 }
+
+export const rollUpOtherBars = (chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax) => {
+  if(typeof chartData !== 'undefined'){
+    console.log("*** in here rolling****")
+    if ((chartData.length > 0) && (rollupBy === 'other')) {
+      let isDtCol = isColTypeTest(selectedColumnDef, 'date')
+      if (!isDtCol) {
+        let chartDataTop15 = transformOthers(chartData, domainMax, isGroupBy)
+        if (chartDataTop15) {
+          return chartDataTop15['chartData']
+        }
+      }
+    }
+  }else{
+    chartData = []
+  }
+  return chartData
+}
+
 // slice reducer - chart
 export const chartReducer = createReducer({}, {
   [ActionTypes.METADATA_REQUEST]: resetState,
   [ActionTypes.DATA_SUCCESS]: updateData,
+  [ActionTypes.CHANGE_ROLLUPBY]: changeRollUpBy,
   [ActionTypes.APPLY_CHART_TYPE]: changeChartType,
   [ActionTypes.SET_DEFAULT_CHARTTYPE]: setDefaultChartType
 })
