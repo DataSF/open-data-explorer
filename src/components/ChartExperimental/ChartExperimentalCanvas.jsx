@@ -10,7 +10,6 @@ import ChartExperimentalBarStuff from './ChartExperimentalBarStuff'
 import ChartExperimentalLineStuff from './ChartExperimentalLineStuff'
 import ChartExperimentalAreaStuff from './ChartExperimentalAreaStuff'
 import ChartExperimentalHistogramStuff from './ChartExperimentalHistogramStuff'
-import { isColTypeTest, transformOthers } from '../../helpers'
 
 
 
@@ -57,26 +56,28 @@ class ChartExperimentalCanvas extends Component {
     This component needs to be refactored to handle resizing on a container, for now, we'll update the component always
     We should also not rerender the char
     */
-
+    let thisChartLen, nextChartLen = 0
+    if(Object.keys(this.props).indexOf('chartData') > -1) {
+      thisChartLen = this.props.chartData.length
+    }
+    if(Object.keys(nextProps).indexOf('chartData') > -1) {
+      nextChartLen = nextProps.chartData.length
+    }
     let thisChart = {
       chartData: this.props.chartData,
       chartType: this.props.chartType,
       height: this.state.height,
       width: this.state.width,
-      rollupBy: this.props.rollupBy
-      //chartDataLen: this.props.chartdata.length
+      chartDataLen:  nextChartLen
     }
     let nextChart = {
       chartData: nextProps.chartData,
       chartType: nextProps.chartType,
       height: nextState.height,
       width: nextState.width,
-      rollupBy: nextProps.rollupBy
+      chartDataLen: thisChartLen
     }
-    console.log("**** wowo")
-    console.log(this.props)
-    console.log(nextProps)
-    return !isEqual(thisChart, nextChart) && !nextProps.isFetching
+    return ( (!isEqual(thisChart, nextChart)) && !nextProps.isFetching)
   }
 
   setFontSizeTicks(domainMax){
@@ -89,10 +90,8 @@ class ChartExperimentalCanvas extends Component {
 
 
   render () {
-    let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, rollupBy, isFetching, isGroupBy, numericCol, isDateSelectedCol, domainMax, colName, valueAxisTickLst, xAxisInterval, freqs, yTickCnt, xTickCnt, maxPowerOf10} = this.props
-    console.log("in the chart canvase")
-    console.log(chartData)
-    console.log("***")
+    let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, isFetching, isGroupBy, numericCol, isDateSelectedCol, domainMax, colName, valueAxisTickLst, xAxisInterval, freqs, yTickCnt, xTickCnt, maxPowerOf10} = this.props
+
     const formatValue = d3.format('0,000')
     const valTickFormater = function (d) { return formatValue(d) }
     const xAxisPadding = { left: 30, right: 30 }
@@ -143,12 +142,6 @@ class ChartExperimentalCanvas extends Component {
     }
 
     let minTickGap = 200
-    //if (!rollupBy) {
-    //  rollupBy = 'other'
-    //}
-
-    //histogramData =  this,makeHistogramData(chartData, w, chartType, noOfBins)
-
 
     return (
       <div className='chartCanvas'>

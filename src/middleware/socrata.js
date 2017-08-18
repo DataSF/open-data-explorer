@@ -4,7 +4,8 @@ import difference from 'lodash/difference'
 import { replacePropertyNameValue } from '../helpers'
 import moment from 'moment'
 import d3 from 'd3'
-import { sumObj, sortObj } from '../helpers'
+import { sumObj, sortObj, getMaxDomain,transformOthers,} from '../helpers'
+
 
 const API_ROOT = 'https://data.sfgov.org/'
 
@@ -495,8 +496,8 @@ function transformTextCategoryData(json, state){
   }
 }
 function transformQueryData (json, state) {
+  let rollupBy, domainMax
   let { query } = state
-  console.log(query)
   let groupKeys = []
   if (query.groupBy && json.length > 0) {
     groupKeys = uniq(json.map((obj) => {
@@ -548,12 +549,26 @@ function transformQueryData (json, state) {
     json = addMissingDates(json, state)
     json =  castJson (json, state)
   }
+  rollupBy = rollUpChartData(state, json)
+  let isGroupBy = false
+  if(groupKeys.length > 0){
+    isGroupBy = true
+  }
+  domainMax = getMaxDomain (json, isGroupBy, state.chart.chartType)
+  if (rollupBy === 'other') {
+      let json2 = transformOthers(json, domainMax, isGroupBy )
+      console.log(json2)
+      json = json2['chartData']
+      domainMax = getMaxDomain (json, isGroupBy, state.chart.chartType)
+  }
   return {
     query: {
       isFetching: false,
       data: [],
       originalData: json,
-      groupKeys: groupKeys
+      groupKeys: groupKeys,
+      domainMax: domainMax,
+      rollupBy: rollupBy
     }
   }
 }
@@ -573,6 +588,27 @@ function transformCount (json) {
 
 function transformApiMigration (json) {
   return {dataId: json.nbeId}
+}
+
+function rollUpChartData(state, json){
+  let rollupBy = false
+  if(Object.keys(state.query).indexOf('rollupBy') > -1 ) {
+     if (state.chart.chartType === 'bar'){
+      rollupBy = state.query.rollupBy
+    }else{
+       rollupBy = "none"
+    }
+  }
+  else if(json && state.chart.chartType){
+    if ((state.chart.chartType === 'bar') && (json.length > 12) && !rollupBy) {
+      rollupBy = 'other'
+    }else{
+      rollupBy = 'none'
+    }
+  }else{
+    rollupBy = 'none'
+  }
+  return rollupBy
 }
 
 

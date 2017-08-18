@@ -74,7 +74,7 @@ class ChartExperimentalBarStuff extends Component {
     let bars = this.makeBars(groupKeys, grpColorScale, rowLabel)
     let chartProperties = this.getChartProperties(chartData)
     let xpadding = {bottom: 300}
-    const barLabelStyle = { fill: '#133140', fontSize: '15px', paddingBottom:'15px'}
+    //const barLabelStyle = { fill: '#133140', fontSize: '15px', paddingBottom:'15px'}
     legendStyle = this.setLegendStyleTop(bars, legendStyle)
     return (
       <Choose>
@@ -191,8 +191,6 @@ class ChartExperimentalBarStuff extends Component {
                 <Tooltip />
                 <Bar dataKey={'value'}
                     fill={fillColor}/>
-                    // unit={" " + rowLabel}
-                    // label={barLabelStyle} />
               </BarChart>
             </When>
             <When condition={isGroupBy && chartProperties.manyBars}>

@@ -78,14 +78,11 @@ export const makePublishingFactsFxn = state =>
 export const calculatePublishingHealthFxn = state =>
   calculatePublishingHealth(state)
 
-export const setDefaultChartTypeAfterLoad = (selectedColumnDef, chartType) =>
-  fromCharts.setDefaultChartTypeAfterLoad(selectedColumnDef, chartType)
-
 export const isGroupByz = groupKeys =>
   fromCharts.isGroupByz(groupKeys)
 
-export const getMaxDomain = (chartData, isGroupBy, chartType) =>
-  fromCharts.getMaxDomain(chartData, isGroupBy, chartType)
+//export const getMaxDomain = (chartData, isGroupBy, chartType) =>
+//  fromCharts.getMaxDomain(chartData, isGroupBy, chartType)
 
 //export const roundAxisZeros = (maxValue, numberOfTicks, maxPowerOf10) =>
 //  fromCharts.roundAxisZeros(maxValue, numberOfTicks, maxPowerOf10)
@@ -96,9 +93,10 @@ export const setXAxisTickInterval = (chartData) =>
 export const explodeFrequencies = (chartData, chartType) =>
   fromCharts.explodeFrequencies(chartData, chartType)
 
-export const rollUpOtherBars = (chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax) =>
-  fromCharts.rollUpOtherBars(chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax)
+//export const rollUpOtherBars = (chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax) =>
+//  fromCharts.rollUpOtherBars(chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax)
 
-
+export const rollUpChartData = (query, chart) =>
+  fromCharts.rollUpChartData(query, chart)
 
 export default rootReducer

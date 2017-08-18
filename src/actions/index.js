@@ -204,16 +204,20 @@ export function filterColumnList (key, item, target) {
 
 export function selectColumn (column) {
   return (dispatch, getState) => {
-    dispatch({
-      type: SELECT_COLUMN,
-      payload: column})
-    dispatch(setHideShow(false, 'columnProps'))
-    if (column !== null) {
-      dispatch(fetchData(getState()))
-      dispatch(setDefaultChartType(column))
-    } else if (column === null) {
-      dispatch(resetState('query'))
-    }
+    return Promise.all([
+      dispatch({
+        type: SELECT_COLUMN,
+        payload: column}),
+      dispatch(setHideShow(false, 'columnProps'))]).then(() => {
+        if (column !== null) {
+          Promise.all([dispatch(setDefaultChartType(column))]).then(() => {
+            return dispatch(fetchData(getState()))
+          })
+        } else {
+          return dispatch(resetState('query'))
+        }
+      })
+
   }
 }
 
@@ -252,7 +256,7 @@ export function setDefaultChartType (column) {
       }
       return chartType
     }
-    dispatch({
+    return dispatch({
       type: SET_DEFAULT_CHARTTYPE,
       chartType: getDefaultChartType()
     })

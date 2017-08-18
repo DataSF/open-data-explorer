@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns, getSupportedChartTypes, setDefaultChartTypeAfterLoad, isGroupByz, getMaxDomain, setXAxisTickInterval, explodeFrequencies, rollUpOtherBars} from '../reducers'
+import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns, getSupportedChartTypes, isGroupByz, setXAxisTickInterval, explodeFrequencies} from '../reducers'
 import { showHideModal, selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy, loadQueryStateFromString, changeRollupBy } from '../actions'
 import BlankChart from '../components/ChartExperimental/BlankChart'
 import ConditionalOnSelect from '../components/ConditionalOnSelect'
@@ -94,7 +94,8 @@ class VizContainer extends Component {
                         columns={props.columns}
                         filters={props.filters}
                         chartData={props.chartData}
-                        rollupBy={props.rollupBy} />
+                        rollupBy={props.rollupBy}
+                        chartType={props.chartType} />
                     </Col>
                     <Col md={3}>
                       <Choose>
@@ -184,9 +185,6 @@ const mapStateToProps = (state, ownProps) => {
   let colName = ''
   let selectedColumnDef = getSelectedColumnDef(state)
   let chartType = chart.chartType
-  if(typeof chartType !== 'undefined' && chartType.length < 1){
-    chartType = setDefaultChartTypeAfterLoad(selectedColumnDef, chartType)
-  }
   const id = ownProps.params.id
   let queryState = Object.assign({}, query)
   delete queryState.isFetching
@@ -198,30 +196,10 @@ const mapStateToProps = (state, ownProps) => {
   if (selectedColumnDef) {
     colName = selectedColumnDef.name
   }
-  let domainMax, valueAxisTickLst, rollupBy
   let chartData = chart.chartData || []
-  if(Object.keys(query).indexOf('rollupBy') > -1 ) {
-    rollupBy = query.rollupBy
-    console.log("*** in here a different roll up")
-    console.log(rollupBy)
-  } else {
-    if (!query.isFetching){
-      rollupBy = 'other'
-    }
-  }
-  if ( (chartType === 'bar') && (chartData.length > 12) && (!query.isFetching) && (rollupBy !== 'none')){
-      domainMax = getMaxDomain(chartData, isGroupBy, chartType)
-      chartData = rollUpOtherBars(chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax)
-      console.log(chartData)
-      domainMax = getMaxDomain(chartData, isGroupBy, chartType)
-  }else{
-    console.log("not rolling up")
-    domainMax = getMaxDomain(chartData, isGroupBy, chartType)
-  }
-  valueAxisTickLst = roundAxisZeros(domainMax, NUMBEROFTICKSY, MAXPOWEROFT10)
-  console.log("final chart data")
-  console.log(chartData)
-
+  console.log("made it here")
+  let valueAxisTickLst = roundAxisZeros(chart.domainMax, NUMBEROFTICKSY, MAXPOWEROFT10) || []
+  console.log('now here')
   return {
     props: {
       name: ownProps.name,
@@ -238,7 +216,7 @@ const mapStateToProps = (state, ownProps) => {
       queryString: ownProps.location.query.q,
       chartType: chartType,
       chartData: chartData,
-      rollupBy: rollupBy,
+      rollupBy: chart.rollupBy,
       groupKeys: chart.groupKeys,
       selectedColumn: query.selectedColumn,
       selectedColumnDef: selectedColumnDef,
@@ -251,7 +229,7 @@ const mapStateToProps = (state, ownProps) => {
       filters: query.filters,
       rowLabel: metadata.rowLabel,
       freqs: explodeFrequencies(chartData, chartType),
-      domainMax: domainMax,
+      domainMax: chart.domainMax,
       xAxisInterval: setXAxisTickInterval(chartData),
       summableColumns: getSummableColumns(state),
       groupableColumns: getGroupableColumns(state),
