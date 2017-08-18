@@ -190,7 +190,7 @@ class ChartExperimentalBarStuff extends Component {
                 <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
                 <Tooltip />
                 <Bar dataKey={'value'}
-                    fill={fillColor}
+                    fill={fillColor}/>
                     // unit={" " + rowLabel}
                     // label={barLabelStyle} />
               </BarChart>
