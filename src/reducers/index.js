@@ -106,4 +106,9 @@ export const setXAxisTickInterval = (chartData) =>
 export const explodeFrequencies = (chartData, chartType) =>
   fromCharts.explodeFrequencies(chartData, chartType)
 
+export const rollUpOtherBars = (chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax) =>
+  fromCharts.rollUpOtherBars(chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax)
+
+
+
 export default rootReducer
