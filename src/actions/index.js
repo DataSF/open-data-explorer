@@ -192,12 +192,20 @@ export const SET_DEFAULT_HIDE_SHOW = 'SET_DEFAULT_HIDE_SHOW'
 export const SET_DEFAULT_CHARTTYPE = 'SET_DEFAULT_CHARTTYPE'
 
 export function filterColumnList (key, item, target) {
+
   return {
     type: FILTER_COLUMN_LIST,
     payload: {
       key,
       item,
       target
+    },
+    ga: {
+      event: {
+        category: 'Field Selector',
+        action: 'Filter ' + target,
+        label: item
+      }
     }
   }
 }
@@ -206,7 +214,15 @@ export function selectColumn (column) {
   return (dispatch, getState) => {
     dispatch({
       type: SELECT_COLUMN,
-      payload: column})
+      payload: column,
+      ga: {
+        event: {
+          category: 'Field Selector',
+          action: 'Select Chart Field',
+          label: column
+        }
+      }
+    })
     dispatch(setHideShow(false, 'columnProps'))
     if (column !== null) {
       dispatch(fetchData(getState()))
@@ -221,7 +237,15 @@ export function selectField (column) {
   return (dispatch, getState) => {
     dispatch({
       type: SELECT_FIELD,
-      payload: column})
+      payload: column,
+      ga: {
+        event: {
+          category: 'Field Selector',
+          action: 'Select Field Definition',
+          label: column
+        }
+      }
+    })
     dispatch(fetchDataTextFieldCategories(getState()))
     dispatch(setHideShow(false, 'fieldDetailsProps'))
   }
@@ -281,7 +305,15 @@ export function groupBy (key) {
   return (dispatch, getState) => {
     dispatch({
       type: GROUP_BY,
-      payload: key})
+      payload: key,
+      ga: {
+        event: {
+          category: 'Group By',
+          action: 'Select Field',
+          label: key ? key.value : null
+        }
+      }
+    })
     dispatch(fetchData(getState()))
   }
 }
@@ -290,7 +322,15 @@ export function sumBy (key) {
   return (dispatch, getState) => {
     dispatch({
       type: SUM_BY,
-      payload: key})
+      payload: key,
+      ga: {
+        event: {
+          category: 'Sum By',
+          action: 'Select Field',
+          label: key ? key.value : null
+        }
+      }
+    })
     dispatch(fetchData(getState()))
   }
 }
@@ -335,13 +375,27 @@ export const DISPLAY_FIELD_PROFILES_LIST = 'DISPLAY_FIELD_PROFILES_LIST'
 export function addFilter (key) {
   return {
     type: ADD_FILTER,
-    payload: key}
+    payload: key,
+    ga: {
+      event: {
+        category: 'Filter',
+        action: 'Add',
+        label: key.value
+      }
+    }}
 }
 
 export function applyChartType (chartType) {
   return {
     type: APPLY_CHART_TYPE,
-    chartType}
+    chartType,
+    ga: {
+      event: {
+        category: 'Chart Type',
+        action: 'Select Type',
+        label: chartType
+      }
+    }}
 }
 
 export function displayFieldProfilesList (displayType) {
@@ -366,6 +420,13 @@ export function updateFilter (key, options) {
     payload: {
       key,
       options
+    },
+    ga: {
+      event: {
+        category: 'Filter',
+        action: 'Update',
+        label: key + ': ' + JSON.stringify(options)
+      }
     }
   }
 }
@@ -442,9 +503,18 @@ export function selectSearchRecord (record) {
 export const SHOW_HIDE_MODAL = 'SHOW_HIDE_MODAL'
 
 export function showHideModal (target) {
-  return {
-    type: SHOW_HIDE_MODAL,
-    payload: target
+  return (dispatch, getState) => {
+    return dispatch({
+      type: SHOW_HIDE_MODAL,
+      payload: target,
+      ga: {
+        event: {
+          category: 'Modal ' + target,
+          action: 'Open Modal',
+          label: (!getState().ui.modals[target]).toString()
+        }
+      }
+    })
   }
 }
 
@@ -473,3 +543,43 @@ export function loadRelatedDatasets (id) {
   }
 }
 
+export const COPY_LINK = 'COPY_LINK'
+export const DOWNLOAD = 'DOWNLOAD'
+export const OUTBOUND_LINK = 'OUTBOUND_LINK'
+
+export function copyLink (link) {
+  return {
+    type: COPY_LINK,
+    ga: {
+      event: {
+        category: 'Modal Share',
+        action: 'Copy Link',
+        label: link
+      }
+    }
+  }
+}
+
+export function download (link, type) {
+  return {
+    type: DOWNLOAD,
+    ga: {
+      event: {
+        category: 'Download',
+        action: 'Click ' + type,
+        label: link
+      }
+    }
+  }
+}
+
+export function outboundLink (link) {
+  return {
+    type: OUTBOUND_LINK,
+    ga: {
+      link: {
+        label: link
+      }
+    }
+  }
+}

@@ -15,6 +15,7 @@ H.sumObj = require('./sumObj.js')
 H.sortObj = require('./sortObj.js')
 H.setClassNamesListItem = require('./setClassNamesListItem.js')
 H.setDocumentTitle = require('./setDocumentTitle.js')
+H.getLocalTimeWithOffset = require('./getLocalTimeWithOffset')
 // Implement chaining
 H.prototype = {
   value: function value () {

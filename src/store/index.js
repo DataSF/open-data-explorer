@@ -2,6 +2,7 @@ import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import api from '../middleware'
 import airbrakeMiddleware from '../middleware/airbrake'
+import analyticsMiddleware from '../middleware/analytics'
 import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
 
@@ -16,7 +17,7 @@ export default function configureStore (initialState) {
     }
   }
 
-  let middleware = [thunkMiddleware, api]
+  let middleware = [thunkMiddleware, api, analyticsMiddleware]
 
   if (process.env.NODE_ENV === 'production') {
     let server = process.env.REACT_APP_CONTEXT
