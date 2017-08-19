@@ -1,0 +1,72 @@
+.DateRangePicker__root {
+    max-width: none;
+}
+
+.DateRangePicker__list-item {
+    background-color: #eee;
+    border-radius: 4px;
+    margin: 8px 0;
+    padding: 5px 0 5px 10px;
+    cursor: pointer;
+}
+
+.DateRangePicker__list-item:hover {
+    background-color: #d7ffd9;
+}
+
+.DateRangePicker__list-item--active,
+.DateRangePicker__list-item--active:hover {
+    background-color: #3e5a6b;
+    color: #ffffff;
+}
+
+.DateRangePicker__calendar-wrapper {
+    float: left;
+}
+
+.DateRangePicker__list {
+    min-width: 150px;
+    float: right;
+}
+
+.DateRangePicker__date-text-input-group.form-group {
+    width: 206px;
+    margin: 0 10px 10px 10px;
+    position: relative;
+}
+
+.DateRangePicker__date-text-input-group input {
+    border-width: 1px;
+    padding-left: 35px;
+}
+
+.DateRangePicker__date-text-input-group .glyphicon-calendar {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+
+.DayPicker-Caption select {
+    padding: 0 0 0 30px;
+    outline: none;
+    -webkit-appearance: none;
+        -moz-appearance: none;
+            appearance: none;
+    border: 0;
+    text-align: center;
+    font-weight: 300;
+    border-radius: 0;
+    background-color: #FFF;
+    display: inline-block;
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjEycHgiIGhlaWdodD0iMTJweCIgdmlld0JveD0iMCAwIDEyIDEyIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogICAgPGcgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMy4wMDAwMDAsIDAuMDAwMDAwKSIgZmlsbD0iIzU2NUE1QyI+CiAgICAgICAgICAgIDxwb2x5Z29uIHBvaW50cz0iMy41IDAgNyA1IDAgNSAiPjwvcG9seWdvbj4KICAgICAgICAgICAgPHBhdGggZD0iTTAsNyBMNyw3IEwzLjUsMTIgTDAsNyBaIj48L3BhdGg+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4K);
+    background-position: .75em center;
+    background-repeat: no-repeat;
+}
+
+.DayPicker-NavButton {
+    height: 2rem;
+}
+
+abbr[title], abbr[data-original-title] {
+    text-decoration: none;
+}

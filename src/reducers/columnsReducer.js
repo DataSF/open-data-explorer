@@ -103,37 +103,42 @@ export const getSelectedField = (state, selectedColumn) => {
   }).sort(sortColumns)
 }
 
-export const getSelectableColumns = (state, selectedColumn, all = false, ignoreTypeFilters = false, exclude = []) => {
+export const getSelectableColumns = (state, selectedColumn, all = false, ignoreTypeFilters = false, exclude = [], filterable = false) => {
   let { columns, typeFilters, fieldNameFilter } = state
   if (!columns) return []
   return Object.keys(columns).filter((col) => {
-    // override to return all columns, not just selectable
-    if (all) return true
-
-    let selectable = isSelectable(columns, col)
-    if (col === selectedColumn) {
-      return false
-    }
-    if (fieldNameFilter && columns[col].name.toLowerCase().indexOf(fieldNameFilter.toLowerCase()) === -1) {
-      return false
-    }
     if (exclude.indexOf(col) > -1) {
       return false
     }
+    if (!filterable && fieldNameFilter && columns[col].name.toLowerCase().indexOf(fieldNameFilter.toLowerCase()) === -1) {
+      return false
+    }
+    if (col === selectedColumn && !filterable) {
+      return false
+    }
+    
+    let selectable = isSelectable(columns, col)
+    // override to return all columns, not just selectable
+    if (all) selectable = true
+    
     if (ignoreTypeFilters && selectable) {
       return true
     }
+
     if (selectable && typeFilters.length > 0 && typeFilters.indexOf(columns[col].type) > -1) {
       return true
     }
+
     if (selectable && typeFilters.length === 0) {
       return true
     }
+    
     return false
   }).map((col) => {
     return {
       label: columns[col].name,
       value: columns[col].key,
+      key: columns[col].key,
       type: columns[col].type,
       description: columns[col].description,
       isCategory: (typeof columns[col].categories !== 'undefined' && columns[col].categories.length > 0),

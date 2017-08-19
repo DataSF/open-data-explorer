@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import isEqual from 'lodash/isEqual'
 import d3 from 'd3'
 import BlankChart from './BlankChart'
-import $ from 'jquery'
 import ChartExperimentalBarStuff from './ChartExperimentalBarStuff'
 import ChartExperimentalLineStuff from './ChartExperimentalLineStuff'
 import ChartExperimentalAreaStuff from './ChartExperimentalAreaStuff'
@@ -13,41 +12,32 @@ import ChartExperimentalHistogramStuff from './ChartExperimentalHistogramStuff'
 import { findMaxObjKeyValue, isColTypeTest, sumObj, sortObj, transformOthers } from '../../helpers'
 
 class ChartExperimentalCanvas extends Component {
+  constructor(props) {
+    super(props)
 
-  componentWillMount () {
-    var _self = this
-
-    $(window).on('resize', function (e) {
-      _self.updateSize()
-    })
-
-    this.setState({
+    this.state = {
       width: this.props.width,
       height: this.props.height
-    })
+    }
   }
+
   componentDidMount () {
     this.updateSize()
+    window.addEventListener('resize', this.updateSize.bind(this))
   }
   componentWillUnmount () {
-    $(window).off('resize')
+    window.removeEventListener('resize', this.updateSize.bind(this))
   }
 
   updateSize () {
     var ReactDOM = require('react-dom')
     var node = ReactDOM.findDOMNode(this)
-    var parentWidth = $(node).width()
-    let { embed } = this.props
+    var parentWidth = node.getBoundingClientRect().width
 
     if (!(parentWidth === this.props.width)) {
       this.setState({width: parentWidth - 20})
     } else {
       this.setState({width: this.props.width})
-    }
-    if (embed) {
-      // this is a hack for now, we'll lift the state up to make handling layout simpler
-      let offset = $('#Embed-chartHeader').outerHeight(true) + 21
-      this.setState({height: window.innerHeight - offset})
     }
   }
   shouldComponentUpdate (nextProps, nextState) {

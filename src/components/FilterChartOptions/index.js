@@ -44,6 +44,7 @@ class FilterOptions extends Component {
             fieldKey={filter.key}
             startDate={startDate}
             endDate={endDate}
+            dataRange={[filter.min, filter.max]}
             applyFilter={applyFilter}
             dateBy={dateBy} />
           break

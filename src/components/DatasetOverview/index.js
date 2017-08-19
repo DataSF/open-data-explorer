@@ -77,9 +77,7 @@ class DatasetOverview extends Component {
       </OverlayTrigger>
     )
   }
-
-
-
+  
   render () {
     const { datasetFacts, colCounts, publishing_health, publishing_faqs, name } = this.props
     const { id, description, publishingDepartment, licenseLink, licenseName, notes, attachments, programLink, relatedDatasets, relatedDatasetCnt} = this.props.metadata

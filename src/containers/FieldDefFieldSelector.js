@@ -4,15 +4,17 @@ import { getUniqueColumnTypesDetails, getSelectableColumnsDetails, getSelectedFi
 
 import FieldSelector from '../components/FieldSelector'
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state, ownProps) => {
+return {
   types: getUniqueColumnTypesDetails(state, true),
-  selectableColumns: getSelectableColumnsDetails(state),
+  selectableColumns: getSelectableColumnsDetails(state, true),
   selectedField: getSelectedFieldDetails(state),
   title: getSelectedFieldDetails(state).length > 0 ? 'Selected field' : 'Select a field',
-  hideshowVal: getSelectableColumnsDetails(state).length,
   showCols: state.fieldDetailsProps.showCols,
-  popOverPlacement: 'right'
-})
+  popOverPlacement: 'right',
+  searchValue: state.fieldDetailsProps.fieldNameFilter
+}
+}
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onFilterTypes: item => dispatch(filterColumnList('typeFilters', item, 'fieldDetailsProps')),

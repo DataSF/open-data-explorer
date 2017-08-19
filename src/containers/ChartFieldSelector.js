@@ -9,7 +9,8 @@ const mapStateToProps = (state, ownProps) => ({
   selectableColumns: getSelectableColumns(state),
   selectedField: getSelectedField(state),
   title: getSelectedField(state).length > 0 ? 'Selected field' : 'Select a field',
-  showCols: state.columnProps.showCols
+  showCols: state.columnProps.showCols,
+  searchValue: state.columnProps.fieldNameFilter
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

@@ -33,8 +33,15 @@ const getFieldProfileDef = (state, column) => fromFields.getFieldProfileInfo(sta
 export const getUniqueColumnTypesDetails = (state, selectable) =>
   fromFields.getUniqueColumnTypes(state.fieldDetailsProps, selectable)
 
-export const getSelectableColumnsDetails = (state, all = false) =>
-  fromFields.getSelectableColumns(state.fieldDetailsProps, state.fieldDetailsProps.selectedField, all)
+export const getSelectableColumnsDetails = (state, all = true, ignoreTypeFilters = false, exclude = []) => {
+  let modifiedState = {
+    columns: state.columnProps.columns,
+    typeFilters: [].concat(state.fieldDetailsProps.typeFilters) || [],
+    fieldNameFilter: state.fieldDetailsProps.fieldNameFilter
+  }
+  return fromColumns.getSelectableColumns(modifiedState, state.fieldDetailsProps.selectedField, all, ignoreTypeFilters, [state.fieldDetailsProps.selectedField])
+}
+  
 
 export const getSelectedFieldDetails = state =>
   fromFields.getSelectedFieldDetails(state.fieldDetailsProps, state.fieldDetailsProps.selectedField)
@@ -53,6 +60,9 @@ export const getGroupableColumns = state =>
 
 export const getSelectableColumns = (state, all = false, ignoreTypeFilters = false, exclude = []) => 
   fromColumns.getSelectableColumns(state.columnProps, state.query.selectedColumn, all, ignoreTypeFilters, exclude)
+
+export const getFilterableColumns = (state, exclude = []) =>
+  fromColumns.getSelectableColumns(state.columnProps, state.query.selectedColumn, false, true, exclude, true)
 
 export const getSummableColumns = state =>
   fromColumns.getSummableColumns(state.columnProps)

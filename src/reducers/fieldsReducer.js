@@ -218,6 +218,8 @@ export const getSelectedFieldDetails = (state, selectedColumn) => {
   }).sort(sortColumns)
 }
 
+/*
+This is duplicative of the selector in columns, consolidating code there and lifting specific parameters up to the root reducer
 export const getSelectableColumns = (state, selectedColumn, all = false) => {
   let { columns, typeFilters, fieldNameFilter } = state
   if (!columns) return []
@@ -251,7 +253,7 @@ export const getSelectableColumns = (state, selectedColumn, all = false) => {
     return colInstance
   }).sort(sortColumns)
 }
-
+*/
 
 // case reducers
 function initColumns (state, action) {

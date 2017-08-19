@@ -73,7 +73,7 @@ const ColumnDetails = ({name, topOffset, list, filters, onFilter, sort, onSort, 
 }
 
 const mapStateToProps = (state, ownProps) => {
-  let selectable = getSelectableColumnsDetails(state)
+  let selectable = getSelectableColumnsDetails(state, true)
   return {
     list: selectable || {},
     fieldTypeItems: getUniqueColumnTypesDetails(state, true),
@@ -83,7 +83,6 @@ const mapStateToProps = (state, ownProps) => {
     selectedColumnDef: getSelectedFieldDef(state),
     selectedProfileInfo: getFieldProfileInfo(state),
     selectedField: getSelectedFieldDetails(state),
-    hideshowVal: getSelectableColumnsDetails(state).length,
     showCols: state.fieldDetailsProps.showCols,
     selectedCategories: state.fieldDetailsProps.selectedCategories,
     containerHeight: ownProps.viewportHeight
