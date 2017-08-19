@@ -496,7 +496,14 @@ export function updateSearch (searchState) {
 export function selectSearchRecord (record) {
   return {
     type: SELECT_SEARCH_RECORD,
-    payload: record
+    payload: record,
+    ga: {
+      event: {
+        category: 'Quick Search',
+        action: 'Select ' + record.name,
+        label: record.id
+      }
+    }
   }
 }
 
