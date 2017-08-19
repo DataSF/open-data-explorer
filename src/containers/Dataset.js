@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { loadMetadata, loadColumnProps, loadTable } from '../actions'
+import { loadMetadata, loadColumnProps, loadTable, download, outboundLink } from '../actions'
 import DatasetFrontMatter from '../components/DatasetFrontMatter'
 import DatasetNav from '../components/DatasetNav'
 import Loading from '../components/Loading'
@@ -42,7 +42,7 @@ class Dataset extends Component {
   }
 
   render () {
-    const { rowsUpdatedAt, name, id, dataId, hasGeo, isFetching, children, ...other } = this.props
+    const { rowsUpdatedAt, name, id, dataId, hasGeo, isFetching, children, onDownload, onOutboundLink, ...other } = this.props
     const childrenWithDatasetProps = React.Children.map(children, (child) => React.cloneElement(child, {...this.state, name}))
 
     return (
@@ -56,7 +56,13 @@ class Dataset extends Component {
             rowsUpdatedAt={rowsUpdatedAt} />
         </section>
         <section id={'DatasetNav'}>
-          <DatasetNav id={id} dataId={dataId} hasGeo={hasGeo} {...other} />
+          <DatasetNav 
+            id={id} 
+            dataId={dataId} 
+            hasGeo={hasGeo} 
+            onDownload={onDownload} 
+            onOutboundLink={onOutboundLink} 
+            {...other} />
         </section>
         <section id={'DatasetChildren'} style={{width: '100%', minHeight: '100px'}}>
           {childrenWithDatasetProps}
@@ -78,19 +84,15 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    onLoad: () => {
-      return dispatch(loadMetadata(ownProps.params.id))
-    },
-    loadColumnProps: () => {
-      return dispatch(loadColumnProps())
-    },
-    loadTable: () => {
-      return dispatch(loadTable())
-    }
+const mapDispatchToProps = (dispatch, ownProps) => (
+  {
+    onLoad: () => dispatch(loadMetadata(ownProps.params.id)),
+    loadColumnProps: () => dispatch(loadColumnProps()),
+    loadTable: () => dispatch(loadTable()),
+    onDownload: (link, type) => dispatch(download(link, type)),
+    onOutboundLink: (link) => dispatch(outboundLink(link))
   }
-}
+)
 
 export default connect(
   mapStateToProps,
