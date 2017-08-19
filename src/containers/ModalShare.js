@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import ModalShare from '../components/ModalShare'
-import { showHideModal } from '../actions'
+import { showHideModal, copyLink } from '../actions'
 import { withRouter } from 'react-router'
 
 import { BASE_HREF } from '../constants/AppConstants'
@@ -18,7 +18,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => (
   {
-    showHideModal: () => dispatch(showHideModal('share'))
+    showHideModal: () => dispatch(showHideModal('share')),
+    onCopySnippet: (link) => dispatch(copyLink(link))
   }
 )
 

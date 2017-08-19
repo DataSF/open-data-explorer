@@ -4,12 +4,20 @@ import { Provider } from 'react-redux'
 import routes from '../routes'
 import { Router } from 'react-router'
 import reactGA from 'react-ga'
+import { getLocalTimeWithOffset } from '../helpers'
 
 reactGA.initialize('UA-53975719-6')
 
 function logPageView() {
-  reactGA.set({ page: window.location.pathname + window.location.search });
-  reactGA.pageview(window.location.pathname + window.location.search);
+  reactGA.ga(tracker => {
+    let hitTimestamp = getLocalTimeWithOffset()
+    let sId = new Date().getTime() + '.' + Math.random().toString(36).substring(5)
+    reactGA.set({ dimension1: sId})
+    reactGA.set({ dimension2: hitTimestamp})
+    reactGA.set({ dimension3: tracker.get('clientId') })
+    reactGA.set({ page: window.location.pathname + window.location.search })
+    reactGA.pageview(window.location.pathname + window.location.search)
+  })
 }
 
 export default class Root extends Component {

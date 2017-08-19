@@ -22,6 +22,9 @@ class CopySnippet extends Component {
     setTimeout(() => {
       this.setState({copied: false})
     }, 2000)
+    if (this.props.onCopy) {
+      this.props.onCopy(this.props.snippet)
+    }
   }
 
   render () {
@@ -54,7 +57,8 @@ class CopySnippet extends Component {
 CopySnippet.propTypes = {
   snippet: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  help: PropTypes.string
+  help: PropTypes.string,
+  onClick: PropTypes.func
 }
 
 export default CopySnippet
