@@ -110,12 +110,12 @@ export const makePublishingFacts = (state) => {
         value = parseDt(value)
       }
       else if(key === 'days_since_first_created') {
-        value = moment(state.metadata['createdAt']).fromNow()
+        value = moment.utc(state.metadata['createdAt']).local().fromNow()
         value = value.split('ago')
         value = value[0] + ' old'
       }
       else if(key === 'days_since_last_updated') {
-        value = moment(state.metadata['rowsUpdatedAt']).fromNow()
+        value = moment.utc(state.metadata['rowsUpdatedAt']).local().fromNow()
       }
       publishingFaqs.push({'header': pubFieldDetails[key], 'value': value})
     }
@@ -144,8 +144,6 @@ function preloadMetadata (state, action) {
   data.relatedDatasets = []
   data.attachments = null
   data.notes = null
-  data.createdAt = moment(data.createdAt * 1000).format()
-  data.rowsUpdatedAt = moment(data.rowsUpdatedAt * 1000).format()
   return Object.assign({}, state, data)
 }
 

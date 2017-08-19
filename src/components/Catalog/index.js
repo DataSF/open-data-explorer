@@ -26,7 +26,7 @@ const Record = (onClickRecord, {hit}) => (
     </div>
     <div className={'Catalog__record-meta clearfix'}>
       <div className={'Catalog__record-meta-title'}>Data updated</div>
-      <div className={'Catalog__record-meta-value'}>{moment(hit.rowsUpdatedAt * 1000).fromNow()}</div>
+      <div className={'Catalog__record-meta-value'}>{moment.utc(hit.rowsUpdatedAt).local().fromNow()}</div>
       <div className={'Catalog__record-meta-title'}>Target update schedule</div>
       <div className={'Catalog__record-meta-value'}>{hit.publishingFrequency}</div>
       <div className={'Catalog__record-meta-title'}>Category</div>
