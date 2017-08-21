@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import FieldColumns from '../components/FieldColumns'
-import { filterColumnList, selectField, setHideShow, sortColumnList, displayFieldProfilesList, } from '../actions'
+import { filterColumnList, selectField, setHideShow, sortColumnList, displayFieldProfilesList } from '../actions'
 import { getUniqueColumnTypesDetails, getSelectableColumnsDetails, getSelectedFieldDef, getSelectedFieldDetails, getFieldProfileInfo} from '../reducers'
 import FieldProfile from '../components/FieldProfile'
 import FieldDefFieldSelector from './FieldDefFieldSelector'
@@ -16,8 +16,9 @@ const ColumnDetails = ({name, topOffset, list, filters, onFilter, sort, onSort, 
   if(name) {
     setDocumentTitle(name + ' | Field Definitions')
   }
+  console.log(containerHeight-topOffset)
   let containerHeightStyle = {
-    height: (containerHeight+100) + 'px', 'position': 'relative'
+    height: (containerHeight-topOffset-50) + 'px', 'position': 'relative'
   }
   return (
 
@@ -85,7 +86,9 @@ const mapStateToProps = (state, ownProps) => {
     selectedField: getSelectedFieldDetails(state),
     showCols: state.fieldDetailsProps.showCols,
     selectedCategories: state.fieldDetailsProps.selectedCategories,
-    containerHeight: ownProps.viewportHeight
+    containerHeight: ownProps.viewportHeight,
+    topOffset: ownProps.topOffset
+
   }
 }
 

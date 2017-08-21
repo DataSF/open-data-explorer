@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns, getSupportedChartTypes, getFilterableColumns } from '../reducers'
+import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns, getSupportedChartTypes, isGroupByz, setXAxisTickInterval, explodeFrequencies, getFilterableColumns } from '../reducers'
 import { showHideModal, selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy, loadQueryStateFromString, changeRollupBy } from '../actions'
 import BlankChart from '../components/ChartExperimental/BlankChart'
 import ConditionalOnSelect from '../components/ConditionalOnSelect'
@@ -19,13 +19,12 @@ import OtherDataToggle from '../components/Query/OtherDataToggle'
 import ChartTypePicker from '../components/ChartTypePicker'
 import Loading from '../components/Loading'
 import Messages from '../components/Messages'
-import { setDocumentTitle } from '../helpers'
+import { setDocumentTitle, isColTypeTest, roundAxisZeros } from '../helpers'
 import './@containers.css'
-
 import ChartFieldSelector from '../containers/ChartFieldSelector'
 import ModalShare from '../containers/ModalShare'
+import { BASE_HREF, NUMBEROFTICKSY, NUMBEROFTICKSX, MAXPOWEROFT10 } from '../constants/AppConstants'
 
-import { BASE_HREF } from '../constants/AppConstants'
 
 class VizContainer extends Component {
   componentWillMount () {
@@ -95,7 +94,8 @@ class VizContainer extends Component {
                         columns={props.columns}
                         filters={props.filters}
                         chartData={props.chartData}
-                        rollupBy={props.rollupBy} />
+                        rollupBy={props.rollupBy}
+                        chartType={props.chartType} />
                     </Col>
                     <Col md={3}>
                       <Choose>
@@ -124,15 +124,25 @@ class VizContainer extends Component {
                         <ChartExperimentalCanvas
                           chartData={props.chartData || []}
                           chartType={props.chartType}
+                          isFetching={props.isFetching}
                           dateBy={props.dateBy}
+                          maxPowerOf10={MAXPOWEROFT10}
+                          yTickCnt={NUMBEROFTICKSY}
+                          xTickCnt={NUMBEROFTICKSX}
                           rollupBy={props.rollupBy}
+                          isGroupBy={props.isGroupBy}
                           groupKeys={props.groupKeys}
                           filters={props.filters}
                           rowLabel={props.rowLabel}
                           selectedColumnDef={props.selectedColumnDef}
                           groupBy={props.groupBy}
                           sumBy={props.sumBy}
-                          isFetching={props.isFetching} />
+                          freqs={props.freqs}
+                          domainMax={props.domainMax}
+                          colName={props.colName}
+                          valueAxisTickLst={props.valueAxisTickLst || []}
+                          isDateSelectedCol={props.isDateSelectedCol}
+                          numericCol={props.numericCol} />
                       </When>
                     </Choose>
                   </Messages>
@@ -167,7 +177,14 @@ VizContainer.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => {
+  //console.log("*****state***")
+  //console.log(state)
+  //console.log("******ownProps****")
+  //console.log(ownProps)
   const { metadata, chart, columnProps, query, messages } = state
+  let colName = ''
+  let selectedColumnDef = getSelectedColumnDef(state)
+  let chartType = chart.chartType
   const id = ownProps.params.id
   let queryState = Object.assign({}, query)
   delete queryState.isFetching
@@ -175,6 +192,12 @@ const mapStateToProps = (state, ownProps) => {
   const embedLink = BASE_HREF + '/#/e/' + id + '?q=' + encodedJSON
   const embedCode = '<iframe src="' + embedLink + '" width="100%" height="400" allowfullscreen frameborder="0"></iframe>'
   const exclude = query.filters ? Object.keys(query.filters) : []
+  let isGroupBy = isGroupByz(chart.groupKeys)
+  if (selectedColumnDef) {
+    colName = selectedColumnDef.name
+  }
+  let chartData = chart.chartData || []
+  let valueAxisTickLst = roundAxisZeros(chart.domainMax, NUMBEROFTICKSY, MAXPOWEROFT10) || []
   return {
     props: {
       name: ownProps.name,
@@ -183,21 +206,29 @@ const mapStateToProps = (state, ownProps) => {
       id,
       embedCode,
       messages,
+      numericCol: isColTypeTest(selectedColumnDef, 'number'),
+      colName: colName,
+      isGroupBy: isGroupBy,
+      isDateSelectedCol: isColTypeTest(selectedColumnDef, 'date'),
       supportedChartTypes: getSupportedChartTypes(state),
       queryString: ownProps.location.query.q,
-      chartType: chart.chartType,
-      chartData: chart.chartData,
+      chartType: chartType,
+      chartData: chartData,
+      rollupBy: chart.rollupBy,
       groupKeys: chart.groupKeys,
       selectedColumn: query.selectedColumn,
-      selectedColumnDef: getSelectedColumnDef(state),
+      selectedColumnDef: selectedColumnDef,
       columns: columnProps.columns,
       isFetching: query.isFetching,
+      valueAxisTickLst: valueAxisTickLst,
       groupBy: query.groupBy,
       sumBy: query.sumBy,
       dateBy: query.dateBy || 'year',
-      rollupBy: query.rollupBy,
       filters: query.filters,
       rowLabel: metadata.rowLabel,
+      freqs: explodeFrequencies(chartData, chartType),
+      domainMax: chart.domainMax,
+      xAxisInterval: setXAxisTickInterval(chartData),
       summableColumns: getSummableColumns(state),
       groupableColumns: getGroupableColumns(state),
       selectableColumns: getSelectableColumns(state),

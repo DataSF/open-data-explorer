@@ -4,7 +4,8 @@ import difference from 'lodash/difference'
 import { replacePropertyNameValue } from '../helpers'
 import moment from 'moment'
 import d3 from 'd3'
-import { sumObj, sortObj } from '../helpers'
+import { sumObj, sortObj, getMaxDomain,transformOthers,} from '../helpers'
+
 
 const API_ROOT = 'https://data.sfgov.org/'
 
@@ -223,10 +224,14 @@ function transformColumns (json) {
 
 // refactor
 function reduceGroupedData (data, groupBy) {
-
   // collect unique labels
   let groupedData = uniq(data.map((obj) => {
-    return obj['label']
+
+    if(Object.keys(obj).indexOf('label') > -1){
+        return obj['label']
+    }else{
+      return "Blank"
+    }
   })).map((label) => {
     return {label: label}
   })
@@ -468,6 +473,10 @@ function  castJson (json, state) {
     } else {
       formattedJson = formatJsonCol(json)
     }
+    formattedJson = formattedJson.map(function(item){
+      item.value = parseInt(item.value, 10)
+      return item
+    })
     return formattedJson
   }
 
@@ -487,18 +496,55 @@ function transformTextCategoryData(json, state){
   }
 }
 function transformQueryData (json, state) {
+  let rollupBy, domainMax
+  //if(state.chart.chartType == 'histogram'){
+  //  console.log(query)
+  //}
   let { query } = state
   let groupKeys = []
-
   if (query.groupBy && json.length > 0) {
     groupKeys = uniq(json.map((obj) => {
-      return obj[query.groupBy]
+      if(Object.keys(obj).indexOf(query.groupBy) > -1){
+        return obj[query.groupBy]
+      }else{
+        return "Blank"
+      }
     }))
-    json = reduceGroupedData(json, query.groupBy)
-    json = addMissingDatesGrpBy(json, state)
-    json = castJsonGrpBy(json, state)
-    if(!isDateColSelected(state)) {
-      json = sortJsonGrpBy (json)
+    let grpCol = query.groupBy
+    json = json.map(function(obj){
+      if(Object.keys(obj).indexOf(query.groupBy) > -1) {
+        if(Object.keys(obj).indexOf('label') > -1) {
+          return obj
+        }else{
+          obj['label'] = "Blank"
+          return obj
+        }
+      }else{
+        obj[grpCol] = "Blank"
+        if(Object.keys(obj).indexOf('label') > -1) {
+          return obj
+        }else{
+          obj['label'] = "Blank"
+          return obj
+        }
+      }
+    })
+    ///for weird edges casese where someone filters a group by;
+    ///we essentially want it to be a normal chart if there is only 1 item in the group.
+    if(groupKeys.length === 1){
+      json = json.map(function(item){
+        return {'key':item.key, 'label':item.label, 'value':parseInt(item.value, 10)}
+      })
+      json = replacePropertyNameValue(json, 'label', 'undefined', 'blank')
+      json = addMissingDates(json, state)
+      json =  castJson (json, state)
+    } else {
+      json = reduceGroupedData(json, query.groupBy)
+      json = addMissingDatesGrpBy(json, state)
+      json = castJsonGrpBy(json, state)
+      if(!isDateColSelected(state)) {
+        json = sortJsonGrpBy (json)
+      }
     }
   }
   if(json.length > 0 && !query.groupBy){
@@ -506,12 +552,25 @@ function transformQueryData (json, state) {
     json = addMissingDates(json, state)
     json =  castJson (json, state)
   }
+  rollupBy = rollUpChartData(state, json)
+  let isGroupBy = false
+  if(groupKeys.length > 0){
+    isGroupBy = true
+  }
+  //console.log(isGroupBy)
+  domainMax = getMaxDomain (json, isGroupBy, state.chart.chartType)
+  if (rollupBy === 'other') {
+        json = transformOthers(json, domainMax, isGroupBy )
+        domainMax = getMaxDomain (json, isGroupBy, state.chart.chartType)
+  }
   return {
     query: {
       isFetching: false,
       data: [],
       originalData: json,
-      groupKeys: groupKeys
+      groupKeys: groupKeys,
+      domainMax: domainMax,
+      rollupBy: rollupBy
     }
   }
 }
@@ -531,6 +590,27 @@ function transformCount (json) {
 
 function transformApiMigration (json) {
   return {dataId: json.nbeId}
+}
+
+function rollUpChartData(state, json){
+  let rollupBy = false
+  if(Object.keys(state.query).indexOf('rollupBy') > -1 ) {
+     if (state.chart.chartType === 'bar'){
+      rollupBy = state.query.rollupBy
+    }else{
+       rollupBy = "none"
+    }
+  }
+  else if(json && state.chart.chartType){
+    if ((state.chart.chartType === 'bar') && (json.length > 12) && !rollupBy) {
+      rollupBy = 'other'
+    }else{
+      rollupBy = 'none'
+    }
+  }else{
+    rollupBy = 'none'
+  }
+  return rollupBy
 }
 
 
