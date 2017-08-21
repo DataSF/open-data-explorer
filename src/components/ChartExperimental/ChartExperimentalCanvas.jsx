@@ -10,8 +10,6 @@ import ChartExperimentalLineStuff from './ChartExperimentalLineStuff'
 import ChartExperimentalAreaStuff from './ChartExperimentalAreaStuff'
 import ChartExperimentalHistogramStuff from './ChartExperimentalHistogramStuff'
 
-
-
 class ChartExperimentalCanvas extends Component {
   constructor(props) {
     super(props)

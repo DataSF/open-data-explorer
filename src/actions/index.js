@@ -233,8 +233,8 @@ export function selectColumn (column) {
           return dispatch(resetState('query'))
         }
       })
-    }
   }
+}
 
 export function selectField (column) {
   return (dispatch, getState) => {
