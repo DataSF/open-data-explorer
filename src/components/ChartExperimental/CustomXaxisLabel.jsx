@@ -14,9 +14,6 @@ class CustomXaxisLabel extends Component {
     if (isGroupBy) {
       //console.log("grps")
       if (numOfGrps > 0 && numOfGrps <= 20) {
-        console.log("**yval****")
-        console.log(yVal)
-        console.log("***")
         yVal = yVal + 300
       }else if(numOfGrps > 20  && numOfGrps <= 25) {
         // console.log("**in here 20 to 25")

@@ -497,6 +497,9 @@ function transformTextCategoryData(json, state){
 }
 function transformQueryData (json, state) {
   let rollupBy, domainMax
+  //if(state.chart.chartType == 'histogram'){
+  //  console.log(query)
+  //}
   let { query } = state
   let groupKeys = []
   if (query.groupBy && json.length > 0) {
@@ -554,12 +557,11 @@ function transformQueryData (json, state) {
   if(groupKeys.length > 0){
     isGroupBy = true
   }
+  //console.log(isGroupBy)
   domainMax = getMaxDomain (json, isGroupBy, state.chart.chartType)
   if (rollupBy === 'other') {
-      let json2 = transformOthers(json, domainMax, isGroupBy )
-      console.log(json2)
-      json = json2['chartData']
-      domainMax = getMaxDomain (json, isGroupBy, state.chart.chartType)
+        json = transformOthers(json, domainMax, isGroupBy )
+        domainMax = getMaxDomain (json, isGroupBy, state.chart.chartType)
   }
   return {
     query: {

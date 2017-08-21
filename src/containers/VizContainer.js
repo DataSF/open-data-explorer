@@ -197,9 +197,7 @@ const mapStateToProps = (state, ownProps) => {
     colName = selectedColumnDef.name
   }
   let chartData = chart.chartData || []
-  console.log("made it here")
   let valueAxisTickLst = roundAxisZeros(chart.domainMax, NUMBEROFTICKSY, MAXPOWEROFT10) || []
-  console.log('now here')
   return {
     props: {
       name: ownProps.name,

@@ -1,6 +1,6 @@
 import * as ActionTypes from '../actions'
 import { updateObject, createReducer } from './reducerUtilities'
-import { fillArray } from '../helpers'
+import { fillArray, getMaxDomain } from '../helpers'
 // import d3 from 'd3'
 // case reducers
 
@@ -21,9 +21,19 @@ function updateData (state, action) {
 }
 
 function changeChartType (state, action) {
+  if(Object.keys(state).indexOf('groupKeys') > -1 ) {
+    if(state.groupKeys.length > 0){
+      return updateObject(state, {
+        chartType: action.chartType,
+        domainMax: getMaxDomain(state.chartData, true, action.chartType)
+      })
+    }
+  }
   return updateObject(state, {
-    chartType: action.chartType
+      chartType: action.chartType,
+      domainMax: getMaxDomain(state.chartData, false, action.chartType)
   })
+
 }
 
 function setDefaultChartType (state, action) {
