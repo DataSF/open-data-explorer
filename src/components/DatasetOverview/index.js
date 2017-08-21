@@ -86,8 +86,8 @@ class DatasetOverview extends Component {
     let datasetFieldCntTbl = this.makeDatasetFactsTable(colCounts, 'overview-dataset-facts-td',  'overview-dataset-cnts-td-value')
     let publishingHealthSpan = [this.renderPublishingHealthSpan(publishing_health)]
     let publishingFaqItems =  publishingHealthSpan.concat(this.renderPublishingInfo( publishing_faqs ) )
-
-    let descPara = description ? description.split('\n\n').map((paragraph) => <p>{paragraph}</p>) : null
+    let descriptionNoCR = description ? description.replace(/\r/g, '') : ''
+    let descPara = description ? descriptionNoCR.split('\n\n').map((paragraph, idx) => <p key={'description_'+idx}>{paragraph}</p>) : null
 
     if(name) {
       setDocumentTitle(name + ' | Overview')

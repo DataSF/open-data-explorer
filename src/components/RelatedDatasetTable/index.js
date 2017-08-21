@@ -3,8 +3,6 @@ import React, { Component } from 'react'
 import './@RelatedDatasetTable.css'
 class RelatedDatasetTable extends Component {
 
-
-
   makeRelatedDatasetLinks (relatedDatasets) {
     let relatedDatasetLinks = relatedDatasets.map(function (relatedDataset) {
       return (

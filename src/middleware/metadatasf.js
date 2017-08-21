@@ -77,9 +77,14 @@ function transformColumns (json) {
 
 function getRelatedDeparts(json){
   let depts = {}
-  json.forEach(function(item){
+  let sortedByDatasetName = json.sort(function(a, b){
+    if(a.dataset_name < b.dataset_name) return -1
+    if(a.dataset_name > b.dataset_name) return 1
+    return 0
+  })
+  sortedByDatasetName.forEach(function(item){
     //item.dataset_name = titleize(item.dataset_name)
-    item.description = item.description.substring(0,250) + ' ...'
+    item.description = item.description ? item.description.substring(0,250) + ' ...' : null
     // item.department = titleize(item.department)
     if(typeof item.keywords !== 'undefined'){
       item.keywords = item.keywords.split(", ")
@@ -99,6 +104,7 @@ function getRelatedDeparts(json){
   let deptsSorted =  []
 
   sortedDeptsList.forEach(function(dept){
+    console.log(depts)
     let deptItem = {'dept': dept, 'links': depts[dept]}
     deptsSorted.push(deptItem)
   })

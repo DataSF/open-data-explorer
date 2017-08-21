@@ -1,7 +1,18 @@
+import React from 'react'
 import { connect } from 'react-redux'
 import DatasetOverview from '../components/DatasetOverview'
 import { makeDatasetFactDictFxn, makeColTypesCntFxn, makePublishingFactsFxn, calculatePublishingHealthFxn } from '../reducers'
 import { loadRelatedDatasets } from '../actions'
+
+class DatasetOverviewContainer extends React.Component {
+  shouldComponentUpdate (nextProps, nextState) {
+    return nextProps.metadata !== this.props.metadata
+  }
+
+  render () {
+    return <DatasetOverview {...this.props} />
+  }
+}
 
 const mapStateToProps = (state, ownProps) => {
   const { metadata } = state
@@ -26,4 +37,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(DatasetOverview)
+)(DatasetOverviewContainer)
