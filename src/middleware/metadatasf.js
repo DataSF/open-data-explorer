@@ -79,7 +79,7 @@ function getRelatedDeparts(json){
   let depts = {}
   json.forEach(function(item){
     //item.dataset_name = titleize(item.dataset_name)
-    item.description = item.description.substring(0,250) + ' ...'
+    item.description = item.description ? item.description.substring(0,250) + ' ...' : null
     // item.department = titleize(item.department)
     if(typeof item.keywords !== 'undefined'){
       item.keywords = item.keywords.split(", ")
