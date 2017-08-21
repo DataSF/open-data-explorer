@@ -1,4 +1,3 @@
-import logo from './logo_big.png'
 import find from './find.gif'
 import understand from './understand.gif'
 import visualize from './visualize.gif'
