@@ -143,7 +143,7 @@ function preloadMetadata (state, action) {
   data.relatedDatasetCnt = 0
   data.relatedDatasets = []
   data.attachments = null
-  data.notes = null
+  data.notes = data.notes || null
   return Object.assign({}, state, data)
 }
 
