@@ -152,7 +152,7 @@ export const getSelectableColumns = (state, selectedColumn, all = false, ignoreT
 export const getSummableColumns = (state) => {
   let { columns } = state
   let colTypesAccepted = ['number']
-  let regex = /(^(lat|lon|supervisor)[a-z]*|^(x|y)$)/i
+  let regex = /(^(lat|lon|supervisor)[a-z]*|^(x|y)$|year)/i
 
   if (!columns) return []
   
