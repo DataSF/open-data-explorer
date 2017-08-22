@@ -168,9 +168,10 @@ export const getSupportedChartTypes = (state, selectedColumn) => {
   if (!selectedColumn) return []
 
   let { columns } = state
+  /*
   let hasDate = Object.keys(columns).filter(key => {
     return columns[key].type === 'date'
-  }).length > 0
+  }).length > 0*/
 
   let column = columns[selectedColumn]
   if (column.type === 'text') return [BAR]
