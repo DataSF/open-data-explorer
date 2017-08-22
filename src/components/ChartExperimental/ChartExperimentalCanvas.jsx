@@ -79,7 +79,6 @@ class ChartExperimentalCanvas extends Component {
 
   render () {
     let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, isFetching, isGroupBy, numericCol, isDateSelectedCol, domainMax, colName, valueAxisTickLst, xAxisInterval, freqs, yTickCnt, xTickCnt, maxPowerOf10} = this.props
-
     const formatValue = d3.format('0,000')
     const valTickFormater = function (d) { return formatValue(d) }
     const xAxisPadding = { left: 30, right: 30 }
@@ -136,29 +135,25 @@ class ChartExperimentalCanvas extends Component {
         <Choose>
           <When condition={selectedColumnDef && !isFetching && chartData.length > 0 && valueAxisTickLst.length > 0}>
             <Choose>
-              <When condition={numericCol}>
-                <Choose>
-                  <When condition={chartType === 'histogram'}>
-                    <ChartExperimentalHistogramStuff
-                      w={w}
-                      h={h}
-                      yAxisWidth={yAxisWidth}
-                      xAxisHeight={xAxisHeight}
-                      isGroupBy={isGroupBy}
-                      margin={chartMargin}
-                      freqs={freqs}
-                      valueAxisTickLst={valueAxisTickLst}
-                      rowLabel={rowLabel}
-                      fillColor={fillColor}
-                      colName={colName}
-                      groupKeys={groupKeys}
-                      xTickCnt={xTickCnt}
-                      yTickCnt={yTickCnt}
-                      maxPowerOf10={maxPowerOf10}
-                      xAxisPadding={xAxisPadding}
-                      valTickFormater={valTickFormater} />
-                  </When>
-                </Choose>
+              <When condition={chartType === 'histogram'}>
+                <ChartExperimentalHistogramStuff
+                  w={w}
+                  h={h}
+                  yAxisWidth={yAxisWidth}
+                  xAxisHeight={xAxisHeight}
+                  isGroupBy={isGroupBy}
+                  margin={chartMargin}
+                  freqs={freqs}
+                  valueAxisTickLst={valueAxisTickLst}
+                  rowLabel={rowLabel}
+                  fillColor={fillColor}
+                  colName={colName}
+                  groupKeys={groupKeys}
+                  xTickCnt={xTickCnt}
+                  yTickCnt={yTickCnt}
+                  maxPowerOf10={maxPowerOf10}
+                  xAxisPadding={xAxisPadding}
+                  valTickFormater={valTickFormater} />
               </When>
               <When condition={chartType === 'bar'}>
                 <ChartExperimentalBarStuff
