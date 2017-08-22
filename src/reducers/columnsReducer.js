@@ -175,7 +175,7 @@ export const getSupportedChartTypes = (state, selectedColumn) => {
   let column = columns[selectedColumn]
   if (column.type === 'text') return [BAR]
   if (column.type === 'date') return [LINE, COLUMN, AREA]
-  if (column.type === 'number' && hasDate) return [BAR, HISTOGRAM, LINE, AREA]
+  // if (column.type === 'number' && hasDate) return [BAR, HISTOGRAM, LINE, AREA]
   if (column.type === 'number') return [BAR, HISTOGRAM]
   if (column.type === 'boolean') return [BAR]
 
