@@ -51,7 +51,7 @@ class ChartExperimentalLineStuff extends Component {
     return legendStyle
   }
   render () {
-    let {h, w, isGroupBy, yAxisWidth, valTickFormater, margin, rowLabel, units, groupKeys, fillColor, chartData, xAxisPadding, xAxisInterval, colName, legendStyle, xAxisHeight, valueAxisTickLst} = this.props
+    let {h, w, isGroupBy, yAxisWidth, valTickFormater, margin, units, groupKeys, fillColor, chartData, xAxisPadding, xAxisInterval, colName, legendStyle, xAxisHeight, valueAxisTickLst} = this.props
     let lines = this.makeLines(groupKeys, units)
     let tickMax = valueAxisTickLst[valueAxisTickLst.length-1]
     legendStyle = this.setLegendStyleTop(lines, legendStyle)
