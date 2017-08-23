@@ -84,10 +84,19 @@
   width: 25%;
   top: 240px;
   overflow-y: scroll;
+  border-left: thin solid #133140;
 }
 
 .VizContainer__config .panel-group {
   margin-bottom: 0;
+}
+
+.VizContainer__config .panel {
+  border: 0;
+}
+
+.VizContainer__config .panel-heading {
+  border-bottom: thin solid #133140;
 }
 
 .VizContainer__stage {

@@ -34,7 +34,7 @@ class VizContainer extends Component {
     if (queryString) {
       setTimeout(() => {
         loadQueryStateFromString(queryString)
-      }, 2000)
+      }, 1000)
     }
   }
 
@@ -51,7 +51,7 @@ class VizContainer extends Component {
     return (
       <Row>
         <ModalShare />
-        <Col className={'VizContainer__config'} style={absoluteTop}>
+        <Col className={'VizContainer__config'} style={{top: '65px'}}>
           <Accordion>
             <ChartFieldSelector />
             <ConditionalOnSelect selectedColumn={props.selectedColumn}>
@@ -198,6 +198,7 @@ const mapStateToProps = (state, ownProps) => {
   }
   let chartData = chart.chartData || []
   let valueAxisTickLst = roundAxisZeros(chart.domainMax, NUMBEROFTICKSY, MAXPOWEROFT10) || []
+  console.log(roundAxisZeros(chart.domainMax, NUMBEROFTICKSY, MAXPOWEROFT10))
   return {
     props: {
       name: ownProps.name,

@@ -152,7 +152,7 @@ export const getSelectableColumns = (state, selectedColumn, all = false, ignoreT
 export const getSummableColumns = (state) => {
   let { columns } = state
   let colTypesAccepted = ['number']
-  let regex = /(^(lat|lon|supervisor)[a-z]*|^(x|y)$)/i
+  let regex = /(^(lat|lon|supervisor)[a-z]*|^(x|y)$|year)/i
 
   if (!columns) return []
   
@@ -168,14 +168,15 @@ export const getSupportedChartTypes = (state, selectedColumn) => {
   if (!selectedColumn) return []
 
   let { columns } = state
+  /*
   let hasDate = Object.keys(columns).filter(key => {
     return columns[key].type === 'date'
-  }).length > 0
+  }).length > 0*/
 
   let column = columns[selectedColumn]
   if (column.type === 'text') return [BAR]
   if (column.type === 'date') return [LINE, COLUMN, AREA]
-  if (column.type === 'number' && hasDate) return [BAR, HISTOGRAM, LINE, AREA]
+  // if (column.type === 'number' && hasDate) return [BAR, HISTOGRAM, LINE, AREA]
   if (column.type === 'number') return [BAR, HISTOGRAM]
   if (column.type === 'boolean') return [BAR]
 
