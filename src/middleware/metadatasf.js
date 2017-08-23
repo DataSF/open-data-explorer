@@ -1,7 +1,7 @@
 
 //import titleize from 'titleize'
 
-const API_ROOT = 'http://metadatasf.tk/api/v1/'
+const API_ROOT = 'http://metadata.datasf.org/api/v1/'
 const geoTypeMappings = {
   'geometry: line': 'geometry-line',
   'geometry: point': 'geometry-point',
