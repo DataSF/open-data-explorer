@@ -7,7 +7,7 @@ import CustomXaxisLabel from './CustomXaxisLabel'
 class ChartExperimentalLineStuff extends Component {
 
 
-  makeLines (groupKeys, rowLabel) {
+  makeLines (groupKeys, units) {
     let lines = []
     if (groupKeys && groupKeys.length > 0) {
       let colorScale = d3.scale.linear().domain([1, groupKeys.length])
@@ -21,7 +21,7 @@ class ChartExperimentalLineStuff extends Component {
               type='linear'
               dataKey={i}
               connectNulls={true}
-              unit={" " + rowLabel}
+              unit={' ' + units}
               stackId='a'
               key={i}
               dot={false}
@@ -51,10 +51,11 @@ class ChartExperimentalLineStuff extends Component {
     return legendStyle
   }
   render () {
-    let {h, w, isGroupBy, yAxisWidth, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, xAxisInterval, colName, legendStyle, xAxisHeight, valueAxisTickLst} = this.props
-    let lines = this.makeLines(groupKeys, rowLabel)
+    let {h, w, isGroupBy, yAxisWidth, valTickFormater, margin, rowLabel, units, groupKeys, fillColor, chartData, xAxisPadding, xAxisInterval, colName, legendStyle, xAxisHeight, valueAxisTickLst} = this.props
+    let lines = this.makeLines(groupKeys, units)
     let tickMax = valueAxisTickLst[valueAxisTickLst.length-1]
     legendStyle = this.setLegendStyleTop(lines, legendStyle)
+    console.log(valueAxisTickLst)
     return (
       <Choose>
         <When condition={chartData.length > 0}>
@@ -79,11 +80,11 @@ class ChartExperimentalLineStuff extends Component {
                 tickSize={3}
                 ticks={valueAxisTickLst}
                 domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
-                label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} chartType={'line'}/> }
+                label={<CustomYaxisLabel val={'Number of ' + units} h={h} chartType={'line'}/> }
                 tickFormatter={valTickFormater} />
               <Line
                 type={'linear'}
-                unit={" " + rowLabel}
+                unit={' ' + units}
                 strokeWidth={'3'}
                 dataKey={'value'}
                 dot={false}
@@ -115,7 +116,7 @@ class ChartExperimentalLineStuff extends Component {
                 ticks={valueAxisTickLst}
                 domain={[0,  tickMax]}
                 tickFormatter={valTickFormater}
-                label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h}  chartType={'line'}/>} />
+                label={<CustomYaxisLabel val={'Number of ' + units} h={h}  chartType={'line'}/>} />
               <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
               <Tooltip />
               <Legend wrapperStyle={legendStyle} />

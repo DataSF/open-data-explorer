@@ -24,6 +24,7 @@ import './@containers.css'
 import ChartFieldSelector from '../containers/ChartFieldSelector'
 import ModalShare from '../containers/ModalShare'
 import { BASE_HREF, NUMBEROFTICKSY, NUMBEROFTICKSX, MAXPOWEROFT10 } from '../constants/AppConstants'
+import pluralize from 'pluralize'
 
 
 class VizContainer extends Component {
@@ -134,6 +135,7 @@ class VizContainer extends Component {
                           groupKeys={props.groupKeys}
                           filters={props.filters}
                           rowLabel={props.rowLabel}
+                          units={pluralize(props.units)}
                           selectedColumnDef={props.selectedColumnDef}
                           groupBy={props.groupBy}
                           sumBy={props.sumBy}
@@ -192,6 +194,7 @@ const mapStateToProps = (state, ownProps) => {
   const embedLink = BASE_HREF + '/#/e/' + id + '?q=' + encodedJSON
   const embedCode = '<iframe src="' + embedLink + '" width="100%" height="400" allowfullscreen frameborder="0"></iframe>'
   const exclude = query.filters ? Object.keys(query.filters) : []
+  let units = query.sumBy ? columnProps.columns[query.sumBy].name : metadata.rowLabel
   let isGroupBy = isGroupByz(chart.groupKeys)
   if (selectedColumnDef) {
     colName = selectedColumnDef.name
@@ -227,6 +230,7 @@ const mapStateToProps = (state, ownProps) => {
       dateBy: query.dateBy || 'year',
       filters: query.filters,
       rowLabel: metadata.rowLabel,
+      units: units,
       freqs: explodeFrequencies(chartData, chartType),
       domainMax: chart.domainMax,
       xAxisInterval: setXAxisTickInterval(chartData),
