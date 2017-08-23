@@ -7,7 +7,7 @@ import CustomXaxisLabel from './CustomXaxisLabel'
 
 class ChartExperimentalAreaStuff extends Component {
 
-  makeAreas (groupKeys, grpColorScale, rowLabel) {
+  makeAreas (groupKeys, grpColorScale, units) {
     let areas = []
     if (groupKeys) {
       if (groupKeys.length > 1) {
@@ -23,7 +23,7 @@ class ChartExperimentalAreaStuff extends Component {
                 dataKey={i}
                 stackId='i'
                 key={i}
-                unit={" " + rowLabel}
+                unit={" " + units}
                 stroke={colorScale('colorIndex')}
                 fill={colorScale(colorIndex)} />)
           }
@@ -51,8 +51,8 @@ class ChartExperimentalAreaStuff extends Component {
     return legendStyle
   }
   render () {
-    let {h, w, xAxisPadding, xAxisInterval, isGroupBy, margin, yAxisWidth, rowLabel, groupKeys, fillColor, chartData, grpColorScale, valTickFormater, xAxisHeight, legendStyle, colName, valueAxisTickLst, valueTickStyle} = this.props
-    let areas = this.makeAreas(groupKeys, grpColorScale, rowLabel)
+    let {h, w, xAxisPadding, xAxisInterval, isGroupBy, margin, yAxisWidth, units, groupKeys, fillColor, chartData, grpColorScale, valTickFormater, xAxisHeight, legendStyle, colName, valueAxisTickLst, valueTickStyle} = this.props
+    let areas = this.makeAreas(groupKeys, grpColorScale, units)
     legendStyle = this.setLegendStyleTop(areas, legendStyle)
     return (
       <Choose>
@@ -80,7 +80,7 @@ class ChartExperimentalAreaStuff extends Component {
                 ticks={valueAxisTickLst}
                 tickFormatter={valTickFormater}
                 type={'number'}
-                label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} chartType={'area'} />} />
+                label={<CustomYaxisLabel val={'Number of ' + units} h={h} chartType={'area'} />} />
               <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
               <Tooltip />
               <Area
@@ -88,7 +88,7 @@ class ChartExperimentalAreaStuff extends Component {
                 dataKey='value'
                 stroke={fillColor}
                 fill={fillColor}
-                unit={" " + rowLabel} />
+                unit={" " + units} />
             </AreaChart>
           </When>
           <When condition={isGroupBy}>
@@ -110,7 +110,7 @@ class ChartExperimentalAreaStuff extends Component {
                 domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
                 ticks={valueAxisTickLst}
                 type={'number'}
-                label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h}   chartType={'area'}/>} />
+                label={<CustomYaxisLabel val={'Number of ' + units} h={h}   chartType={'area'}/>} />
               <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
               <Tooltip />
               <Legend wrapperStyle={legendStyle} />
@@ -132,6 +132,7 @@ ChartExperimentalAreaStuff.propTypes = {
   isGroupBy: PropTypes.bool,
   margin: PropTypes.object,
   rowLabel: PropTypes.string,
+  units: PropTypes.string,
   groupKeys: PropTypes.array,
   fillColor: PropTypes.string
 }

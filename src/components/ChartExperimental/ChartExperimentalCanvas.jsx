@@ -173,6 +173,7 @@ class ChartExperimentalCanvas extends Component {
                   isGroupBy={isGroupBy}
                   margin={chartMargin}
                   rowLabel={rowLabel}
+                  units={units}
                   fillColor={fillColor}
                   groupKeys={groupKeys}
                   chartData={chartData}
@@ -234,6 +235,7 @@ class ChartExperimentalCanvas extends Component {
                   xAxisPadding={xAxisPadding}
                   grpColorScale={grpColorScale}
                   colName={colName}
+                  units={units}
                   xAxisHeight={xAxisHeight}/>
               </When>
               <Otherwise>
