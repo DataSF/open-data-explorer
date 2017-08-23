@@ -18,5 +18,5 @@ export const BASE_HREF = APP_URLS[context]
 
 /***Chart variables*****/
 export const NUMBEROFTICKSY = 10
-export const MAXPOWEROFT10 = 10
+export const MAXPOWEROFT10 = 20
 export const NUMBEROFTICKSX = 6

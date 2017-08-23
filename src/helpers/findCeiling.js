@@ -1,6 +1,6 @@
 
 module.exports = function findCeiling (maxValue, maxPowerOf10) {
-  let zerosRange = Array.apply(null, Array(maxPowerOf10 + 2)).map(function (_, i) { return i })
+  let zerosRange = Array.apply(null, Array(maxPowerOf10)).map(function (_, i) { return i })
   for (let i = 1; i < zerosRange.length; i++) {
     let zeros = Math.pow(10, zerosRange[i])
     let zerosNext = Math.pow(10, zerosRange[i + 1])
