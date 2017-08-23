@@ -9,6 +9,7 @@ import ChartExperimentalBarStuff from './ChartExperimentalBarStuff'
 import ChartExperimentalLineStuff from './ChartExperimentalLineStuff'
 import ChartExperimentalAreaStuff from './ChartExperimentalAreaStuff'
 import ChartExperimentalHistogramStuff from './ChartExperimentalHistogramStuff'
+import ReactDOM from 'react-dom'
 
 class ChartExperimentalCanvas extends Component {
   constructor(props) {
@@ -18,25 +19,32 @@ class ChartExperimentalCanvas extends Component {
       width: this.props.width,
       height: this.props.height
     }
+
+    this._isMounted = false
+    this._updateSize = this._updateSize.bind(this)
   }
 
   componentDidMount () {
-    this.updateSize()
-    window.addEventListener('resize', this.updateSize.bind(this))
+    this._isMounted = true
+    this._updateSize()
+    window.addEventListener('resize', this._updateSize)
   }
+
   componentWillUnmount () {
-    window.removeEventListener('resize', this.updateSize.bind(this))
+    this._isMounted = false
+    window.removeEventListener('resize', this._updateSize)
   }
 
-  updateSize () {
-    var ReactDOM = require('react-dom')
-    var node = ReactDOM.findDOMNode(this)
-    var parentWidth = node.getBoundingClientRect().width
+  _updateSize () {
+    if (this._isMounted) {
+      var node = ReactDOM.findDOMNode(this)
+      var parentWidth = node.getBoundingClientRect().width
 
-    if (!(parentWidth === this.props.width)) {
-      this.setState({width: parentWidth - 20})
-    } else {
-      this.setState({width: this.props.width})
+      if (!(parentWidth === this.props.width)) {
+        this.setState({width: parentWidth - 20})
+      } else {
+        this.setState({width: this.props.width})
+      }
     }
   }
   shouldComponentUpdate (nextProps, nextState) {
