@@ -108,3 +108,11 @@
 .recharts-cartesian-grid-horizontal line:first-child {
     display: none;
 }
+
+.recharts-label tspan {
+    fill: #666;
+}
+
+.recharts-cartesian-axis-tick-value {
+    font-size: .8em;
+}

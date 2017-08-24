@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import d3 from 'd3'
 import { XAxis, BarChart, YAxis, CartesianGrid, Bar, Tooltip } from 'recharts'
 import { findMaxObjKeyValue, padDomainMax, roundAxisZeros } from '../../helpers'
-import CustomXaxisLabel from './CustomXaxisLabel'
 import HistogramTooltip from './HistogramTooltip'
 import CustomYaxisLabel from './CustomYaxisLabel'
 import './@Histogram.css'
@@ -73,7 +72,7 @@ class ChartExperimentalHistogramStuff extends Component {
           ticks={valueAxisTickLstX}
           tickSize={3}
           domain={[0, (valueAxisTickLstX[valueAxisTickLstX.length-1]* 1.05)]}
-          label={<CustomXaxisLabel val={'Value of ' + colName} isGroupBy={false} numOfGroups={0} />} />
+          label={'Value of ' + colName} />
         <YAxis
           type={'number'}
           width={yAxisWidth}

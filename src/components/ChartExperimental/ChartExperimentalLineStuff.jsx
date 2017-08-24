@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 import d3 from 'd3'
 import { XAxis, LineChart, YAxis, CartesianGrid, Line, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
-import CustomXaxisLabel from './CustomXaxisLabel'
 class ChartExperimentalLineStuff extends Component {
 
 
-  makeLines (groupKeys, rowLabel) {
+  makeLines (groupKeys, units) {
     let lines = []
     if (groupKeys && groupKeys.length > 0) {
       let colorScale = d3.scale.linear().domain([1, groupKeys.length])
@@ -21,7 +20,7 @@ class ChartExperimentalLineStuff extends Component {
               type='linear'
               dataKey={i}
               connectNulls={true}
-              unit={" " + rowLabel}
+              unit={' ' + units}
               stackId='a'
               key={i}
               dot={false}
@@ -33,6 +32,7 @@ class ChartExperimentalLineStuff extends Component {
       return lines
     }
   }
+  /*
   setLegendStyleTop(lines, legendStyle){
     if(lines){
       if(lines.length <= 20){
@@ -49,12 +49,13 @@ class ChartExperimentalLineStuff extends Component {
       }
     }
     return legendStyle
-  }
+  }*/
+
   render () {
-    let {h, w, isGroupBy, yAxisWidth, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, xAxisInterval, colName, legendStyle, xAxisHeight, valueAxisTickLst} = this.props
-    let lines = this.makeLines(groupKeys, rowLabel)
+    let {h, w, isGroupBy, yAxisWidth, valTickFormater, units, groupKeys, fillColor, chartData, xAxisPadding, xAxisInterval, colName, legendStyle, xAxisHeight, valueAxisTickLst} = this.props
+    let lines = this.makeLines(groupKeys, units)
     let tickMax = valueAxisTickLst[valueAxisTickLst.length-1]
-    legendStyle = this.setLegendStyleTop(lines, legendStyle)
+    //legendStyle = this.setLegendStyleTop(lines, legendStyle)
     return (
       <Choose>
         <When condition={chartData.length > 0}>
@@ -69,7 +70,7 @@ class ChartExperimentalLineStuff extends Component {
                 interval={xAxisInterval}
                 type={'category'}
                 tickSize={4}
-                label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} chartType={'line'} />}
+                label={colName}
                 padding={xAxisPadding}
                 height={xAxisHeight} />
               <CartesianGrid stroke='#eee' strokeDasharray='4 4' vertical={false} y={10} x={200} />
@@ -79,16 +80,16 @@ class ChartExperimentalLineStuff extends Component {
                 tickSize={3}
                 ticks={valueAxisTickLst}
                 domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
-                label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} chartType={'line'}/> }
+                label={<CustomYaxisLabel val={'Number of ' + units} h={h} chartType={'line'}/> }
                 tickFormatter={valTickFormater} />
               <Line
                 type={'linear'}
-                unit={" " + rowLabel}
+                unit={' ' + units}
                 strokeWidth={'3'}
                 dataKey={'value'}
                 dot={false}
                 activeDot={true}
-                stroke={fillColor}/>
+                stroke={fillColor}
                 isAnimationActive={false} />
               <Tooltip />
             </LineChart>
@@ -97,15 +98,14 @@ class ChartExperimentalLineStuff extends Component {
             <LineChart
               width={w}
               height={h}
-              data={chartData}
-              margin={margin}>
+              data={chartData}>
               <XAxis
                 dataKey={'label'}
                 type={'category'}
                 interval={xAxisInterval}
                 height={xAxisHeight}
                 tickSize={4}
-                label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={lines.length} chartType={'line'} />}
+                label={colName}
                 padding={xAxisPadding} />
               <YAxis
                 width={yAxisWidth}
@@ -115,10 +115,10 @@ class ChartExperimentalLineStuff extends Component {
                 ticks={valueAxisTickLst}
                 domain={[0,  tickMax]}
                 tickFormatter={valTickFormater}
-                label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h}  chartType={'line'}/>} />
+                label={<CustomYaxisLabel val={'Number of ' + units} h={h}  chartType={'line'}/>} />
               <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
               <Tooltip />
-              <Legend wrapperStyle={legendStyle} />
+              <Legend wrapperStyle={legendStyle} layout='vertical' verticalAlign='top' align='right' />
               {lines}
             </LineChart>
           </When>

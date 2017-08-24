@@ -16,7 +16,7 @@ const ColumnDetails = ({name, topOffset, list, filters, onFilter, sort, onSort, 
   if(name) {
     setDocumentTitle(name + ' | Field Definitions')
   }
-  console.log(containerHeight-topOffset)
+  
   let containerHeightStyle = {
     height: (containerHeight-topOffset-50) + 'px', 'position': 'relative'
   }

@@ -16,20 +16,31 @@ class Dataset extends Component {
       frontMatterHeight: 50,
       topOffset: 160
     }
+
+    this._calculateViewport = this._calculateViewport.bind(this)
   }
 
   componentWillMount () {
     this.props.onLoad()
   }
 
+  componentDidMount () {
+    window.addEventListener('resize', this._calculateViewport)
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('resize', this._calculateViewport)
+  }
+
   componentWillReceiveProps (nextProps) {
     if (this.props.params.id !== nextProps.params.id) {
       nextProps.onLoad()
     }
+    console.log('props received')
   }
 
   componentDidUpdate (prevProps, prevState) {
-    // TODO: may be more foolproof to get this by ref
+    console.log('updated component')
     let height = document.getElementById('DatasetFrontmatter') ? document.getElementById('DatasetFrontmatter').clientHeight : prevState.frontMatterHeight
     let viewportHeight = window.innerHeight
     if (prevState.frontMatterHeight !== height) {
@@ -41,10 +52,16 @@ class Dataset extends Component {
     }
   }
 
+  _calculateViewport () {
+    let viewportHeight = window.innerHeight
+    this.setState({ 
+      viewportHeight
+    })
+  }
+
   render () {
     const { rowsUpdatedAt, name, id, dataId, hasGeo, isFetching, children, onDownload, onOutboundLink, ...other } = this.props
     const childrenWithDatasetProps = React.Children.map(children, (child) => React.cloneElement(child, {...this.state, name}))
-
     return (
       <Loading isFetching={isFetching} hideChildrenWhileLoading={true} type='centered'>
         <section id={'DatasetFrontmatter'}>

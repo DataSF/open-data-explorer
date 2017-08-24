@@ -11,7 +11,7 @@ module.exports = function roundAxisZeros (maxValue, numberOfTicks, maxPowerOf10)
       valueAxisTickIncrement = Math.round((maxValue / (numberOfTicks - 1)), 2)
     } else {
       let powerToRound = findCeiling(maxValue, maxPowerOf10)
-      valueAxisTickIncrement = roundNumberByPower((maxValue / numberOfTicks), powerToRound)
+      valueAxisTickIncrement = roundNumberByPower((maxValue / (numberOfTicks - 1)), powerToRound)
     }
     let valueAxisTickIncrementLast = 0
     for (let i = 0; i < numberOfTicks; i++) {

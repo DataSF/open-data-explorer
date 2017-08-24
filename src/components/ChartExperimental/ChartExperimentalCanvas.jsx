@@ -9,6 +9,7 @@ import ChartExperimentalBarStuff from './ChartExperimentalBarStuff'
 import ChartExperimentalLineStuff from './ChartExperimentalLineStuff'
 import ChartExperimentalAreaStuff from './ChartExperimentalAreaStuff'
 import ChartExperimentalHistogramStuff from './ChartExperimentalHistogramStuff'
+import ReactDOM from 'react-dom'
 
 class ChartExperimentalCanvas extends Component {
   constructor(props) {
@@ -18,27 +19,42 @@ class ChartExperimentalCanvas extends Component {
       width: this.props.width,
       height: this.props.height
     }
+
+    this._isMounted = false
+    this._updateSize = this._updateSize.bind(this)
+    this._getChartTitleHeight = this._getChartTitleHeight.bind(this)
   }
 
   componentDidMount () {
-    this.updateSize()
-    window.addEventListener('resize', this.updateSize.bind(this))
+    this._isMounted = true
+    this._updateSize()
+    window.addEventListener('resize', this._updateSize)
   }
+
   componentWillUnmount () {
-    window.removeEventListener('resize', this.updateSize.bind(this))
+    this._isMounted = false
+    window.removeEventListener('resize', this._updateSize)
   }
 
-  updateSize () {
-    var ReactDOM = require('react-dom')
-    var node = ReactDOM.findDOMNode(this)
-    var parentWidth = node.getBoundingClientRect().width
+  _updateSize () {
+    if (this._isMounted) {
+      var node = ReactDOM.findDOMNode(this)
+      var parentWidth = node.getBoundingClientRect().width
 
-    if (!(parentWidth === this.props.width)) {
-      this.setState({width: parentWidth - 20})
-    } else {
-      this.setState({width: this.props.width})
+      if (!(parentWidth === this.props.width)) {
+        this.setState({width: parentWidth - 20})
+      } else {
+        this.setState({width: this.props.width})
+      }
     }
   }
+
+  _getChartTitleHeight () {
+    // TODO: get by ref
+    let chartTitleHeight = document.getElementsByClassName('Chart__title')[0] ? document.getElementsByClassName('Chart__title')[0].clientHeight : 35
+    return chartTitleHeight
+  }
+
   shouldComponentUpdate (nextProps, nextState) {
     /*
     This component needs to be refactored to handle resizing on a container, for now, we'll update the component always
@@ -54,14 +70,14 @@ class ChartExperimentalCanvas extends Component {
     let thisChart = {
       chartData: this.props.chartData,
       chartType: this.props.chartType,
-      height: this.state.height,
+      height: this.props.viewportHeight,
       width: this.state.width,
       chartDataLen:  nextChartLen
     }
     let nextChart = {
       chartData: nextProps.chartData,
       chartType: nextProps.chartType,
-      height: nextState.height,
+      height: nextProps.viewportHeight,
       width: nextState.width,
       chartDataLen: thisChartLen
     }
@@ -78,7 +94,7 @@ class ChartExperimentalCanvas extends Component {
 
 
   render () {
-    let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, isFetching, isGroupBy, isDateSelectedCol, domainMax, colName, valueAxisTickLst, xAxisInterval, freqs, yTickCnt, xTickCnt, maxPowerOf10} = this.props
+    let {rowLabel, units, viewportHeight, topOffset, selectedColumnDef, groupKeys, chartData, chartType, isFetching, isGroupBy, isDateSelectedCol, domainMax, colName, valueAxisTickLst, xAxisInterval, freqs, yTickCnt, xTickCnt, maxPowerOf10} = this.props
     const formatValue = d3.format('0,000')
     const valTickFormater = function (d) { return formatValue(d) }
     const xAxisPadding = { left: 30, right: 30 }
@@ -93,6 +109,7 @@ class ChartExperimentalCanvas extends Component {
       'money': '#de93c2',
       'other': '#E6FF2E'
     }
+
     const groupByColorIndex = {
       'text': {'start': '#31c4ed', 'end': '#0000ff'},
       'date': {'start': '#204c39', 'end': '#83F52C'},
@@ -102,6 +119,8 @@ class ChartExperimentalCanvas extends Component {
       'double': {'start': '#c71585', 'end': '#ffc0cb'},
       'money': {'start': '#c71585', 'end': '#ffc0cb'}
     }
+
+    /*
     const legendStyle = {
       color: '#666',
       display: 'block',
@@ -113,12 +132,21 @@ class ChartExperimentalCanvas extends Component {
       paddingBottom:'1%',
       wordBreak: 'break-all',
       textAlign: 'left'
-    }
+    }*/
+    console.log(viewportHeight)
     const xAxisHeight = 100
     const yAxisWidth = 70
     let w = this.state.width - (chartMargin.left + chartMargin.right)
-    let h = this.state.height - (chartMargin.top + chartMargin.bottom)
+    let h = viewportHeight - (chartMargin.top + chartMargin.bottom) - topOffset - this._getChartTitleHeight() - 50
     let fillColor, valueTickStyle, grpColorScale
+
+    const legendStyle = {
+      color: '#666',
+      maxWidth: '200px',
+      paddingLeft: '10px',
+      height: h,
+      overflowY: 'scroll'
+    }
 
     if (domainMax > 0) {
       valueTickStyle = this.setFontSizeTicks(domainMax)
@@ -165,6 +193,7 @@ class ChartExperimentalCanvas extends Component {
                   isGroupBy={isGroupBy}
                   margin={chartMargin}
                   rowLabel={rowLabel}
+                  units={units}
                   fillColor={fillColor}
                   groupKeys={groupKeys}
                   chartData={chartData}
@@ -188,6 +217,7 @@ class ChartExperimentalCanvas extends Component {
                   margin={chartMargin}
                   domainMax={domainMax}
                   rowLabel={rowLabel}
+                  units={units}
                   fillColor={fillColor}
                   groupKeys={groupKeys}
                   chartData={chartData}
@@ -225,6 +255,7 @@ class ChartExperimentalCanvas extends Component {
                   xAxisPadding={xAxisPadding}
                   grpColorScale={grpColorScale}
                   colName={colName}
+                  units={units}
                   xAxisHeight={xAxisHeight}/>
               </When>
               <Otherwise>

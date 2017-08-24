@@ -85,10 +85,7 @@ class ChartExperimentalSubTitle extends Component {
     }else if (rollupBy ===  'other'){
      return   "Rolling Up Categories with Small Values as Other"
     }
-    console.log("in here")
-    console.log(rollupBy)
     if(typeof rollup === 'undefined' && typeof chartData !== 'undefined' ){
-        console.log("in here again w")
         if(chartData.length > 12 && chartType === 'bar'){
          return "Rolling Up Categories with Small Values as Other"
       }

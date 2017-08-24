@@ -34,8 +34,6 @@ export const Transforms = {
 // TODO - break into smaller functions
 
 function constructQueryTextCategories (state) {
-  //console.log("****Constructing a column props****")
-  //let query = selectedField
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
   let id = state.metadata.dataId || state.metadata.id
@@ -47,8 +45,6 @@ function constructQueryTextCategories (state) {
       .group('category')
       .order(orderBy)
   query = query.limit(10)
-  //console.log(query.getURL())
-  //console.log("***")
   return query.getURL()
 }
 
@@ -497,9 +493,6 @@ function transformTextCategoryData(json, state){
 }
 function transformQueryData (json, state) {
   let rollupBy, domainMax
-  //if(state.chart.chartType == 'histogram'){
-  //  console.log(query)
-  //}
   let { query } = state
   let groupKeys = []
   if (query.groupBy && json.length > 0) {
@@ -557,7 +550,6 @@ function transformQueryData (json, state) {
   if(groupKeys.length > 0){
     isGroupBy = true
   }
-  //console.log(isGroupBy)
   domainMax = getMaxDomain (json, isGroupBy, state.chart.chartType)
   if (rollupBy === 'other') {
         json = transformOthers(json, domainMax, isGroupBy )
