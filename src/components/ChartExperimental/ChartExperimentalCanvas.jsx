@@ -101,6 +101,7 @@ class ChartExperimentalCanvas extends Component {
       'money': '#de93c2',
       'other': '#E6FF2E'
     }
+
     const groupByColorIndex = {
       'text': {'start': '#31c4ed', 'end': '#0000ff'},
       'date': {'start': '#204c39', 'end': '#83F52C'},
@@ -110,6 +111,8 @@ class ChartExperimentalCanvas extends Component {
       'double': {'start': '#c71585', 'end': '#ffc0cb'},
       'money': {'start': '#c71585', 'end': '#ffc0cb'}
     }
+
+    /*
     const legendStyle = {
       color: '#666',
       display: 'block',
@@ -121,12 +124,21 @@ class ChartExperimentalCanvas extends Component {
       paddingBottom:'1%',
       wordBreak: 'break-all',
       textAlign: 'left'
-    }
+    }*/
+
     const xAxisHeight = 100
     const yAxisWidth = 70
     let w = this.state.width - (chartMargin.left + chartMargin.right)
     let h = this.state.height - (chartMargin.top + chartMargin.bottom)
     let fillColor, valueTickStyle, grpColorScale
+
+    const legendStyle = {
+      color: '#666',
+      maxWidth: '200px',
+      paddingLeft: '10px',
+      height: h,
+      overflowY: 'scroll'
+    }
 
     if (domainMax > 0) {
       valueTickStyle = this.setFontSizeTicks(domainMax)

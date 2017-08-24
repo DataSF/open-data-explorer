@@ -33,6 +33,7 @@ class ChartExperimentalAreaStuff extends Component {
       }
     }
   }
+  /*
   setLegendStyleTop(areas, legendStyle){
     if(areas){
       if(areas.length <= 20){
@@ -49,11 +50,12 @@ class ChartExperimentalAreaStuff extends Component {
       }
     }
     return legendStyle
-  }
+  }*/
   render () {
     let {h, w, xAxisPadding, xAxisInterval, isGroupBy, margin, yAxisWidth, units, groupKeys, fillColor, chartData, grpColorScale, valTickFormater, xAxisHeight, legendStyle, colName, valueAxisTickLst, valueTickStyle} = this.props
     let areas = this.makeAreas(groupKeys, grpColorScale, units)
-    legendStyle = this.setLegendStyleTop(areas, legendStyle)
+    //legendStyle = this.setLegendStyleTop(areas, legendStyle)
+    legendStyle.paddingLeft = '-10px'
     return (
       <Choose>
         <When condition={chartData.length > 0}>
@@ -62,23 +64,21 @@ class ChartExperimentalAreaStuff extends Component {
             <AreaChart
               width={w}
               height={h}
-              data={chartData}
-              margin={margin}>
+              data={chartData}>
               <XAxis
                 dataKey='key'
                 height={xAxisHeight}
                 interval={xAxisInterval}
                 type={'category'}
                 tickSize={4}
-                label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} chartType={'area'} />}
-                //label={colName}
-                padding={xAxisPadding}/>
+                padding={{left: 10, right: 10}}
+                label={colName}/>
               <YAxis
-                style={valueTickStyle}
                 width={yAxisWidth}
                 domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
                 ticks={valueAxisTickLst}
                 tickFormatter={valTickFormater}
+                tickSize={3}
                 type={'number'}
                 label={<CustomYaxisLabel val={'Number of ' + units} h={h} chartType={'area'} />} />
               <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
@@ -96,24 +96,25 @@ class ChartExperimentalAreaStuff extends Component {
               width={w}
               height={h}
               data={chartData}
-              margin={margin}>
+              margin={{left: 15, bottom: 5}}>
               <XAxis
                 dataKey={'label'}
                 type={'category'}
                 interval={xAxisInterval}
+                padding={{left: 10, right: 10}}
                 height={xAxisHeight}
                 tickSize={4}
-                padding={xAxisPadding}
-                label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={areas.length} chartType={'area'} />} />
+                label={colName}/>
               <YAxis
                 tickFormatter={valTickFormater}
                 domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
+                tickSize={3}
                 ticks={valueAxisTickLst}
                 type={'number'}
-                label={<CustomYaxisLabel val={'Number of ' + units} h={h}   chartType={'area'}/>} />
+                label={<CustomYaxisLabel val={'Number of ' + units} h={h} chartType={'area'}/>} />
               <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
               <Tooltip />
-              <Legend wrapperStyle={legendStyle} />
+              <Legend layout='vertical' verticalAlign='top' align='right' wrapperStyle={legendStyle} />
               {areas}
             </AreaChart>
           </When>
@@ -132,7 +133,6 @@ ChartExperimentalAreaStuff.propTypes = {
   isGroupBy: PropTypes.bool,
   margin: PropTypes.object,
   rowLabel: PropTypes.string,
-  units: PropTypes.string,
   groupKeys: PropTypes.array,
   fillColor: PropTypes.string
 }
