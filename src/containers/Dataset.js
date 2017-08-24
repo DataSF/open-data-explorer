@@ -14,12 +14,23 @@ class Dataset extends Component {
     // to capture height of sub-component
     this.state = {
       frontMatterHeight: 50,
-      topOffset: 160
+      topOffset: 160,
+      chartTitleHeight: 35
     }
+
+    this._calculateViewport = this._calculateViewport.bind(this)
   }
 
   componentWillMount () {
     this.props.onLoad()
+  }
+
+  componentDidMount () {
+    window.addEventListener('resize', this._calculateViewport)
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('resize', this._calculateViewport)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -29,22 +40,31 @@ class Dataset extends Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    // TODO: may be more foolproof to get this by ref
     let height = document.getElementById('DatasetFrontmatter') ? document.getElementById('DatasetFrontmatter').clientHeight : prevState.frontMatterHeight
+    let chartTitleHeight = document.getElementsByClassName('Chart__tile')[0] ? document.getElementsByClassName('Chart__tile')[0].clientHeight : prevState.chartTitleHeight
     let viewportHeight = window.innerHeight
-    if (prevState.frontMatterHeight !== height) {
+    if (prevState.frontMatterHeight !== height || prevState.chartTitleHeight !== chartTitleHeight) {
       this.setState({ 
         frontMatterHeight: height,
         topOffset: height + 45 + 65,
-        viewportHeight
+        viewportHeight,
+        chartTitleHeight,
       })
     }
   }
 
+  _calculateViewport () {
+    console.log('calculateViewport')
+    let viewportHeight = window.innerHeight
+    this.setState({ 
+      viewportHeight
+    })
+  }
+
   render () {
+    console.log('render')
     const { rowsUpdatedAt, name, id, dataId, hasGeo, isFetching, children, onDownload, onOutboundLink, ...other } = this.props
     const childrenWithDatasetProps = React.Children.map(children, (child) => React.cloneElement(child, {...this.state, name}))
-
     return (
       <Loading isFetching={isFetching} hideChildrenWhileLoading={true} type='centered'>
         <section id={'DatasetFrontmatter'}>

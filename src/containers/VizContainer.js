@@ -135,7 +135,7 @@ class VizContainer extends Component {
                           groupKeys={props.groupKeys}
                           filters={props.filters}
                           rowLabel={props.rowLabel}
-                          units={pluralize(props.units)}
+                          units={props.units}
                           selectedColumnDef={props.selectedColumnDef}
                           groupBy={props.groupBy}
                           sumBy={props.sumBy}
@@ -144,7 +144,11 @@ class VizContainer extends Component {
                           colName={props.colName}
                           valueAxisTickLst={props.valueAxisTickLst || []}
                           isDateSelectedCol={props.isDateSelectedCol}
-                          numericCol={props.numericCol} />
+                          numericCol={props.numericCol} 
+                          viewportHeight={props.viewportHeight}
+                          chartTitleHeight={props.chartTitleHeight}
+                          topOffset={props.topOffset}
+                          />
                       </When>
                     </Choose>
                   </Messages>
@@ -179,10 +183,7 @@ VizContainer.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  //console.log("*****state***")
-  //console.log(state)
-  //console.log("******ownProps****")
-  //console.log(ownProps)
+  console.log(ownProps)
   const { metadata, chart, columnProps, query, messages } = state
   let colName = ''
   let selectedColumnDef = getSelectedColumnDef(state)
@@ -195,18 +196,20 @@ const mapStateToProps = (state, ownProps) => {
   const embedCode = '<iframe src="' + embedLink + '" width="100%" height="400" allowfullscreen frameborder="0"></iframe>'
   const exclude = query.filters ? Object.keys(query.filters) : []
   let units = query.sumBy ? columnProps.columns[query.sumBy].name : metadata.rowLabel
+  units = typeof units === 'string' ? pluralize(units) : units
   let isGroupBy = isGroupByz(chart.groupKeys)
   if (selectedColumnDef) {
     colName = selectedColumnDef.name
   }
   let chartData = chart.chartData || []
   let valueAxisTickLst = roundAxisZeros(chart.domainMax, NUMBEROFTICKSY, MAXPOWEROFT10) || []
-  console.log(roundAxisZeros(chart.domainMax, NUMBEROFTICKSY, MAXPOWEROFT10))
   return {
     props: {
       name: ownProps.name,
       frontMatterHeight: ownProps.frontMatterHeight,
       topOffset: ownProps.topOffset,
+      viewportHeight: ownProps.viewportHeight,
+      chartTitleHeight: ownProps.chartTitleHeight,
       id,
       embedCode,
       messages,

@@ -73,7 +73,7 @@ class ChartExperimentalHistogramStuff extends Component {
           ticks={valueAxisTickLstX}
           tickSize={3}
           domain={[0, (valueAxisTickLstX[valueAxisTickLstX.length-1]* 1.05)]}
-          label={<CustomXaxisLabel val={'Value of ' + colName} isGroupBy={false} numOfGroups={0} />} />
+          label={'Value of ' + colName} />
         <YAxis
           type={'number'}
           width={yAxisWidth}

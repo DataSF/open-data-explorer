@@ -154,14 +154,14 @@ class ChartExperimentalBarStuff extends Component {
                   //padding={xpadding}
                   tickSize={4}
                   domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
-                  label={<CustomXaxisLabel val={'Number of ' + units} isGroupBy={isGroupBy} numOfGrps={0} />}
+                  label={'Number of ' + units}
                   height={xAxisHeight} />
                 <YAxis
                   dataKey={'key'}
                   label={<CustomYaxisLabel val={colName} h={h} />}
                   type='category'
                   tickSize={3}
-                  tick={< CustomKeyAxisTick />}
+                  tick={<CustomKeyAxisTick />}
                   width={yAxisWidth} />
                 <CartesianGrid stroke='#eee' strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
                 <Tooltip />
@@ -209,7 +209,7 @@ class ChartExperimentalBarStuff extends Component {
                   height={xAxisHeight}
                   domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
                   type={'number'}
-                  label={<CustomXaxisLabel val={'Number of ' + units} isGroupBy={isGroupBy} numOfGrps={bars.length} />} />
+                  label={'Number of ' + units} />
                 <YAxis
                   dataKey={'label'}
                   width={yAxisWidth}

@@ -62,14 +62,14 @@ class ChartExperimentalCanvas extends Component {
     let thisChart = {
       chartData: this.props.chartData,
       chartType: this.props.chartType,
-      height: this.state.height,
+      height: this.props.viewportHeight,
       width: this.state.width,
       chartDataLen:  nextChartLen
     }
     let nextChart = {
       chartData: nextProps.chartData,
       chartType: nextProps.chartType,
-      height: nextState.height,
+      height: nextProps.viewportHeight,
       width: nextState.width,
       chartDataLen: thisChartLen
     }
@@ -86,7 +86,7 @@ class ChartExperimentalCanvas extends Component {
 
 
   render () {
-    let {rowLabel, units, selectedColumnDef, groupKeys, chartData, chartType, isFetching, isGroupBy, isDateSelectedCol, domainMax, colName, valueAxisTickLst, xAxisInterval, freqs, yTickCnt, xTickCnt, maxPowerOf10} = this.props
+    let {rowLabel, units, viewportHeight, chartTitleHeight, topOffset, selectedColumnDef, groupKeys, chartData, chartType, isFetching, isGroupBy, isDateSelectedCol, domainMax, colName, valueAxisTickLst, xAxisInterval, freqs, yTickCnt, xTickCnt, maxPowerOf10} = this.props
     const formatValue = d3.format('0,000')
     const valTickFormater = function (d) { return formatValue(d) }
     const xAxisPadding = { left: 30, right: 30 }
@@ -125,11 +125,11 @@ class ChartExperimentalCanvas extends Component {
       wordBreak: 'break-all',
       textAlign: 'left'
     }*/
-
+    console.log(viewportHeight)
     const xAxisHeight = 100
     const yAxisWidth = 70
     let w = this.state.width - (chartMargin.left + chartMargin.right)
-    let h = this.state.height - (chartMargin.top + chartMargin.bottom)
+    let h = viewportHeight - (chartMargin.top + chartMargin.bottom) - topOffset - chartTitleHeight - 50
     let fillColor, valueTickStyle, grpColorScale
 
     const legendStyle = {
