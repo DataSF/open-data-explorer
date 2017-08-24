@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import d3 from 'd3'
 import { XAxis, BarChart, YAxis, CartesianGrid, Bar, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
-import CustomXaxisLabel from './CustomXaxisLabel'
 import CustomKeyAxisTick from './CustomKeyAxisTick'
 
 class ChartExperimentalBarStuff extends Component {
@@ -71,10 +70,9 @@ class ChartExperimentalBarStuff extends Component {
     return legendStyle
   }*/
   render () {
-    let {h, w, xAxisInterval, xAxisPadding, isGroupBy, rowLabel, units, groupKeys, fillColor, chartData, valTickFormater, grpColorScale, colName, isDateSelectedCol, legendStyle, xAxisHeight, yAxisWidth, valueAxisTickLst} = this.props
+    let {h, w, xAxisInterval, isGroupBy, rowLabel, units, groupKeys, fillColor, chartData, valTickFormater, grpColorScale, colName, isDateSelectedCol, legendStyle, xAxisHeight, yAxisWidth, valueAxisTickLst} = this.props
     let bars = this.makeBars(groupKeys, grpColorScale, rowLabel)
     let chartProperties = this.getChartProperties(chartData)
-    let xpadding = {bottom: 300}
     //const barLabelStyle = { fill: '#133140', fontSize: '15px', paddingBottom:'15px'}
     //legendStyle = this.setLegendStyleTop(bars, legendStyle)
     return (

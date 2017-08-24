@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import d3 from 'd3'
 import { XAxis, AreaChart, YAxis, CartesianGrid, Area, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
-import CustomXaxisLabel from './CustomXaxisLabel'
 
 class ChartExperimentalAreaStuff extends Component {
 
@@ -52,7 +51,7 @@ class ChartExperimentalAreaStuff extends Component {
     return legendStyle
   }*/
   render () {
-    let {h, w, xAxisPadding, xAxisInterval, isGroupBy, margin, yAxisWidth, units, groupKeys, fillColor, chartData, grpColorScale, valTickFormater, xAxisHeight, legendStyle, colName, valueAxisTickLst, valueTickStyle} = this.props
+    let {h, w, xAxisInterval, isGroupBy, yAxisWidth, units, groupKeys, fillColor, chartData, grpColorScale, valTickFormater, xAxisHeight, legendStyle, colName, valueAxisTickLst} = this.props
     let areas = this.makeAreas(groupKeys, grpColorScale, units)
     //legendStyle = this.setLegendStyleTop(areas, legendStyle)
     legendStyle.paddingLeft = '-10px'

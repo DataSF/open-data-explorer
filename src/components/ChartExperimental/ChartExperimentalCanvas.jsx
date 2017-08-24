@@ -94,7 +94,7 @@ class ChartExperimentalCanvas extends Component {
 
 
   render () {
-    let {rowLabel, units, viewportHeight, chartTitleHeight, topOffset, selectedColumnDef, groupKeys, chartData, chartType, isFetching, isGroupBy, isDateSelectedCol, domainMax, colName, valueAxisTickLst, xAxisInterval, freqs, yTickCnt, xTickCnt, maxPowerOf10} = this.props
+    let {rowLabel, units, viewportHeight, topOffset, selectedColumnDef, groupKeys, chartData, chartType, isFetching, isGroupBy, isDateSelectedCol, domainMax, colName, valueAxisTickLst, xAxisInterval, freqs, yTickCnt, xTickCnt, maxPowerOf10} = this.props
     const formatValue = d3.format('0,000')
     const valTickFormater = function (d) { return formatValue(d) }
     const xAxisPadding = { left: 30, right: 30 }

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import d3 from 'd3'
 import { XAxis, LineChart, YAxis, CartesianGrid, Line, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
-import CustomXaxisLabel from './CustomXaxisLabel'
 class ChartExperimentalLineStuff extends Component {
 
 
@@ -53,7 +52,7 @@ class ChartExperimentalLineStuff extends Component {
   }*/
 
   render () {
-    let {h, w, isGroupBy, yAxisWidth, valTickFormater, margin, units, groupKeys, fillColor, chartData, xAxisPadding, xAxisInterval, colName, legendStyle, xAxisHeight, valueAxisTickLst} = this.props
+    let {h, w, isGroupBy, yAxisWidth, valTickFormater, units, groupKeys, fillColor, chartData, xAxisPadding, xAxisInterval, colName, legendStyle, xAxisHeight, valueAxisTickLst} = this.props
     let lines = this.makeLines(groupKeys, units)
     let tickMax = valueAxisTickLst[valueAxisTickLst.length-1]
     //legendStyle = this.setLegendStyleTop(lines, legendStyle)
