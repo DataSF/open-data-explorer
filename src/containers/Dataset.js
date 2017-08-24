@@ -14,8 +14,7 @@ class Dataset extends Component {
     // to capture height of sub-component
     this.state = {
       frontMatterHeight: 50,
-      topOffset: 160,
-      chartTitleHeight: 35
+      topOffset: 160
     }
 
     this._calculateViewport = this._calculateViewport.bind(this)
@@ -37,24 +36,23 @@ class Dataset extends Component {
     if (this.props.params.id !== nextProps.params.id) {
       nextProps.onLoad()
     }
+    console.log('props received')
   }
 
   componentDidUpdate (prevProps, prevState) {
+    console.log('updated component')
     let height = document.getElementById('DatasetFrontmatter') ? document.getElementById('DatasetFrontmatter').clientHeight : prevState.frontMatterHeight
-    let chartTitleHeight = document.getElementsByClassName('Chart__tile')[0] ? document.getElementsByClassName('Chart__tile')[0].clientHeight : prevState.chartTitleHeight
     let viewportHeight = window.innerHeight
-    if (prevState.frontMatterHeight !== height || prevState.chartTitleHeight !== chartTitleHeight) {
+    if (prevState.frontMatterHeight !== height) {
       this.setState({ 
         frontMatterHeight: height,
         topOffset: height + 45 + 65,
-        viewportHeight,
-        chartTitleHeight,
+        viewportHeight
       })
     }
   }
 
   _calculateViewport () {
-    console.log('calculateViewport')
     let viewportHeight = window.innerHeight
     this.setState({ 
       viewportHeight
@@ -62,7 +60,6 @@ class Dataset extends Component {
   }
 
   render () {
-    console.log('render')
     const { rowsUpdatedAt, name, id, dataId, hasGeo, isFetching, children, onDownload, onOutboundLink, ...other } = this.props
     const childrenWithDatasetProps = React.Children.map(children, (child) => React.cloneElement(child, {...this.state, name}))
     return (

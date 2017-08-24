@@ -22,6 +22,7 @@ class ChartExperimentalCanvas extends Component {
 
     this._isMounted = false
     this._updateSize = this._updateSize.bind(this)
+    this._getChartTitleHeight = this._getChartTitleHeight.bind(this)
   }
 
   componentDidMount () {
@@ -47,6 +48,13 @@ class ChartExperimentalCanvas extends Component {
       }
     }
   }
+
+  _getChartTitleHeight () {
+    // TODO: get by ref
+    let chartTitleHeight = document.getElementsByClassName('Chart__title')[0] ? document.getElementsByClassName('Chart__title')[0].clientHeight : 35
+    return chartTitleHeight
+  }
+
   shouldComponentUpdate (nextProps, nextState) {
     /*
     This component needs to be refactored to handle resizing on a container, for now, we'll update the component always
@@ -129,7 +137,7 @@ class ChartExperimentalCanvas extends Component {
     const xAxisHeight = 100
     const yAxisWidth = 70
     let w = this.state.width - (chartMargin.left + chartMargin.right)
-    let h = viewportHeight - (chartMargin.top + chartMargin.bottom) - topOffset - chartTitleHeight - 50
+    let h = viewportHeight - (chartMargin.top + chartMargin.bottom) - topOffset - this._getChartTitleHeight() - 50
     let fillColor, valueTickStyle, grpColorScale
 
     const legendStyle = {
