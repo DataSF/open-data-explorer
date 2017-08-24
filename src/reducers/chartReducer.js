@@ -47,8 +47,6 @@ function resetState (state, action) {
 }
 
 function changeRollUpBy (state, action) {
-  console.log("***** roll up by option*****")
-  //console.log(action)
   return updateObject(state, {
     rollupBy: action.payload
   })

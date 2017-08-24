@@ -104,7 +104,6 @@ function getRelatedDeparts(json){
   let deptsSorted =  []
 
   sortedDeptsList.forEach(function(dept){
-    console.log(depts)
     let deptItem = {'dept': dept, 'links': depts[dept]}
     deptsSorted.push(deptItem)
   })

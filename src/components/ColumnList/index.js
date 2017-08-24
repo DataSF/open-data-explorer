@@ -47,7 +47,6 @@ const sortColumns = (keys, list, sort) => {
 const ColumnList = ({list, filters, sort}) => {
   filters = filters || []
   sort = sort || 'name'
-  // console.log(list)
   let keys = sortColumns(Object.keys(list), list, sort)
 
   let listItems = keys.map((key, idx) => {

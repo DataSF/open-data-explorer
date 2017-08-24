@@ -91,8 +91,6 @@ class DateRangePicker extends React.Component {
   handleDayClick = day => {
     let {from, to} = this.state
     let range = null
-    console.log(from)
-    console.log(to)
     if (from && to) {
       range = {from: day, to: null, selectedRange: 'Custom'}
       this.setState(range)
@@ -114,7 +112,6 @@ class DateRangePicker extends React.Component {
         [target]: value
       })
     } else if ((ev.type === 'keypress' && ev.key === 'Enter') || ev.type === 'blur') {
-      console.log(ev.type)
       let dateObject = moment(value)
       if(dateObject.isValid()) {
         let dateTarget = target.split('Input')[0]
@@ -160,8 +157,6 @@ class DateRangePicker extends React.Component {
     const { selectedRange, from, to, fromInput, toInput } = this.state
     let fromFormatted = fromInput !== null ? fromInput : moment(from).format('MM/DD/YYYY')
     let toFormatted = toInput !== null ? toInput : (to ? moment(to).format('MM/DD/YYYY') : moment(from).format('MM/DD/YYYY'))
-    console.log(from)
-    console.log(to)
   return (
     <OverlayTrigger
       trigger='click'

@@ -146,9 +146,6 @@ function fetchData (state, isForTable = false) {
 function fetchDataTextFieldCategories (state) {
   let endpoint
   let transform
-  //console.log("(*****state before fetch on categories*****")
-  //console.log(state)
-  ///console.log(state.fieldDetailsProps.selectedField)
   if(state.fieldDetailsProps.selectedField){
     endpoint = Endpoints.QUERYTEXTCATEGORIES(state)
     transform = Transforms.QUERYTEXTCATEGORIES
@@ -535,9 +532,6 @@ export const RELATEDDATASET_FAILURE = 'RELATEDDATASET_FAILURE'
 // Fetches a related datasets from the metadata API.
 // Relies on the custom API middleware defined in ../middleware/api.js.
 function fetchRelatedDatasets (id) {
-  // console.log("** fetching related datasets***")
-  // console.log(fbf)
-  // console.log("********")
   return {
     [CALL_API]: {
       types: [RELATEDDATASET_REQUEST, RELATEDDATASET_SUCCESS, RELATEDDATASET_FAILURE],
