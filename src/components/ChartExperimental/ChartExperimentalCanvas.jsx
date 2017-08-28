@@ -133,7 +133,6 @@ class ChartExperimentalCanvas extends Component {
       wordBreak: 'break-all',
       textAlign: 'left'
     }*/
-    console.log(viewportHeight)
     const xAxisHeight = 100
     const yAxisWidth = 70
     let w = this.state.width - (chartMargin.left + chartMargin.right)

@@ -32,10 +32,10 @@ class VizContainer extends Component {
     let { queryString } = this.props.props
     let { loadQueryStateFromString } = this.props.actions
 
-    if (queryString) {
+    if (queryString.selectedColumn) {
       setTimeout(() => {
         loadQueryStateFromString(queryString)
-      }, 1000)
+      }, 700)
     }
   }
 
@@ -183,7 +183,6 @@ VizContainer.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(ownProps)
   const { metadata, chart, columnProps, query, messages } = state
   let colName = ''
   let selectedColumnDef = getSelectedColumnDef(state)
@@ -218,7 +217,7 @@ const mapStateToProps = (state, ownProps) => {
       isGroupBy: isGroupBy,
       isDateSelectedCol: isColTypeTest(selectedColumnDef, 'date'),
       supportedChartTypes: getSupportedChartTypes(state),
-      queryString: ownProps.location.query.q,
+      queryString: ownProps.location.query,
       chartType: chartType,
       chartData: chartData,
       rollupBy: chart.rollupBy,

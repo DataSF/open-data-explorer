@@ -36,11 +36,9 @@ class Dataset extends Component {
     if (this.props.params.id !== nextProps.params.id) {
       nextProps.onLoad()
     }
-    console.log('props received')
   }
 
   componentDidUpdate (prevProps, prevState) {
-    console.log('updated component')
     let height = document.getElementById('DatasetFrontmatter') ? document.getElementById('DatasetFrontmatter').clientHeight : prevState.frontMatterHeight
     let viewportHeight = window.innerHeight
     if (prevState.frontMatterHeight !== height) {
