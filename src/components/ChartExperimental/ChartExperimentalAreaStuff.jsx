@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import d3 from 'd3'
+//import d3 from 'd3'
 import { XAxis, AreaChart, YAxis, CartesianGrid, Area, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
 
 class ChartExperimentalAreaStuff extends Component {
 
-  makeAreas (groupKeys, grpColorScale, units) {
+  makeAreas (groupKeys,  units, chartColorsGrpBy) {
     let areas = []
     if (groupKeys) {
       if (groupKeys.length > 1) {
-        let colorScale = d3.scale.linear().domain([1, groupKeys.length])
-          .interpolate(d3.interpolateHcl)
-          .range([d3.rgb(grpColorScale['start']), d3.rgb(grpColorScale['end'])])
+        //let colorScale = d3.scale.linear().domain([1, groupKeys.length])
+        //  .interpolate(d3.interpolateHcl)
+        //  .range([d3.rgb(grpColorScale['start']), d3.rgb(grpColorScale['end'])])
         areas = groupKeys.map(function (i) {
           if (i) {
             let colorIndex = groupKeys.indexOf(i)
@@ -23,8 +23,8 @@ class ChartExperimentalAreaStuff extends Component {
                 stackId='i'
                 key={i}
                 unit={" " + units}
-                stroke={colorScale('colorIndex')}
-                fill={colorScale(colorIndex)} />)
+                stroke={chartColorsGrpBy[colorIndex]}
+                fill={chartColorsGrpBy[colorIndex]} />)
           }
           return false
         })
@@ -51,8 +51,8 @@ class ChartExperimentalAreaStuff extends Component {
     return legendStyle
   }*/
   render () {
-    let {h, w, xAxisInterval, isGroupBy, yAxisWidth, units, groupKeys, fillColor, chartData, grpColorScale, valTickFormater, xAxisHeight, legendStyle, colName, valueAxisTickLst} = this.props
-    let areas = this.makeAreas(groupKeys, grpColorScale, units)
+    let {h, w, xAxisInterval, isGroupBy, yAxisWidth, units, groupKeys, fillColor, chartData, chartColorsGrpBy, valTickFormater, xAxisHeight, legendStyle, colName, valueAxisTickLst} = this.props
+    let areas = this.makeAreas(groupKeys, units, chartColorsGrpBy)
     //legendStyle = this.setLegendStyleTop(areas, legendStyle)
     legendStyle.paddingLeft = '-10px'
     return (

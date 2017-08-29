@@ -11,6 +11,7 @@ import ChartExperimentalAreaStuff from './ChartExperimentalAreaStuff'
 import ChartExperimentalHistogramStuff from './ChartExperimentalHistogramStuff'
 import ReactDOM from 'react-dom'
 
+
 class ChartExperimentalCanvas extends Component {
   constructor(props) {
     super(props)
@@ -60,29 +61,41 @@ class ChartExperimentalCanvas extends Component {
     This component needs to be refactored to handle resizing on a container, for now, we'll update the component always
     We should also not rerender the char
     */
-    let thisChartLen, nextChartLen = 0
+    let thisChartLen, nextChartLen, nextchartColorsGrpByLen, thischartColorsGrpByLen    = 0
     if(Object.keys(this.props).indexOf('chartData') > -1) {
       thisChartLen = this.props.chartData.length
     }
     if(Object.keys(nextProps).indexOf('chartData') > -1) {
       nextChartLen = nextProps.chartData.length
     }
+    if(Object.keys(nextProps).indexOf('chartColorsGrpBy') > -1) {
+      nextchartColorsGrpByLen = nextProps.chartColorsGrpBy.length
+    }
+    if(Object.keys(this.props).indexOf('chartColorsGrpBy') > -1) {
+      thischartColorsGrpByLen = this.props.chartColorsGrpBy.length
+    }
     let thisChart = {
       chartData: this.props.chartData,
       chartType: this.props.chartType,
       height: this.props.viewportHeight,
       width: this.state.width,
-      chartDataLen:  nextChartLen
+      chartColor: this.props.chartColor,
+      chartDataLen: nextChartLen,
+      chartColorsGrpBy: thischartColorsGrpByLen,
     }
     let nextChart = {
-      chartData: nextProps.chartData,
       chartType: nextProps.chartType,
+      chartData: nextProps.chartData,
       height: nextProps.viewportHeight,
       width: nextState.width,
-      chartDataLen: thisChartLen
+      chartColor: nextProps.chartColor,
+      chartColorsGrpBy: nextchartColorsGrpByLen,
+      chartDataLen: thisChartLen,
     }
     return ( (!isEqual(thisChart, nextChart)) && !nextProps.isFetching)
   }
+
+
 
   setFontSizeTicks(domainMax){
     if(String(Math.round(domainMax,0)).length >= 6) {
@@ -93,13 +106,14 @@ class ChartExperimentalCanvas extends Component {
 
 
 
+
   render () {
-    let {rowLabel, units, viewportHeight, topOffset, selectedColumnDef, groupKeys, chartData, chartType, isFetching, isGroupBy, isDateSelectedCol, domainMax, colName, valueAxisTickLst, xAxisInterval, freqs, yTickCnt, xTickCnt, maxPowerOf10} = this.props
+    let {rowLabel, units, viewportHeight, topOffset, selectedColumnDef, groupKeys, chartData, chartType, isFetching, isGroupBy, isDateSelectedCol, domainMax, colName, valueAxisTickLst, xAxisInterval, freqs, yTickCnt, xTickCnt, maxPowerOf10, chartColor, chartColorsGrpBy} = this.props
     const formatValue = d3.format('0,000')
     const valTickFormater = function (d) { return formatValue(d) }
     const xAxisPadding = { left: 30, right: 30 }
     const chartMargin = {top: 1, right: 5, bottom: 1, left: 5}
-    const fillColorIndex = {
+    /* const fillColorIndex = {
       'text': '#93c2de',
       'date': '#93deaf',
       'calendar_date': '#93deaf',
@@ -120,7 +134,6 @@ class ChartExperimentalCanvas extends Component {
       'money': {'start': '#c71585', 'end': '#ffc0cb'}
     }
 
-    /*
     const legendStyle = {
       color: '#666',
       display: 'block',
@@ -133,12 +146,12 @@ class ChartExperimentalCanvas extends Component {
       wordBreak: 'break-all',
       textAlign: 'left'
     }*/
-    console.log(viewportHeight)
     const xAxisHeight = 100
     const yAxisWidth = 70
     let w = this.state.width - (chartMargin.left + chartMargin.right)
     let h = viewportHeight - (chartMargin.top + chartMargin.bottom) - topOffset - this._getChartTitleHeight() - 50
-    let fillColor, valueTickStyle, grpColorScale
+    let fillColor, valueTickStyle
+    //grpColorScale
 
     const legendStyle = {
       color: '#666',
@@ -152,8 +165,7 @@ class ChartExperimentalCanvas extends Component {
       valueTickStyle = this.setFontSizeTicks(domainMax)
     }
     if (selectedColumnDef) {
-      fillColor = fillColorIndex[selectedColumnDef.type]
-      grpColorScale = groupByColorIndex[selectedColumnDef.type]
+      fillColor = chartColor
     }
 
     let minTickGap = 200
@@ -204,7 +216,7 @@ class ChartExperimentalCanvas extends Component {
                   colType={selectedColumnDef.type}
                   colName={colName}
                   xAxisInterval={xAxisInterval}
-                  grpColorScale={grpColorScale}
+                  chartColorsGrpBy={chartColorsGrpBy}
                   isDateSelectedCol={isDateSelectedCol}
                   xAxisHeight={xAxisHeight}
                   legendStyle={legendStyle}/>
@@ -231,7 +243,7 @@ class ChartExperimentalCanvas extends Component {
                   legendStyle={legendStyle}
                   valTickFormater={valTickFormater}
                   xAxisPadding={xAxisPadding}
-                  grpColorScale={grpColorScale} />
+                  chartColorsGrpBy={chartColorsGrpBy} />
               </When>
               <When condition={chartType === 'area'}>
                 <ChartExperimentalAreaStuff
@@ -253,7 +265,7 @@ class ChartExperimentalCanvas extends Component {
                   valueTickStyle={valueTickStyle}
                   xTickCnt={xTickCnt}
                   xAxisPadding={xAxisPadding}
-                  grpColorScale={grpColorScale}
+                  chartColorsGrpBy={chartColorsGrpBy}
                   colName={colName}
                   units={units}
                   xAxisHeight={xAxisHeight}/>

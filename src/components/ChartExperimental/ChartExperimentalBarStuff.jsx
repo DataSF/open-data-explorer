@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import d3 from 'd3'
+//import d3 from 'd3'
 import { XAxis, BarChart, YAxis, CartesianGrid, Bar, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
 import CustomKeyAxisTick from './CustomKeyAxisTick'
@@ -9,13 +9,13 @@ class ChartExperimentalBarStuff extends Component {
 //  // unit={" " + rowLabel}
 //  label={barLabelStyle}
 
-  makeBars (groupKeys, grpColorScale, rowLabel) {
+  makeBars (groupKeys, rowLabel, chartColorsGrpBy) {
     let bars = []
     if (groupKeys) {
       if (groupKeys.length > 1) {
-        let colorScale = d3.scale.linear().domain([1, groupKeys.length])
-          .interpolate(d3.interpolateHcl)
-          .range([d3.rgb(grpColorScale['start']), d3.rgb(grpColorScale['end'])])
+        //let colorScale = d3.scale.linear().domain([1, groupKeys.length])
+        //  .interpolate(d3.interpolateHcl)
+        //  .range([d3.rgb(grpColorScale['start']), d3.rgb(grpColorScale['end'])])
         bars = groupKeys.map(function (i) {
           if (i) {
             let colorIndex = groupKeys.indexOf(i)
@@ -25,7 +25,7 @@ class ChartExperimentalBarStuff extends Component {
                 stackId='a'
                 key={i}
                 // unit={" " + rowLabel}
-                fill={colorScale(colorIndex)} />)
+                fill={chartColorsGrpBy[colorIndex]} />)
           }
           return false
         })
@@ -70,8 +70,8 @@ class ChartExperimentalBarStuff extends Component {
     return legendStyle
   }*/
   render () {
-    let {h, w, xAxisInterval, isGroupBy, rowLabel, units, groupKeys, fillColor, chartData, valTickFormater, grpColorScale, colName, isDateSelectedCol, legendStyle, xAxisHeight, yAxisWidth, valueAxisTickLst} = this.props
-    let bars = this.makeBars(groupKeys, grpColorScale, rowLabel)
+    let {h, w, xAxisInterval, isGroupBy, rowLabel, units, groupKeys, fillColor, chartData, valTickFormater, chartColorsGrpBy, colName, isDateSelectedCol, legendStyle, xAxisHeight, yAxisWidth, valueAxisTickLst} = this.props
+    let bars = this.makeBars(groupKeys, rowLabel, chartColorsGrpBy)
     let chartProperties = this.getChartProperties(chartData)
     //const barLabelStyle = { fill: '#133140', fontSize: '15px', paddingBottom:'15px'}
     //legendStyle = this.setLegendStyleTop(bars, legendStyle)

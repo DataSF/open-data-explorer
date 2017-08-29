@@ -20,3 +20,28 @@ export const BASE_HREF = APP_URLS[context]
 export const NUMBEROFTICKSY = 10
 export const MAXPOWEROFT10 = 20
 export const NUMBEROFTICKSX = 6
+export const GRPBYCOLORSBASE = ['#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#f2c407','#b15928', '#a6cee3','#1f78b4']
+
+export const GRADIATIONFXNS  = {
+      // 'normal': function(chromaColor, step){
+      //   return chromaColor.hex()
+      //},
+      'desaturate': function(chromaColor, step){
+        let color = chromaColor.desaturate(step).hex()
+        return color
+      },
+
+      'saturate': function(chromaColor, step){
+        let color = chromaColor.saturate(step).hex()
+        return color
+      },
+
+      'darken': function(chromaColor, step){
+        let color =  chromaColor.darken(step).hex()
+        return color
+      },
+      'brighten': function(chromaColor, step){
+        let color = chromaColor.brighten(step).hex()
+        return color
+      }
+}

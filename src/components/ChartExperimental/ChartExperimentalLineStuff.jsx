@@ -1,21 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import d3 from 'd3'
+//import d3 from 'd3'
 import { XAxis, LineChart, YAxis, CartesianGrid, Line, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
 class ChartExperimentalLineStuff extends Component {
 
 
-  makeLines (groupKeys, units) {
+  makeLines (groupKeys, units, chartColorsGrpBy) {
     let lines = []
-    if (groupKeys && groupKeys.length > 0) {
-      let colorScale = d3.scale.linear().domain([1, groupKeys.length])
-        .interpolate(d3.interpolateHcl)
-        .range([d3.rgb('#007AFF'), d3.rgb('#FFF500')])
-      lines = groupKeys.map(function (i) {
-        if (i) {
-          let colorIndex = groupKeys.indexOf(i)
-          return (
+    if (groupKeys && groupKeys.length > 0){
+      if(chartColorsGrpBy.length > 0) {
+      //let colorScale = d3.scale.linear().domain([1, groupKeys.length])
+      //  .interpolate(d3.interpolateHcl)
+      //  .range([d3.rgb('#007AFF'), d3.rgb('#FFF500')])
+        lines = groupKeys.map(function (i) {
+          if (i) {
+            let colorIndex = groupKeys.indexOf(i)
+            return (
             <Line
               type='linear'
               dataKey={i}
@@ -25,10 +26,11 @@ class ChartExperimentalLineStuff extends Component {
               key={i}
               dot={false}
               isAnimationActive={false}
-              stroke={colorScale(colorIndex)} />)
+              stroke={chartColorsGrpBy[colorIndex]} />)
         }
         return false
       })
+      }
       return lines
     }
   }
@@ -52,9 +54,15 @@ class ChartExperimentalLineStuff extends Component {
   }*/
 
   render () {
-    let {h, w, isGroupBy, yAxisWidth, valTickFormater, units, groupKeys, fillColor, chartData, xAxisPadding, xAxisInterval, colName, legendStyle, xAxisHeight, valueAxisTickLst} = this.props
-    let lines = this.makeLines(groupKeys, units)
+    let {h, w, isGroupBy, yAxisWidth, valTickFormater, units, groupKeys, fillColor, chartData, xAxisPadding, xAxisInterval, colName, legendStyle, xAxisHeight, valueAxisTickLst, chartColorsGrpBy} = this.props
+    if(typeof chartColorsGrpBy === 'undefined'){
+      chartColorsGrpBy = []
+    }
+    let lines = this.makeLines(groupKeys, units,chartColorsGrpBy)
     let tickMax = valueAxisTickLst[valueAxisTickLst.length-1]
+    console.log("****")
+    console.log(chartColorsGrpBy)
+
     //legendStyle = this.setLegendStyleTop(lines, legendStyle)
     return (
       <Choose>

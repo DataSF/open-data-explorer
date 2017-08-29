@@ -9,7 +9,14 @@ const keyMap = {
   [ActionTypes.GROUP_BY]: 'groupBy',
   [ActionTypes.CHANGE_DATEBY]: 'dateBy',
   [ActionTypes.CHANGE_ROLLUPBY]: 'rollupBy',
+  [ActionTypes.CHANGE_CHART_COLOR]: 'changeChartColor',
   [ActionTypes.SELECT_COLUMN]: 'selectedColumn'
+}
+
+function changeChartColor(state, action) {
+  return updateObject(state, {
+    chartColor: action.payload.hex
+  })
 }
 
 function updateQueryKeys (state, action) {
@@ -96,6 +103,7 @@ export const queryReducer = (state = initialState, action) => {
     case ActionTypes.ADD_FILTER: return addFilter(state, action)
     case ActionTypes.REMOVE_FILTER: return removeFilter(state, action)
     case ActionTypes.UPDATE_FILTER: return updateFilter(state, action)
+    case ActionTypes.CHANGE_CHART_COLOR: return changeChartColor(state, action)
     case ActionTypes.UPDATE_FROM_QS: return updateFromQueryString(state, action)
     default:
       return state

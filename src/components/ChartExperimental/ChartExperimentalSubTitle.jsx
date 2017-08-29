@@ -77,24 +77,38 @@ class ChartExperimentalSubTitle extends Component {
         return null
       })
     }
+    return subtitle
+  }
+  rollupOthersSubtitle(rollupBy, subtitle, chartData,  chartType){
+    let msg = null
     if(rollupBy === 'none'){
-      return subtitle
+      return null
     }
-    if(rollupBy ===  'other' && subtitle){
-     return subtitle +  "; Rolling Up Others"
+    if(rollupBy ===  'other' && typeof subtitle !== 'undefined'){
+      msg = 'Rolling Up Others'
     }else if (rollupBy ===  'other'){
-     return   "Rolling Up Categories with Small Values as Other"
+      msg = "Rolling Up Categories with Small Values as Other"
     }
     if(typeof rollup === 'undefined' && typeof chartData !== 'undefined' ){
         if(chartData.length > 12 && chartType === 'bar'){
-         return "Rolling Up Categories with Small Values as Other"
+         msg = 'Rolling Up Categories with Small Values as Other'
       }
     }
-    return subtitle
+    if(msg !== null){
+      return <div> {msg} </div>
+    }
+    return null
   }
   render () {
     let {filters, columns, rollupBy, chartData, chartType} = this.props
     let subtitleStuff = this.buildSubTitle(filters, columns, rollupBy, chartData, chartType)
+    let rollupBySub = this.rollupOthersSubtitle(rollupBy, subtitleStuff, chartData,  chartType)
+    if( typeof subtitleStuff !== 'undefined' && rollupBySub){
+      subtitleStuff.push(rollupBySub)
+    }else{
+      subtitleStuff = rollupBySub
+    }
+
     return (
       <div className={'Chart__sub-title'}>{subtitleStuff}</div>
     )
