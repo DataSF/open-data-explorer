@@ -3,8 +3,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns, getSupportedChartTypes, isGroupByz, setXAxisTickInterval, explodeFrequencies, getFilterableColumns } from '../reducers'
-import { showHideModal, selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy, loadQueryStateFromString, changeRollupBy } from '../actions'
+import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns, getSupportedChartTypes, isGroupByz, setXAxisTickInterval, explodeFrequencies, getFilterableColumns, setGroupByColorScale } from '../reducers'
+import { showHideModal, selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy, loadQueryStateFromString, changeRollupBy, changeChartColor } from '../actions'
 import BlankChart from '../components/ChartExperimental/BlankChart'
 import ConditionalOnSelect from '../components/ConditionalOnSelect'
 import ChartExperimentalCanvas from '../components/ChartExperimental/ChartExperimentalCanvas'
@@ -59,6 +59,8 @@ class VizContainer extends Component {
               <ChartTypePicker
                 chartTypes={props.supportedChartTypes}
                 chartType={props.chartType}
+                isGroupBy={props.isGroupBy}
+                onChangeChartColor={actions.changeChartColor}
                 onChange={actions.handleChartType} />
               <FilterOptions
                 filters={props.filters}
@@ -123,6 +125,8 @@ class VizContainer extends Component {
                     <Choose>
                       <When condition={props.chartData}>
                         <ChartExperimentalCanvas
+                          chartColor={props.chartColor}
+                          chartColorsGrpBy={props.chartColorsGrpBy}
                           chartData={props.chartData || []}
                           chartType={props.chartType}
                           isFetching={props.isFetching}
@@ -144,7 +148,7 @@ class VizContainer extends Component {
                           colName={props.colName}
                           valueAxisTickLst={props.valueAxisTickLst || []}
                           isDateSelectedCol={props.isDateSelectedCol}
-                          numericCol={props.numericCol} 
+                          numericCol={props.numericCol}
                           viewportHeight={props.viewportHeight}
                           chartTitleHeight={props.chartTitleHeight}
                           topOffset={props.topOffset}
@@ -183,7 +187,6 @@ VizContainer.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(ownProps)
   const { metadata, chart, columnProps, query, messages } = state
   let colName = ''
   let selectedColumnDef = getSelectedColumnDef(state)
@@ -202,9 +205,12 @@ const mapStateToProps = (state, ownProps) => {
     colName = selectedColumnDef.name
   }
   let chartData = chart.chartData || []
+  let chartColor =  query.chartColor || '#2196f3'
   let valueAxisTickLst = roundAxisZeros(chart.domainMax, NUMBEROFTICKSY, MAXPOWEROFT10) || []
   return {
     props: {
+      chartColor: query.chartColor || '#2196f3',
+      chartColorsGrpBy: setGroupByColorScale(chartColor, chartData, isGroupBy),
       name: ownProps.name,
       frontMatterHeight: ownProps.frontMatterHeight,
       topOffset: ownProps.topOffset,
@@ -215,7 +221,7 @@ const mapStateToProps = (state, ownProps) => {
       messages,
       numericCol: isColTypeTest(selectedColumnDef, 'number'),
       colName: colName,
-      isGroupBy: isGroupBy,
+      isGroupBy: isGroupByz(chart.groupKeys),
       isDateSelectedCol: isColTypeTest(selectedColumnDef, 'date'),
       supportedChartTypes: getSupportedChartTypes(state),
       queryString: ownProps.location.query.q,
@@ -284,6 +290,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       },
       loadQueryStateFromString: (q) => {
         return dispatch(loadQueryStateFromString(q))
+      },
+      changeChartColor: (chartColor) => {
+        return dispatch(changeChartColor(chartColor))
       },
       showHideModal: () => {
         return dispatch(showHideModal('share'))

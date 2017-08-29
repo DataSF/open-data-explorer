@@ -405,6 +405,17 @@ export function displayFieldProfilesList (displayType) {
   }
 }
 
+
+export const CHANGE_CHART_COLOR = 'CHANGE_CHART_COLOR'
+
+export function changeChartColor (chartColor) {
+  return {
+    type: CHANGE_CHART_COLOR,
+    payload: chartColor
+  }
+}
+
+
 export function removeFilter (key) {
   return (dispatch, getState) => {
     dispatch({
@@ -492,6 +503,9 @@ export function updateSearch (searchState) {
     payload: searchState
   }
 }
+
+
+
 
 export function selectSearchRecord (record) {
   return {

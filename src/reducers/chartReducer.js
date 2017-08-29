@@ -2,8 +2,9 @@ import * as ActionTypes from '../actions'
 import { updateObject, createReducer } from './reducerUtilities'
 import { fillArray, getMaxDomain } from '../helpers'
 // import d3 from 'd3'
+import chroma from 'chroma-js'
 // case reducers
-
+import {GRPBYCOLORSBASE, GRADIATIONFXNS} from '../constants/AppConstants'
 
 function updateData (state, action) {
   if (action.response.query) {
@@ -20,6 +21,9 @@ function updateData (state, action) {
   }
 }
 
+
+
+
 function changeChartType (state, action) {
   if(Object.keys(state).indexOf('groupKeys') > -1 ) {
     if(state.groupKeys.length > 0){
@@ -33,12 +37,12 @@ function changeChartType (state, action) {
       chartType: action.chartType,
       domainMax: getMaxDomain(state.chartData, false, action.chartType)
   })
-
 }
 
 function setDefaultChartType (state, action) {
   return updateObject(state, {
     chartType: action.chartType,
+    chartColor: "#2196f3"
   })
 }
 
@@ -87,7 +91,54 @@ export const isSelectedColDate = (selectedColumnDef) => {
   return false
 }
 
+function setColorSteps(gradiationFxn, step) {
+  let groupColors = GRPBYCOLORSBASE.map(function(color){
+    let cl = chroma(color)
+    let colorItem =  gradiationFxn(cl, step)
+    return colorItem
+  })
+  return groupColors
+}
 
+function makeColors(groupColors, step){
+  Object.keys(GRADIATIONFXNS).forEach(function(gradientFxnKey){
+    let groupColorsStep = setColorSteps(GRADIATIONFXNS[gradientFxnKey], step)
+    groupColors = groupColors.concat(groupColorsStep)
+  })
+  return groupColors
+}
+export const setGroupByColorScale = (chartColor, chartData, isGroupBy) => {
+  let groupColors = GRPBYCOLORSBASE
+  if(chartData.length > 0){
+    if(isGroupBy){
+      if(Object.keys(chartData[0]).length < GRPBYCOLORSBASE.length){
+        return GRPBYCOLORSBASE
+      }else{
+        let step = 1
+        while ( groupColors.length < Object.keys(chartData[0]).length){
+          //console.log(step)
+          //console.log("** here chart data****")
+          //console.log(Object.keys(chartData[0]).length)
+          //console.log("** grp colors****")
+          //console.log(groupColors.length)
+          //console.log("****** here ****")
+          groupColors = groupColors.concat(makeColors(groupColors,step))
+          //console.log("** here chart data 2****")
+          //console.log(Object.keys(chartData[0]).length)
+          //console.log("** grp colors 2****")
+          //console.log(groupColors.length)
+          //console.log("****** here agai ****")
+          step = step + 1
+          //console.log(step)
+        }
+        //console.log("** returning colors***")
+        //console.log(groupColors)
+        return groupColors
+      }
+    }
+  }
+  return []
+}
 
 export const setXAxisTickInterval = (chartData) => {
   let xAxisInterval
@@ -135,7 +186,7 @@ export const chartReducer = createReducer({}, {
   [ActionTypes.DATA_SUCCESS]: updateData,
   [ActionTypes.CHANGE_ROLLUPBY]: changeRollUpBy,
   [ActionTypes.APPLY_CHART_TYPE]: changeChartType,
-  [ActionTypes.SET_DEFAULT_CHARTTYPE]: setDefaultChartType
+  [ActionTypes.SET_DEFAULT_CHARTTYPE]: setDefaultChartType,
 })
 
 export default chartReducer

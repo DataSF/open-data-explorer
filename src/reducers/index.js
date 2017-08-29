@@ -41,7 +41,7 @@ export const getSelectableColumnsDetails = (state, all = true, ignoreTypeFilters
   }
   return fromColumns.getSelectableColumns(modifiedState, state.fieldDetailsProps.selectedField, all, ignoreTypeFilters, [state.fieldDetailsProps.selectedField])
 }
-  
+
 
 export const getSelectedFieldDetails = state =>
   fromFields.getSelectedFieldDetails(state.fieldDetailsProps, state.fieldDetailsProps.selectedField)
@@ -103,7 +103,11 @@ export const setXAxisTickInterval = (chartData) =>
 export const explodeFrequencies = (chartData, chartType) =>
   fromCharts.explodeFrequencies(chartData, chartType)
 
-//export const rollUpOtherBars = (chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax) =>
+export const setGroupByColorScale = (chartColor, chartData, isGroupBy) =>
+  fromCharts.setGroupByColorScale(chartColor, chartData, isGroupBy)
+
+
+//rollUpOtherBars = (chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax) =>
 //  fromCharts.rollUpOtherBars(chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax)
 
 export const rollUpChartData = (query, chart) =>
