@@ -11,7 +11,7 @@ const Navigation = ({ location, pages }) => {
   return (
     <div>
       <div className={'ribbon'}>
-        <Link to={'/about'} className={'ribbonTxt'}>alpha</Link>
+        <Link to={'/about'} className={'ribbonTxt'}>beta</Link>
       </div>
       <nav id={'Navigation'} className={'navbar navbar-default'}>
         <div className={'container'}>
@@ -27,9 +27,6 @@ const Navigation = ({ location, pages }) => {
             </Link>
           </div>
           <div className={'navbar-collapse collapse'}>
-            { showSearch
-              ? <AutoSuggestSearch className={'navbar-form'} />
-              : null }
             <ul className={'nav navbar-nav'}>
               {pages.map(
                   renderNavItem.bind(this)
@@ -40,6 +37,9 @@ const Navigation = ({ location, pages }) => {
                 <MenuItem eventKey={3.2} href={'https://docs.google.com/forms/d/e/1FAIpQLSfLcOX8nrJTz3q07iWzW3MkY1f9NLH3tIFaUTdJ2lxBCYkrbw/viewform?usp=sf_link'} target='_blank'>Other Feedback</MenuItem>
               </NavDropdown>
             </ul>
+            { showSearch
+              ? <div className={'pull-right'}><AutoSuggestSearch className={'navbar-form'} /></div>
+              : null }
           </div>
         </div>
       </nav>

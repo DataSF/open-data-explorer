@@ -2,11 +2,11 @@ import { CALL_API } from '../middleware'
 //import { Endpoints, Transforms, shouldRunColumnStats } from '../middleware/socrata'
 
 import { Endpoints, Transforms } from '../middleware/socrata'
-
-
 import { EndpointsSF, TransformsSF } from '../middleware/metadatasf'
 
 import {isColTypeTest} from '../helpers'
+import qs from 'qs'
+
 export const METADATA_REQUEST = 'METADATA_REQUEST'
 export const METADATA_SUCCESS = 'METADATA_SUCCESS'
 export const METADATA_FAILURE = 'METADATA_FAILURE'
@@ -37,34 +37,6 @@ function fetchColumns (id) {
   }
 }
 
-export const MIGRATION_REQUEST = 'MIGRATION_REQUEST'
-export const MIGRATION_FAILURE = 'MIGRATION_FAILURE'
-export const MIGRATION_SUCCESS = 'MIGRATION_SUCCESS'
-
-// function fetchMigrationId (id) {
-//  return {
-//   [CALL_API]: {
-//      types: [MIGRATION_REQUEST, MIGRATION_SUCCESS, MIGRATION_FAILURE],
-//      endpoint: Endpoints.MIGRATION(id),
-//      transform: Transforms.MIGRATION
-//    }
-//  }
-// }
-
-export const COUNT_REQUEST = 'COUNT_REQUEST'
-export const COUNT_SUCCESS = 'COUNT_SUCCESS'
-export const COUNT_FAILURE = 'COUNT_FAILURE'
-
-//function countRows (id) {
-//  return {
-//    [CALL_API]: {
-//      types: [COUNT_REQUEST, COUNT_SUCCESS, COUNT_FAILURE],
-//      endpoint: Endpoints.COUNT(id),
-//      transform: Transforms.COUNT
-//    }
-//  }
-//}
-
 export const COLPROPS_REQUEST = 'COLPROPS_REQUEST'
 export const COLPROPS_SUCCESS = 'COLPROPS_SUCCESS'
 export const COLPROPS_FAILURE = 'COLPROPS_FAILURE'
@@ -91,9 +63,13 @@ export function loadMetadata (id) {
   return (dispatch, getState) => {
     return Promise.all([
       dispatch(fetchMetadata(id)),
-      dispatch(fetchColumns(id))
+      dispatch(fetchColumns(id)),
+      dispatch(loadRelatedDatasets(id))
       ]).then(() => {
-        return dispatch(loadColumnProps())
+        return Promise.all([
+          dispatch(loadColumnProps()),
+          dispatch(loadTable())
+        ])
       })
     }
   }
@@ -127,8 +103,6 @@ export function loadFieldProps () {
     return Promise.all(promises)
   }
 }
-
-
 
 export function loadColumnProps () {
   return (dispatch, getState) => {
@@ -174,9 +148,6 @@ function fetchData (state, isForTable = false) {
 function fetchDataTextFieldCategories (state) {
   let endpoint
   let transform
-  //console.log("(*****state before fetch on categories*****")
-  //console.log(state)
-  ///console.log(state.fieldDetailsProps.selectedField)
   if(state.fieldDetailsProps.selectedField){
     endpoint = Endpoints.QUERYTEXTCATEGORIES(state)
     transform = Transforms.QUERYTEXTCATEGORIES
@@ -220,26 +191,47 @@ export const SET_DEFAULT_HIDE_SHOW = 'SET_DEFAULT_HIDE_SHOW'
 export const SET_DEFAULT_CHARTTYPE = 'SET_DEFAULT_CHARTTYPE'
 
 export function filterColumnList (key, item, target) {
+
   return {
     type: FILTER_COLUMN_LIST,
     payload: {
       key,
       item,
       target
+    },
+    ga: {
+      event: {
+        category: 'Field Selector',
+        action: 'Filter ' + target,
+        label: item
+      }
     }
   }
 }
 
 export function selectColumn (column) {
   return (dispatch, getState) => {
-    dispatch({
-      type: SELECT_COLUMN,
-      payload: column})
-    dispatch(setDefaultHideShow('columnProps'))
-    if (column !== null) {
-      dispatch(fetchData(getState()))
-      dispatch(setDefaultChartType(column))
-    }
+    return Promise.all([
+      dispatch({
+        type: SELECT_COLUMN,
+        payload: column,
+        ga: {
+          event: {
+            category: 'Field Selector',
+            action: 'Select Chart Field',
+            label: column
+          }
+        }
+      }),
+      dispatch(setHideShow(false, 'columnProps'))]).then(() => {
+        if (column !== null) {
+          Promise.all([dispatch(setDefaultChartType(column))]).then(() => {
+            return dispatch(fetchData(getState()))
+          })
+        } else {
+          return dispatch(resetState('query'))
+        }
+      })
   }
 }
 
@@ -247,9 +239,17 @@ export function selectField (column) {
   return (dispatch, getState) => {
     dispatch({
       type: SELECT_FIELD,
-      payload: column})
+      payload: column,
+      ga: {
+        event: {
+          category: 'Field Selector',
+          action: 'Select Field Definition',
+          label: column
+        }
+      }
+    })
     dispatch(fetchDataTextFieldCategories(getState()))
-    dispatch(setDefaultHideShow('fieldDetailsProps'))
+    dispatch(setHideShow(false, 'fieldDetailsProps'))
   }
 }
 
@@ -258,16 +258,6 @@ export function setHideShow (showCols, target) {
     dispatch({
       type: SET_HIDE_SHOW,
       payload: {'showCols': showCols, 'target': target}
-    })
-  }
-}
-
-
-export function setDefaultHideShow (target) {
-  return (dispatch, getState) => {
-    dispatch({
-      type: SET_DEFAULT_HIDE_SHOW,
-      payload: {'showCols': 'show', 'target': target}
     })
   }
 }
@@ -288,7 +278,7 @@ export function setDefaultChartType (column) {
       }
       return chartType
     }
-    dispatch({
+    return dispatch({
       type: SET_DEFAULT_CHARTTYPE,
       chartType: getDefaultChartType()
     })
@@ -317,7 +307,15 @@ export function groupBy (key) {
   return (dispatch, getState) => {
     dispatch({
       type: GROUP_BY,
-      payload: key})
+      payload: key,
+      ga: {
+        event: {
+          category: 'Group By',
+          action: 'Select Field',
+          label: key ? key.value : null
+        }
+      }
+    })
     dispatch(fetchData(getState()))
   }
 }
@@ -326,7 +324,15 @@ export function sumBy (key) {
   return (dispatch, getState) => {
     dispatch({
       type: SUM_BY,
-      payload: key})
+      payload: key,
+      ga: {
+        event: {
+          category: 'Sum By',
+          action: 'Select Field',
+          label: key ? key.value : null
+        }
+      }
+    })
     dispatch(fetchData(getState()))
   }
 }
@@ -366,17 +372,51 @@ export const APPLY_CHART_TYPE = 'APPLY_CHART_TYPE'
 export const UPDATE_FROM_QS = 'UPDATE_FROM_QS'
 export const QS_FAILURE = 'QS_FAILURE'
 export const RESET_STATE = 'RESET_STATE'
+export const DISPLAY_FIELD_PROFILES_LIST = 'DISPLAY_FIELD_PROFILES_LIST'
+
 export function addFilter (key) {
   return {
     type: ADD_FILTER,
-    payload: key}
+    payload: key,
+    ga: {
+      event: {
+        category: 'Filter',
+        action: 'Add',
+        label: key.value
+      }
+    }}
 }
 
 export function applyChartType (chartType) {
   return {
     type: APPLY_CHART_TYPE,
-    chartType}
+    chartType,
+    ga: {
+      event: {
+        category: 'Chart Type',
+        action: 'Select Type',
+        label: chartType
+      }
+    }}
 }
+
+export function displayFieldProfilesList (displayType) {
+  return {
+    type: DISPLAY_FIELD_PROFILES_LIST,
+    payload: displayType
+  }
+}
+
+
+export const CHANGE_CHART_COLOR = 'CHANGE_CHART_COLOR'
+
+export function changeChartColor (chartColor) {
+  return {
+    type: CHANGE_CHART_COLOR,
+    payload: chartColor
+  }
+}
+
 
 export function removeFilter (key) {
   return (dispatch, getState) => {
@@ -393,6 +433,13 @@ export function updateFilter (key, options) {
     payload: {
       key,
       options
+    },
+    ga: {
+      event: {
+        category: 'Filter',
+        action: 'Update',
+        label: key + ': ' + JSON.stringify(options)
+      }
     }
   }
 }
@@ -414,10 +461,11 @@ export function applyFilter (key, options) {
 const parseQueryString = (q) => {
   let payload
   let error
-  if (typeof q === 'string') {
+  if (typeof q === 'object') {
     try {
-      payload = JSON.parse(q)
+      payload = qs.parse(q)
     } catch (e) {
+      console.error(e)
       error = true
     }
   } else {
@@ -431,6 +479,7 @@ const parseQueryString = (q) => {
 export const loadQueryStateFromString = (q) => (dispatch, getState) => {
   return parseQueryString(q).then(
     response => {
+      dispatch(setDefaultChartType(response.selectedColumn))
       dispatch({
         type: UPDATE_FROM_QS,
         payload: response
@@ -447,7 +496,7 @@ export const loadQueryStateFromString = (q) => (dispatch, getState) => {
 }
 
 export const UPDATE_SEARCH = 'UPDATE_SEARCH'
-export const CLEAR_SEARCH = 'CLEAR_SEARCH'
+export const SELECT_SEARCH_RECORD = 'SELECT_SEARCH_RECORD'
 export const SELECT_FIELD = 'SELECT_FIELD'
 export const SET_SELECTED_FIELD_DETAILS = 'SET_SELECTED_FIELD_DETAILS'
 
@@ -459,9 +508,100 @@ export function updateSearch (searchState) {
   }
 }
 
-export function clearSearch () {
+
+
+
+export function selectSearchRecord (record) {
   return {
-    type: CLEAR_SEARCH
+    type: SELECT_SEARCH_RECORD,
+    payload: record,
+    ga: {
+      event: {
+        category: 'Quick Search',
+        action: 'Select ' + record.name,
+        label: record.id
+      }
+    }
   }
 }
 
+export const SHOW_HIDE_MODAL = 'SHOW_HIDE_MODAL'
+
+export function showHideModal (target) {
+  return (dispatch, getState) => {
+    return dispatch({
+      type: SHOW_HIDE_MODAL,
+      payload: target,
+      ga: {
+        event: {
+          category: 'Modal ' + target,
+          action: 'Open Modal',
+          label: (!getState().ui.modals[target]).toString()
+        }
+      }
+    })
+  }
+}
+
+export const RELATEDDATASET_REQUEST = 'RELATEDDATASET_REQUEST'
+export const RELATEDDATASET_SUCCESS = 'RELATEDDATASET_SUCCESS'
+export const RELATEDDATASET_FAILURE = 'RELATEDDATASET_FAILURE'
+
+// Fetches a related datasets from the metadata API.
+// Relies on the custom API middleware defined in ../middleware/api.js.
+function fetchRelatedDatasets (id) {
+  return {
+    [CALL_API]: {
+      types: [RELATEDDATASET_REQUEST, RELATEDDATASET_SUCCESS, RELATEDDATASET_FAILURE],
+      endpoint: EndpointsSF.RELATEDDATASETS(id),
+      transform: TransformsSF.RELATEDDATASETS
+    }
+  }
+}
+
+export function loadRelatedDatasets (id) {
+  return (dispatch, getState) => {
+    return dispatch(fetchRelatedDatasets(id))
+  }
+}
+
+export const COPY_LINK = 'COPY_LINK'
+export const DOWNLOAD = 'DOWNLOAD'
+export const OUTBOUND_LINK = 'OUTBOUND_LINK'
+
+export function copyLink (link) {
+  return {
+    type: COPY_LINK,
+    ga: {
+      event: {
+        category: 'Modal Share',
+        action: 'Copy Link',
+        label: link
+      }
+    }
+  }
+}
+
+export function download (link, type) {
+  return {
+    type: DOWNLOAD,
+    ga: {
+      event: {
+        category: 'Download',
+        action: 'Click ' + type,
+        label: link
+      }
+    }
+  }
+}
+
+export function outboundLink (link) {
+  return {
+    type: OUTBOUND_LINK,
+    ga: {
+      link: {
+        label: link
+      }
+    }
+  }
+}

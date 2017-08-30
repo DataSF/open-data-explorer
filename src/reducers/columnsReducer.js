@@ -3,6 +3,10 @@ import merge from 'lodash/merge'
 import union from 'lodash/union'
 import { updateObject, createReducer, deleteFromArray } from './reducerUtilities'
 
+let initialState = { 
+  typeFilters: [] 
+}
+
 const COLTYPES = {
   'boolean': 'True/False',
   'text': 'Text',
@@ -29,10 +33,11 @@ function sortColumns (a, b) {
 }
 
 function isSelectable (columns, col) {
-  let colTypesAccepted = ['number', 'boolean', 'date']
+  let colTypesAccepted = ['boolean', 'date']
   let regex = /(^(lat|lon)[a-z]*|^(x|y)$)/i
   let geoFields = regex.test(columns[col].key)
-  let selectable = (!columns[col].unique && !geoFields && ((['text', 'number'].indexOf(columns[col].type) > -1) || colTypesAccepted.indexOf(columns[col].type) > -1))
+  // selectable if they are text or numeric columns that are categories and not geoFields OR is one of the type boolean, date and number
+  let selectable = ((columns[col].isCategory) && !geoFields && ['text', 'number'].indexOf(columns[col].type) > -1) || colTypesAccepted.indexOf(columns[col].type) > -1
   return selectable
 }
 
@@ -74,7 +79,7 @@ export const getGroupableColumns = (state, selectedColumn) => {
   selectedColumn = selectedColumn || ''
   if (!columns) return []
   return Object.keys(columns).filter((col) => {
-    return (columns[col].key !== selectedColumn && columns[col].categories)
+    return (columns[col].key !== selectedColumn && columns[col].categories && (columns[col].type === 'text' || (columns[col].type === 'number' && parseInt(columns[col].cardinality, 10) < 15 )))
   }).map((col) => {
     return {label: columns[col].name, value: columns[col].key}
   }).sort(sortColumns)
@@ -98,30 +103,42 @@ export const getSelectedField = (state, selectedColumn) => {
   }).sort(sortColumns)
 }
 
-export const getSelectableColumns = (state, selectedColumn, all = false) => {
+export const getSelectableColumns = (state, selectedColumn, all = false, ignoreTypeFilters = false, exclude = [], filterable = false) => {
   let { columns, typeFilters, fieldNameFilter } = state
   if (!columns) return []
   return Object.keys(columns).filter((col) => {
-    // override to return all columns, not just selectable
-    if (all) return true
-
+    if (exclude.indexOf(col) > -1) {
+      return false
+    }
+    if (!filterable && fieldNameFilter && columns[col].name.toLowerCase().indexOf(fieldNameFilter.toLowerCase()) === -1) {
+      return false
+    }
+    if (col === selectedColumn && !filterable) {
+      return false
+    }
+    
     let selectable = isSelectable(columns, col)
-    if (state.showCols === 'hide' && col === selectedColumn) {
-      return false
+    // override to return all columns, not just selectable
+    if (all) selectable = true
+    
+    if (ignoreTypeFilters && selectable) {
+      return true
     }
-    if (fieldNameFilter && columns[col].name.toLowerCase().indexOf(fieldNameFilter.toLowerCase()) === -1) {
-      return false
-    }
+
     if (selectable && typeFilters.length > 0 && typeFilters.indexOf(columns[col].type) > -1) {
       return true
-    } else if (selectable && typeFilters.length === 0) {
+    }
+
+    if (selectable && typeFilters.length === 0) {
       return true
     }
+    
     return false
   }).map((col) => {
     return {
       label: columns[col].name,
       value: columns[col].key,
+      key: columns[col].key,
       type: columns[col].type,
       description: columns[col].description,
       isCategory: (typeof columns[col].categories !== 'undefined' && columns[col].categories.length > 0),
@@ -134,12 +151,14 @@ export const getSelectableColumns = (state, selectedColumn, all = false) => {
 
 export const getSummableColumns = (state) => {
   let { columns } = state
-  let colTypesAccepted = ['number', 'money', 'double']
+  let colTypesAccepted = ['number']
+  let regex = /(^(lat|lon|supervisor)[a-z]*|^(x|y)$|year)/i
 
   if (!columns) return []
-
+  
+  
   return Object.keys(columns).filter((col) => {
-    return (!columns[col].categories && !columns[col].unique && colTypesAccepted.indexOf(columns[col].type) > -1)
+    return (parseFloat(columns[col].distinctness) < 0.95 && colTypesAccepted.indexOf(columns[col].type) > -1 && !regex.test(columns[col].name))
   }).map((col) => {
     return {label: columns[col].name, value: columns[col].key}
   }).sort(sortColumns)
@@ -149,14 +168,15 @@ export const getSupportedChartTypes = (state, selectedColumn) => {
   if (!selectedColumn) return []
 
   let { columns } = state
+  /*
   let hasDate = Object.keys(columns).filter(key => {
     return columns[key].type === 'date'
-  }).length > 0
+  }).length > 0*/
 
   let column = columns[selectedColumn]
   if (column.type === 'text') return [BAR]
   if (column.type === 'date') return [LINE, COLUMN, AREA]
-  if (column.type === 'number' && hasDate) return [BAR, HISTOGRAM, LINE, AREA]
+  // if (column.type === 'number' && hasDate) return [BAR, HISTOGRAM, LINE, AREA]
   if (column.type === 'number') return [BAR, HISTOGRAM]
   if (column.type === 'boolean') return [BAR]
 
@@ -171,9 +191,15 @@ function initColumns (state, action) {
   })
 }
 
-//function updateColumns (state, action) {
-//  return merge({}, state, action.response)
-//}
+function sortColumn (state, action) {
+  return merge({}, state, {
+    columns: {
+      [action.key]: {
+        sortDir: action.dir
+      }
+    }
+  })
+}
 
 function loadColumnProperties (state, action) {
   action.response.categoryColumns = union([], state.categoryColumns, action.response.categoryColumns)
@@ -225,24 +251,21 @@ function setDefaultHideShow (state, action) {
 }
 
 function resetState (state, action) {
-  if (action.payload.target !== 'columnProps') {
-    return state
+  if (action.type === ActionTypes.METADATA_REQUEST || action.payload === 'columnProps') {
+    return initialState
   }
-  return updateObject(state, {})
+  return state
 }
 
-
-
-
-
-
-const columnsReducer = createReducer({ typeFilters: [] }, {
+const columnsReducer = createReducer(initialState, {
   [ActionTypes.COLUMNS_SUCCESS]: initColumns, 
   [ActionTypes.COLPROPS_SUCCESS]: loadColumnProperties,
   [ActionTypes.FILTER_COLUMN_LIST]: filterColumnList,
   [ActionTypes.SORT_COLUMN_LIST]: sortColumnList,
   [ActionTypes.SET_HIDE_SHOW]: setHideShow,
   [ActionTypes.SET_DEFAULT_HIDE_SHOW]: setDefaultHideShow,
-  [ActionTypes.RESET_STATE]: resetState
+  [ActionTypes.METADATA_REQUEST]: resetState,
+  [ActionTypes.RESET_STATE]: resetState,
+  [ActionTypes.SORT_COLUMN]: sortColumn
 })
 export default columnsReducer

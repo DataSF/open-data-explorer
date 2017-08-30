@@ -1,7 +1,7 @@
 import './@CopySnippet.css'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Form, FormGroup, FormControl, Button } from 'react-bootstrap'
+import { FormGroup, FormControl, Button, InputGroup } from 'react-bootstrap'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 class CopySnippet extends Component {
@@ -22,29 +22,33 @@ class CopySnippet extends Component {
     setTimeout(() => {
       this.setState({copied: false})
     }, 2000)
+    if (this.props.onCopy) {
+      this.props.onCopy(this.props.snippet)
+    }
   }
 
   render () {
     let { snippet, title, help } = this.props
     return (
       <div className='CopyEmbedLink-wrapper'>
-        <h3>{title}</h3>
+        <h5>{title}</h5>
         <small className='text-muted'>{help}</small>
-        <Form inline>
-          <FormGroup controlId='formInlineName'>
-            <FormControl
-              type='text'
-              readOnly
-              value={snippet}
-              onClick={this.handleFocus}
-              />
+          <FormGroup>
+            <InputGroup>
+              <FormControl
+                type="text"
+                readOnly
+                value={snippet}
+                onClick={this.handleFocus} />
+              <InputGroup.Button>
+                <CopyToClipboard text={snippet} onCopy={this.handleCopy.bind(this)}>
+                  <Button bsStyle={'primary'} className={this.state.copied ? 'copied' : 'not-copied'}>
+                    {this.state.copied ? 'Copied!' : 'Copy'}
+                  </Button>
+                </CopyToClipboard>
+              </InputGroup.Button>
+            </InputGroup>
           </FormGroup>
-          <CopyToClipboard text={snippet} onCopy={this.handleCopy.bind(this)}>
-            <Button className={this.state.copied ? 'copied' : 'not-copied'}>
-              {this.state.copied ? 'Copied!' : 'Copy'}
-            </Button>
-          </CopyToClipboard>
-        </Form>
       </div>
     )
   }
@@ -53,7 +57,8 @@ class CopySnippet extends Component {
 CopySnippet.propTypes = {
   snippet: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  help: PropTypes.string
+  help: PropTypes.string,
+  onClick: PropTypes.func
 }
 
 export default CopySnippet

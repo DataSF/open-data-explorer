@@ -88,13 +88,11 @@ class ChartOptions extends Component {
         sumByOptions = this.renderSumByOptions()
       }
     }
-    const panelTitle = (
-      <div>Filter Options</div>
-    )
+    
     return (
       selectedColumn
       ? (
-        <Panel collapsible defaultExpanded className='chart' header={panelTitle}>
+        <Panel collapsible defaultExpanded className='chart' header={<h4>Filter options <span className='glyphicon collapse-icon' aria-hidden></span></h4>}>
           {sumByOptions}
         </Panel>
       ) : false

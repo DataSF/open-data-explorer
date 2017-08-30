@@ -4,7 +4,8 @@ import {
 } from 'react-bootstrap-card'
 import MetadataCard from '../MetadataCard'
 import './@FieldColumns.css'
-import _ from 'lodash'
+import countBy from 'lodash/countBy'
+import identity from 'lodash/identity'
 
 class FieldColumns extends Component {
 
@@ -36,7 +37,7 @@ class FieldColumns extends Component {
           headersList.push(field.label.charAt(0))
         }
       })
-      let headersListCnt = _.countBy(headersList, _.identity)
+      let headersListCnt = countBy(headersList, identity)
       arrHeads = Object.keys(headersListCnt).filter(function(n){ return n !== "undefined" });
       headerItems = arrHeads.map(function(key){
         if(key)
@@ -52,7 +53,7 @@ class FieldColumns extends Component {
           headersList.push(field.type)
         }
       })
-      let headersListCnt = _.countBy(headersList, _.identity)
+      let headersListCnt = countBy(headersList, identity)
       arrHeads = Object.keys(headersListCnt).filter(function(n){ return n !== "undefined" });
       headerItems = arrHeads.map(function(key){
         if(key){
@@ -129,12 +130,12 @@ class FieldColumns extends Component {
     fieldCards = this.cardSort(fieldCards, sortBy,  headersObj.headerTypes)
     fieldCards = this.makeMetadataCards(fieldCards, onClick)
     }
-
     return (
-    <CardColumns>
-        {fieldCards}
-    </CardColumns>
-         )
+
+          <CardColumns>
+            {fieldCards}
+          </CardColumns>
+    )
   }
 }
 

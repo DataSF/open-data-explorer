@@ -18,24 +18,26 @@ class FieldButton extends Component {
     }
     itemProps.className = setClassNamesListItem(itemProps, 'type', optionalClassNames)
     itemProps.otherComponents = itemProps.isSelected ? checked : null
-    itemProps.hoverSide =  hoverSide
+    itemProps.hoverSide = hoverSide
     return itemProps
   }
 
   render () {
-    let {itemProps, onClick, hoverSide} = this.props
+    let {itemProps, onClick, hoverSide, key} = this.props
     itemProps = this.setItemProps(itemProps, hoverSide)
     const FieldDefinition = <Popover id={'option-' + itemProps.value} title='Definition'>{itemProps.description || 'No definition available.'}</Popover>
     return (
       <Choose>
         <When condition={itemProps.isSelected}>
           <DefaultListGroupItem
+            key={key}
             itemProps={itemProps}
             buttonOverlay={FieldDefinition}
             onClick={onClick.bind(this, null)} />
         </When>
         <Otherwise>
           <DefaultListGroupItem
+            key={key}
             onClick={onClick.bind(this, itemProps.value)}
             itemProps={itemProps}
             buttonOverlay={FieldDefinition}   />

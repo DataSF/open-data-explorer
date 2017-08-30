@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Alert } from 'react-bootstrap'
+import './@Messages.css'
 
-const Message = ({title, type, message}) => (
+const Message = ({title, type, message, style}) => (
   type
-  ? <Alert bsStyle='danger'>
+  ? <Alert bsStyle={style} className={'Messages__message'}>
     <h4>{title}</h4>
     <p>{message}</p>
   </Alert> : false
@@ -13,12 +14,12 @@ const Message = ({title, type, message}) => (
 class Messages extends Component {
   render () {
     let { messages } = this.props
-    let title = messages.server ? 'Server Error' : 'Application Error'
     return (
-      <div className='Messages-wrapper'>
-        <Message title={title} type={messages.type} message={messages.message} />
-        {(messages.type !== 'error' && this.props.children)
-          ? this.props.children : false }
+      <div className='Messages__root'>
+        <Message title={messages.title} type={messages.type} style={messages.style} message={messages.message} />
+        { messages.showChildren !== false
+          ? this.props.children 
+          : null }
       </div>
     )
   }

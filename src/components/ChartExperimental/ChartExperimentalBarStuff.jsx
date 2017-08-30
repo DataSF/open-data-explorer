@@ -1,19 +1,21 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import d3 from 'd3'
+//import d3 from 'd3'
 import { XAxis, BarChart, YAxis, CartesianGrid, Bar, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
-import CustomXaxisLabel from './CustomXaxisLabel'
 import CustomKeyAxisTick from './CustomKeyAxisTick'
 
 class ChartExperimentalBarStuff extends Component {
-  makeBars (groupKeys, grpColorScale) {
+//  // unit={" " + rowLabel}
+//  label={barLabelStyle}
+
+  makeBars (groupKeys, rowLabel, chartColorsGrpBy) {
     let bars = []
     if (groupKeys) {
       if (groupKeys.length > 1) {
-        let colorScale = d3.scale.linear().domain([1, groupKeys.length])
-          .interpolate(d3.interpolateHcl)
-          .range([d3.rgb(grpColorScale['start']), d3.rgb(grpColorScale['end'])])
+        //let colorScale = d3.scale.linear().domain([1, groupKeys.length])
+        //  .interpolate(d3.interpolateHcl)
+        //  .range([d3.rgb(grpColorScale['start']), d3.rgb(grpColorScale['end'])])
         bars = groupKeys.map(function (i) {
           if (i) {
             let colorIndex = groupKeys.indexOf(i)
@@ -22,13 +24,15 @@ class ChartExperimentalBarStuff extends Component {
                 dataKey={i}
                 stackId='a'
                 key={i}
-                fill={colorScale(colorIndex)} />)
+                // unit={" " + rowLabel}
+                fill={chartColorsGrpBy[colorIndex]} />)
           }
           return false
         })
         return bars
       }
     }
+    return bars
   }
 
   getChartProperties (chartData) {
@@ -47,6 +51,7 @@ class ChartExperimentalBarStuff extends Component {
     }
     return chartProperties
   }
+  /*
   setLegendStyleTop(bars, legendStyle){
     if(bars){
       if(bars.length <= 20){
@@ -63,14 +68,16 @@ class ChartExperimentalBarStuff extends Component {
       }
     }
     return legendStyle
-  }
+  }*/
   render () {
-    let {h, w, xAxisInterval, xAxisPadding, isGroupBy, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater, grpColorScale, colName, domainMax, isDateSelectedCol, legendStyle, xAxisHeight, yAxisWidth} = this.props
-    let bars = this.makeBars(groupKeys, grpColorScale)
+    let {h, w, xAxisInterval, isGroupBy, rowLabel, units, groupKeys, fillColor, chartData, valTickFormater, chartColorsGrpBy, colName, isDateSelectedCol, legendStyle, xAxisHeight, yAxisWidth, valueAxisTickLst} = this.props
+    let bars = this.makeBars(groupKeys, rowLabel, chartColorsGrpBy)
     let chartProperties = this.getChartProperties(chartData)
-    let xpadding = {bottom: 300}
-    legendStyle = this.setLegendStyleTop(bars, legendStyle)
+    //const barLabelStyle = { fill: '#133140', fontSize: '15px', paddingBottom:'15px'}
+    //legendStyle = this.setLegendStyleTop(bars, legendStyle)
     return (
+      <Choose>
+      <When condition={chartData.length > 0}>
       <Choose>
         <When condition={isDateSelectedCol}>
           <Choose>
@@ -81,25 +88,23 @@ class ChartExperimentalBarStuff extends Component {
                 data={chartData} >
                 <XAxis
                   dataKey={'key'}
-                  allowDataOverflow={true}
                   interval={xAxisInterval}
                   type={'category'}
                   tickSize={4}
-                  padding={xAxisPadding}
-                  label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} chartType={'line'} />}
+                  label={colName}
                   height={xAxisHeight} />
                 <YAxis
                   tickFormatter={valTickFormater}
-                  tickCount={yTickCnt}
+                  ticks={valueAxisTickLst}
                   tickSize={3}
-                  allowDataOverflow={true}
-                  domain={[0, domainMax]}
-                  type='number'
-                  label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} chartType={'line'} />} />
-                  width={yAxisWidth}
-                <CartesianGrid stroke='#eee'  strokeDasharray='3 3' vertical={false} />
+                  domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
+                  type={'number'}
+                  label={<CustomYaxisLabel val={'Number of ' + units } h={h} chartType={'line'} />}
+                  width={yAxisWidth} />
+                <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
                 <Tooltip />
-                <Bar dataKey='value' fill={fillColor} />
+                <Bar dataKey={'value'}
+                    fill={fillColor} />
               </BarChart>
             </When>
             <Otherwise>
@@ -109,23 +114,23 @@ class ChartExperimentalBarStuff extends Component {
                 data={chartData}>
                 <XAxis
                   dataKey={'label'}
-                  type={'category'}
                   interval={xAxisInterval}
-                  allowDataOverflow={true}
+                  type={'category'}
                   height={xAxisHeight}
                   tickSize={4}
-                  label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={bars.length} chartType={'line'} />} />
+                  label={colName} />
                 <YAxis
                   tickFormatter={valTickFormater}
-                  tickCount={yTickCnt}
-                  allowDataOverflow={true}
-                  domain={[0, domainMax]}
+                  // tickCount={yTickCnt}
+                  ticks={valueAxisTickLst}
+                  tickSize={3}
+                  domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
                   width={yAxisWidth}
                   type={'number'}
-                  label={<CustomYaxisLabel val={rowLabel + ' value'} h={h}   chartType={'line'} />} />
+                  label={<CustomYaxisLabel val={'Number of ' + units} h={h} chartType={'line'} />} />
                 <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
                 <Tooltip />
-                <Legend wrapperStyle={legendStyle} />
+                <Legend layout='vertical' verticalAlign='top' align='right' wrapperStyle={legendStyle} />
                 {bars}
               </BarChart>
             </Otherwise>
@@ -141,21 +146,25 @@ class ChartExperimentalBarStuff extends Component {
                 data={chartData} >
                 <XAxis
                   tickFormatter={valTickFormater}
-                  type='number'
-                  tickCount={xTickCnt}
-                  padding={xpadding}
-                  domain={[0, domainMax]}
-                  label={<CustomXaxisLabel val={'Number of ' + rowLabel + 's'} isGroupBy={isGroupBy} numOfGrps={0} />}
+                  type={'number'}
+                  //tickCount={xTickCnt}
+                  ticks={valueAxisTickLst}
+                  //padding={xpadding}
+                  tickSize={4}
+                  domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
+                  label={'Number of ' + units}
                   height={xAxisHeight} />
                 <YAxis
-                  dataKey='key'
+                  dataKey={'key'}
                   label={<CustomYaxisLabel val={colName} h={h} />}
                   type='category'
-                  tick={< CustomKeyAxisTick />}
+                  tickSize={3}
+                  tick={<CustomKeyAxisTick />}
                   width={yAxisWidth} />
                 <CartesianGrid stroke='#eee' strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
                 <Tooltip />
-                <Bar dataKey='value' fill={fillColor} />
+                <Bar dataKey='value'
+                fill={fillColor}  />
               </BarChart>
             </When>
             <When condition={!isGroupBy && !chartProperties.manyBars}>
@@ -164,20 +173,24 @@ class ChartExperimentalBarStuff extends Component {
                 height={h}
                 data={chartData}>
                 <XAxis
-                  dataKey='key'
-                  type='category'
-                  label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGroups={0} />}
+                  dataKey={'key'}
+                  type={'category'}
+                  label={colName}
+                  tickSize={4}
                   height={xAxisHeight} />
                 <YAxis
                   tickFormatter={valTickFormater}
-                  tickCount={yTickCnt}
-                  domain={[0, domainMax]}
-                  type='number'
+                  //tickCount={yTickCnt}
+                  ticks={valueAxisTickLst}
+                  domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
+                  type={'number'}
                   width={yAxisWidth}
+                  tickSize={3}
                   label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
                 <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
                 <Tooltip />
-                <Bar dataKey='value' fill={fillColor} />
+                <Bar dataKey={'value'}
+                    fill={fillColor}/>
               </BarChart>
             </When>
             <When condition={isGroupBy && chartProperties.manyBars}>
@@ -188,20 +201,23 @@ class ChartExperimentalBarStuff extends Component {
                 data={chartData}>
                 <XAxis
                   tickFormatter={valTickFormater}
-                  tickCount={yTickCnt}
+                  // tickCount={yTickCnt}
+                  tickSize={4}
+                  ticks={valueAxisTickLst}
                   height={xAxisHeight}
-                  domain={[0, domainMax]}
-                  type='number'
-                  label={<CustomXaxisLabel val={'Number of ' + rowLabel + 's'} isGroupBy={isGroupBy} numOfGrps={bars.length} />} />
+                  domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
+                  type={'number'}
+                  label={'Number of ' + units} />
                 <YAxis
-                  dataKey='label'
+                  dataKey={'label'}
                   width={yAxisWidth}
+                  tickSize={3}
                   tick={< CustomKeyAxisTick />}
                   label={<CustomYaxisLabel val={colName} h={h} />}
-                  type='category' />
+                  type={'category'} />
                 <CartesianGrid stroke='#eee' strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
                 <Tooltip />
-                <Legend wrapperStyle={legendStyle} />
+                <Legend layout='vertical' verticalAlign='top' align='right' wrapperStyle={legendStyle} />
                 {bars}
               </BarChart>
             </When>
@@ -211,25 +227,29 @@ class ChartExperimentalBarStuff extends Component {
                 height={h}
                 data={chartData}>
                 <XAxis
-                  dataKey='label'
-                  type='category'
+                  dataKey={'label'}
+                  type={'category'}
                   height={xAxisHeight}
-                  label={<CustomXaxisLabel val={colName} isGroupBy={isGroupBy} numOfGrps={bars.length} />} />
+                  tickSize={4}
+                  label={colName} />
                 <YAxis
                   tickFormatter={valTickFormater}
-                  tickCount={yTickCnt}
-                  domain={[0, domainMax]}
-                  type='number'
+                  ticks={valueAxisTickLst}
+                  domain={[0, valueAxisTickLst[valueAxisTickLst.length-1]]}
+                  type={'number'}
                   width={yAxisWidth}
-                  label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
+                  tickSize={3}
+                  label={<CustomYaxisLabel val={'Number of ' + units} h={h} />} />
                 <CartesianGrid  stroke='#eee' strokeDasharray='3 3' vertical={false} />
                 <Tooltip />
-                <Legend wrapperStyle={legendStyle} />
+                <Legend layout='vertical' verticalAlign='top' align='right' wrapperStyle={legendStyle} />
                 {bars}
               </BarChart>
             </When>
           </Choose>
         </Otherwise>
+      </Choose>
+      </When>
       </Choose>
     )
   }

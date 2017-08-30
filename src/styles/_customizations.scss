@@ -9,6 +9,7 @@ label {
 .navbar {
   border-radius: 0;
   margin-bottom: 0;
+  min-height: 65px;
 }
 
 .jumbotron {
@@ -31,4 +32,11 @@ label {
 
 mark {
   padding: 0;
+}
+
+.flex-center-vertically {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 400px;
 }

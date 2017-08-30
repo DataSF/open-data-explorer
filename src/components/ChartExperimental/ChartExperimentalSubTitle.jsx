@@ -56,7 +56,7 @@ class ChartExperimentalSubTitle extends Component {
     return <div key={columnFilterName}>{subtitle}</div>
   }
 
-  buildSubTitle (filters, columns) {
+  buildSubTitle (filters, columns, rollupBy, chartData, chartType) {
     const builders = {
       'category': this.filterCategories,
       'booleanCategory': this.filterCategories,
@@ -79,9 +79,36 @@ class ChartExperimentalSubTitle extends Component {
     }
     return subtitle
   }
+  rollupOthersSubtitle(rollupBy, subtitle, chartData,  chartType){
+    let msg = null
+    if(rollupBy === 'none'){
+      return null
+    }
+    if(rollupBy ===  'other' && typeof subtitle !== 'undefined'){
+      msg = 'Rolling Up Others'
+    }else if (rollupBy ===  'other'){
+      msg = "Rolling Up Categories with Small Values as Other"
+    }
+    if(typeof rollup === 'undefined' && typeof chartData !== 'undefined' ){
+        if(chartData.length > 12 && chartType === 'bar'){
+         msg = 'Rolling Up Categories with Small Values as Other'
+      }
+    }
+    if(msg !== null){
+      return <div> {msg} </div>
+    }
+    return null
+  }
   render () {
-    let {filters, columns} = this.props
-    let subtitleStuff = this.buildSubTitle(filters, columns)
+    let {filters, columns, rollupBy, chartData, chartType} = this.props
+    let subtitleStuff = this.buildSubTitle(filters, columns, rollupBy, chartData, chartType)
+    let rollupBySub = this.rollupOthersSubtitle(rollupBy, subtitleStuff, chartData,  chartType)
+    if( typeof subtitleStuff !== 'undefined' && rollupBySub){
+      subtitleStuff.push(rollupBySub)
+    }else{
+      subtitleStuff = rollupBySub
+    }
+
     return (
       <div className={'Chart__sub-title'}>{subtitleStuff}</div>
     )

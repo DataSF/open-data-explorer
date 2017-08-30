@@ -1,5 +1,4 @@
 .filter {
-  z-index: 0;
   margin-bottom: 1.25em;
 }
 
@@ -15,4 +14,12 @@
 .filter .close:hover {
   background: transparent;
   border: none;
+}
+
+.FilterChartOptions__filter-options .Select {
+  z-index: 10;
+}
+
+.FilterChartOptions__select {
+  z-index: 11;
 }

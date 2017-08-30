@@ -1,5 +1,10 @@
 #jumbo-search {
   text-align: center;
+  padding-top: 15px;
+}
+
+#jumbo-search h2 {
+  margin-top: 0;
 }
 
 #search-catalog-input::-webkit-input-placeholder {
@@ -50,4 +55,55 @@ search-catalog-input:-moz-placeholder {
 .HomePage__search {
   color: #000000;
   text-align: left;
+}
+
+.FeatureSection__short {
+  color: #99b5c3;
+  display: inline-block;
+  border-bottom: thin solid #99b5c3;
+  font-size: 2rem;
+}
+
+.FeatureSection__body {
+  line-height: 1.5;
+  font-size: 18px;
+}
+
+.FeatureSection__title {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.FeatureSection__browser {
+  margin: 20px 0;
+  border: thin solid #4a5558;
+  width: 100%;
+  max-width: 450px;
+  border-radius: 6px;
+  padding-bottom: 6px;
+  background-color: #4a5558;
+}
+
+.FeatureSection__browser-top {
+  height: 20px;
+}
+
+.FeatureSection__browser-buttons {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  margin: 4px 2px 2px 4px;
+  float: left;
+}
+
+.FeatureSection__browser-buttons--red {
+  background-color: #ca6d62;
+}
+
+.FeatureSection__browser-buttons--yellow {
+  background-color: #d7ac62;
+}
+
+.FeatureSection__browser-buttons--green {
+  background-color: #81b259;
 }

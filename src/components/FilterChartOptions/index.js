@@ -24,7 +24,7 @@ class FilterOptions extends Component {
       let checkboxOptions = {}
       if (key !== 'booleans') {
         filter = columns[key]
-        filterType = (filter.type === 'text' || filter.type === 'number') && filter.categories ? 'category' : filter.type
+        filterType = (filter.type === 'text') && filter.categories ? 'category' : filter.type
       } else {
         filter = {key: 'booleans', name: 'True/False fields'}
         filterType = 'boolean'
@@ -44,6 +44,7 @@ class FilterOptions extends Component {
             fieldKey={filter.key}
             startDate={startDate}
             endDate={endDate}
+            dataRange={[filter.min, filter.max]}
             applyFilter={applyFilter}
             dateBy={dateBy} />
           break
@@ -81,7 +82,8 @@ class FilterOptions extends Component {
             nextRange={nextRange}
             filter={filters[key]}
             applyFilter={applyFilter}
-            updateFilter={updateFilter} />
+            updateFilter={updateFilter}
+            format={filter.format} />
           break
         default:
           return null
@@ -100,29 +102,18 @@ class FilterOptions extends Component {
 
       return filterOption
     })
-    return filterOptions
+    return (<div className='FilterChartOptions__filter-options'>{filterOptions}</div>)
   }
 
   render () {
-    let { handleAddFilter, columns, filters } = this.props
+    let { handleAddFilter, options, filters } = this.props
     let booleans = false
-    // todo: these are specific to Socrata, filterable columns should just be set in the state when columns are processed
-    const notFilters = ['boolean', 'location', 'url']
-
-    let options = Object.keys(columns).filter((column) => {
-      let option = columns[column]
-      if (option.unique) return false
-      if (option.type === 'boolean') booleans = true
-      if (notFilters.indexOf(option.type) > -1) return false
-      if (!option.categories && option.type === 'text') return false
-      if (option.singleValue) return false
-      return true
-    }).map((column, i) => {
-      let option = columns[column]
-      return {
-        value: option.key,
-        label: option.name
+    options = options.filter(field => {
+      if (field.type === 'boolean') {
+        booleans = true
+        return false
       }
+      return true
     })
 
     if (booleans) {
@@ -130,10 +121,11 @@ class FilterOptions extends Component {
     }
 
     return (
-      <Panel collapsible defaultExpanded header='Filter chart by other fields' bsStyle={'primary'}>
+      <Panel className={'FilterChartOptions__root'} collapsible defaultExpanded header={<h4>Filter by other fields <span className='glyphicon collapse-icon' aria-hidden></span></h4>} bsStyle={'primary'}>
         <Select
+          className={'FilterChartOptions__select'}
           name='filters'
-          placeholder='Add filters to visualization'
+          placeholder='Add fields to filter by'
           options={options}
           onChange={handleAddFilter} />
         {filters ? this.renderFilterList() : false}

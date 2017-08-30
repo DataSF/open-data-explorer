@@ -18,10 +18,11 @@ class FieldTypeButton extends Component {
   }
 
   render () {
-    let {itemProps, onClick} = this.props
+    let {itemProps, onClick, key} = this.props
     itemProps = this.setItemProps(itemProps)
     return (
       <DefaultListGroupItem
+        key={key}
         itemProps={itemProps}
         onClick={onClick} />
     )

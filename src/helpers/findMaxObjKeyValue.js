@@ -8,7 +8,6 @@ module.exports = function findMaxObjKeyValue (arr, prop) {
       }
       maxValue = parseInt(max[prop], 10)
     }
-  // console.log(max)
   }
   return maxValue
 }

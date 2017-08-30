@@ -5,287 +5,115 @@ import PropTypes from 'prop-types'
 import isEqual from 'lodash/isEqual'
 import d3 from 'd3'
 import BlankChart from './BlankChart'
-import $ from 'jquery'
 import ChartExperimentalBarStuff from './ChartExperimentalBarStuff'
 import ChartExperimentalLineStuff from './ChartExperimentalLineStuff'
 import ChartExperimentalAreaStuff from './ChartExperimentalAreaStuff'
 import ChartExperimentalHistogramStuff from './ChartExperimentalHistogramStuff'
-import { findMaxObjKeyValue, isColTypeTest, sumObj, sortObj, transformOthers } from '../../helpers'
+import ReactDOM from 'react-dom'
+
 
 class ChartExperimentalCanvas extends Component {
+  constructor(props) {
+    super(props)
 
-  componentWillMount () {
-    var _self = this
-
-    $(window).on('resize', function (e) {
-      _self.updateSize()
-    })
-
-    this.setState({
+    this.state = {
       width: this.props.width,
       height: this.props.height
-    })
+    }
+
+    this._isMounted = false
+    this._updateSize = this._updateSize.bind(this)
+    this._getChartTitleHeight = this._getChartTitleHeight.bind(this)
   }
+
   componentDidMount () {
-    this.updateSize()
+    this._isMounted = true
+    this._updateSize()
+    window.addEventListener('resize', this._updateSize)
   }
+
   componentWillUnmount () {
-    $(window).off('resize')
+    this._isMounted = false
+    window.removeEventListener('resize', this._updateSize)
   }
 
-  updateSize () {
-    var ReactDOM = require('react-dom')
-    var node = ReactDOM.findDOMNode(this)
-    var parentWidth = $(node).width()
-    let { embed } = this.props
+  _updateSize () {
+    if (this._isMounted) {
+      var node = ReactDOM.findDOMNode(this)
+      var parentWidth = node.getBoundingClientRect().width
 
-    if (!(parentWidth === this.props.width)) {
-      this.setState({width: parentWidth - 20})
-    } else {
-      this.setState({width: this.props.width})
-    }
-    if (embed) {
-      // this is a hack for now, we'll lift the state up to make handling layout simpler
-      let offset = $('#Embed-chartHeader').outerHeight(true) + 21
-      this.setState({height: window.innerHeight - offset})
+      if (!(parentWidth === this.props.width)) {
+        this.setState({width: parentWidth - 20})
+      } else {
+        this.setState({width: this.props.width})
+      }
     }
   }
+
+  _getChartTitleHeight () {
+    // TODO: get by ref
+    let chartTitleHeight = document.getElementsByClassName('Chart__title')[0] ? document.getElementsByClassName('Chart__title')[0].clientHeight : 35
+    return chartTitleHeight
+  }
+
   shouldComponentUpdate (nextProps, nextState) {
     /*
     This component needs to be refactored to handle resizing on a container, for now, we'll update the component always
     We should also not rerender the char
     */
+    let thisChartLen, nextChartLen, nextchartColorsGrpByLen, thischartColorsGrpByLen    = 0
+    if(Object.keys(this.props).indexOf('chartData') > -1) {
+      thisChartLen = this.props.chartData.length
+    }
+    if(Object.keys(nextProps).indexOf('chartData') > -1) {
+      nextChartLen = nextProps.chartData.length
+    }
+    if(Object.keys(nextProps).indexOf('chartColorsGrpBy') > -1) {
+      nextchartColorsGrpByLen = nextProps.chartColorsGrpBy.length
+    }
+    if(Object.keys(this.props).indexOf('chartColorsGrpBy') > -1) {
+      thischartColorsGrpByLen = this.props.chartColorsGrpBy.length
+    }
     let thisChart = {
       chartData: this.props.chartData,
       chartType: this.props.chartType,
-      height: this.state.height,
-      width: this.state.width
+      height: this.props.viewportHeight,
+      width: this.state.width,
+      chartColor: this.props.chartColor,
+      chartDataLen: nextChartLen,
+      chartColorsGrpBy: thischartColorsGrpByLen,
     }
     let nextChart = {
-      chartData: nextProps.chartData,
       chartType: nextProps.chartType,
-      height: nextState.height,
-      width: nextState.width
+      chartData: nextProps.chartData,
+      height: nextProps.viewportHeight,
+      width: nextState.width,
+      chartColor: nextProps.chartColor,
+      chartColorsGrpBy: nextchartColorsGrpByLen,
+      chartDataLen: thisChartLen,
     }
-
-    return !isEqual(thisChart, nextChart) && !nextProps.isFetching
+    return ( (!isEqual(thisChart, nextChart)) && !nextProps.isFetching)
   }
 
-  isSelectedColDate (selectedColumnDef) {
-    if (selectedColumnDef.type === 'date') {
-      return true
+
+
+  setFontSizeTicks(domainMax){
+    if(String(Math.round(domainMax,0)).length >= 6) {
+      return {'fontSize':'85%'}
     }
-    return false
+    return {'fontSize':'100%'}
   }
 
-  formatChartDataDates (itemList, dateBy) {
-    let yrFormat = d3.time.format('%Y')
-    let monthFormat = d3.time.format('%m-%Y')
-    itemList = itemList.map(function (item, index) {
-      let dt = item['label'].split('T')
-      dt = dt[0].split('-')
-      if (dateBy === 'month') {
-        item['key'] = monthFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
-      } else {
-        item['key'] = yrFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
-      }
-      item['value'] = Number(item['value'])
-      return item
-    })
-    return itemList
-  }
 
-  formatChartDataDatesGrpBy (itemList, dateBy) {
-    let yrFormat = d3.time.format('%Y')
-    let monthFormat = d3.time.format('%m-%Y')
-    itemList = itemList.map(function (item, index) {
-      if (dateBy === 'month') {
-        item['label'] = monthFormat(new Date(item['label']))
-      } else {
-        item['label'] = yrFormat(new Date(item['label']))
-      }
-      return item
-    })
-    return itemList
-  }
 
-  formatChartDataCol (itemList) {
-    itemList = itemList.map(function (item, index) {
-      item['key'] = String(item['label'])
-      item['value'] = Number(item['value'])
-      return item
-    })
-    return itemList
-  }
 
-  formatBlankChartData (itemList) {
-    itemList = itemList.map(function (item, index) {
-      if (item['key'] === 'undefined') {
-        item['blank'] = Number(item['value'])
-      }
-      return item
-    })
-    delete itemList['undefined']
-    return itemList
-  }
-
-  formatWhiteSpaceChartData (itemList) {
-    itemList = itemList.map(function (item, index) {
-      item['key'] = item['key'].replace(/(\r\n|\n|\r|\t)/gm, 'whitespace')
-      item['key'] = item['key'].replace('  ', 'whitespace')
-      if (item['key'] === ' ') {
-        item['key'] = 'whitespace'
-      }
-      return item
-    })
-    return itemList
-  }
-
-  castChartData (chartData, isDtCol, dateBy) {
-    let newChartData = []
-    if (isDtCol) {
-      newChartData = this.formatChartDataDates(chartData, dateBy)
-    } else {
-      newChartData = this.formatChartDataCol(chartData)
-    }
-    newChartData = this.formatBlankChartData(newChartData)
-    newChartData = this.formatWhiteSpaceChartData(newChartData)
-    return newChartData
-  }
-
-  formatChartDataGrpBy (itemList, dateBy, isDateCol) {
-    let newdict = {}
-    let yrFormat = d3.time.format('%Y')
-    let monthFormat = d3.time.format('%m-%Y')
-    Object.keys(itemList).forEach(function (key, index) {
-      if (key === 'label') {
-        newdict[key] = String(itemList[key])
-        if (newdict[key] === 'undefined') {
-          newdict[key] = 'blank'
-        }
-      } else if (key === 'undefined') {
-        newdict['blank'] = Number(itemList[key])
-      } else {
-        newdict[key] = Number(itemList[key])
-      }
-    })
-
-    if (isDateCol) {
-      let dt = newdict['label'].split('T')
-      dt = dt[0].split('-')
-      if (dateBy === 'month') {
-        newdict['label'] = monthFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
-      } else {
-        newdict['label'] = yrFormat(new Date(String(dt[0]), String(Number(dt[1]) - 1), String(dt[2])))
-      }
-    }
-    return newdict
-  }
-
-  castChartDataGrpBy (chartData, isDtCol, dateBy) {
-    let newChartData = []
-    for (let i = 0; i < chartData.length; i++) {
-      let newdict = this.formatChartDataGrpBy(chartData[i], dateBy, isDtCol)
-      newChartData.push(newdict)
-    }
-    return newChartData
-  }
-  sortChartDataGrpByDate (newChartData, dateBy) {
-    if (dateBy === 'month') {
-      newChartData.sort(function(a, b){
-        let keyA = new Date(a.label),
-        keyB = new Date(b.label);
-      // Compare the 2 dates
-      if(keyA < keyB) return -1;
-      if(keyA > keyB) return 1;
-      return 0
-  })
-
-    } else {
-      newChartData.sort(function (a, b) {
-        return Number(a.label) - Number(b.label)
-      })
-    }
-    return newChartData
-  }
-
-  sortChartDataGrpBy (newChartData) {
-    let sortedNewChartData = []
-    let grpSumDict = {}
-    Object.keys(newChartData).forEach(function (key, index) {
-      grpSumDict[key] = sumObj(newChartData[key], 'label')
-    })
-    let sorted = sortObj(grpSumDict)
-    for (let i = 0; i < sorted.length; i++) {
-      let idx = sorted[i][0]
-      sortedNewChartData.push(newChartData[idx])
-    }
-    return sortedNewChartData
-  }
-
-  convertChartData (chartData, selectedColumnDef, dateBy, isGroupBy) {
-    //let newChartData = []
-    let isDtCol = isColTypeTest(selectedColumnDef, 'date')
-    if (chartData && chartData.length > 1) {
-      if (!isGroupBy) {
-        return this.castChartData(chartData, isDtCol, dateBy)
-      }
-    }
-    return chartData
-  }
-
-  getMaxDate (dateBy, chartType, chartData) {
-    let maxDt = ''
-    if (chartType === 'line') {
-      maxDt = Math.max.apply(Math, chartData.map(function (o) { return o.key }))
-    }
-    return maxDt
-  }
-
-  isGroupByz (groupByKeys, barChartType) {
-    if (groupByKeys) {
-      if (groupByKeys.length > 1) {
-        return true
-      }
-    }
-    return false
-  }
-
-  setDefaultChartType (selectedColumnDef, chartType) {
-    let isDateCol = isColTypeTest(selectedColumnDef, 'date')
-    let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
-    if (!(chartType)) {
-      if (isDateCol) {
-        chartType = 'line'
-      } else if (isNumericCol) {
-        chartType = 'histogram'
-      } else {
-        chartType = 'bar'
-      }
-    }
-    return chartType
-  }
-
-  findMaxObjKeyValueGrpBy(chartData){
-    let allVals = []
-    chartData.forEach(function(item){
-      let itemCopy = Object.assign({}, item);
-      delete itemCopy.label
-      let itemVals = Object.values(itemCopy)
-      let itemMax = Math.max.apply(null, itemVals)
-      allVals.push(itemMax)
-    })
-    return Math.max.apply(null, allVals)
-  }
-  setXAxisTickInterval(dateBy, chartData){
-    return Math.round(chartData.length * 0.09)
-  }
   render () {
-    let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, rollupBy, dateBy} = this.props
-    chartType = this.setDefaultChartType(selectedColumnDef, chartType)
-    let fillColor
-    let grpColorScale
-    const fillColorIndex = {
+    let {rowLabel, units, viewportHeight, topOffset, selectedColumnDef, groupKeys, chartData, chartType, isFetching, isGroupBy, isDateSelectedCol, domainMax, colName, valueAxisTickLst, xAxisInterval, freqs, yTickCnt, xTickCnt, maxPowerOf10, chartColor, chartColorsGrpBy} = this.props
+    const formatValue = d3.format('0,000')
+    const valTickFormater = function (d) { return formatValue(d) }
+    const xAxisPadding = { left: 30, right: 30 }
+    const chartMargin = {top: 1, right: 5, bottom: 1, left: 5}
+    /* const fillColorIndex = {
       'text': '#93c2de',
       'date': '#93deaf',
       'calendar_date': '#93deaf',
@@ -295,6 +123,7 @@ class ChartExperimentalCanvas extends Component {
       'money': '#de93c2',
       'other': '#E6FF2E'
     }
+
     const groupByColorIndex = {
       'text': {'start': '#31c4ed', 'end': '#0000ff'},
       'date': {'start': '#204c39', 'end': '#83F52C'},
@@ -304,40 +133,8 @@ class ChartExperimentalCanvas extends Component {
       'double': {'start': '#c71585', 'end': '#ffc0cb'},
       'money': {'start': '#c71585', 'end': '#ffc0cb'}
     }
-    let xAxisInterval = this.setXAxisTickInterval(dateBy, chartData)
-    let isDateSelectedCol = false
-    let colName = ''
-    let maxValue, domainMax, valTickFormater
-    let formatValue = d3.format('0,000')
-    let numericCol = isColTypeTest(selectedColumnDef, 'number')
-    let isGroupBy = this.isGroupByz(groupKeys)
-    if(!isGroupBy){
-      maxValue = findMaxObjKeyValue(chartData, 'value')
-    }else{
-      maxValue = this.findMaxObjKeyValueGrpBy(chartData)
-    }
-    valTickFormater = function (d) { return formatValue(d) }
-    domainMax = maxValue + (maxValue * 0.05)
-    console.log("***max is here")
-    console.log(domainMax)
-    let yTickCnt = 6
 
-    //chartData = this.convertChartData(chartData, selectedColumnDef, dateBy, isGroupBy)
-    if (selectedColumnDef) {
-      fillColor = fillColorIndex[selectedColumnDef.type]
-      grpColorScale = groupByColorIndex[selectedColumnDef.type]
-      isDateSelectedCol = this.isSelectedColDate(selectedColumnDef)
-      colName = selectedColumnDef.name
-    }
-    let xAxisPadding = { left: 30, right: 30 }
-    let xTickCnt = 6
-    let margin = {top: 1, right: 5, bottom: 1, left: 5}
-    let w = this.state.width - (margin.left + margin.right)
-    let h = this.state.height - (margin.top + margin.bottom)
-
-    let xAxisHeight = 100
-    // let formatValue = d3.format('d')
-    let legendStyle = {
+    const legendStyle = {
       color: '#666',
       display: 'block',
       marginLeft: 'auto',
@@ -348,47 +145,55 @@ class ChartExperimentalCanvas extends Component {
       paddingBottom:'1%',
       wordBreak: 'break-all',
       textAlign: 'left'
+    }*/
+    const xAxisHeight = 100
+    const yAxisWidth = 70
+    let w = this.state.width - (chartMargin.left + chartMargin.right)
+    let h = viewportHeight - (chartMargin.top + chartMargin.bottom) - topOffset - this._getChartTitleHeight() - 50
+    let fillColor, valueTickStyle
+    //grpColorScale
+
+    const legendStyle = {
+      color: '#666',
+      maxWidth: '200px',
+      paddingLeft: '10px',
+      height: h,
+      overflowY: 'scroll'
     }
+
+    if (domainMax > 0) {
+      valueTickStyle = this.setFontSizeTicks(domainMax)
+    }
+    if (selectedColumnDef) {
+      fillColor = chartColor
+    }
+
     let minTickGap = 200
-    if (!rollupBy) {
-      rollupBy = 'other'
-    }
-    let isDtCol = isColTypeTest(selectedColumnDef, 'date')
-    if (rollupBy === 'other' && !isDtCol && chartData) {
-      let chartDataTop15 = transformOthers(chartData, maxValue, isGroupBy)
-      if (chartDataTop15) {
-        chartData = chartDataTop15['chartData']
-      }
-    }
-    let yAxisWidth = 70
 
     return (
       <div className='chartCanvas'>
         <Choose>
-          <When condition={selectedColumnDef}>
+          <When condition={selectedColumnDef && !isFetching && chartData.length > 0 && valueAxisTickLst.length > 0}>
             <Choose>
-              <When condition={numericCol}>
-                <Choose>
-                  <When condition={chartType === 'histogram'}>
-                    <ChartExperimentalHistogramStuff
-                      w={w}
-                      h={h}
-                      yAxisWidth={yAxisWidth}
-                      xAxisHeight={xAxisHeight}
-                      domainMax={domainMax}
-                      isGroupBy={isGroupBy}
-                      margin={margin}
-                      rowLabel={rowLabel}
-                      fillColor={fillColor}
-                      colName={colName}
-                      groupKeys={groupKeys}
-                      chartData={chartData}
-                      yTickCnt={yTickCnt}
-                      xTickCnt={xTickCnt}
-                      xAxisPadding={xAxisPadding}
-                      valTickFormater={valTickFormater} />
-                  </When>
-                </Choose>
+              <When condition={chartType === 'histogram'}>
+                <ChartExperimentalHistogramStuff
+                  w={w}
+                  h={h}
+                  yAxisWidth={yAxisWidth}
+                  xAxisHeight={xAxisHeight}
+                  isGroupBy={isGroupBy}
+                  margin={chartMargin}
+                  freqs={freqs}
+                  valueAxisTickLst={valueAxisTickLst}
+                  rowLabel={rowLabel}
+                  fillColor={fillColor}
+                  colName={colName}
+                  groupKeys={groupKeys}
+                  xTickCnt={xTickCnt}
+                  yTickCnt={yTickCnt}
+                  maxPowerOf10={maxPowerOf10}
+                  xAxisPadding={xAxisPadding}
+                  valTickFormater={valTickFormater} />
               </When>
               <When condition={chartType === 'bar'}>
                 <ChartExperimentalBarStuff
@@ -398,19 +203,20 @@ class ChartExperimentalCanvas extends Component {
                   minTickGap={minTickGap}
                   domainMax={domainMax}
                   isGroupBy={isGroupBy}
-                  margin={margin}
+                  margin={chartMargin}
                   rowLabel={rowLabel}
+                  units={units}
                   fillColor={fillColor}
                   groupKeys={groupKeys}
                   chartData={chartData}
-                  yTickCnt={yTickCnt}
+                  valueAxisTickLst={valueAxisTickLst}
                   xAxisPadding={xAxisPadding}
                   xTickCnt={xTickCnt}
                   valTickFormater={valTickFormater}
                   colType={selectedColumnDef.type}
                   colName={colName}
                   xAxisInterval={xAxisInterval}
-                  grpColorScale={grpColorScale}
+                  chartColorsGrpBy={chartColorsGrpBy}
                   isDateSelectedCol={isDateSelectedCol}
                   xAxisHeight={xAxisHeight}
                   legendStyle={legendStyle}/>
@@ -420,14 +226,16 @@ class ChartExperimentalCanvas extends Component {
                   w={w}
                   h={h}
                   isGroupBy={isGroupBy}
-                  margin={margin}
+                  margin={chartMargin}
                   domainMax={domainMax}
                   rowLabel={rowLabel}
+                  units={units}
                   fillColor={fillColor}
                   groupKeys={groupKeys}
                   chartData={chartData}
                   colName={colName}
                   yTickCnt={yTickCnt}
+                  valueAxisTickLst={valueAxisTickLst}
                   xTickCnt={xTickCnt}
                   xAxisHeight={xAxisHeight}
                   yAxisWidth={yAxisWidth}
@@ -435,7 +243,7 @@ class ChartExperimentalCanvas extends Component {
                   legendStyle={legendStyle}
                   valTickFormater={valTickFormater}
                   xAxisPadding={xAxisPadding}
-                  grpColorScale={grpColorScale} />
+                  chartColorsGrpBy={chartColorsGrpBy} />
               </When>
               <When condition={chartType === 'area'}>
                 <ChartExperimentalAreaStuff
@@ -444,7 +252,7 @@ class ChartExperimentalCanvas extends Component {
                   yAxisWidth={yAxisWidth}
                   isGroupBy={isGroupBy}
                   domainMax={domainMax}
-                  margin={margin}
+                  margin={chartMargin}
                   rowLabel={rowLabel}
                   valTickFormater={valTickFormater}
                   fillColor={fillColor}
@@ -453,11 +261,13 @@ class ChartExperimentalCanvas extends Component {
                   xAxisInterval={xAxisInterval}
                   groupKeys={groupKeys}
                   chartData={chartData}
-                  yTickCnt={yTickCnt}
+                  valueAxisTickLst={valueAxisTickLst}
+                  valueTickStyle={valueTickStyle}
                   xTickCnt={xTickCnt}
                   xAxisPadding={xAxisPadding}
-                  grpColorScale={grpColorScale}
+                  chartColorsGrpBy={chartColorsGrpBy}
                   colName={colName}
+                  units={units}
                   xAxisHeight={xAxisHeight}/>
               </When>
               <Otherwise>

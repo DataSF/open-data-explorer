@@ -1,17 +1,16 @@
 import soda from 'soda-js'
-import maxBy from 'lodash/maxBy'
 import uniq from 'lodash/uniq'
 import difference from 'lodash/difference'
 import { replacePropertyNameValue } from '../helpers'
 import moment from 'moment'
 import d3 from 'd3'
-import { sumObj, sortObj } from '../helpers'
+import { sumObj, sortObj, getMaxDomain,transformOthers,} from '../helpers'
+
 
 const API_ROOT = 'https://data.sfgov.org/'
 
 // Export constants
 export const Endpoints = {
-  METADATA: endpointMetadata,
   COLUMNS: endpointColumns,
   QUERY: endpointQuery,
   TABLEQUERY: endpointTableQuery,
@@ -22,7 +21,6 @@ export const Endpoints = {
 }
 
 export const Transforms = {
-  METADATA: transformMetadata,
   COLUMNS: transformColumns,
   QUERY: transformQueryData,
   QUERYTEXTCATEGORIES: transformTextCategoryData,
@@ -32,27 +30,10 @@ export const Transforms = {
   COLPROPS: transformColumnProperties
 }
 
-export const shouldRunColumnStats = (type, key) => {
-  /*
-   * below is a bit of a hack to get around the fact that some categorical fields are encoded as numbers on the portal
-   * we don't want to run column stats against all numeric columns, so this allows us to control that, the regex below may need to be
-   * tuned as is, it could create false positives. This is okay for now, something we can optimize later
-  */
-  let regex = /(year|day|date|month|district|yr|code|id|x|y|lat|lon)/g
-  let isCategorical = regex.test(key)
-  if (type === 'text' || (isCategorical && type === 'number')) {
-    return true
-  } else {
-    return false
-  }
-}
-
 // Construct URL based on chart options
 // TODO - break into smaller functions
 
 function constructQueryTextCategories (state) {
-  //console.log("****Constructing a column props****")
-  //let query = selectedField
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
   let id = state.metadata.dataId || state.metadata.id
@@ -64,8 +45,6 @@ function constructQueryTextCategories (state) {
       .group('category')
       .order(orderBy)
   query = query.limit(10)
-  //console.log(query.getURL())
-  //console.log("***")
   return query.getURL()
 }
 
@@ -117,15 +96,15 @@ function constructQuery (state) {
   }
 
   // Where (filter)
-  if (columnType === 'date' || (columnType === 'number' && !isCategory)) query = query.where('label is not null')
+  if (columnType === 'date') query = query.where('label is not null')
   if (filters) {
     for (let key in filters) {
       let column = key !== 'booleans' ? columns[key] : {type: 'boolean'}
       let filter = filters[key]
 
       if (filter.options && column.type === 'date') {
-        let start = filter.options.min.format('YYYY-MM-DD')
-        let end = filter.options.max.format('YYYY-MM-DD')
+        let start = moment(filter.options.min).format('YYYY-MM-DDTHH:mm:ss.SSS')
+        let end = moment(filter.options.max).format('YYYY-MM-DDTHH:mm:ss.SSS')
         query.where(key + '>="' + start + '" and ' + key + '<="' + end + '"')
       } else if (column.categories && filter.options && filter.options.selected) {
         let enclose = '"'
@@ -151,7 +130,7 @@ function constructQuery (state) {
         let join = filter.options.join || 'or'
         let joined = filter.options.selected.join(' ' + join + ' ')
         query.where(joined)
-      } else if (column.type === 'number' && !column.categories && filter.options && filter.options.currentRange) {
+      } else if (column.type === 'number' && filter.options && filter.options.currentRange) {
         let first = parseInt(filter.options.currentRange[0], 10)
         let last = parseInt(filter.options.currentRange[1], 10)
         query.where(key + '>=' + first + ' and ' + key + '<=' + last)
@@ -166,10 +145,6 @@ function constructQuery (state) {
 
 function endpointApiMigration (id) {
   return API_ROOT + `api/migrations/${id}.json`
-}
-
-function endpointMetadata (id) {
-  return API_ROOT + `api/views/${id}.json`
 }
 
 function endpointCount (id) {
@@ -188,7 +163,7 @@ function endpointTableQuery (state) {
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
   let id = state.metadata.dataId || state.metadata.id
-  let table = state.metadata.table
+  let { table, columnProps: { columns }} = state
   let page = table.tablePage || 0
 
   let query = consumer.query()
@@ -198,7 +173,9 @@ function endpointTableQuery (state) {
 
   if (table.sorted && table.sorted.length > 0) {
     table.sorted.forEach((key) => {
-      query.order(key + ' ' + state.metadata.columns[key].sortDir)
+      if (columns[key] && columns[key].sortDir !== null) {
+        query.order(key + ' ' + columns[key].sortDir)
+      }
     })
   }
 
@@ -214,69 +191,6 @@ function endpointColumnProperties (id, key) {
 }
 
 // Transforms
-
-function transformMetadata (json) {
-  let metadata = {
-    id: json['id'],
-    dataId: json['id'],
-    name: json['name'],
-    description: json['description'],
-    type: json['viewType'],
-    createdAt: json['createdAt'],
-    rowsUpdatedAt: json['rowsUpdatedAt'],
-    viewModifiedAt: json['viewLastModified'],
-    licenseName: json.license.name || null,
-    licenseLink: json.license.termsLink || null,
-    publishingDepartment: json.metadata.custom_fields['Department Metrics']['Publishing Department'] || null,
-    publishingFrequency: json.metadata.custom_fields['Publishing Details']['Publishing frequency'] || null,
-    dataChangeFrequency: json.metadata.custom_fields['Publishing Details']['Data change frequency'] || null,
-    notes: json.metadata.custom_fields['Detailed Descriptive']['Data notes'] || null,
-    programLink: json.metadata.custom_fields['Detailed Descriptive']['Program link'] || null,
-    rowLabel: json.metadata.rowLabel === null ? 'Record' : json.metadata.rowLabel,
-    tags: json.tags || null,
-    category: json['category'] || 'dataset',
-    columns: {}
-  }
-
-  if (json.viewType === 'geo') {
-    metadata.dataId = json.childViews[0]
-  }
-
-  if (json.metadata.attachments) {
-    metadata.attachments = json.metadata.attachments
-  }
-
-  for (let column of json.columns) {
-    let typeCast = {
-      'calendar_date': 'date',
-      'currency': 'number',
-      'money': 'number',
-      'checkbox': 'boolean'
-    }
-    let type = typeCast[column['dataTypeName']] || column['dataTypeName']
-    let format = column['dataTypeName']
-
-    let col = {
-      id: column['id'],
-      key: column['fieldName'],
-      name: column['name'].replace(/[_-]/g, ' '),
-      description: column['description'] || '',
-      type,
-      format}
-
-    if (column['cachedContents']) {
-      col.non_null = column['cachedContents']['non_null'] || 0
-      col.null = column['cachedContents']['null'] || 0
-      col.count = col.non_null + col.null
-      col.min = column['cachedContents']['smallest'] || null
-      col.max = column['cachedContents']['largest'] || null
-    }
-
-    metadata.columns[column['fieldName']] = col
-  }
-
-  return metadata
-}
 
 function transformColumns (json) {
   let response = {}
@@ -301,16 +215,19 @@ function transformColumns (json) {
     }
   }
   response.columns = columns
-
   return response
 }
 
 // refactor
 function reduceGroupedData (data, groupBy) {
-
   // collect unique labels
   let groupedData = uniq(data.map((obj) => {
-    return obj['label']
+
+    if(Object.keys(obj).indexOf('label') > -1){
+        return obj['label']
+    }else{
+      return "Blank"
+    }
   })).map((label) => {
     return {label: label}
   })
@@ -552,6 +469,10 @@ function  castJson (json, state) {
     } else {
       formattedJson = formatJsonCol(json)
     }
+    formattedJson = formattedJson.map(function(item){
+      item.value = parseInt(item.value, 10)
+      return item
+    })
     return formattedJson
   }
 
@@ -571,18 +492,52 @@ function transformTextCategoryData(json, state){
   }
 }
 function transformQueryData (json, state) {
+  let rollupBy, domainMax
   let { query } = state
   let groupKeys = []
-
   if (query.groupBy && json.length > 0) {
     groupKeys = uniq(json.map((obj) => {
-      return obj[query.groupBy]
+      if(Object.keys(obj).indexOf(query.groupBy) > -1){
+        return obj[query.groupBy]
+      }else{
+        return "Blank"
+      }
     }))
-    json = reduceGroupedData(json, query.groupBy)
-    json = addMissingDatesGrpBy(json, state)
-    json = castJsonGrpBy(json, state)
-    if(!isDateColSelected(state)) {
-      json = sortJsonGrpBy (json)
+    let grpCol = query.groupBy
+    json = json.map(function(obj){
+      if(Object.keys(obj).indexOf(query.groupBy) > -1) {
+        if(Object.keys(obj).indexOf('label') > -1) {
+          return obj
+        }else{
+          obj['label'] = "Blank"
+          return obj
+        }
+      }else{
+        obj[grpCol] = "Blank"
+        if(Object.keys(obj).indexOf('label') > -1) {
+          return obj
+        }else{
+          obj['label'] = "Blank"
+          return obj
+        }
+      }
+    })
+    ///for weird edges casese where someone filters a group by;
+    ///we essentially want it to be a normal chart if there is only 1 item in the group.
+    if(groupKeys.length === 1){
+      json = json.map(function(item){
+        return {'key':item.key, 'label':item.label, 'value':parseInt(item.value, 10)}
+      })
+      json = replacePropertyNameValue(json, 'label', 'undefined', 'blank')
+      json = addMissingDates(json, state)
+      json =  castJson (json, state)
+    } else {
+      json = reduceGroupedData(json, query.groupBy)
+      json = addMissingDatesGrpBy(json, state)
+      json = castJsonGrpBy(json, state)
+      if(!isDateColSelected(state)) {
+        json = sortJsonGrpBy (json)
+      }
     }
   }
   if(json.length > 0 && !query.groupBy){
@@ -590,12 +545,24 @@ function transformQueryData (json, state) {
     json = addMissingDates(json, state)
     json =  castJson (json, state)
   }
+  rollupBy = rollUpChartData(state, json)
+  let isGroupBy = false
+  if(groupKeys.length > 0){
+    isGroupBy = true
+  }
+  domainMax = getMaxDomain (json, isGroupBy, state.chart.chartType)
+  if (rollupBy === 'other') {
+        json = transformOthers(json, domainMax, isGroupBy )
+        domainMax = getMaxDomain (json, isGroupBy, state.chart.chartType)
+  }
   return {
     query: {
       isFetching: false,
       data: [],
       originalData: json,
-      groupKeys: groupKeys
+      groupKeys: groupKeys,
+      domainMax: domainMax,
+      rollupBy: rollupBy
     }
   }
 }
@@ -617,26 +584,36 @@ function transformApiMigration (json) {
   return {dataId: json.nbeId}
 }
 
+function rollUpChartData(state, json){
+  let rollupBy = false
+  if(Object.keys(state.query).indexOf('rollupBy') > -1 ) {
+     if (state.chart.chartType === 'bar'){
+      rollupBy = state.query.rollupBy
+    }else{
+       rollupBy = "none"
+    }
+  }
+  else if(json && state.chart.chartType){
+    if ((state.chart.chartType === 'bar') && (json.length > 12) && !rollupBy) {
+      rollupBy = 'other'
+    }else{
+      rollupBy = 'none'
+    }
+  }else{
+    rollupBy = 'none'
+  }
+  return rollupBy
+}
+
+
 function transformColumnProperties (json, state, params) {
-  let maxRecord = parseInt(maxBy(json, function (o) { return parseInt(o.count, 10) },).count, 10)
-  let checkFirst = maxRecord / state.metadata.rowCount
-  let checkNumCategories = json.length / state.metadata.rowCount
-  let transformed = {
-    columns: {}
+  return {
+    columns: {
+      [params['key']]: {
+        categories: json
+      }
+    }
   }
-  transformed.columns[params['key']] = {}
-  if ((checkFirst <= 0.95 && checkFirst >= 0.05 && checkNumCategories <= 0.95) && maxRecord !== '1' && json.length !== 50000) {
-    transformed.columns[params['key']].categories = json
-    transformed.categoryColumns = [params['key']]
-  } else if (maxRecord === 1) {
-    transformed.columns[params['key']].unique = true
-  }
-
-  if (checkFirst === 1) {
-    transformed.columns[params['key']].singleValue = true
-  }
-
-  return transformed
 }
 
 

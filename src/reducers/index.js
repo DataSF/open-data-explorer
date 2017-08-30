@@ -1,13 +1,14 @@
 import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
 // import reducers and selectors
-import { metadataReducer } from './metadataReducer'
+import { metadataReducer, makeDatasetFactDict, makeColTypesCnt, makePublishingFacts, calculatePublishingHealth } from './metadataReducer'
 import columnsReducer, * as fromColumns from './columnsReducer'
 import { queryReducer } from './queryReducer'
-import { chartReducer } from './chartReducer'
+import chartReducer, * as fromCharts from './chartReducer'
 import { tableReducer } from './tableReducer'
 import { messagesReducer } from './messagesReducer'
 import { searchReducer } from './searchReducer'
+import { uiReducer } from './uiReducer'
 import fieldsReducer, * as fromFields from './fieldsReducer'
 
 
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   fieldDetailsProps: fieldsReducer,
   messages: messagesReducer,
   search: searchReducer,
+  ui: uiReducer,
   routing
 })
 
@@ -31,8 +33,15 @@ const getFieldProfileDef = (state, column) => fromFields.getFieldProfileInfo(sta
 export const getUniqueColumnTypesDetails = (state, selectable) =>
   fromFields.getUniqueColumnTypes(state.fieldDetailsProps, selectable)
 
-export const getSelectableColumnsDetails = (state, all = false) =>
-  fromFields.getSelectableColumns(state.fieldDetailsProps, state.fieldDetailsProps.selectedField, all)
+export const getSelectableColumnsDetails = (state, all = true, ignoreTypeFilters = false, exclude = []) => {
+  let modifiedState = {
+    columns: state.columnProps.columns,
+    typeFilters: [].concat(state.fieldDetailsProps.typeFilters) || [],
+    fieldNameFilter: state.fieldDetailsProps.fieldNameFilter
+  }
+  return fromColumns.getSelectableColumns(modifiedState, state.fieldDetailsProps.selectedField, all, ignoreTypeFilters, [state.fieldDetailsProps.selectedField])
+}
+
 
 export const getSelectedFieldDetails = state =>
   fromFields.getSelectedFieldDetails(state.fieldDetailsProps, state.fieldDetailsProps.selectedField)
@@ -49,8 +58,11 @@ export const getUniqueColumnTypes = (state, selectable) =>
 export const getGroupableColumns = state =>
   fromColumns.getGroupableColumns(state.columnProps, state.query.selectedColumn)
 
-export const getSelectableColumns = (state, all = false) =>
-  fromColumns.getSelectableColumns(state.columnProps, state.query.selectedColumn, all)
+export const getSelectableColumns = (state, all = false, ignoreTypeFilters = false, exclude = []) =>
+  fromColumns.getSelectableColumns(state.columnProps, state.query.selectedColumn, all, ignoreTypeFilters, exclude)
+
+export const getFilterableColumns = (state, exclude = []) =>
+  fromColumns.getSelectableColumns(state.columnProps, state.query.selectedColumn, false, true, exclude, true)
 
 export const getSummableColumns = state =>
   fromColumns.getSummableColumns(state.columnProps)
@@ -63,5 +75,42 @@ export const getSelectedColumnDef = state =>
 
 export const getSupportedChartTypes = state =>
   fromColumns.getSupportedChartTypes(state.columnProps, state.query.selectedColumn)
+
+export const makeDatasetFactDictFxn = state =>
+  makeDatasetFactDict(state)
+
+export const makeColTypesCntFxn = state =>
+  makeColTypesCnt(state)
+
+export const makePublishingFactsFxn = state =>
+  makePublishingFacts(state)
+
+export const calculatePublishingHealthFxn = state =>
+  calculatePublishingHealth(state)
+
+export const isGroupByz = groupKeys =>
+  fromCharts.isGroupByz(groupKeys)
+
+//export const getMaxDomain = (chartData, isGroupBy, chartType) =>
+//  fromCharts.getMaxDomain(chartData, isGroupBy, chartType)
+
+//export const roundAxisZeros = (maxValue, numberOfTicks, maxPowerOf10) =>
+//  fromCharts.roundAxisZeros(maxValue, numberOfTicks, maxPowerOf10)
+
+export const setXAxisTickInterval = (chartData) =>
+  fromCharts.setXAxisTickInterval(chartData)
+
+export const explodeFrequencies = (chartData, chartType) =>
+  fromCharts.explodeFrequencies(chartData, chartType)
+
+export const setGroupByColorScale = (chartColor, chartData, isGroupBy) =>
+  fromCharts.setGroupByColorScale(chartColor, chartData, isGroupBy)
+
+
+//rollUpOtherBars = (chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax) =>
+//  fromCharts.rollUpOtherBars(chartData, selectedColumnDef, rollupBy, isGroupBy, domainMax)
+
+export const rollUpChartData = (query, chart) =>
+  fromCharts.rollUpChartData(query, chart)
 
 export default rootReducer

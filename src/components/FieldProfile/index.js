@@ -145,7 +145,7 @@ class FieldProfile extends Component {
               <CardBlock className={'profile-main-content'}>
               <div className='profile-stats-container'>
                 <div className={'profile-stats-tbl-header'}>
-                {'Field Profile Stats'}
+                {field.name}{' Profile Stats'}
                 </div>
               <table className={'profile-stats'}>
                 <tbody>{rows}</tbody>
