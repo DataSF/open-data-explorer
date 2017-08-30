@@ -50,6 +50,7 @@ class ChartExperimentalAreaStuff extends Component {
     }
     return legendStyle
   }*/
+  
   render () {
     let {h, w, xAxisInterval, isGroupBy, yAxisWidth, units, groupKeys, fillColor, chartData, chartColorsGrpBy, valTickFormater, xAxisHeight, legendStyle, colName, valueAxisTickLst} = this.props
     let areas = this.makeAreas(groupKeys, units, chartColorsGrpBy)

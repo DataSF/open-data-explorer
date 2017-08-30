@@ -5,6 +5,8 @@ import { Endpoints, Transforms } from '../middleware/socrata'
 import { EndpointsSF, TransformsSF } from '../middleware/metadatasf'
 
 import {isColTypeTest} from '../helpers'
+import qs from 'qs'
+
 export const METADATA_REQUEST = 'METADATA_REQUEST'
 export const METADATA_SUCCESS = 'METADATA_SUCCESS'
 export const METADATA_FAILURE = 'METADATA_FAILURE'
@@ -459,10 +461,11 @@ export function applyFilter (key, options) {
 const parseQueryString = (q) => {
   let payload
   let error
-  if (typeof q === 'string') {
+  if (typeof q === 'object') {
     try {
-      payload = JSON.parse(q)
+      payload = qs.parse(q)
     } catch (e) {
+      console.error(e)
       error = true
     }
   } else {
@@ -476,6 +479,7 @@ const parseQueryString = (q) => {
 export const loadQueryStateFromString = (q) => (dispatch, getState) => {
   return parseQueryString(q).then(
     response => {
+      dispatch(setDefaultChartType(response.selectedColumn))
       dispatch({
         type: UPDATE_FROM_QS,
         payload: response
