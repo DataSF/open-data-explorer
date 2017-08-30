@@ -11,7 +11,7 @@ const Navigation = ({ location, pages }) => {
   return (
     <div>
       <div className={'ribbon'}>
-        <Link to={'/about'} className={'ribbonTxt'}>alpha</Link>
+        <Link to={'/about'} className={'ribbonTxt'}>beta</Link>
       </div>
       <nav id={'Navigation'} className={'navbar navbar-default'}>
         <div className={'container'}>
