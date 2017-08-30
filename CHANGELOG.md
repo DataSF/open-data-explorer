@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/)
 
 ## Unreleased
 
+## [v1.0.0-beta.0](https://github.com/DataSF/open-data-explorer/compare/v1.0.0-alpha.4...v1.0.0-beta.0) - 2017-07-24
+
+### Added
+
+### Changed
+
+### Fixed
+
 ## [v1.0.0-alpha.5](https://github.com/DataSF/open-data-explorer/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) - 2017-07-24
 
 ### Added
