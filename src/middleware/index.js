@@ -27,7 +27,7 @@ function callApi (endpoint, transform, state, params) {
   })
 }
 
-export const CALL_API = Symbol('Call API')
+export const CALL_API = 'Call API'
 
 // A Redux middleware that interprets actions with CALL_API info specified.
 // Performs the call and promises when such actions are dispatched.

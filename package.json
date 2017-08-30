@@ -1,6 +1,6 @@
 {
   "name": "open-data-explorer",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-beta.0",
   "description": "React based application to explore open datasets interactively.",
   "repository": "https://github.com/DataSF/open-data-explorer",
   "license": "MIT",
